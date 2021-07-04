@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import { getMovies, deleteMovie } from "../../../actions/videos";
+import { getMovies, deleteMovie } from "../../../actions/movies";
 
 export class Movies extends Component {
   static propTypes = {
@@ -62,7 +62,7 @@ export class Movies extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  movies: state.videos.movies,
+  movies: state.movies.movies,
 });
 
 export default connect(mapStateToProps, { getMovies, deleteMovie })(Movies);

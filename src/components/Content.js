@@ -22,11 +22,13 @@ class Content extends Component {
 
   render() {
     if (this.props.isLoading)
-      return <div className="text-gray-200">Loading....</div>;
+      return <div className="text-gray-100">Loading....</div>;
 
     return (
       <Router>
-        <div className={`text-gray-200 ${this.props.theme}`}>
+        <div
+          className={`text-gray-100 ${this.props.theme} bg-gradient-to-t from-secondary to-tertiary min-h-screen`}
+        >
           <Header />
           <Switch>
             <Route exact path="/" component={Home}></Route>

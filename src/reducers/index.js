@@ -1,8 +1,14 @@
 import { combineReducers } from "redux";
-import videos from "./videos";
+import info from "./info";
 import page from "./page";
+import anime from "./anime";
+import serials from "./serials";
+import movies from "./movies";
 
 export default combineReducers({
-  videos,
+  info,
+  anime,
+  serials,
+  movies,
   page,
 });

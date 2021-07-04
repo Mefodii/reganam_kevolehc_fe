@@ -13,8 +13,8 @@
 
 .anime-theme {
   --primary: #150017;
-  --secondary: #170019;
-  --tertiary: #26002b;
+  --secondary: #210024;
+  --tertiary: #320138;
 }
 
 @tailwind utilities;

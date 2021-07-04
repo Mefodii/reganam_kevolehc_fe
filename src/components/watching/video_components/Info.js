@@ -24,7 +24,7 @@ export class Info extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  statusTypes: state.videos.info.statusTypes,
+  statusTypes: state.info.statusTypes,
 });
 
 export default connect(mapStateToProps, null)(Info);

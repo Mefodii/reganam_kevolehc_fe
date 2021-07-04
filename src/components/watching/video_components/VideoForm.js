@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import { addAnime, addMovie, addSerial } from "../../../actions/videos";
+import { addAnime } from "../../../actions/anime";
+import { addSerial } from "../../../actions/serials";
+import { addMovie } from "../../../actions/movies";
 
 export class VideoForm extends Component {
   state = {
@@ -137,8 +139,8 @@ export class VideoForm extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  videoTypes: state.videos.info.videoTypes,
-  statusTypes: state.videos.info.statusTypes,
+  videoTypes: state.info.videoTypes,
+  statusTypes: state.info.statusTypes,
 });
 
 export default connect(mapStateToProps, { addAnime, addMovie, addSerial })(

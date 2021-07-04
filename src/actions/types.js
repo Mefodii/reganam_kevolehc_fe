@@ -30,8 +30,3 @@ export const DELETE_POSTER = "DELETE_POSTER";
 export const DELETE_ANIME_POSTER = "DELETE_ANIME_POSTER";
 export const DELETE_SERIAL_POSTER = "DELETE_SERIAL_POSTER";
 export const DELETE_MOVIE_POSTER = "DELETE_MOVIE_POSTER";
-
-export const buildTypes = (main, secondary) => ({
-  main,
-  secondary,
-});

@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import { getSerials, deleteSerial } from "../../../actions/videos";
+import { getSerials, deleteSerial } from "../../../actions/serials";
 
 export class Serials extends Component {
   static propTypes = {
@@ -99,8 +99,8 @@ export class Serials extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  serials: state.videos.serials,
-  statusTypes: state.videos.info.statusTypes,
+  serials: state.serials.serials,
+  statusTypes: state.info.statusTypes,
 });
 
 export default connect(mapStateToProps, { getSerials, deleteSerial })(Serials);
