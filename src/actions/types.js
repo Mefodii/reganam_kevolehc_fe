@@ -1,0 +1,37 @@
+// PAGE ACTION TYPES
+export const LOAD_COMPLETE = "LOAD_COMPLETE";
+export const UPDATE_THEME = "UPDATE_THEME";
+
+// VIDEOS ACTION TYPES
+export const GET_VIDEOS = "GET_VIDEOS";
+export const GET_MOVIES = "GET_MOVIES";
+export const GET_SERIALS = "GET_SERIALS";
+export const GET_ANIME = "GET_ANIME";
+export const ADD_VIDEO = "ADD_VIDEO";
+export const ADD_ANIME = "ADD_ANIME";
+export const ADD_SERIAL = "ADD_SERIAL";
+export const ADD_MOVIE = "ADD_MOVIE";
+export const DELETE_VIDEO = "DELETE_VIDEO";
+export const DELETE_ANIME = "DELETE_ANIME";
+export const DELETE_SERIAL = "DELETE_SERIAL";
+export const DELETE_MOVIE = "DELETE_MOVIE";
+export const GET_WATCHIO_INFO = "GET_WATCHIO_INFO";
+
+// POSTERS ACTION TYPES
+export const ADD_POSTER = "ADD_POSTER";
+export const ADD_ANIME_POSTER = "ADD_ANIME_POSTER";
+export const ADD_SERIAL_POSTER = "ADD_SERIAL_POSTER";
+export const ADD_MOVIE_POSTER = "ADD_MOVIE_POSTER";
+export const UPDATE_POSTER = "UPDATE_POSTER";
+export const UPDATE_ANIME_POSTER = "UPDATE_ANIME_POSTER";
+export const UPDATE_SERIAL_POSTER = "UPDATE_SERIAL_POSTER";
+export const UPDATE_MOVIE_POSTER = "UPDATE_MOVIE_POSTER";
+export const DELETE_POSTER = "DELETE_POSTER";
+export const DELETE_ANIME_POSTER = "DELETE_ANIME_POSTER";
+export const DELETE_SERIAL_POSTER = "DELETE_SERIAL_POSTER";
+export const DELETE_MOVIE_POSTER = "DELETE_MOVIE_POSTER";
+
+export const buildTypes = (main, secondary) => ({
+  main,
+  secondary,
+});

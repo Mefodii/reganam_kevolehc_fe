@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+
+.drop-down {
+  @apply absolute;
+}
+
+.default-theme {
+  --primary: rgb(31, 41, 55);
+  --secondary: rgb(31, 41, 55);
+  --tertiary: rgb(55, 65, 81);
+}
+
+.anime-theme {
+  --primary: #150017;
+  --secondary: #170019;
+  --tertiary: #26002b;
+}
+
+@tailwind utilities;

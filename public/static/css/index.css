@@ -1,0 +1,24 @@
+/* fonts */
+@font-face {
+  font-family: "Quicksand";
+  src: url("../fonts/Quicksand-Light.woff2") format("woff2"),
+    url("../fonts/Quicksand-Light.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+}
+
+body {
+  background: #102a54;
+}
+
+* {
+  font-family: Quicksand;
+}
+/* to remove the top and left whitespace */
+#sky {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline;
+  z-index: -1;
+}
