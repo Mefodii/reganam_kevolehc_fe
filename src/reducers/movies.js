@@ -1,4 +1,8 @@
-import { GET_MOVIES, ADD_MOVIE, DELETE_MOVIE } from "../actions/types.js";
+import {
+  GET_MOVIES_GROUP,
+  ADD_MOVIE_GROUP,
+  DELETE_MOVIE_GROUP,
+} from "../actions/types.js";
 
 const initialState = {
   movies: [],
@@ -7,17 +11,17 @@ const initialState = {
 const reducer = (state = initialState, action) => {
   const payload = action.payload;
   switch (action.type) {
-    case GET_MOVIES:
+    case GET_MOVIES_GROUP:
       return {
         ...state,
         movies: payload,
       };
-    case ADD_MOVIE:
+    case ADD_MOVIE_GROUP:
       return {
         ...state,
         movies: [...state.movies, payload],
       };
-    case DELETE_MOVIE:
+    case DELETE_MOVIE_GROUP:
       return {
         ...state,
         movies: state.movies.filter(({ id }) => id !== payload),

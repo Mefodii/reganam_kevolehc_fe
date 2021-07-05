@@ -5,11 +5,11 @@ import PropTypes from "prop-types";
 import { getAnime } from "../../../actions/anime";
 import { updateTheme } from "../../../actions/page";
 
-import AnimeItem from "./AnimeItem";
+import AnimeGroup from "./AnimeGroup";
 
 export class Anime extends Component {
   static propTypes = {
-    anime: PropTypes.array.isRequired,
+    groups: PropTypes.array.isRequired,
     getAnime: PropTypes.func.isRequired,
   };
 
@@ -29,8 +29,8 @@ export class Anime extends Component {
           Welcome to Anime, fellow watcher
         </h2>
         <div className="rounded-xl shadow-lg w-10/12 bg-primary border border-tertiary">
-          {this.props.anime.map((video) => (
-            <AnimeItem video={video} key={video.id}></AnimeItem>
+          {this.props.groups.map((group) => (
+            <AnimeGroup group={group} key={group.id}></AnimeGroup>
           ))}
         </div>
       </div>
@@ -39,7 +39,7 @@ export class Anime extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  anime: state.anime.anime,
+  groups: state.anime.groups,
 });
 
 export default connect(mapStateToProps, { getAnime, updateTheme })(Anime);

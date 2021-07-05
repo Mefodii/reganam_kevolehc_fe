@@ -4,9 +4,10 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <br></br>
-        <h1> Home. </h1>
-        <h4>Probably the most awesome home page after it's finished</h4>
+        <div className="p-5 text-2xl font-semibold text-center">
+          <div>Probably the most awesome home page</div>
+          <div>...once it's finished</div>
+        </div>
       </div>
     );
   }

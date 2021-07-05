@@ -37,12 +37,14 @@ export class AnimeItem extends Component {
   };
 
   render() {
-    const { name, alias, id, status, year, images, seasons } = this.props.video;
+    const { name, alias, id, status, year, images, seasons, group } =
+      this.props.video;
     return (
       <div className="flex m-5 p-2 border-2 shadow-2xl rounded-xl bg-secondary border-tertiary">
         <Poster
           images={images}
           videoId={id}
+          groupId={group}
           deletePoster={this.props.deleteAnimePoster}
           addPoster={this.props.addAnimePoster}
         ></Poster>
