@@ -1,6 +1,15 @@
-import { GET_ANIME_GROUPS, DELETE_ANIME_GROUP, ADD_ANIME_GROUP } from "./types";
-import { getGroups, addGroup, deleteGroup } from "../api/api";
+import {
+  GET_ANIME_GROUPS,
+  DELETE_ANIME_GROUP,
+  ADD_ANIME_GROUP,
+  ADD_ANIME_POSTER,
+  DELETE_ANIME_POSTER,
+} from "./types";
 
+import { getGroups, addGroup, deleteGroup, deletePoster } from "../api/api";
+import { addPoster } from "./posters";
+
+// GROUP ACTIONS
 export const getAnimeGroups = () => async (dispatch, getState) => {
   const { data: payload } = await getGroups(getState().info.videoTypes.anime);
   dispatch({
@@ -24,3 +33,26 @@ export const deleteAnimeGroup = (id) => async (dispatch) => {
     payload: id,
   });
 };
+// ----------------------------- //
+
+// POSTER ACTIONS
+export const addAnimePoster = (image, videoId, groupId) => async (dispatch) => {
+  const response = await addPoster(image, videoId);
+  dispatch({
+    type: ADD_ANIME_POSTER,
+    payload: {
+      poster: response.data,
+      groupId,
+      videoId,
+    },
+  });
+};
+
+export const deleteAnimePoster = (id, videoId, groupId) => async (dispatch) => {
+  await deletePoster(id);
+  dispatch({
+    type: DELETE_ANIME_POSTER,
+    payload: { id, videoId, groupId },
+  });
+};
+// ----------------------------- //

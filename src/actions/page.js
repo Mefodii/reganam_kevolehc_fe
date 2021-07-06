@@ -1,11 +1,8 @@
 import { GET_WATCHIO_INFO, LOAD_COMPLETE, UPDATE_THEME } from "./types";
 
-import { API_GET_WATCHIO_INFO } from "../api/urls";
-import { addConfigJsonType } from "./default";
+import { getInfo as getInfoApi } from "../api/api";
 
 import { getThemeForUrl } from "../util/colors";
-
-import axios from "axios";
 
 export const updateTheme = () => (dispatch) => {
   dispatch({
@@ -15,11 +12,11 @@ export const updateTheme = () => (dispatch) => {
 };
 
 export const getInfo = () => async (dispatch) => {
-  const response = await axios.get(API_GET_WATCHIO_INFO, addConfigJsonType());
+  const { data: payload } = await getInfoApi();
 
   dispatch({
     type: GET_WATCHIO_INFO,
-    payload: response.data,
+    payload,
   });
 
   dispatch({

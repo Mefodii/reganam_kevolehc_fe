@@ -2,8 +2,11 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import { addAnimePoster, deleteAnimePoster } from "../../../actions/posters";
-import { deleteAnimeGroup } from "../../../actions/anime";
+import {
+  addAnimePoster,
+  deleteAnimePoster,
+  deleteAnimeGroup,
+} from "../../../actions/anime";
 
 import Poster from "../video_components/Poster";
 import Info from "../video_components/Info";
