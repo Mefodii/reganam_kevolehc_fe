@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import { getAnime } from "../../../actions/anime";
+import { getAnimeGroups } from "../../../actions/anime";
 import { updateTheme } from "../../../actions/page";
 
 import AnimeGroup from "./AnimeGroup";
@@ -10,11 +10,11 @@ import AnimeGroup from "./AnimeGroup";
 export class Anime extends Component {
   static propTypes = {
     groups: PropTypes.array.isRequired,
-    getAnime: PropTypes.func.isRequired,
+    getAnimeGroups: PropTypes.func.isRequired,
   };
 
   componentDidMount() {
-    this.props.getAnime();
+    this.props.getAnimeGroups();
     this.props.updateTheme();
   }
 
@@ -42,4 +42,4 @@ const mapStateToProps = (state) => ({
   groups: state.anime.groups,
 });
 
-export default connect(mapStateToProps, { getAnime, updateTheme })(Anime);
+export default connect(mapStateToProps, { getAnimeGroups, updateTheme })(Anime);

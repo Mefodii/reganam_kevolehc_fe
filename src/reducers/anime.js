@@ -6,51 +6,29 @@ import {
   DELETE_ANIME_POSTER,
 } from "../actions/types.js";
 
-import {
-  addPoster,
-  deletePoster,
-  sortGroups,
-  addGroup,
-  deleteGroup,
-} from "./videos";
+import groupReducer from "./groups";
 
 const initialState = {
   groups: [],
 };
 
-const reducer = (state = initialState, action) => {
-  const { groups } = state;
-  const { type, payload } = action;
+const GROUP_ACTION_TYPES = [
+  GET_ANIME_GROUP,
+  ADD_ANIME_GROUP,
+  DELETE_ANIME_GROUP,
+  ADD_ANIME_POSTER,
+  DELETE_ANIME_POSTER,
+];
+const isGroupType = (type) => GROUP_ACTION_TYPES.find((_) => type === _);
 
-  switch (type) {
-    case GET_ANIME_GROUP:
-      return {
-        ...state,
-        groups: sortGroups(payload),
-      };
-    case ADD_ANIME_GROUP:
-      return {
-        ...state,
-        groups: addGroup(groups, payload),
-      };
-    case DELETE_ANIME_GROUP:
-      return {
-        ...state,
-        groups: deleteGroup(groups, payload),
-      };
-    case ADD_ANIME_POSTER:
-      return {
-        ...state,
-        groups: addPoster(groups, payload),
-      };
-    case DELETE_ANIME_POSTER:
-      return {
-        ...state,
-        groups: deletePoster(groups, payload),
-      };
-    default:
-      return state;
-  }
+const reducer = (state = initialState, action) => {
+  if (isGroupType(action.type))
+    return {
+      ...state,
+      groups: groupReducer(state.groups, action),
+    };
+
+  return state;
 };
 
 export default reducer;

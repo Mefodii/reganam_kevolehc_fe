@@ -1,4 +1,8 @@
-const addPosterToVideo = (videos, poster) => {
+import { ADD_POSTER, DELETE_POSTER } from "../actions/types.js";
+
+const initialState = [];
+
+const addPoster = (videos, { poster }) => {
   return videos.map((video) => {
     if (poster.video !== video.id) return video;
 
@@ -9,7 +13,7 @@ const addPosterToVideo = (videos, poster) => {
   });
 };
 
-const deletePosterFromVideo = (videos, videoId, posterId) => {
+const deletePoster = (videos, { videoId, posterId }) => {
   return videos.map((video) => {
     if (videoId !== video.id) return video;
 
@@ -20,35 +24,17 @@ const deletePosterFromVideo = (videos, videoId, posterId) => {
   });
 };
 
-export const addPoster = (groups, { poster, groupId }) => {
-  return groups.map((group) => {
-    if (groupId !== group.id) return group;
+const reducer = (state = initialState, action) => {
+  const { type, payload } = action;
 
-    return {
-      ...group,
-      videos: addPosterToVideo(group.videos, poster),
-    };
-  });
+  switch (type) {
+    case ADD_POSTER:
+      return addPoster(state, payload);
+    case DELETE_POSTER:
+      return deletePoster(state, payload);
+    default:
+      return state;
+  }
 };
 
-export const deletePoster = (groups, { videoId, posterId, groupId }) => {
-  return groups.map((group) => {
-    if (groupId !== group.id) return group;
-
-    return {
-      ...group,
-      videos: deletePosterFromVideo(group.videos, videoId, posterId),
-    };
-  });
-};
-
-export const sortByOrder = (a, b) => a.order - b.order;
-export const sortGroups = (groups) => [
-  ...groups.map((group) => {
-    group.videos.sort(sortByOrder);
-    return group;
-  }),
-];
-export const deleteGroup = (groups, groupId) => {};
-
-export const addGroup = (groups, newGroup) => {};
+export default reducer;

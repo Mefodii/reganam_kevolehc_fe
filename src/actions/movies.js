@@ -4,7 +4,6 @@ import { GET_MOVIES_GROUP, DELETE_MOVIE_GROUP, ADD_MOVIE_GROUP } from "./types";
 import { API_VIDEOS } from "../api/urls";
 
 import { jsonConfig, jsonWithParamsConfig } from "../api/config";
-import { newVideo } from "./videos";
 
 export const getMovies = () => async (dispatch, getState) => {
   const videoType = getState().info.videoTypes.movie;
@@ -20,7 +19,7 @@ export const getMovies = () => async (dispatch, getState) => {
 export const addMovie = (movie) => async (dispatch) => {
   const config = jsonConfig();
   const response = await axios.post(API_VIDEOS, movie, config);
-  const payload = newVideo(response.data);
+  const payload = response.data;
   dispatch({
     type: ADD_MOVIE_GROUP,
     payload,

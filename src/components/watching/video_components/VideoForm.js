@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import { addAnime } from "../../../actions/anime";
+import { addAnimeGroup } from "../../../actions/anime";
 import { addSerial } from "../../../actions/serials";
 import { addMovie } from "../../../actions/movies";
 
@@ -18,7 +18,7 @@ export class VideoForm extends Component {
   static propTypes = {
     videoTypes: PropTypes.object.isRequired,
     statusTypes: PropTypes.array.isRequired,
-    addAnime: PropTypes.func.isRequired,
+    addAnimeGroup: PropTypes.func.isRequired,
     addMovie: PropTypes.func.isRequired,
     addSerial: PropTypes.func.isRequired,
   };
@@ -31,7 +31,7 @@ export class VideoForm extends Component {
     const video = { name, alias, year, type, status };
     console.log(video);
 
-    if (type === this.props.videoTypes.anime) this.props.addAnime(video);
+    if (type === this.props.videoTypes.anime) this.props.addAnimeGroup(video);
     if (type === this.props.videoTypes.serial) this.props.addSerial(video);
     if (type === this.props.videoTypes.movie) this.props.addMovie(video);
   };
@@ -143,6 +143,6 @@ const mapStateToProps = (state) => ({
   statusTypes: state.info.statusTypes,
 });
 
-export default connect(mapStateToProps, { addAnime, addMovie, addSerial })(
+export default connect(mapStateToProps, { addAnimeGroup, addMovie, addSerial })(
   VideoForm
 );

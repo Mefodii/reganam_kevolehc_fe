@@ -1,37 +1,24 @@
-import axios from "axios";
-
 import { GET_ANIME_GROUP, DELETE_ANIME_GROUP, ADD_ANIME_GROUP } from "./types";
-import { API_VIDEOS, API_VIDEO_GROUPS } from "../api/urls";
+import { getGroups, addGroup, deleteGroup } from "../api/api";
 
-import { jsonConfig, jsonWithParamsConfig } from "../api/config";
-import { newVideo } from "./videos";
-
-export const getAnime = () => async (dispatch, getState) => {
-  const videoType = getState().info.videoTypes.anime;
-  const config = jsonWithParamsConfig({ videoType });
-
-  const response = await axios.get(API_VIDEO_GROUPS, config);
+export const getAnimeGroups = () => async (dispatch, getState) => {
+  const { data: payload } = await getGroups(getState().info.videoTypes.anime);
   dispatch({
     type: GET_ANIME_GROUP,
-    payload: response.data,
+    payload,
   });
 };
 
-export const addAnime = (anime) => async (dispatch) => {
-  const config = jsonConfig();
-  const response = await axios.post(API_VIDEOS, anime, config);
-  const payload = newVideo(response.data);
+export const addAnimeGroup = (anime) => async (dispatch) => {
+  const { data: payload } = await addGroup(anime);
   dispatch({
     type: ADD_ANIME_GROUP,
     payload,
   });
 };
 
-export const deleteAnime = (id) => async (dispatch) => {
-  const url = `${API_VIDEOS}${id}/`;
-  const config = jsonConfig();
-
-  await axios.delete(url, config);
+export const deleteAnimeGroup = (id) => async (dispatch) => {
+  await deleteGroup(id);
   dispatch({
     type: DELETE_ANIME_GROUP,
     payload: id,
