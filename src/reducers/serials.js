@@ -1,5 +1,5 @@
 import {
-  GET_SERIALS_GROUP,
+  GET_SERIAL_GROUPS,
   ADD_SERIAL_GROUP,
   DELETE_SERIAL_GROUP,
 } from "../actions/types.js";
@@ -11,7 +11,7 @@ const initialState = {
 const reducer = (state = initialState, action) => {
   const payload = action.payload;
   switch (action.type) {
-    case GET_SERIALS_GROUP:
+    case GET_SERIAL_GROUPS:
       return {
         ...state,
         serials: payload,

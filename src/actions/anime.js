@@ -1,10 +1,10 @@
-import { GET_ANIME_GROUP, DELETE_ANIME_GROUP, ADD_ANIME_GROUP } from "./types";
+import { GET_ANIME_GROUPS, DELETE_ANIME_GROUP, ADD_ANIME_GROUP } from "./types";
 import { getGroups, addGroup, deleteGroup } from "../api/api";
 
 export const getAnimeGroups = () => async (dispatch, getState) => {
   const { data: payload } = await getGroups(getState().info.videoTypes.anime);
   dispatch({
-    type: GET_ANIME_GROUP,
+    type: GET_ANIME_GROUPS,
     payload,
   });
 };

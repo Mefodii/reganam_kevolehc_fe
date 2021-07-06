@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { GET_MOVIES_GROUP, DELETE_MOVIE_GROUP, ADD_MOVIE_GROUP } from "./types";
+import { GET_MOVIE_GROUPS, DELETE_MOVIE_GROUP, ADD_MOVIE_GROUP } from "./types";
 import { API_VIDEOS } from "../api/urls";
 
 import { jsonConfig, jsonWithParamsConfig } from "../api/config";
@@ -11,7 +11,7 @@ export const getMovies = () => async (dispatch, getState) => {
 
   const response = await axios.get(API_VIDEOS, config);
   dispatch({
-    type: GET_MOVIES_GROUP,
+    type: GET_MOVIE_GROUPS,
     payload: response.data,
   });
 };

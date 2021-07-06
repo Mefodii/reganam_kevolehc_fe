@@ -1,5 +1,5 @@
 import {
-  GET_MOVIES_GROUP,
+  GET_MOVIE_GROUPS,
   ADD_MOVIE_GROUP,
   DELETE_MOVIE_GROUP,
 } from "../actions/types.js";
@@ -11,7 +11,7 @@ const initialState = {
 const reducer = (state = initialState, action) => {
   const payload = action.payload;
   switch (action.type) {
-    case GET_MOVIES_GROUP:
+    case GET_MOVIE_GROUPS:
       return {
         ...state,
         movies: payload,

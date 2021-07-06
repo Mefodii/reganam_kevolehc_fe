@@ -11,18 +11,18 @@ export const addAnimePoster = (image, videoId, groupId) => async (dispatch) => {
     payload: {
       poster: response.data,
       groupId,
+      videoId,
     },
   });
 };
 
-export const deleteAnimePoster =
-  (posterId, videoId, groupId) => async (dispatch) => {
-    await deletePoster(posterId);
-    dispatch({
-      type: DELETE_ANIME_POSTER,
-      payload: { posterId, videoId, groupId },
-    });
-  };
+export const deleteAnimePoster = (id, videoId, groupId) => async (dispatch) => {
+  await deletePoster(id);
+  dispatch({
+    type: DELETE_ANIME_POSTER,
+    payload: { id, videoId, groupId },
+  });
+};
 
 export const addPoster = async (image, videoId) => {
   const config = formDataConfig();

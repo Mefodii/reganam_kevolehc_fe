@@ -1,7 +1,7 @@
 import axios from "axios";
 
 import {
-  GET_SERIALS_GROUP,
+  GET_SERIAL_GROUPS,
   DELETE_SERIAL_GROUP,
   ADD_SERIAL_GROUP,
 } from "./types";
@@ -15,7 +15,7 @@ export const getSerials = () => async (dispatch, getState) => {
 
   const response = await axios.get(API_VIDEOS, config);
   dispatch({
-    type: GET_SERIALS_GROUP,
+    type: GET_SERIAL_GROUPS,
     payload: response.data,
   });
 };
