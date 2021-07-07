@@ -1,27 +1,49 @@
 import {
   GET_ANIME_GROUPS,
-  DELETE_ANIME_GROUP,
   ADD_ANIME_GROUP,
+  UPDATE_ANIME_GROUP,
+  DELETE_ANIME_GROUP,
+  ADD_ANIME_VIDEO,
+  UPDATE_ANIME_VIDEO,
+  DELETE_ANIME_VIDEO,
   ADD_ANIME_POSTER,
   DELETE_ANIME_POSTER,
 } from "./types";
 
-import { getGroups, addGroup, deleteGroup, deletePoster } from "../api/api";
+import {
+  getGroups,
+  addGroup,
+  updateGroup,
+  addVideo,
+  updateVideo,
+  deleteVideo,
+  deleteGroup,
+  deletePoster,
+} from "../api/api";
 import { addPoster } from "./posters";
 
 // GROUP ACTIONS
 export const getAnimeGroups = () => async (dispatch, getState) => {
-  const { data: payload } = await getGroups(getState().info.videoTypes.anime);
+  const videoType = getState().info.videoTypes.anime;
+  const { data: payload } = await getGroups(videoType);
   dispatch({
     type: GET_ANIME_GROUPS,
     payload,
   });
 };
 
-export const addAnimeGroup = (anime) => async (dispatch) => {
-  const { data: payload } = await addGroup(anime);
+export const addAnimeGroup = (group) => async (dispatch) => {
+  const { data: payload } = await addGroup(group);
   dispatch({
     type: ADD_ANIME_GROUP,
+    payload,
+  });
+};
+
+export const updateAnimeGroup = (group) => async (dispatch) => {
+  const { data: payload } = await updateGroup(group);
+  dispatch({
+    type: UPDATE_ANIME_GROUP,
     payload,
   });
 };
@@ -30,6 +52,32 @@ export const deleteAnimeGroup = (id) => async (dispatch) => {
   await deleteGroup(id);
   dispatch({
     type: DELETE_ANIME_GROUP,
+    payload: id,
+  });
+};
+// ----------------------------- //
+
+// VIDEO ACTIONS
+export const addAnimeVideo = (video) => async (dispatch) => {
+  const { data: payload } = await addVideo(video);
+  dispatch({
+    type: ADD_ANIME_VIDEO,
+    payload,
+  });
+};
+
+export const updateAnimeVideo = (video) => async (dispatch) => {
+  const { data: payload } = await updateVideo(video);
+  dispatch({
+    type: UPDATE_ANIME_VIDEO,
+    payload,
+  });
+};
+
+export const deleteAnimeVideo = (id) => async (dispatch) => {
+  await deleteVideo(id);
+  dispatch({
+    type: DELETE_ANIME_VIDEO,
     payload: id,
   });
 };

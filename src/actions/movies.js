@@ -1,38 +1,106 @@
-import axios from "axios";
+import {
+  GET_MOVIE_GROUPS,
+  ADD_MOVIE_GROUP,
+  UPDATE_MOVIE_GROUP,
+  DELETE_MOVIE_GROUP,
+  ADD_MOVIE_VIDEO,
+  UPDATE_MOVIE_VIDEO,
+  DELETE_MOVIE_VIDEO,
+  ADD_MOVIE_POSTER,
+  DELETE_MOVIE_POSTER,
+} from "./types";
 
-import { GET_MOVIE_GROUPS, DELETE_MOVIE_GROUP, ADD_MOVIE_GROUP } from "./types";
-import { API_VIDEOS } from "../api/urls";
+import {
+  getGroups,
+  addGroup,
+  updateGroup,
+  addVideo,
+  updateVideo,
+  deleteVideo,
+  deleteGroup,
+  deletePoster,
+} from "../api/api";
+import { addPoster } from "./posters";
 
-import { jsonConfig, jsonWithParamsConfig } from "../api/config";
-
-export const getMovies = () => async (dispatch, getState) => {
+// GROUP ACTIONS
+export const getMovieGroups = () => async (dispatch, getState) => {
   const videoType = getState().info.videoTypes.movie;
-  const config = jsonWithParamsConfig({ videoType });
-
-  const response = await axios.get(API_VIDEOS, config);
+  const { data: payload } = await getGroups(videoType);
   dispatch({
     type: GET_MOVIE_GROUPS,
-    payload: response.data,
+    payload,
   });
 };
 
-export const addMovie = (movie) => async (dispatch) => {
-  const config = jsonConfig();
-  const response = await axios.post(API_VIDEOS, movie, config);
-  const payload = response.data;
+export const addMovieGroup = (group) => async (dispatch) => {
+  const { data: payload } = await addGroup(group);
   dispatch({
     type: ADD_MOVIE_GROUP,
     payload,
   });
 };
 
-export const deleteMovie = (id) => async (dispatch) => {
-  const url = `${API_VIDEOS}${id}/`;
-  const config = jsonConfig();
+export const updateMovieGroup = (group) => async (dispatch) => {
+  const { data: payload } = await updateGroup(group);
+  dispatch({
+    type: UPDATE_MOVIE_GROUP,
+    payload,
+  });
+};
 
-  await axios.delete(url, config);
+export const deleteMovieGroup = (id) => async (dispatch) => {
+  await deleteGroup(id);
   dispatch({
     type: DELETE_MOVIE_GROUP,
     payload: id,
   });
 };
+// ----------------------------- //
+
+// VIDEO ACTIONS
+export const addMovieVideo = (video) => async (dispatch) => {
+  const { data: payload } = await addVideo(video);
+  dispatch({
+    type: ADD_MOVIE_VIDEO,
+    payload,
+  });
+};
+
+export const updateMovieVideo = (video) => async (dispatch) => {
+  const { data: payload } = await updateVideo(video);
+  dispatch({
+    type: UPDATE_MOVIE_VIDEO,
+    payload,
+  });
+};
+
+export const deleteMovieVideo = (id) => async (dispatch) => {
+  await deleteVideo(id);
+  dispatch({
+    type: DELETE_MOVIE_VIDEO,
+    payload: id,
+  });
+};
+// ----------------------------- //
+
+// POSTER ACTIONS
+export const addMoviePoster = (image, videoId, groupId) => async (dispatch) => {
+  const response = await addPoster(image, videoId);
+  dispatch({
+    type: ADD_MOVIE_POSTER,
+    payload: {
+      poster: response.data,
+      groupId,
+      videoId,
+    },
+  });
+};
+
+export const deleteMoviePoster = (id, videoId, groupId) => async (dispatch) => {
+  await deletePoster(id);
+  dispatch({
+    type: DELETE_MOVIE_POSTER,
+    payload: { id, videoId, groupId },
+  });
+};
+// ----------------------------- //

@@ -1,6 +1,11 @@
 import axios from "axios";
 
-import { API_GROUPS, API_POSTERS, API_GET_WATCHIO_INFO } from "./urls";
+import {
+  API_GROUPS,
+  API_POSTERS,
+  API_GET_WATCHIO_INFO,
+  API_VIDEOS,
+} from "./urls";
 
 import {
   jsonConfig as json,
@@ -15,8 +20,24 @@ export const getGroups = async (videoType) =>
 export const addGroup = async (group) =>
   await axios.post(API_GROUPS, group, json());
 
+export const updateGroup = async (group) =>
+  await axios.put(API_GROUPS, group, json());
+
 export const deleteGroup = async (id) =>
   await axios.delete(`${API_GROUPS}${id}/`, json());
+// ----------------------------- //
+
+// VIDEOS API
+export const getVideos = async () => await axios.get(API_VIDEOS, json());
+
+export const addVideo = async (video) =>
+  await axios.post(API_VIDEOS, video, json());
+
+export const updateVideo = async (video) =>
+  await axios.put(API_VIDEOS, video, json());
+
+export const deleteVideo = async (id) =>
+  await axios.delete(`${API_VIDEOS}${id}/`, json());
 // ----------------------------- //
 
 // POSTERS API

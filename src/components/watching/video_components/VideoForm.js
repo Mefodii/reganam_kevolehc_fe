@@ -3,8 +3,8 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 import { addAnimeGroup } from "../../../actions/anime";
-import { addSerial } from "../../../actions/serials";
-import { addMovie } from "../../../actions/movies";
+import { getSerialGroups } from "../../../actions/serials";
+import { addMovieGroup } from "../../../actions/movies";
 
 export class VideoForm extends Component {
   state = {
@@ -19,8 +19,8 @@ export class VideoForm extends Component {
     videoTypes: PropTypes.object.isRequired,
     statusTypes: PropTypes.array.isRequired,
     addAnimeGroup: PropTypes.func.isRequired,
-    addMovie: PropTypes.func.isRequired,
-    addSerial: PropTypes.func.isRequired,
+    addMovieGroup: PropTypes.func.isRequired,
+    getSerialGroups: PropTypes.func.isRequired,
   };
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
@@ -32,8 +32,9 @@ export class VideoForm extends Component {
     console.log(video);
 
     if (type === this.props.videoTypes.anime) this.props.addAnimeGroup(video);
-    if (type === this.props.videoTypes.serial) this.props.addSerial(video);
-    if (type === this.props.videoTypes.movie) this.props.addMovie(video);
+    if (type === this.props.videoTypes.serial)
+      this.props.getSerialGroups(video);
+    if (type === this.props.videoTypes.movie) this.props.addMovieGroup(video);
   };
 
   render() {
@@ -143,6 +144,8 @@ const mapStateToProps = (state) => ({
   statusTypes: state.info.statusTypes,
 });
 
-export default connect(mapStateToProps, { addAnimeGroup, addMovie, addSerial })(
-  VideoForm
-);
+export default connect(mapStateToProps, {
+  addAnimeGroup,
+  addMovieGroup,
+  getSerialGroups,
+})(VideoForm);
