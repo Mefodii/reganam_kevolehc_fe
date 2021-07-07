@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import {
   addAnimePoster,
   deleteAnimePoster,
-  deleteAnimeGroup,
+  deleteAnimeVideo,
 } from "../../../actions/anime";
 
 import Poster from "../video_components/Poster";
@@ -18,7 +18,7 @@ export class AnimeItem extends Component {
     video: PropTypes.object.isRequired,
     addAnimePoster: PropTypes.func.isRequired,
     deleteAnimePoster: PropTypes.func.isRequired,
-    deleteAnimeGroup: PropTypes.func.isRequired,
+    deleteAnimeVideo: PropTypes.func.isRequired,
   };
 
   state = {
@@ -35,8 +35,8 @@ export class AnimeItem extends Component {
     // TODO
   };
 
-  deleteAnimeGroup = (id) => () => {
-    this.props.deleteAnimeGroup(id);
+  deleteAnimeVideo = (id) => () => {
+    this.props.deleteAnimeVideo(id);
   };
 
   render() {
@@ -56,7 +56,7 @@ export class AnimeItem extends Component {
           <Seasons seasons={seasons} videoId={id}></Seasons>
         </div>
         <Info status={status} updateStatus={this.updateStatus}></Info>
-        <div onClick={this.deleteAnimeGroup(id)}>Delete</div>
+        <div onClick={this.deleteAnimeVideo(id)}>Delete</div>
       </div>
     );
   }
@@ -65,7 +65,7 @@ export class AnimeItem extends Component {
 const mapDispatchToProps = {
   addAnimePoster,
   deleteAnimePoster,
-  deleteAnimeGroup,
+  deleteAnimeVideo,
 };
 
 export default connect(null, mapDispatchToProps)(AnimeItem);

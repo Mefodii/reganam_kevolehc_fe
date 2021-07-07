@@ -33,18 +33,18 @@ export const getSerialGroups = () => async (dispatch, getState) => {
 };
 
 export const addSerialGroup = (group) => async (dispatch) => {
-  const { data: payload } = await addGroup(group);
+  const { data } = await addGroup(group);
   dispatch({
     type: ADD_SERIAL_GROUP,
-    payload,
+    payload: { group: data },
   });
 };
 
 export const updateSerialGroup = (group) => async (dispatch) => {
-  const { data: payload } = await updateGroup(group);
+  const { data } = await updateGroup(group);
   dispatch({
     type: UPDATE_SERIAL_GROUP,
-    payload,
+    payload: { group: data },
   });
 };
 
@@ -52,33 +52,33 @@ export const deleteSerialGroup = (id) => async (dispatch) => {
   await deleteGroup(id);
   dispatch({
     type: DELETE_SERIAL_GROUP,
-    payload: id,
+    payload: { id },
   });
 };
 // ----------------------------- //
 
 // VIDEO ACTIONS
-export const addSerialVideo = (video) => async (dispatch) => {
-  const { data: payload } = await addVideo(video);
+export const addSerialVideo = (video, groupId) => async (dispatch) => {
+  const { data } = await addVideo(video);
   dispatch({
     type: ADD_SERIAL_VIDEO,
-    payload,
+    payload: { video: data, groupId },
   });
 };
 
-export const updateSerialVideo = (video) => async (dispatch) => {
-  const { data: payload } = await updateVideo(video);
+export const updateSerialVideo = (video, groupId) => async (dispatch) => {
+  const { data } = await updateVideo(video);
   dispatch({
     type: UPDATE_SERIAL_VIDEO,
-    payload,
+    payload: { video: data, groupId },
   });
 };
 
-export const deleteSerialVideo = (id) => async (dispatch) => {
+export const deleteSerialVideo = (id, groupId) => async (dispatch) => {
   await deleteVideo(id);
   dispatch({
     type: DELETE_SERIAL_VIDEO,
-    payload: id,
+    payload: { id, groupId },
   });
 };
 // ----------------------------- //

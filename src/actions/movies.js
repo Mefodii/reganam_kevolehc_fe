@@ -33,18 +33,18 @@ export const getMovieGroups = () => async (dispatch, getState) => {
 };
 
 export const addMovieGroup = (group) => async (dispatch) => {
-  const { data: payload } = await addGroup(group);
+  const { data } = await addGroup(group);
   dispatch({
     type: ADD_MOVIE_GROUP,
-    payload,
+    payload: { group: data },
   });
 };
 
 export const updateMovieGroup = (group) => async (dispatch) => {
-  const { data: payload } = await updateGroup(group);
+  const { data } = await updateGroup(group);
   dispatch({
     type: UPDATE_MOVIE_GROUP,
-    payload,
+    payload: { group: data },
   });
 };
 
@@ -52,33 +52,33 @@ export const deleteMovieGroup = (id) => async (dispatch) => {
   await deleteGroup(id);
   dispatch({
     type: DELETE_MOVIE_GROUP,
-    payload: id,
+    payload: { id },
   });
 };
 // ----------------------------- //
 
 // VIDEO ACTIONS
-export const addMovieVideo = (video) => async (dispatch) => {
-  const { data: payload } = await addVideo(video);
+export const addMovieVideo = (video, groupId) => async (dispatch) => {
+  const { data } = await addVideo(video);
   dispatch({
     type: ADD_MOVIE_VIDEO,
-    payload,
+    payload: { video: data, groupId },
   });
 };
 
-export const updateMovieVideo = (video) => async (dispatch) => {
-  const { data: payload } = await updateVideo(video);
+export const updateMovieVideo = (video, groupId) => async (dispatch) => {
+  const { data } = await updateVideo(video);
   dispatch({
     type: UPDATE_MOVIE_VIDEO,
-    payload,
+    payload: { video: data, groupId },
   });
 };
 
-export const deleteMovieVideo = (id) => async (dispatch) => {
+export const deleteMovieVideo = (id, groupId) => async (dispatch) => {
   await deleteVideo(id);
   dispatch({
     type: DELETE_MOVIE_VIDEO,
-    payload: id,
+    payload: { id, groupId },
   });
 };
 // ----------------------------- //

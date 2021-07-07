@@ -21,7 +21,7 @@ export const addGroup = async (group) =>
   await axios.post(API_GROUPS, group, json());
 
 export const updateGroup = async (group) =>
-  await axios.put(API_GROUPS, group, json());
+  await axios.put(`${API_GROUPS}${group.id}/`, group, json());
 
 export const deleteGroup = async (id) =>
   await axios.delete(`${API_GROUPS}${id}/`, json());
@@ -34,7 +34,7 @@ export const addVideo = async (video) =>
   await axios.post(API_VIDEOS, video, json());
 
 export const updateVideo = async (video) =>
-  await axios.put(API_VIDEOS, video, json());
+  await axios.put(`${API_VIDEOS}${video.id}/`, video, json());
 
 export const deleteVideo = async (id) =>
   await axios.delete(`${API_VIDEOS}${id}/`, json());
