@@ -35,8 +35,8 @@ export class AnimeItem extends Component {
     // TODO
   };
 
-  deleteAnimeVideo = (id) => () => {
-    this.props.deleteAnimeVideo(id);
+  deleteAnimeVideo = (id, groupId) => () => {
+    this.props.deleteAnimeVideo(id, groupId);
   };
 
   render() {
@@ -56,7 +56,7 @@ export class AnimeItem extends Component {
           <Seasons seasons={seasons} videoId={id}></Seasons>
         </div>
         <Info status={status} updateStatus={this.updateStatus}></Info>
-        <div onClick={this.deleteAnimeVideo(id)}>Delete</div>
+        <div onClick={this.deleteAnimeVideo(id, group)}>Delete</div>
       </div>
     );
   }

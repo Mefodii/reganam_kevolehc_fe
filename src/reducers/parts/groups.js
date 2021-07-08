@@ -53,6 +53,7 @@ const reducer = (groups = [], action) => {
 
     case isVideoActionType(type):
       const id = action.payload.groupId;
+      console.log(id, action.payload);
       return partialUpdate(groups, id, "videos", videoAction(action));
 
     default:

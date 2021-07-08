@@ -22,6 +22,7 @@ const posterAction = (action) => (video) => posterReducer(video.images, action);
 
 const reducer = (videos = [], action) => {
   const { type, payload } = action;
+  console.log(videos, action);
 
   switch (type) {
     case ADD_VIDEO:

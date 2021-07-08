@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import { deleteAnimeGroup } from "../../../actions/anime";
+import { deleteAnimeGroup, addAnimeVideo } from "../../../actions/anime";
 
 import AnimeItem from "./AnimeItem";
+import VideoForm from "../video_components/VideoForm";
 
 export class AnimeGroup extends Component {
   static propTypes = {
@@ -21,6 +22,11 @@ export class AnimeGroup extends Component {
     return (
       <div className="">
         <div>{name}</div>
+        <VideoForm
+          submit={this.props.addAnimeVideo}
+          type={this.props.animeType}
+          groupId={id}
+        ></VideoForm>
         <div onClick={this.deleteAnimeGroup(id)}>Delete</div>
         <div className="">
           {videos.map((video) => (
@@ -32,4 +38,10 @@ export class AnimeGroup extends Component {
   }
 }
 
-export default connect(null, { deleteAnimeGroup })(AnimeGroup);
+const mapStateToProps = (state) => ({
+  animeType: state.info.videoTypes.anime,
+});
+
+export default connect(mapStateToProps, { deleteAnimeGroup, addAnimeVideo })(
+  AnimeGroup
+);
