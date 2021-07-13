@@ -629,6 +629,18 @@ video {
   --tertiary: #320138;
 }
 
+.serials-theme {
+  --primary: #170d00;
+  --secondary: #241900;
+  --tertiary: #382501;
+}
+
+.movies-theme {
+  --primary: #001708;
+  --secondary: #00240c;
+  --tertiary: #01380c;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;

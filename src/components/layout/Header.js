@@ -33,7 +33,7 @@ class Header extends Component {
             onMouseEnter={this.showDropDown}
             onMouseLeave={this.hideDropDown}
           >
-            <NavLink to="/watchio">WatchIO</NavLink>
+            <div className="inline-block">WatchIO</div>
             <SVGDownArrow className="inline transform group-hover:-rotate-180 transition ease-in duration-150 opacity-75 scale-75"></SVGDownArrow>
             <div
               className={`drop-down ${dropDownVisibility} bg-primary border border-tertiary shadow-md z-10`}
