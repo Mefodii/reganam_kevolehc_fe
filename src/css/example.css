@@ -1,0 +1,161 @@
+@tailwind base;
+@tailwind components;
+
+.table-generic {
+  @apply table-auto shadow-md rounded border border-gray-400 dark:border-gray-600;
+}
+
+.table-row {
+  @apply hover:bg-gray-400 dark:hover:bg-gray-400;
+}
+
+.table-row:nth-child(odd) {
+  @apply bg-gray-200 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-400;
+}
+
+.table-header-row {
+  @apply uppercase bg-gray-300 dark:bg-gray-800;
+}
+
+.table-cell-header {
+  @apply py-1 px-2;
+}
+
+.table-cell-header-slim {
+  @apply px-2;
+}
+
+.table-cell-string {
+  @apply py-1 px-2 text-left;
+}
+
+.table-cell-char {
+  @apply p-1 text-center;
+}
+
+.table-cell-border {
+  @apply border-l border-gray-300 dark:border-gray-700;
+}
+
+.div-overlay {
+  @apply absolute top-0 left-0 opacity-10 w-full h-full;
+}
+
+.click-transition {
+  @apply transition duration-200 ease-in-out;
+}
+
+.modal {
+  @apply fixed bottom-0 left-0 h-full w-full text-center flex items-center justify-center z-10;
+}
+
+.modal-bg {
+  @apply fixed bottom-0 left-0 h-full w-full bg-gray-700 opacity-90;
+}
+
+.modal-content {
+  @apply rounded-xl shadow-2xl bg-gray-100 dark:bg-gray-700 z-20;
+}
+
+.modal-row {
+  @apply mb-4 flex flex-row w-full justify-between space-x-4;
+}
+
+.modal-close-button {
+  @apply flex justify-end m-3 pr-3 cursor-pointer font-bold hover:text-purple-300 active:text-purple-800;
+}
+
+.button-generic {
+  @apply cursor-pointer focus:outline-none font-bold py-2 px-4 rounded border-2 
+  border-gray-700 hover:bg-gray-300 active:bg-gray-400
+  dark:border-gray-600 dark:hover:text-purple-300 dark:hover:bg-gray-700 dark:active:text-purple-700 dark:active:bg-gray-400;
+}
+
+.ring-error {
+  @apply ring-4 ring-red-500 ring-opacity-30;
+}
+
+.input-container {
+  @apply w-full relative pb-2 pt-6 px-3 border-b-2 bg-gray-200 border-gray-300 dark:bg-gray-700 dark:border-gray-600;
+}
+
+.input-label {
+  @apply absolute opacity-70 text-sm left-3 top-1 select-none;
+}
+
+.input-error {
+  @apply mt-1 text-left text-sm text-red-500;
+}
+
+.input-container-error {
+  @apply ring-error mb-4;
+}
+
+.input-text {
+  @apply outline-none w-full bg-transparent;
+}
+
+.input-radio {
+  @apply m-1;
+}
+
+.input-multi-options {
+  @apply flex flex-row flex-wrap items-center;
+}
+
+.option {
+  @apply p-1 mb-1 cursor-pointer border-2 border-gray-400 rounded-lg;
+}
+
+.option-inline {
+  @apply py-1 px-2 my-1 mr-2 cursor-pointer border-2 border-gray-400 rounded-lg;
+}
+
+.option-selected {
+  @apply bg-green-500 bg-opacity-40;
+}
+
+.option-dropdown-container {
+  @apply absolute rounded-sm shadow-md border
+  bg-gray-300 border-gray-400 dark:bg-gray-800 dark:border-gray-600 origin-top
+  transform scale-0 duration-300 ease-in-out group-hover:scale-100;
+}
+
+.option-dropdown-item {
+  @apply hover:bg-gray-400 dark:hover:bg-gray-600;
+}
+
+.dropdown-container {
+  @apply flex flex-col absolute origin-top hover-up bg-gray-200 dark:bg-gray-700;
+}
+
+.dropdown-item {
+  @apply flex flex-row hover:text-purple-800 hover:bg-gray-300 active:bg-gray-500 dark:hover:text-purple-300 dark:hover:bg-gray-600 dark:active:bg-gray-400;
+}
+
+.action-icon {
+  @apply cursor-pointer transform ease-in-out duration-300 hover:text-purple-700 dark:hover:text-purple-300 hover:scale-125;
+}
+
+.hover-up {
+  @apply transform scale-0 duration-300 ease-in-out group-hover:scale-100;
+}
+
+input:checked ~ .dot {
+  transform: translateX(100%);
+  background-color: #48bb78;
+}
+
+.legend-item {
+  @apply mx-2 px-4 py-1 border border-gray-600 rounded-full;
+}
+
+.test:hover {
+  background-color: rgb(156, 163, 175);
+}
+
+.warning-element {
+  @apply cursor-help text-yellow-700 dark:text-yellow-300;
+}
+
+@tailwind utilities;

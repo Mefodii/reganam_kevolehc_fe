@@ -29,4 +29,79 @@
   --tertiary: #01380c;
 }
 
+.btn {
+  @apply text-center cursor-pointer focus:outline-none font-bold py-2 px-4 rounded border-2 
+  bg-tertiary border-primary hover:brightness-125 active:brightness-150 filter brightness-110;
+}
+
+.ring-error {
+  @apply ring-4 ring-red-500 ring-opacity-30;
+}
+
+.input-container {
+  @apply w-full relative pb-2 pt-6 px-3 border-b-2 bg-gray-200 border-gray-300;
+}
+
+.input-label {
+  @apply absolute opacity-70 text-sm left-3 top-1 select-none;
+}
+
+.input-error {
+  @apply mt-1 text-left text-sm text-red-500;
+}
+
+.input-container-error {
+  @apply ring-error mb-4;
+}
+
+.input-text {
+  @apply outline-none w-full bg-transparent;
+}
+
+.input-radio {
+  @apply m-1;
+}
+
+.input-multi-options {
+  @apply flex flex-row flex-wrap items-center;
+}
+
+.option {
+  @apply p-1 mb-1 cursor-pointer border-2 border-gray-400 rounded-lg;
+}
+
+.option-inline {
+  @apply py-1 px-2 my-1 mr-2 cursor-pointer border-2 border-gray-400 rounded-lg;
+}
+
+.option-selected {
+  @apply bg-green-500 bg-opacity-40;
+}
+
+.option-dropdown-container {
+  @apply absolute rounded-sm shadow-md border
+  bg-gray-300 border-gray-400 origin-top
+  transform scale-0 duration-300 ease-in-out group-hover:scale-100;
+}
+
+.option-dropdown-item {
+  @apply hover:bg-gray-400;
+}
+
+.dropdown-container {
+  @apply flex flex-col absolute origin-top hover-up bg-gray-200;
+}
+
+.dropdown-item {
+  @apply flex flex-row hover:text-purple-800 hover:bg-gray-300 active:bg-gray-500;
+}
+
+.action-icon {
+  @apply cursor-pointer transform ease-in-out duration-300 hover:text-purple-700;
+}
+
+.hover-up {
+  @apply transform scale-0 duration-300 ease-in-out group-hover:scale-100;
+}
+
 @tailwind utilities;

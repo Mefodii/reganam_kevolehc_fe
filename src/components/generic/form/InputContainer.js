@@ -99,7 +99,11 @@ export class InputContainer extends Component {
     const { label, error, type } = this.props;
     return (
       <div className="w-full">
-        <div className={`input-container ${error && "ring-error"}`}>
+        <div
+          className={`w-full relative pb-2 pt-6 px-3 border-b-2 bg-tertiary border-primary ${
+            error && "ring-error"
+          }`}
+        >
           <div className="input-label">{label}</div>
           {type && this.renderByType()}
           {this.props.children}
