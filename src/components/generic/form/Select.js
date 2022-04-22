@@ -1,6 +1,6 @@
 import { Component } from "react";
 
-import { OPTION_SELECTED } from "../../../util/cssUtils";
+import { OPTION_SELECTED } from "../../../util/constants";
 import { isObject } from "../../../util/functions";
 
 export class Select extends Component {

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { OPTION_SELECTED } from "../../../util/cssUtils";
+import { OPTION_SELECTED } from "../../../util/constants";
 
 export class Checkbox extends Component {
   onClick = (e) => {

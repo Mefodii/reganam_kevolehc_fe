@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { OPTION_SELECTED } from "../../../util/cssUtils";
+import { OPTION_SELECTED } from "../../../util/constants";
 
 export class Options extends Component {
   onClick = (option) => (e) => {
