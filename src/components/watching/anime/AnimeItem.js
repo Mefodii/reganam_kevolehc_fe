@@ -2,13 +2,8 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import {
-  addAnimePoster,
-  deleteAnimePoster,
-  deleteAnimeVideo,
-} from "../../../actions/anime";
+import { deleteAnimeVideo } from "../../../actions/anime";
 
-import Poster from "../video_components/Poster";
 import Info from "../video_components/Info";
 import Title from "../video_components/Title";
 import Seasons from "../video_components/Seasons";
@@ -16,8 +11,6 @@ import Seasons from "../video_components/Seasons";
 export class AnimeItem extends Component {
   static propTypes = {
     video: PropTypes.object.isRequired,
-    addAnimePoster: PropTypes.func.isRequired,
-    deleteAnimePoster: PropTypes.func.isRequired,
     deleteAnimeVideo: PropTypes.func.isRequired,
   };
 
@@ -40,17 +33,9 @@ export class AnimeItem extends Component {
   };
 
   render() {
-    const { name, alias, id, status, year, images, seasons, group } =
-      this.props.video;
+    const { name, alias, id, status, year, seasons, group } = this.props.video;
     return (
       <div className="flex m-5 p-2 border-2 shadow-2xl rounded-xl bg-secondary border-tertiary">
-        <Poster
-          images={images}
-          videoId={id}
-          groupId={group}
-          deletePoster={this.props.deleteAnimePoster}
-          addPoster={this.props.addAnimePoster}
-        ></Poster>
         <div className="w-full">
           <Title name={name} alias={alias} year={year}></Title>
           <Seasons seasons={seasons} videoId={id}></Seasons>
@@ -63,8 +48,6 @@ export class AnimeItem extends Component {
 }
 
 const mapDispatchToProps = {
-  addAnimePoster,
-  deleteAnimePoster,
   deleteAnimeVideo,
 };
 

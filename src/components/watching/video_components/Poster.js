@@ -7,7 +7,6 @@ import PropTypes from "prop-types";
 
 export class Poster extends Component {
   static propTypes = {
-    videoId: PropTypes.number.isRequired,
     groupId: PropTypes.number.isRequired,
     images: PropTypes.array.isRequired,
     addPoster: PropTypes.func.isRequired,
@@ -23,19 +22,14 @@ export class Poster extends Component {
     }
     // Add poster
     if (image && !oldImage) {
-      this.props.addPoster(image, this.props.videoId, this.props.groupId);
+      this.props.addPoster(image, this.props.groupId);
       return;
     }
   };
 
   deletePoster = () => {
     const poster = this.props.images[0];
-    if (poster)
-      this.props.deletePoster(
-        poster.id,
-        this.props.videoId,
-        this.props.groupId
-      );
+    if (poster) this.props.deletePoster(poster.id, this.props.groupId);
   };
 
   fileUploadRef = React.createRef();

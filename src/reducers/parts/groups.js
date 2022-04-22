@@ -14,17 +14,16 @@ import {
 import { add, update, partialUpdate, del } from "../generic";
 
 import videoReducer, { VIDEOS_SORT } from "./videos";
+import posterReducer from "./posters";
+
 import { sortByKey } from "../../util/functions";
 
-const VIDEO_ACTION_TYPES = [
-  ADD_VIDEO,
-  UPDATE_VIDEO,
-  DELETE_VIDEO,
-  ADD_POSTER,
-  UPDATE_POSTER,
-  DELETE_POSTER,
-];
+const VIDEO_ACTION_TYPES = [ADD_VIDEO, UPDATE_VIDEO, DELETE_VIDEO];
 const isVideoActionType = (type) => VIDEO_ACTION_TYPES.find((_) => type === _);
+
+const POSTER_ACTION_TYPES = [ADD_POSTER, UPDATE_POSTER, DELETE_POSTER];
+const isPosterActionType = (type) =>
+  POSTER_ACTION_TYPES.find((_) => type === _);
 
 export const GROUPS_SORT = sortByKey("name");
 
@@ -34,6 +33,7 @@ const get = (groups) => {
 };
 
 const videoAction = (action) => (group) => videoReducer(group.videos, action);
+const posterAction = (action) => (video) => posterReducer(video.images, action);
 
 const reducer = (groups = [], action) => {
   const { type, payload } = action;
@@ -53,8 +53,15 @@ const reducer = (groups = [], action) => {
 
     case isVideoActionType(type):
       const id = action.payload.groupId;
-      console.log(id, action.payload);
       return partialUpdate(groups, id, "videos", videoAction(action));
+
+    case isPosterActionType(type):
+      return partialUpdate(
+        groups,
+        action.payload.groupId,
+        "images",
+        posterAction(action)
+      );
 
     default:
       return groups;

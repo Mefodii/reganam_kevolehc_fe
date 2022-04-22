@@ -84,23 +84,22 @@ export const deleteAnimeVideo = (id, groupId) => async (dispatch) => {
 // ----------------------------- //
 
 // POSTER ACTIONS
-export const addAnimePoster = (image, videoId, groupId) => async (dispatch) => {
-  const response = await addPoster(image, videoId);
+export const addAnimePoster = (image, groupId) => async (dispatch) => {
+  const response = await addPoster(image, groupId);
   dispatch({
     type: ADD_ANIME_POSTER,
     payload: {
       poster: response.data,
       groupId,
-      videoId,
     },
   });
 };
 
-export const deleteAnimePoster = (id, videoId, groupId) => async (dispatch) => {
+export const deleteAnimePoster = (id, groupId) => async (dispatch) => {
   await deletePoster(id);
   dispatch({
     type: DELETE_ANIME_POSTER,
-    payload: { id, videoId, groupId },
+    payload: { id, groupId },
   });
 };
 // ----------------------------- //
