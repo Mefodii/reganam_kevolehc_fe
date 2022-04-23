@@ -3,12 +3,14 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import InputContainer, { INPUT_TEXT } from "../../generic/form/InputContainer";
 
+import { getToday } from "../../../util/functions";
+
 export class GroupForm extends Component {
   state = {
     name: "",
     alias: "",
     aliases: ["", ""],
-    check_date: "",
+    check_date: getToday(),
   };
 
   static propTypes = {
@@ -23,8 +25,12 @@ export class GroupForm extends Component {
     this.setState({ aliases: newAliases });
   };
 
-  addAlias = () => {
+  addAliasField = () => {
     this.setState({ aliases: [...this.state.aliases, ""] });
+  };
+
+  removeAliasField = () => {
+    this.setState({ aliases: [...this.state.aliases.slice(0, -1)] });
   };
 
   addGroup = () => {
@@ -60,7 +66,7 @@ export class GroupForm extends Component {
                 onChange={this.onChange}
               ></InputContainer>
               <div className="w-1/5 btn" onClick={this.addGroup}>
-                CREATE
+                CREATE GROUP
               </div>
             </div>
             <div className="w-full">
@@ -73,8 +79,13 @@ export class GroupForm extends Component {
                   onChange={this.onChangeAlias(i)}
                 ></InputContainer>
               ))}
-              <div className="w-1/12 btn" onClick={this.addAlias}>
-                +
+              <div className="flex">
+                <div className="w-1/12 btn" onClick={this.addAliasField}>
+                  +
+                </div>
+                <div className="w-1/12 btn" onClick={this.removeAliasField}>
+                  -
+                </div>
               </div>
             </div>
           </div>
