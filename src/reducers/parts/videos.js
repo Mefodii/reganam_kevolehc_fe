@@ -2,9 +2,9 @@ import { ADD_VIDEO, UPDATE_VIDEO, DELETE_VIDEO } from "../../actions/types.js";
 
 import { add, update, del } from "../generic";
 
-import { sortByKey } from "../../util/functions";
+import { compareByKey } from "../../util/functions";
 
-export const VIDEOS_SORT = sortByKey("order");
+export const VIDEOS_SORT = compareByKey("order");
 
 const reducer = (videos = [], action) => {
   const { type, payload } = action;

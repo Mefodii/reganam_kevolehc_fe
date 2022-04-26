@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 export class VideoForm extends Component {
   state = {
     name: "",
-    alias: "",
     aliases: ["", ""],
   };
 
@@ -18,9 +17,9 @@ export class VideoForm extends Component {
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
   addVideo = () => {
-    const { name } = this.state;
+    const { name, aliases } = this.state;
     const { type, groupId } = this.props;
-    const video = { name, type, group: groupId };
+    const video = { name, type, group: groupId, aliases };
     this.props.submit(video, groupId);
   };
 

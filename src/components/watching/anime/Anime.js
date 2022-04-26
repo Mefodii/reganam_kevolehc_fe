@@ -13,14 +13,11 @@ export class Anime extends Component {
     groups: PropTypes.array.isRequired,
     getAnimeGroups: PropTypes.func.isRequired,
     addAnimeGroup: PropTypes.func.isRequired,
+    updateTheme: PropTypes.func.isRequired,
   };
 
   componentDidMount() {
     this.props.getAnimeGroups();
-    this.props.updateTheme();
-  }
-
-  componentWillUnmount() {
     this.props.updateTheme();
   }
 

@@ -43,7 +43,7 @@ export class Poster extends Component {
     var imgPath = poster ? poster.image : DEFAULT_IMAGE;
 
     return (
-      <div className="w-60 relative group h-auto">
+      <div className="w-60 relative group h-full">
         <div className="absolute bottom-0 w-full flex justify-center transform opacity-0 group-hover:opacity-100 transition ease-in duration-300">
           <div className="absolute w-full bg-gray-800 h-full opacity-80"></div>
           <div className="text-purple-400 z-10 p-1">

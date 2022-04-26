@@ -19,10 +19,6 @@ export class Movies extends Component {
     this.props.updateTheme();
   }
 
-  componentWillUnmount() {
-    this.props.updateTheme();
-  }
-
   render() {
     return (
       <div className="w-full flex flex-col items-center">

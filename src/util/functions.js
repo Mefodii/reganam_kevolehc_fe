@@ -1,4 +1,23 @@
-export const sortByKey = (key) => (a, b) => a[key] > b[key] ? 1 : -1;
+/**
+ * Compare 2 objects by given key
+ * @param  {String} key key value
+ * @param  {Object} options  { caseSensitive : boolean (defeault: true)}
+ */
+export const compareByKey = (key, options) => (a, b) => {
+  const { caseSensitive = true } = options || {};
+  var valueA = a[key];
+  var valueB = b[key];
+
+  if (!caseSensitive) {
+    valueA = valueA.toUpperCase();
+    valueB = valueB.toUpperCase();
+  }
+
+  return valueA > valueB ? 1 : -1;
+};
+
+export const objectEqualsSimple = (o1, o2) =>
+  JSON.stringify(o1) === JSON.stringify(o2);
 
 export const isObject = (variable) => {
   return typeof variable === "object";

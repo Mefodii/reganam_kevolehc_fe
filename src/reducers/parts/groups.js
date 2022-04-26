@@ -16,7 +16,7 @@ import { add, update, partialUpdate, del } from "../generic";
 import videoReducer, { VIDEOS_SORT } from "./videos";
 import posterReducer from "./posters";
 
-import { sortByKey } from "../../util/functions";
+import { compareByKey } from "../../util/functions";
 
 const VIDEO_ACTION_TYPES = [ADD_VIDEO, UPDATE_VIDEO, DELETE_VIDEO];
 const isVideoActionType = (type) => VIDEO_ACTION_TYPES.find((_) => type === _);
@@ -25,7 +25,7 @@ const POSTER_ACTION_TYPES = [ADD_POSTER, UPDATE_POSTER, DELETE_POSTER];
 const isPosterActionType = (type) =>
   POSTER_ACTION_TYPES.find((_) => type === _);
 
-export const GROUPS_SORT = sortByKey("name");
+export const GROUPS_SORT = compareByKey("name", { caseSensitive: false });
 
 const get = (groups) => {
   groups.forEach(({ videos }) => videos.sort(VIDEOS_SORT));

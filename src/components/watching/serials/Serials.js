@@ -2,12 +2,20 @@ import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
+import { updateTheme } from "../../../actions/page";
+
 export class Serials extends Component {
   static propTypes = {
     serials: PropTypes.array.isRequired,
     getSerials: PropTypes.func.isRequired,
     deleteSerial: PropTypes.func.isRequired,
+    updateTheme: PropTypes.func.isRequired,
   };
+
+  componentDidMount() {
+    // this.props.getAnimeGroups();
+    this.props.updateTheme();
+  }
 
   render() {
     return (
@@ -27,4 +35,4 @@ const mapStateToProps = (state) => ({
   statusTypes: state.info.statusTypes,
 });
 
-export default connect(mapStateToProps, {})(Serials);
+export default connect(mapStateToProps, { updateTheme })(Serials);

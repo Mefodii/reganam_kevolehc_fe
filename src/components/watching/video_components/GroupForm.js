@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import InputContainer, { INPUT_TEXT } from "../../generic/form/InputContainer";
+import InputContainer, {
+  INPUT_TEXT,
+  INPUT_TEXTAREA,
+} from "../../generic/form/InputContainer";
 
 import { getToday } from "../../../util/functions";
 
@@ -34,9 +37,12 @@ export class GroupForm extends Component {
   };
 
   addGroup = () => {
-    const { name, alias, check_date } = this.state;
+    const { name, check_date } = this.state;
     const { type } = this.props;
-    const video = { name, alias, type, check_date: check_date + "T00:00" };
+    const aliases = this.state.aliases
+      .map((alias) => alias.trim())
+      .filter((alias) => alias.length > 0);
+    const video = { name, aliases, type, check_date };
     this.props.submit(video);
   };
 
@@ -53,7 +59,7 @@ export class GroupForm extends Component {
             <div className="w-full">
               <InputContainer
                 label="Name"
-                type={INPUT_TEXT}
+                type={INPUT_TEXTAREA}
                 name="name"
                 value={name}
                 onChange={this.onChange}
@@ -65,7 +71,7 @@ export class GroupForm extends Component {
                 value={check_date}
                 onChange={this.onChange}
               ></InputContainer>
-              <div className="w-1/5 btn" onClick={this.addGroup}>
+              <div className="w-max btn" onClick={this.addGroup}>
                 CREATE GROUP
               </div>
             </div>
@@ -73,17 +79,17 @@ export class GroupForm extends Component {
               {aliases.map((alias, i) => (
                 <InputContainer
                   label={`Alias ${i + 1}`}
-                  type={INPUT_TEXT}
+                  type={INPUT_TEXTAREA}
                   key={i}
                   value={alias}
                   onChange={this.onChangeAlias(i)}
                 ></InputContainer>
               ))}
               <div className="flex">
-                <div className="w-1/12 btn" onClick={this.addAliasField}>
+                <div className="w-16 btn" onClick={this.addAliasField}>
                   +
                 </div>
-                <div className="w-1/12 btn" onClick={this.removeAliasField}>
+                <div className="w-16 btn" onClick={this.removeAliasField}>
                   -
                 </div>
               </div>
