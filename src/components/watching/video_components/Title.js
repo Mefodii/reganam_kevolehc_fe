@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 export class Title extends Component {
   static propTypes = {
     name: PropTypes.string.isRequired,
-    alias: PropTypes.string.isRequired,
   };
 
   render() {

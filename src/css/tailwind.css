@@ -80,16 +80,16 @@
 
 .option-dropdown-container {
   @apply absolute rounded-sm shadow-md border
-  bg-gray-300 border-gray-400 origin-top
+  bg-secondary border-tertiary origin-top
   transform scale-0 duration-300 ease-in-out group-hover:scale-100;
 }
 
 .option-dropdown-item {
-  @apply hover:bg-gray-400;
+  @apply hover:bg-tertiary;
 }
 
 .dropdown-container {
-  @apply flex flex-col absolute origin-top hover-up bg-gray-200;
+  @apply flex flex-col absolute origin-top hover-up bg-primary;
 }
 
 .dropdown-item {

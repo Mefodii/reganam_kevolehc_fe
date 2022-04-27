@@ -10,19 +10,22 @@ import {
   deleteAnimePoster,
 } from "../../../actions/anime";
 
-import { OPTION_SELECTED } from "../../../util/constants";
+import { BLANK_CHECK_DATE } from "../../../util/constants";
 import { getToday, objectEqualsSimple } from "../../../util/functions";
 
 import AnimeItem from "./AnimeItem";
 import VideoForm from "../video_components/VideoForm";
 import Poster from "../video_components/Poster";
 import InputContainer, {
-  INPUT_TEXT,
+  INPUT_SELECT,
   INPUT_TEXTAREA,
 } from "../../generic/form/InputContainer";
+import SVGPencil from "../../generic/svg/SVGPencil";
 
 export class AnimeGroup extends Component {
   static propTypes = {
+    statusTypes: PropTypes.array.isRequired,
+    //
     group: PropTypes.object.isRequired,
     updateAnimeGroup: PropTypes.func.isRequired,
     deleteAnimeGroup: PropTypes.func.isRequired,
@@ -35,17 +38,23 @@ export class AnimeGroup extends Component {
     id: 0,
     name: "",
     aliases: ["", ""],
+    status: "",
     check_date: getToday(),
     edit: false,
+    showVideoForm: false,
   };
 
   toggleEdit = () => {
     this.setState({ edit: !this.state.edit });
   };
 
+  toggleShowVideoForm = () => {
+    this.setState({ showVideoForm: !this.state.showVideoForm });
+  };
+
   propsToState = () => {
-    const { id, name, aliases, check_date } = this.props.group;
-    this.setState({ id, name, aliases, check_date });
+    const { id, name, aliases, check_date, status } = this.props.group;
+    this.setState({ id, name, aliases, check_date, status });
   };
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
@@ -74,12 +83,14 @@ export class AnimeGroup extends Component {
       name: this.props.group.name,
       aliases: this.props.group.aliases,
       check_date: this.props.group.check_date,
+      status: this.props.group.status,
     };
 
     const newGroup = {
       name: this.state.name,
       aliases: this.state.aliases,
       check_date: this.state.check_date,
+      status: this.state.status,
     };
 
     return !objectEqualsSimple(oldGroup, newGroup);
@@ -87,12 +98,10 @@ export class AnimeGroup extends Component {
 
   updateGroup = () => {
     if (this.hasGroupDataChanged()) {
-      const { type } = this.props.group;
-      const { id, name, aliases, check_date } = this.state;
+      const { type, single } = this.props.group;
+      const { id, name, aliases, check_date, status } = this.state;
 
-      console.log(aliases);
-
-      const group = { id, name, aliases, check_date, type };
+      const group = { id, name, aliases, check_date, type, single, status };
       this.props.updateAnimeGroup(group);
     }
     this.toggleEdit();
@@ -103,10 +112,13 @@ export class AnimeGroup extends Component {
    * Then call updateGroup
    */
   saveChanges = () => {
-    const aliases = this.state.aliases
+    var { aliases, check_date } = this.state;
+    aliases = this.state.aliases
       .map((alias) => alias.trim())
       .filter((alias) => alias.length > 0);
-    this.setState({ aliases }, this.updateGroup);
+
+    check_date = check_date || check_date.length > 0 ? check_date : null;
+    this.setState({ aliases, check_date }, this.updateGroup);
   };
 
   /**
@@ -133,9 +145,21 @@ export class AnimeGroup extends Component {
     }
   }
 
+  renderVideos = () => {
+    const { videos } = this.props.group;
+
+    return (
+      <div className="">
+        {videos.map((video) => (
+          <AnimeItem video={video} key={video.id}></AnimeItem>
+        ))}
+      </div>
+    );
+  };
+
   renderEditMode = () => {
-    const { videos, images } = this.props.group;
-    const { id, name, aliases, check_date } = this.state;
+    const { images, single } = this.props.group;
+    const { id, name, aliases, check_date, status } = this.state;
 
     return (
       <div>
@@ -157,15 +181,41 @@ export class AnimeGroup extends Component {
                     value={name}
                     onChange={this.onChange}
                   ></InputContainer>
-                  <InputContainer
-                    label="Last Check Date"
-                    type={INPUT_TEXT}
-                    name="check_date"
-                    value={check_date}
-                    onChange={this.onChange}
-                  ></InputContainer>
-                  <div className="w-max btn" onClick={this.addGroup}>
-                    CREATE GROUP
+
+                  <div className="flex flex-row w-full justify-between space-x-4">
+                    <InputContainer
+                      label="Last Check Date"
+                      type={INPUT_TEXTAREA}
+                      name="check_date"
+                      value={check_date || ""}
+                      onChange={this.onChange}
+                      maxLength={10}
+                    ></InputContainer>
+
+                    {single && (
+                      <div className="w-full text-center">
+                        <InputContainer
+                          label="Watch status"
+                          type={INPUT_SELECT}
+                          name="status"
+                          placeholder="Select a status"
+                          value={status}
+                          options={this.props.statusTypes}
+                          onChange={this.onChange}
+                        ></InputContainer>
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex space-x-1">
+                    <div
+                      className={`w-max btn option-selected`}
+                      onClick={this.saveChanges}
+                    >
+                      Save Changes
+                    </div>
+                    <div className="w-max btn" onClick={this.discardChanges}>
+                      Discard Changes
+                    </div>
                   </div>
                 </div>
                 <div className="w-full">
@@ -178,30 +228,34 @@ export class AnimeGroup extends Component {
                       onChange={this.onChangeAlias(i)}
                     ></InputContainer>
                   ))}
-                  <div className="flex">
-                    <div className="w-16 btn" onClick={this.addAliasFields}>
-                      +
+                  <div className="flex justify-between">
+                    <div className="flex">
+                      <div className="w-16 btn" onClick={this.addAliasFields}>
+                        +
+                      </div>
+                      <div className="w-16 btn" onClick={this.removeAliasField}>
+                        -
+                      </div>
                     </div>
-                    <div className="w-16 btn" onClick={this.removeAliasField}>
-                      -
+                    <div
+                      className="w-max btn bg-pink-900"
+                      onClick={this.deleteAnimeGroup(id)}
+                    >
+                      Delete Group
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="">
-              {videos.map((video) => (
-                <AnimeItem video={video} key={video.id}></AnimeItem>
-              ))}
+
+            {!single && (
               <VideoForm
                 submit={this.props.addAnimeVideo}
                 type={this.props.animeType}
                 groupId={id}
               ></VideoForm>
-            </div>
-            <div className="w-max btn" onClick={this.deleteAnimeGroup(id)}>
-              Delete Group
-            </div>
+            )}
+            {!single && this.renderVideos()}
           </div>
         </div>
       </div>
@@ -209,19 +263,19 @@ export class AnimeGroup extends Component {
   };
 
   renderViewMode = () => {
-    const { videos, images } = this.props.group;
-    const { id, name, aliases, check_date } = this.state;
+    const { images, single } = this.props.group;
+    const { id, name, aliases, check_date, status } = this.state;
 
     return (
-      <div>
-        <div className="flex">
-          <Poster
-            images={images}
-            groupId={id}
-            deletePoster={this.props.deleteAnimePoster}
-            addPoster={this.props.addAnimePoster}
-          ></Poster>
-          <div className="m-5 p-2 border-2 shadow-2xl rounded-xl bg-secondary border-tertiary w-full">
+      <div className="flex">
+        <Poster
+          images={images}
+          groupId={id}
+          deletePoster={this.props.deleteAnimePoster}
+          addPoster={this.props.addAnimePoster}
+        ></Poster>
+        <div className="m-5 p-2 border-2 shadow-2xl rounded-xl bg-secondary border-tertiary w-full h-min">
+          <div className="group">
             <div className="flex justify-between">
               <div className="break-all">
                 <div className="text-2xl font-bold overflow-auto">{name}</div>
@@ -236,19 +290,31 @@ export class AnimeGroup extends Component {
                   </div>
                 )}
               </div>
-              <div className="min-w-max">
-                <div className="text-xs">Check Date</div>
-                <div className="font-bold whitespace-pre">
-                  {check_date ? check_date : "---- -- --      "}
+              <div>
+                <div className="flex min-w-max space-x-5 px-3">
+                  {single && (
+                    <div>
+                      <div className="text-xs">Status</div>
+                      <div className="font-bold whitespace-pre">{status}</div>
+                    </div>
+                  )}
+                  <div>
+                    <div className="text-xs">Check Date</div>
+                    <div className="font-bold whitespace-pre">
+                      {check_date || BLANK_CHECK_DATE}
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-1 mr-2 flex justify-end">
+                  <div onClick={this.toggleEdit}>
+                    <SVGPencil className="w-7 transform opacity-20 group-hover:opacity-100 hover:-rotate-12 hover:scale-125 hover:text-green-300 transition ease-in duration-150"></SVGPencil>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="">
-              {videos.map((video) => (
-                <AnimeItem video={video} key={video.id}></AnimeItem>
-              ))}
-            </div>
           </div>
+
+          {this.renderVideos()}
         </div>
       </div>
     );
@@ -259,27 +325,7 @@ export class AnimeGroup extends Component {
 
     return (
       <div className="m-5 p-2 border-2 shadow-2xl rounded-xl bg-secondary border-tertiary">
-        <div className="flex flex-row-reverse">
-          {!edit && (
-            <div className={`w-max btn`} onClick={this.toggleEdit}>
-              Edit Group
-            </div>
-          )}
-          {edit && (
-            <div className={`w-max btn`} onClick={this.discardChanges}>
-              Discard Changes
-            </div>
-          )}
-          {edit && (
-            <div
-              className={`w-max btn ${OPTION_SELECTED}`}
-              onClick={this.saveChanges}
-            >
-              Save Changes
-            </div>
-          )}
-        </div>
-        {this.state.edit ? this.renderEditMode() : this.renderViewMode()}
+        {edit ? this.renderEditMode() : this.renderViewMode()}
       </div>
     );
   }
@@ -287,6 +333,7 @@ export class AnimeGroup extends Component {
 
 const mapStateToProps = (state) => ({
   animeType: state.info.videoTypes.anime,
+  statusTypes: state.info.statusTypes,
 });
 
 const mapDispatchToProps = {

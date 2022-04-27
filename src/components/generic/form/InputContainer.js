@@ -54,6 +54,7 @@ export class InputContainer extends Component {
         value={this.props.value}
         disabled={this.props.disabled}
         rows="1"
+        maxLength={this.props.maxLength}
       />
     );
   };
@@ -66,6 +67,7 @@ export class InputContainer extends Component {
         placeholder={this.props.placeholder}
         options={this.props.options}
         onChange={this.props.onChange}
+        disabled={this.props.disabled}
       ></Select>
     );
   };
@@ -119,15 +121,17 @@ export class InputContainer extends Component {
   };
 
   render() {
-    const { label, error, type } = this.props;
+    const { label, error, type, showLabel = true } = this.props;
     return (
       <div className="w-full">
         <div
-          className={`w-full relative pb-2 pt-6 px-3 border-b-2 bg-tertiary border-primary ${
+          className={`w-full relative ${
+            showLabel ? "pb-2 pt-6" : "py-4"
+          } px-3 border-b-2 bg-tertiary border-primary ${
             error && "ring-error"
           }`}
         >
-          <div className="input-label">{label}</div>
+          {showLabel && <div className="input-label">{label}</div>}
           {type && this.renderByType()}
           {this.props.children}
         </div>

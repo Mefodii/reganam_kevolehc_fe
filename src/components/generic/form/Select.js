@@ -22,7 +22,7 @@ export class Select extends Component {
     options.find((option) => option.value === value);
 
   render() {
-    const { value, placeholder, options: rawOptions } = this.props;
+    const { value, placeholder, options: rawOptions, disabled } = this.props;
     const options = this.prepareOptions(rawOptions);
     const currentValue = value?.toString() || placeholder;
     const isSelected = this.isOptionSelected(options, currentValue);
@@ -33,22 +33,26 @@ export class Select extends Component {
           isSelected && OPTION_SELECTED
         }`}
       >
-        <div className="hover:text-purple-800 dark:hover:text-purple-300">
-          {currentValue}
-        </div>
-        <div className="w-full option-dropdown-container z-10 overflow-y-auto max-h-52">
-          {options.map(({ key, value }) => {
-            return (
-              <div
-                className="p-1 text-center truncate option-dropdown-item"
-                key={key}
-                onClick={this.onOptionClick(key, value)}
-              >
-                {value}
-              </div>
-            );
-          })}
-        </div>
+        <div>{currentValue}</div>
+        {!disabled && (
+          <div
+            className="w-full absolute rounded-sm shadow-md border
+  bg-secondary border-tertiary origin-top
+  transform scale-0 duration-300 ease-in-out group-hover:scale-100 z-10 overflow-y-auto max-h-52"
+          >
+            {options.map(({ key, value }) => {
+              return (
+                <div
+                  className="p-1 text-center truncate hover:bg-tertiary"
+                  key={key}
+                  onClick={this.onOptionClick(key, value)}
+                >
+                  {value}
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     );
   }

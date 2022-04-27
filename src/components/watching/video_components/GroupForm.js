@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import InputContainer, {
-  INPUT_TEXT,
   INPUT_TEXTAREA,
+  INPUT_CHECKBOX,
+  INPUT_SELECT,
 } from "../../generic/form/InputContainer";
 
 import { getToday } from "../../../util/functions";
@@ -11,14 +12,16 @@ import { getToday } from "../../../util/functions";
 export class GroupForm extends Component {
   state = {
     name: "",
-    alias: "",
     aliases: ["", ""],
+    single: false,
+    status: "",
     check_date: getToday(),
   };
 
   static propTypes = {
     type: PropTypes.string.isRequired,
     submit: PropTypes.func.isRequired,
+    statusTypes: PropTypes.array.isRequired,
   };
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
@@ -37,17 +40,26 @@ export class GroupForm extends Component {
   };
 
   addGroup = () => {
-    const { name, check_date } = this.state;
+    const { name, check_date, single, status } = this.state;
     const { type } = this.props;
     const aliases = this.state.aliases
       .map((alias) => alias.trim())
       .filter((alias) => alias.length > 0);
-    const video = { name, aliases, type, check_date };
+
+    const video = {
+      name,
+      aliases,
+      type,
+      check_date,
+      status: single ? status : null,
+      single,
+    };
     this.props.submit(video);
+    this.setState({ aliases });
   };
 
   render() {
-    const { name, aliases, check_date } = this.state;
+    const { name, aliases, check_date, single, status } = this.state;
 
     return (
       <div className="w-full p-6">
@@ -66,11 +78,32 @@ export class GroupForm extends Component {
               ></InputContainer>
               <InputContainer
                 label="Last Check Date"
-                type={INPUT_TEXT}
+                type={INPUT_TEXTAREA}
                 name="check_date"
                 value={check_date}
                 onChange={this.onChange}
+                maxLength={10}
               ></InputContainer>
+              <div className="flex flex-row w-full justify-between space-x-4 text-center">
+                <InputContainer
+                  type={INPUT_CHECKBOX}
+                  name="single"
+                  text="STANDALONE"
+                  label="Standalone group has no child videos"
+                  checked={single}
+                  onClick={this.onChange}
+                ></InputContainer>
+                <InputContainer
+                  label="Watch status (only when standalone group)"
+                  type={INPUT_SELECT}
+                  name="status"
+                  placeholder="Select a status"
+                  value={status}
+                  options={this.props.statusTypes}
+                  onChange={this.onChange}
+                  disabled={!single}
+                ></InputContainer>
+              </div>
               <div className="w-max btn" onClick={this.addGroup}>
                 CREATE GROUP
               </div>
@@ -103,6 +136,8 @@ export class GroupForm extends Component {
 
 const mapStateToProps = (state) => ({
   videoTypes: state.info.videoTypes,
+
+  statusTypes: state.info.statusTypes,
 });
 
 export default connect(mapStateToProps, {})(GroupForm);
