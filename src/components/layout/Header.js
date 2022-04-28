@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { NavLink, withRouter } from "react-router-dom";
 
-import SVGDownArrow from "../svg/SVGDownArrow";
+import SVGDownArrow from "../generic/svg/SVGDownArrow";
 
 class Header extends Component {
   state = {

@@ -299,7 +299,7 @@ export class AnimeItem extends Component {
             </div>
             <div className="flex justify-end">
               <div onClick={this.toggleEdit}>
-                <SVGPencil className="w-7 transform opacity-20 group-hover:opacity-100 hover:-rotate-12 hover:scale-125 hover:text-green-300 transition ease-in duration-150"></SVGPencil>
+                <SVGPencil className="w-7 wiggling-clickable"></SVGPencil>
               </div>
             </div>
           </div>

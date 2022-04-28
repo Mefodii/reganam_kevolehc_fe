@@ -66,12 +66,15 @@ export class VideoForm extends Component {
 
   render() {
     const { name, aliases, year, status, order, episodes, rating } = this.state;
+    const { hideTitle } = this.props;
 
     return (
       <div className="">
-        <div className="text-xl uppercase font-bold m-4 text-center">
-          Add Video
-        </div>
+        {!hideTitle && (
+          <div className="text-xl uppercase font-bold m-4 text-center">
+            Add Video
+          </div>
+        )}
         <div className="flex justify-evenly bg-secondary border-2 border-tertiary rounded-xl shadow-lg w-full">
           <div className="m-4 flex flex-row w-full justify-between space-x-4">
             <div className="w-full">

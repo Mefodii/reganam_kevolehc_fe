@@ -104,4 +104,8 @@
   @apply transform scale-0 duration-300 ease-in-out group-hover:scale-100;
 }
 
+.wiggling-clickable {
+  @apply transform opacity-20 group-hover:opacity-100 hover:animate-wiggle cursor-pointer hover:text-green-300 transition ease-in duration-150;
+}
+
 @tailwind utilities;

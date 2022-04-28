@@ -146,13 +146,34 @@ export class AnimeGroup extends Component {
   }
 
   renderVideos = () => {
-    const { videos } = this.props.group;
+    const { videos, single, id } = this.props.group;
+    const { showVideoForm, edit } = this.state;
 
     return (
       <div className="">
         {videos.map((video) => (
           <AnimeItem video={video} key={video.id}></AnimeItem>
         ))}
+        {edit && (
+          <div className="flex">
+            <div className="w-full mx-5 p-1 border-2 shadow-2xl rounded-xl bg-secondary border-tertiary text-center font-extrabold">
+              <div
+                className="cursor-pointer mb-1"
+                onClick={this.toggleShowVideoForm}
+              >
+                {showVideoForm ? "↑ Hide form ↑" : "↓ Add new Video ↓ "}
+              </div>
+              {!single && showVideoForm && (
+                <VideoForm
+                  submit={this.props.addAnimeVideo}
+                  type={this.props.animeType}
+                  groupId={id}
+                  hideTitle
+                ></VideoForm>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     );
   };
@@ -248,13 +269,6 @@ export class AnimeGroup extends Component {
               </div>
             </div>
 
-            {!single && (
-              <VideoForm
-                submit={this.props.addAnimeVideo}
-                type={this.props.animeType}
-                groupId={id}
-              ></VideoForm>
-            )}
             {!single && this.renderVideos()}
           </div>
         </div>
@@ -307,7 +321,7 @@ export class AnimeGroup extends Component {
                 </div>
                 <div className="mt-1 mr-2 flex justify-end">
                   <div onClick={this.toggleEdit}>
-                    <SVGPencil className="w-7 transform opacity-20 group-hover:opacity-100 hover:-rotate-12 hover:scale-125 hover:text-green-300 transition ease-in duration-150"></SVGPencil>
+                    <SVGPencil className="w-7 wiggling-clickable"></SVGPencil>
                   </div>
                 </div>
               </div>
