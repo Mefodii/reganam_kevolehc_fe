@@ -13,12 +13,12 @@ import {
 import { BLANK_CHECK_DATE } from "../../../util/constants";
 
 import AnimeItem from "./AnimeItem";
-import VideoForm from "../video_components/VideoForm";
-import Poster from "../video_components/Poster";
+import VideoForm from "./VideoForm";
+import Poster from "./Poster";
 import SVGPencil from "../../generic/svg/SVGPencil";
-import GroupForm from "../video_components/GroupForm";
+import GroupForm from "./GroupForm";
 
-export class AnimeGroup extends Component {
+export class GroupItem extends Component {
   static propTypes = {
     group: PropTypes.object.isRequired,
     updateAnimeGroup: PropTypes.func.isRequired,
@@ -178,4 +178,4 @@ const mapDispatchToProps = {
   deleteAnimePoster,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AnimeGroup);
+export default connect(mapStateToProps, mapDispatchToProps)(GroupItem);

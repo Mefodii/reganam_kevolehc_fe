@@ -58,52 +58,44 @@ export class AnimeItem extends Component {
     }
 
     return (
-      <div>
-        <div className="flex group">
-          <div className="my-2 p-2 border-2 shadow-2xl rounded-xl bg-secondary border-tertiary w-full">
-            <div className="flex">
-              <div className="w-2/3 break-all">
-                <div className="text-2xl font-bold overflow-auto">{name}</div>
-                {aliases.length > 0 && (
-                  <div className="mt-3">
-                    <div className="text-xs">Alias:</div>
-                    <div>
-                      {aliases.map((alias, i) => (
-                        <div key={i}>{" - " + alias}</div>
-                      ))}
-                    </div>
+      <div className="flex group">
+        <div className="my-2 p-2 border-2 shadow-2xl rounded-xl bg-secondary border-tertiary w-full">
+          <div className="flex">
+            <div className="w-2/3 break-all">
+              <div className="text-2xl font-bold overflow-auto">{name}</div>
+              {aliases.length > 0 && (
+                <div className="mt-3">
+                  <div className="text-xs">Alias:</div>
+                  <div>
+                    {aliases.map((alias, i) => (
+                      <div key={i}>{" - " + alias}</div>
+                    ))}
                   </div>
-                )}
+                </div>
+              )}
+            </div>
+            <div className="flex w-1/3 space-x-2 px-3 text-center">
+              <div className="w-full">
+                <div className="text-xs">Episodes</div>
+                <div className="font-bold">{episodes}</div>
               </div>
-              <div className="flex w-1/3 justify-between space-x-5 px-3">
-                <div>
-                  <div className="text-xs">Nr of episodes</div>
-                  <div className="font-bold whitespace-pre text-center">
-                    {episodes}
-                  </div>
-                </div>
-                <div>
-                  <div className="text-xs">Status</div>
-                  <div className="font-bold whitespace-pre">{status}</div>
-                </div>
-                <div>
-                  <div className="text-xs">Year</div>
-                  <div className="font-bold whitespace-pre text-center">
-                    {year || "----"}
-                  </div>
-                </div>
-                <div>
-                  <div className="text-xs">Rating</div>
-                  <div className="font-bold whitespace-pre text-center">
-                    {`${rating} / 10`}
-                  </div>
-                </div>
+              <div className="w-full">
+                <div className="text-xs">Status</div>
+                <div className="font-bold">{status}</div>
+              </div>
+              <div className="w-full">
+                <div className="text-xs">Year</div>
+                <div className="font-bold">{year || "----"}</div>
+              </div>
+              <div className="w-full">
+                <div className="text-xs">Rating</div>
+                <div className="font-bold">{`${rating} / 10`}</div>
               </div>
             </div>
-            <div className="flex justify-end">
-              <div onClick={this.toggleEdit}>
-                <SVGPencil className="w-7 wiggling-clickable"></SVGPencil>
-              </div>
+          </div>
+          <div className="flex justify-end">
+            <div onClick={this.toggleEdit}>
+              <SVGPencil className="w-7 wiggling-clickable"></SVGPencil>
             </div>
           </div>
         </div>

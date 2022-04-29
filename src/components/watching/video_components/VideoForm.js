@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
@@ -130,7 +130,7 @@ export class VideoForm extends Component {
     const { hideTitle, edit } = this.props;
 
     return (
-      <div className="">
+      <Fragment>
         {!hideTitle && (
           <div className="text-xl uppercase font-bold m-4 text-center">
             Add Video
@@ -245,7 +245,7 @@ export class VideoForm extends Component {
             </div>
           </div>
         </div>
-      </div>
+      </Fragment>
     );
   }
 }

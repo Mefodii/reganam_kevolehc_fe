@@ -28,7 +28,7 @@ export class Anime extends Component {
           Welcome to Anime, fellow watcher
         </h2>
         <div className="rounded-xl shadow-lg w-10/12 space-y-10 mb-28">
-          <div className="bg-primary border border-tertiary">
+          <div className="px-6 pb-6 bg-primary border border-tertiary">
             <GroupForm
               submit={this.props.addAnimeGroup}
               type={this.props.animeType}
