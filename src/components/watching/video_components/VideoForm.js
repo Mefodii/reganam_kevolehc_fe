@@ -7,23 +7,38 @@ import InputContainer, {
   INPUT_SELECT,
   INPUT_TEXTAREA,
 } from "../../generic/form/InputContainer";
+import { objectEqualsSimple } from "../../../util/functions";
 
 export class VideoForm extends Component {
+  static propTypes = {
+    edit: PropTypes.bool,
+    statusTypes: PropTypes.array.isRequired,
+    groupId: PropTypes.number.isRequired,
+    type: PropTypes.string.isRequired,
+    submit: PropTypes.func.isRequired,
+    discard: PropTypes.func,
+    delete: PropTypes.func,
+  };
+
   state = {
     name: "",
     aliases: ["", ""],
-    year: null,
     status: "",
+    year: null,
     order: 1,
     episodes: 1,
     rating: 1,
   };
 
-  static propTypes = {
-    statusTypes: PropTypes.array.isRequired,
-    groupId: PropTypes.number.isRequired,
-    type: PropTypes.string.isRequired,
-    submit: PropTypes.func.isRequired,
+  propsToState = () => {
+    const { name, year, status, order, episodes, rating } = this.props.video;
+
+    var aliases = [...this.props.video.aliases];
+    while (aliases.length < 2) {
+      aliases.push("");
+    }
+
+    this.setState({ name, aliases, year, status, order, episodes, rating });
   };
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
@@ -42,18 +57,48 @@ export class VideoForm extends Component {
     this.setState({ aliases: [...this.state.aliases.slice(0, -1)] });
   };
 
-  addVideo = () => {
-    const { name, year, status, order, episodes, rating } = this.state;
-    const { type, groupId } = this.props;
-
-    const aliases = this.state.aliases
+  cleanAliases = (aliases) => {
+    return aliases
       .map((alias) => alias.trim())
       .filter((alias) => alias.length > 0);
+  };
+
+  hasVideoDataChanged = () => {
+    const oldVideo = {
+      name: this.props.video.name,
+      aliases: this.props.video.aliases,
+      status: this.props.video.status,
+      year: this.props.video.year,
+      order: this.props.video.order,
+      episodes: this.props.video.episodes,
+      rating: this.props.video.rating,
+    };
+
+    const newVideo = {
+      name: this.state.name,
+      aliases: this.cleanAliases(this.state.aliases),
+      status: this.state.status,
+      year: this.state.year,
+      order: this.state.order,
+      episodes: this.state.episodes,
+      rating: this.state.rating,
+    };
+
+    return !objectEqualsSimple(oldVideo, newVideo);
+  };
+
+  buildVideo = () => {
+    const { name, year, status, order, episodes, rating } = this.state;
+    const { type, groupId: group } = this.props;
+    const id = this.props.video?.id;
+
+    const aliases = this.cleanAliases(this.state.aliases);
 
     const video = {
+      id,
       name,
       type,
-      group: groupId,
+      group,
       aliases,
       year,
       status,
@@ -61,12 +106,28 @@ export class VideoForm extends Component {
       episodes,
       rating,
     };
-    this.props.submit(video, groupId);
+    return video;
   };
+
+  addVideo = () => {
+    this.props.submit(this.buildVideo(), this.props.groupId);
+  };
+
+  saveChanges = () => {
+    if (this.hasVideoDataChanged()) {
+      this.props.submit(this.buildVideo(), this.props.groupId);
+    } else {
+      this.props.discard();
+    }
+  };
+
+  componentDidMount() {
+    if (this.props.edit) this.propsToState();
+  }
 
   render() {
     const { name, aliases, year, status, order, episodes, rating } = this.state;
-    const { hideTitle } = this.props;
+    const { hideTitle, edit } = this.props;
 
     return (
       <div className="">
@@ -87,7 +148,7 @@ export class VideoForm extends Component {
               ></InputContainer>
 
               <div className="flex flex-row w-full justify-between space-x-4">
-                <div className="flex flex-row w-full justify-between space-x-4">
+                <div className="flex flex-row w-full justify-between space-x-2">
                   <InputContainer
                     label="Year"
                     type={INPUT_NUMBER}
@@ -96,21 +157,21 @@ export class VideoForm extends Component {
                     onChange={this.onChange}
                   ></InputContainer>
                   <InputContainer
-                    label="Order"
+                    label="Order *"
                     type={INPUT_NUMBER}
                     name="order"
                     value={order}
                     onChange={this.onChange}
                   ></InputContainer>
                   <InputContainer
-                    label="Episodes"
+                    label="Episodes *"
                     type={INPUT_NUMBER}
                     name="episodes"
                     value={episodes}
                     onChange={this.onChange}
                   ></InputContainer>
                   <InputContainer
-                    label="Rating"
+                    label="Rating *"
                     type={INPUT_NUMBER}
                     name="rating"
                     value={rating}
@@ -130,9 +191,28 @@ export class VideoForm extends Component {
                 </div>
               </div>
 
-              <div className="w-max btn" onClick={this.addVideo}>
-                Add Video
-              </div>
+              {!edit && (
+                <div
+                  className="w-max btn option-selected"
+                  onClick={this.addVideo}
+                >
+                  Add Video
+                </div>
+              )}
+
+              {edit && (
+                <div className="flex space-x-1">
+                  <div
+                    className={`w-max btn option-selected`}
+                    onClick={this.saveChanges}
+                  >
+                    Save Changes
+                  </div>
+                  <div className="w-max btn" onClick={this.props.discard}>
+                    Discard Changes
+                  </div>
+                </div>
+              )}
             </div>
             <div className="w-1/2">
               {aliases.map((alias, i) => (
@@ -144,13 +224,23 @@ export class VideoForm extends Component {
                   onChange={this.onChangeAlias(i)}
                 ></InputContainer>
               ))}
-              <div className="flex">
-                <div className="w-16 btn" onClick={this.addAliasFields}>
-                  +
+              <div className="flex justify-between">
+                <div className="flex">
+                  <div className="w-16 btn" onClick={this.addAliasFields}>
+                    +
+                  </div>
+                  <div className="w-16 btn" onClick={this.removeAliasField}>
+                    -
+                  </div>
                 </div>
-                <div className="w-16 btn" onClick={this.removeAliasField}>
-                  -
-                </div>
+                {edit && (
+                  <div
+                    className="w-max btn bg-pink-900"
+                    onClick={this.props.delete}
+                  >
+                    Delete Video
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -161,7 +251,6 @@ export class VideoForm extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  videoTypes: state.info.videoTypes,
   statusTypes: state.info.statusTypes,
 });
 

@@ -156,7 +156,7 @@ export class AnimeGroup extends Component {
         ))}
         {edit && (
           <div className="flex">
-            <div className="w-full mx-5 p-1 border-2 shadow-2xl rounded-xl bg-secondary border-tertiary text-center font-extrabold">
+            <div className="w-full p-1 border-2 shadow-2xl rounded-xl bg-secondary border-tertiary text-center font-extrabold">
               <div
                 className="cursor-pointer mb-1"
                 onClick={this.toggleShowVideoForm}
