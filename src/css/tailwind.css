@@ -105,7 +105,7 @@
 }
 
 .wiggling-clickable {
-  @apply transform opacity-20 group-hover:opacity-100 hover:animate-wiggle cursor-pointer hover:text-green-300 transition ease-in duration-150;
+  @apply transform opacity-10 group-hover:opacity-100 hover:animate-wiggle cursor-pointer hover:text-green-300 transition ease-in duration-150;
 }
 
 @tailwind utilities;

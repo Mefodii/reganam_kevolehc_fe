@@ -1,38 +1,36 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
+import { getGroups } from "../../../actions/groups";
 import { updateTheme } from "../../../actions/page";
+
+import GroupList from "../watchio_components/GroupList";
 
 export class Serials extends Component {
   static propTypes = {
-    serials: PropTypes.array.isRequired,
-    getSerials: PropTypes.func.isRequired,
-    deleteSerial: PropTypes.func.isRequired,
+    groups: PropTypes.array.isRequired,
+    getGroups: PropTypes.func.isRequired,
     updateTheme: PropTypes.func.isRequired,
   };
 
   componentDidMount() {
-    // this.props.getAnimeGroups();
+    this.props.getGroups(this.props.watchioSerial);
     this.props.updateTheme();
   }
 
   render() {
-    return (
-      <Fragment>
-        <div className="text-gray-100 w-full flex flex-col items-center">
-          <div className="text-xl uppercase font-bold m-4">
-            Welcome to Serials, fellow watcher
-          </div>
-        </div>
-      </Fragment>
-    );
+    const { watchioSerial, groups } = this.props;
+    return <GroupList watchioType={watchioSerial} groups={groups}></GroupList>;
   }
 }
 
 const mapStateToProps = (state) => ({
-  serials: state.serials.serials,
-  statusTypes: state.info.statusTypes,
+  groups: state.serials.groups,
+  watchioSerial: state.info.watchioTypes.serial,
 });
 
-export default connect(mapStateToProps, { updateTheme })(Serials);
+export default connect(mapStateToProps, {
+  getGroups,
+  updateTheme,
+})(Serials);

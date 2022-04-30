@@ -1,7 +1,7 @@
 import { GET_WATCHIO_INFO } from "../actions/types.js";
 
 const initialState = {
-  videoTypes: {},
+  watchioTypes: {},
   statusTypes: [],
   aliasSeparator: "",
 };
