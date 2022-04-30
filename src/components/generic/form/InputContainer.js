@@ -121,11 +121,11 @@ export class InputContainer extends Component {
   };
 
   render() {
-    const { label, error, type, showLabel = true } = this.props;
+    const { label, error, type, showLabel = true, className = "" } = this.props;
     return (
-      <div className="w-full">
+      <div className={`w-full ${className}`}>
         <div
-          className={`w-full relative ${
+          className={`w-full h-full relative ${
             showLabel ? "pb-2 pt-6" : "py-4"
           } px-3 border-b-2 bg-tertiary border-primary ${
             error && "ring-error"

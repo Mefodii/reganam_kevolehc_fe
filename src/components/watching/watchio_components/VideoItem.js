@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 
 import SVGPencil from "../../generic/svg/SVGPencil";
 import VideoForm from "./VideoForm";
+import { BLANK_VALUE } from "../../../util/constants";
 
 export class VideoItem extends Component {
   static propTypes = {
@@ -22,8 +23,16 @@ export class VideoItem extends Component {
   render() {
     const edit = this.state.edit;
     const { watchioType } = this.props;
-    const { name, aliases, status, year, episodes, rating, group } =
-      this.props.video;
+    const {
+      name,
+      aliases,
+      status,
+      watched_date,
+      year,
+      episodes,
+      rating,
+      group,
+    } = this.props.video;
 
     if (edit) {
       return (
@@ -42,8 +51,8 @@ export class VideoItem extends Component {
       <div className="flex group">
         <div className="my-2 p-2 border-2 shadow-2xl rounded-xl bg-secondary border-tertiary w-full">
           <div className="flex">
-            <div className="w-2/3 break-all">
-              <div className="text-2xl font-bold overflow-auto">{name}</div>
+            <div className="w-full break-all">
+              <div className="text-xl font-bold overflow-auto">{name}</div>
               {aliases.length > 0 && (
                 <div className="mt-3">
                   <div className="text-xs">Alias:</div>
@@ -55,14 +64,18 @@ export class VideoItem extends Component {
                 </div>
               )}
             </div>
-            <div className="flex w-1/3 space-x-2 px-3 text-center">
-              <div className="w-full">
-                <div className="text-xs">Episodes</div>
-                <div className="font-bold">{episodes}</div>
-              </div>
+            <div className="flex w-240 space-x-2 px-3 text-center">
               <div className="w-full">
                 <div className="text-xs">Status</div>
                 <div className="font-bold">{status}</div>
+              </div>
+              <div className="w-full">
+                <div className="text-xs">Watched Date</div>
+                <div className="font-bold">{watched_date || BLANK_VALUE}</div>
+              </div>
+              <div className="w-full">
+                <div className="text-xs">Episodes</div>
+                <div className="font-bold">{episodes}</div>
               </div>
               <div className="w-full">
                 <div className="text-xs">Year</div>

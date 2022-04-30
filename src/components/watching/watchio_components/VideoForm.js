@@ -29,6 +29,7 @@ export class VideoForm extends Component {
     name: "",
     aliases: ["", ""],
     status: "",
+    watched_date: null,
     year: null,
     order: 1,
     episodes: 1,
@@ -36,14 +37,24 @@ export class VideoForm extends Component {
   };
 
   propsToState = () => {
-    const { name, year, status, order, episodes, rating } = this.props.video;
+    const { name, year, status, watched_date, order, episodes, rating } =
+      this.props.video;
 
     var aliases = [...this.props.video.aliases];
     while (aliases.length < 2) {
       aliases.push("");
     }
 
-    this.setState({ name, aliases, year, status, order, episodes, rating });
+    this.setState({
+      name,
+      aliases,
+      year,
+      status,
+      order,
+      episodes,
+      rating,
+      watched_date,
+    });
   };
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
@@ -73,6 +84,7 @@ export class VideoForm extends Component {
       name: this.props.video.name,
       aliases: this.props.video.aliases,
       status: this.props.video.status,
+      watched_date: this.props.video.watched_date,
       year: this.props.video.year,
       order: this.props.video.order,
       episodes: this.props.video.episodes,
@@ -83,6 +95,7 @@ export class VideoForm extends Component {
       name: this.state.name,
       aliases: this.cleanAliases(this.state.aliases),
       status: this.state.status,
+      watched_date: this.state.status.watched_date,
       year: this.state.year,
       order: this.state.order,
       episodes: this.state.episodes,
@@ -93,7 +106,8 @@ export class VideoForm extends Component {
   };
 
   buildVideo = () => {
-    const { name, year, status, order, episodes, rating } = this.state;
+    const { name, year, status, watched_date, order, episodes, rating } =
+      this.state;
     const { watchioType: type, groupId: group } = this.props;
     const id = this.props.video?.id;
 
@@ -107,6 +121,7 @@ export class VideoForm extends Component {
       aliases,
       year,
       status,
+      watched_date,
       order,
       episodes,
       rating,
@@ -138,7 +153,16 @@ export class VideoForm extends Component {
   }
 
   render() {
-    const { name, aliases, year, status, order, episodes, rating } = this.state;
+    const {
+      name,
+      aliases,
+      year,
+      status,
+      watched_date,
+      order,
+      episodes,
+      rating,
+    } = this.state;
     const { hideTitle, edit } = this.props;
 
     return (
@@ -152,55 +176,60 @@ export class VideoForm extends Component {
           <div className="m-4 flex flex-row w-full justify-between space-x-4">
             <div className="w-full">
               <InputContainer
-                label="Name *"
+                label="Name"
                 type={INPUT_TEXTAREA}
                 name="name"
                 value={name}
                 onChange={this.onChange}
               ></InputContainer>
 
-              <div className="flex flex-row w-full justify-between space-x-4">
-                <div className="flex flex-row w-full justify-between space-x-2">
-                  <InputContainer
-                    label="Year"
-                    type={INPUT_NUMBER}
-                    name="year"
-                    value={year || ""}
-                    onChange={this.onChange}
-                  ></InputContainer>
-                  <InputContainer
-                    label="Order *"
-                    type={INPUT_NUMBER}
-                    name="order"
-                    value={order}
-                    onChange={this.onChange}
-                  ></InputContainer>
-                  <InputContainer
-                    label="Episodes *"
-                    type={INPUT_NUMBER}
-                    name="episodes"
-                    value={episodes}
-                    onChange={this.onChange}
-                  ></InputContainer>
-                  <InputContainer
-                    label="Rating *"
-                    type={INPUT_NUMBER}
-                    name="rating"
-                    value={rating}
-                    onChange={this.onChange}
-                  ></InputContainer>
-                </div>
-                <div className="w-full text-center">
-                  <InputContainer
-                    label="Watch status *"
-                    type={INPUT_SELECT}
-                    name="status"
-                    placeholder="Select a status"
-                    value={status}
-                    options={this.props.statusTypes}
-                    onChange={this.onChange}
-                  ></InputContainer>
-                </div>
+              <div className="flex flex-row w-full justify-between space-x-2">
+                <InputContainer
+                  label="Year"
+                  type={INPUT_NUMBER}
+                  name="year"
+                  value={year || ""}
+                  onChange={this.onChange}
+                ></InputContainer>
+                <InputContainer
+                  label="Order"
+                  type={INPUT_NUMBER}
+                  name="order"
+                  value={order}
+                  onChange={this.onChange}
+                ></InputContainer>
+                <InputContainer
+                  label="Episodes *"
+                  type={INPUT_NUMBER}
+                  name="episodes"
+                  value={episodes}
+                  onChange={this.onChange}
+                ></InputContainer>
+                <InputContainer
+                  label="Rating"
+                  type={INPUT_NUMBER}
+                  name="rating"
+                  value={rating}
+                  onChange={this.onChange}
+                ></InputContainer>
+                <InputContainer
+                  className="w-full text-center"
+                  label="Watch status"
+                  type={INPUT_SELECT}
+                  name="status"
+                  placeholder="Select a status"
+                  value={status}
+                  options={this.props.statusTypes}
+                  onChange={this.onChange}
+                ></InputContainer>
+                <InputContainer
+                  label="Watch Date"
+                  type={INPUT_TEXTAREA}
+                  name="watched_date"
+                  value={watched_date || ""}
+                  onChange={this.onChange}
+                  maxLength={10}
+                ></InputContainer>
               </div>
 
               {!edit && (
@@ -226,7 +255,7 @@ export class VideoForm extends Component {
                 </div>
               )}
             </div>
-            <div className="w-1/2">
+            <div className="w-full">
               {aliases.map((alias, i) => (
                 <InputContainer
                   label={`Alias ${i + 1}`}

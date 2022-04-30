@@ -3,4 +3,4 @@ export const DEFAULT_IMAGE =
 
 export const OPTION_SELECTED = "option-selected";
 
-export const BLANK_CHECK_DATE = "---- -- --      ";
+export const BLANK_VALUE = " ----- ";

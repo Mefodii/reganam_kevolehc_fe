@@ -20,6 +20,16 @@ module.exports = {
       animation: {
         wiggle: "wiggle 1.5s ease-in-out infinite",
       },
+      spacing: {
+        100: "25rem",
+        120: "30rem",
+        140: "35rem",
+        160: "40rem",
+        180: "45rem",
+        200: "50rem",
+        220: "55rem",
+        240: "60rem",
+      },
     },
   },
   variants: {

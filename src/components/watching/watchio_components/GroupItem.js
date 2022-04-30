@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import { BLANK_CHECK_DATE } from "../../../util/constants";
+import { BLANK_VALUE } from "../../../util/constants";
 
 import Poster from "./Poster";
 import SVGPencil from "../../generic/svg/SVGPencil";
@@ -26,8 +26,20 @@ export class GroupItem extends Component {
   render() {
     const { edit } = this.state;
     const { watchioType } = this.props;
-    const { id, name, aliases, check_date, status, images, single, videos } =
-      this.props.group;
+    const {
+      id,
+      name,
+      aliases,
+      check_date,
+      airing_status,
+      status,
+      images,
+      single,
+      watched_date,
+      year,
+      rating,
+      videos,
+    } = this.props.group;
 
     return (
       <div className="m-5 p-2 border-2 shadow-2xl rounded-xl bg-secondary border-tertiary">
@@ -48,12 +60,10 @@ export class GroupItem extends Component {
                 edit
               ></GroupForm>
             ) : (
-              <div className="group">
+              <div className="ml-2 group">
                 <div className="flex justify-between">
-                  <div className="w-2/3 break-all">
-                    <div className="text-2xl font-bold overflow-auto">
-                      {name}
-                    </div>
+                  <div className="w-1/2 break-all">
+                    <div className="text-3xl font-bold">{name}</div>
                     {aliases.length > 0 && (
                       <div className="mt-3">
                         <div className="text-xs">Alias:</div>
@@ -65,15 +75,33 @@ export class GroupItem extends Component {
                       </div>
                     )}
                   </div>
-                  <div className="flex w-1/3 space-x-2 px-3 text-center">
+                  <div className="flex w-1/2 space-x-2 px-3 text-center">
                     <div className={`w-full ${!single && "invisible"}`}>
                       <div className="text-xs">Status</div>
                       <div className="font-bold">{status}</div>
                     </div>
+                    <div className={`w-full ${!single && "invisible"}`}>
+                      <div className="text-xs">Watched Date</div>
+                      <div className="font-bold">
+                        {watched_date || BLANK_VALUE}
+                      </div>
+                    </div>
+                    <div className={`w-full ${!single && "invisible"}`}>
+                      <div className="text-xs">Year</div>
+                      <div className="font-bold">{year}</div>
+                    </div>
+                    <div className={`w-full ${!single && "invisible"}`}>
+                      <div className="text-xs">Rating</div>
+                      <div className="font-bold">{rating} / 10</div>
+                    </div>
+                    <div className="w-full">
+                      <div className="text-xs">Airing Status</div>
+                      <div className="font-bold">{airing_status}</div>
+                    </div>
                     <div className="w-full">
                       <div className="text-xs">Check Date</div>
                       <div className="font-bold">
-                        {check_date || BLANK_CHECK_DATE}
+                        {check_date || BLANK_VALUE}
                       </div>
                     </div>
                   </div>
