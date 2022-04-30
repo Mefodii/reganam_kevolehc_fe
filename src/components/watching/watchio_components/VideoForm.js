@@ -217,7 +217,7 @@ export class VideoForm extends Component {
                   label="Watch status"
                   type={INPUT_SELECT}
                   name="status"
-                  placeholder="Select a status"
+                  placeholder="Select status"
                   value={status}
                   options={this.props.statusTypes}
                   onChange={this.onChange}

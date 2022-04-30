@@ -44,12 +44,14 @@ export class GroupItem extends Component {
     return (
       <div className="m-5 p-2 border-2 shadow-2xl rounded-xl bg-secondary border-tertiary">
         <div className="flex my-2">
-          <Poster
-            images={images}
-            groupId={id}
-            disabled={!edit}
-            watchioType={watchioType}
-          ></Poster>
+          <div className="w-60">
+            <Poster
+              images={images}
+              groupId={id}
+              disabled={!edit}
+              watchioType={watchioType}
+            ></Poster>
+          </div>
           <div className="mx-5 p-2 border-2 shadow-2xl rounded-xl bg-secondary border-tertiary w-full h-min">
             {edit ? (
               <GroupForm

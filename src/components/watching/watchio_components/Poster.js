@@ -52,7 +52,7 @@ export class Poster extends Component {
     const { disabled } = this.props;
 
     return (
-      <div className="w-60 relative group h-full">
+      <div className="relative group">
         {!disabled && (
           <div className="absolute bottom-0 w-full flex justify-center transform opacity-0 group-hover:opacity-100 transition ease-in duration-300">
             <div className="absolute w-full bg-gray-800 h-full opacity-80"></div>
