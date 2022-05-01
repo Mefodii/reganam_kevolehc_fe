@@ -7,12 +7,14 @@
   font-style: normal;
 }
 
+@import url("https://fonts.googleapis.com/css2?family=Mulish:wght@300&display=swap");
+
 body {
   background: #102a54;
 }
 
 * {
-  font-family: Quicksand;
+  font-family: Quicksand, Mulish;
 }
 /* to remove the top and left whitespace */
 #sky {
