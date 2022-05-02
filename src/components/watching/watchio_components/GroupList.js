@@ -13,6 +13,21 @@ export class GroupList extends Component {
 
   state = {
     showGroupForm: false,
+    filters: {
+      showPosters: true,
+      name: "",
+      status: "",
+      airing_status: "",
+    },
+  };
+
+  onFilterChange = (e) => {
+    const filters = { ...this.state.filters, [e.target.name]: e.target.value };
+    this.setState(filters);
+  };
+
+  filterGroups = (groups) => {
+    return groups;
   };
 
   toggleShowGroupForm = () => {
@@ -20,7 +35,10 @@ export class GroupList extends Component {
   };
 
   render() {
-    const { showGroupForm } = this.state;
+    const {
+      showGroupForm,
+      filters: { showPosters },
+    } = this.state;
     const { watchioType, groups } = this.props;
 
     return (
@@ -43,11 +61,12 @@ export class GroupList extends Component {
             </div>
           </div>
           <div className="bg-primary border border-tertiary">
-            {groups.map((group) => (
+            {this.filterGroups(groups).map((group) => (
               <GroupItem
                 group={group}
                 key={group.id}
                 watchioType={watchioType}
+                showPoster={showPosters}
               ></GroupItem>
             ))}
           </div>

@@ -161,7 +161,7 @@ export class GroupForm extends Component {
       watched_date =
         watched_date && watched_date.length > 0 ? watched_date : null;
     }
-    check_date = check_date || check_date.length > 0 ? check_date : null;
+    check_date = check_date && check_date.length > 0 ? check_date : null;
     const aliases = this.cleanAliases(this.state.aliases);
 
     const group = {

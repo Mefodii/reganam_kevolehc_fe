@@ -13,6 +13,7 @@ export class GroupItem extends Component {
   static propTypes = {
     group: PropTypes.object.isRequired,
     watchioType: PropTypes.string.isRequired,
+    showPoster: PropTypes.bool.isRequired,
   };
 
   state = {
@@ -25,7 +26,7 @@ export class GroupItem extends Component {
 
   render() {
     const { edit } = this.state;
-    const { watchioType } = this.props;
+    const { watchioType, showPoster } = this.props;
     const {
       id,
       name,
@@ -44,7 +45,7 @@ export class GroupItem extends Component {
     return (
       <div className="m-5 p-2 border-2 shadow-2xl rounded-xl bg-secondary border-tertiary">
         <div className="flex my-2">
-          <div className="w-60">
+          <div className={`w-60 ${showPoster ? "" : "hidden"}`}>
             <Poster
               images={images}
               groupId={id}
