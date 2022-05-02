@@ -54,6 +54,7 @@ export class GroupForm extends Component {
 
     this.setState({
       name,
+      aliases,
       check_date,
       airing_status,
       single,
@@ -125,12 +126,12 @@ export class GroupForm extends Component {
 
     const newGroup = {
       name: this.state.name,
-      aliases: this.state.aliases,
+      aliases: this.cleanAliases(this.state.aliases),
       check_date: this.state.check_date,
       airing_status: this.state.airing_status,
       single: this.state.single,
       status: this.state.status,
-      watched_date: this.state.check_date,
+      watched_date: this.state.watched_date,
       year: this.state.year,
       rating: this.state.rating,
     };
