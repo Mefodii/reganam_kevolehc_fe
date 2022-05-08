@@ -6,6 +6,7 @@ import { getGroups } from "../../../actions/groups";
 import { updateTheme } from "../../../actions/page";
 
 import GroupList from "../watchio_components/GroupList";
+import { SERIALS_BACKGROUND } from "../../../util/constants";
 
 export class Serials extends Component {
   static propTypes = {
@@ -21,7 +22,13 @@ export class Serials extends Component {
 
   render() {
     const { watchioSerial, groups } = this.props;
-    return <GroupList watchioType={watchioSerial} groups={groups}></GroupList>;
+    return (
+      <GroupList
+        watchioType={watchioSerial}
+        groups={groups}
+        backgroundPicture={SERIALS_BACKGROUND}
+      ></GroupList>
+    );
   }
 }
 

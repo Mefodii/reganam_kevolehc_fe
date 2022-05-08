@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import { BLANK_VALUE } from "../../../util/constants";
+import { BLANK_VALUE, DEFAULT_IMAGE } from "../../../util/constants";
 
 import Poster from "./Poster";
 import SVGPencil from "../../generic/svg/SVGPencil";
@@ -42,10 +42,21 @@ export class GroupItem extends Component {
       videos,
     } = this.props.group;
 
+    const poster = images[0];
+
     return (
-      <div className="m-5 p-2 border-2 shadow-2xl rounded-xl bg-secondary border-tertiary">
-        <div className="flex my-2">
-          <div className={`w-60 ${showPoster ? "" : "hidden"}`}>
+      <div className="m-5 p-2 border-2 shadow-2xl rounded-xl bg-secondary border-tertiary relative overflow-hidden">
+        <div className="flex my-2 ">
+          {poster && (
+            <div className="absolute w-full opacity-10 -top-220 right-0">
+              <img
+                src={poster.image}
+                alt="Placeholder"
+                className="w-full rounded-lg"
+              />
+            </div>
+          )}
+          <div className={`min-w-60 ${showPoster ? "" : "hidden"}`}>
             <Poster
               images={images}
               groupId={id}
@@ -53,7 +64,7 @@ export class GroupItem extends Component {
               watchioType={watchioType}
             ></Poster>
           </div>
-          <div className="mx-5 p-2 border-2 shadow-2xl rounded-xl bg-secondary border-tertiary w-full h-min">
+          <div className="mx-5 p-2 border-2 shadow-2xl rounded-xl bg-secondary z-10 border-tertiary w-full h-full">
             {edit ? (
               <GroupForm
                 watchioType={watchioType}
@@ -65,7 +76,7 @@ export class GroupItem extends Component {
             ) : (
               <div className="ml-2 group">
                 <div className="flex justify-between">
-                  <div className="w-1/2 break-all">
+                  <div className="w-full break-all">
                     <div className="text-3xl font-bold">{name}</div>
                     {aliases.length > 0 && (
                       <div className="mt-3">
@@ -78,30 +89,30 @@ export class GroupItem extends Component {
                       </div>
                     )}
                   </div>
-                  <div className="flex w-1/2 space-x-2 px-3 text-center">
-                    <div className={`w-full ${!single && "invisible"}`}>
+                  <div className="flex flex-wrap 2xl:flex-nowrap px-3 justify-end text-center">
+                    <div className={`w-24 m-1 ${!single && "invisible"}`}>
                       <div className="text-xs">Status</div>
                       <div className="font-bold">{status}</div>
                     </div>
-                    <div className={`w-full ${!single && "invisible"}`}>
-                      <div className="text-xs">Watched Date</div>
+                    <div className={`w-24 m-1 ${!single && "invisible"}`}>
+                      <div className="text-xs">{status || "Watched "} Date</div>
                       <div className="font-bold">
                         {watched_date || BLANK_VALUE}
                       </div>
                     </div>
-                    <div className={`w-full ${!single && "invisible"}`}>
+                    <div className={`w-24 m-1 ${!single && "invisible"}`}>
                       <div className="text-xs">Year</div>
                       <div className="font-bold">{year}</div>
                     </div>
-                    <div className={`w-full ${!single && "invisible"}`}>
+                    <div className={`w-24 m-1 ${!single && "invisible"}`}>
                       <div className="text-xs">Rating</div>
                       <div className="font-bold">{rating} / 10</div>
                     </div>
-                    <div className="w-full">
+                    <div className="w-24 m-1">
                       <div className="text-xs">Airing Status</div>
                       <div className="font-bold">{airing_status}</div>
                     </div>
-                    <div className="w-full">
+                    <div className="w-24 m-1">
                       <div className="text-xs">Check Date</div>
                       <div className="font-bold">
                         {check_date || BLANK_VALUE}

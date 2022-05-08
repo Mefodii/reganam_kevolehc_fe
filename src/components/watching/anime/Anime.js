@@ -6,6 +6,7 @@ import { getGroups } from "../../../actions/groups";
 import { updateTheme } from "../../../actions/page";
 
 import GroupList from "../watchio_components/GroupList";
+import { ANIME_BACKGROUND } from "../../../util/constants";
 
 export class Anime extends Component {
   static propTypes = {
@@ -21,7 +22,13 @@ export class Anime extends Component {
 
   render() {
     const { watchioAnime, groups } = this.props;
-    return <GroupList watchioType={watchioAnime} groups={groups}></GroupList>;
+    return (
+      <GroupList
+        watchioType={watchioAnime}
+        groups={groups}
+        backgroundPicture={ANIME_BACKGROUND}
+      ></GroupList>
+    );
   }
 }
 

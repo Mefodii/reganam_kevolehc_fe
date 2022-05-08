@@ -9,6 +9,7 @@ export class GroupList extends Component {
   static propTypes = {
     groups: PropTypes.array.isRequired,
     watchioType: PropTypes.string.isRequired,
+    backgroundPicture: PropTypes.string.isRequired,
   };
 
   state = {
@@ -39,15 +40,22 @@ export class GroupList extends Component {
       showGroupForm,
       filters: { showPosters },
     } = this.state;
-    const { watchioType, groups } = this.props;
+    const { watchioType, groups, backgroundPicture } = this.props;
 
     return (
-      <div className="w-full flex flex-col items-center">
-        <h2 className="text-xl uppercase font-bold m-4">
+      <div className="w-full flex flex-col items-center relative overflow-hidden">
+        <div className="w-full opacity-20 right-0 fixed z-0">
+          <img
+            src={backgroundPicture}
+            alt="Placeholder"
+            className="w-full rounded-lg"
+          />
+        </div>
+        <h2 className="text-xl uppercase font-bold m-4 z-10">
           Welcome to {watchioType}, fellow watcher
         </h2>
-        <div className="rounded-xl shadow-lg w-10/12 space-y-10 mb-28">
-          <div className="p-6 bg-primary border border-tertiary">
+        <div className="rounded-xl shadow-md w-10/12 space-y-10 mb-28 z-10">
+          <div className="p-6 bg-primary border border-tertiary rounded-lg">
             <div className="w-full p-1 border-2 shadow-2xl rounded-xl bg-secondary border-tertiary text-center font-extrabold">
               <div
                 className="cursor-pointer mb-1"
@@ -60,7 +68,7 @@ export class GroupList extends Component {
               )}
             </div>
           </div>
-          <div className="bg-primary border border-tertiary">
+          <div className="bg-primary border border-tertiary rounded-lg">
             {this.filterGroups(groups).map((group) => (
               <GroupItem
                 group={group}

@@ -4,7 +4,6 @@ const initialState = {
   watchioTypes: {},
   statusTypes: [],
   airStatusTypes: [],
-  aliasSeparator: "",
 };
 
 const getInfo = (state, payload) => ({

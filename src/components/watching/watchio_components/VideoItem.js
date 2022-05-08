@@ -50,7 +50,7 @@ export class VideoItem extends Component {
     return (
       <div className="flex group">
         <div className="my-2 p-2 border-2 shadow-2xl rounded-xl bg-secondary border-tertiary w-full">
-          <div className="flex">
+          <div className="flex flex-col 2xl:flex-row">
             <div className="w-full break-all">
               <div className="text-xl font-bold overflow-auto">{name}</div>
               {aliases.length > 0 && (
@@ -64,24 +64,24 @@ export class VideoItem extends Component {
                 </div>
               )}
             </div>
-            <div className="flex w-240 space-x-2 px-3 text-center">
-              <div className="w-full">
+            <div className="flex flex-wrap 2xl:flex-nowrap px-3 text-center">
+              <div className="w-24 m-1">
                 <div className="text-xs">Status</div>
                 <div className="font-bold">{status}</div>
               </div>
-              <div className="w-full">
-                <div className="text-xs">Watched Date</div>
+              <div className="w-24 m-1">
+                <div className="text-xs">{status || "Watched "} Date</div>
                 <div className="font-bold">{watched_date || BLANK_VALUE}</div>
               </div>
-              <div className="w-full">
+              <div className="w-24 m-1">
                 <div className="text-xs">Episodes</div>
                 <div className="font-bold">{episodes}</div>
               </div>
-              <div className="w-full">
+              <div className="w-24 m-1">
                 <div className="text-xs">Year</div>
                 <div className="font-bold">{year || "----"}</div>
               </div>
-              <div className="w-full">
+              <div className="w-24 m-1">
                 <div className="text-xs">Rating</div>
                 <div className="font-bold">{`${rating} / 10`}</div>
               </div>

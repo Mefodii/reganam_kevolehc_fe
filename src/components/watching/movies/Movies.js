@@ -6,6 +6,7 @@ import { getGroups } from "../../../actions/groups";
 import { updateTheme } from "../../../actions/page";
 
 import GroupList from "../watchio_components/GroupList";
+import { MOVIES_BACKGROUND } from "../../../util/constants";
 
 export class Movies extends Component {
   static propTypes = {
@@ -21,7 +22,13 @@ export class Movies extends Component {
 
   render() {
     const { watchioMovie, groups } = this.props;
-    return <GroupList watchioType={watchioMovie} groups={groups}></GroupList>;
+    return (
+      <GroupList
+        watchioType={watchioMovie}
+        groups={groups}
+        backgroundPicture={MOVIES_BACKGROUND}
+      ></GroupList>
+    );
   }
 }
 

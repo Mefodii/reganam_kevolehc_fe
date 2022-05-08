@@ -23,7 +23,9 @@ class Header extends Component {
     const dropDownVisibility = showDropDown ? "" : "hidden";
 
     return (
-      <nav className={`${theme} text-gray-200 shadow-md bg-primary`}>
+      <nav
+        className={`${theme} text-gray-200 shadow-md bg-primary sticky top-0 z-20`}
+      >
         <ul className="flex p-2 items-center text-lg">
           <li className="font-bold m-2">
             <NavLink to="/">:Kevolehc:</NavLink>

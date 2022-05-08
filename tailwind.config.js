@@ -30,6 +30,9 @@ module.exports = {
         220: "55rem",
         240: "60rem",
       },
+      minWidth: {
+        60: "15rem",
+      },
     },
   },
   variants: {
@@ -38,6 +41,7 @@ module.exports = {
       rotate: ["group-hover"],
       scale: ["group-hover", "group-focus"],
       backgroundColor: ["active"],
+      backgroundOpacity: ["active"],
       textColor: ["active"],
       brightness: ["hover", "active"],
     },

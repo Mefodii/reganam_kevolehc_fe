@@ -84,7 +84,7 @@ export class Poster extends Component {
         <img
           src={imgPath}
           alt="Placeholder"
-          className="shadow-sm rounded-lg object-center"
+          className="shadow-sm rounded-lg object-center w-60"
         />
       </div>
     );

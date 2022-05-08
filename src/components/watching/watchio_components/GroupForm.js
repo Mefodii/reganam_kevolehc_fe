@@ -224,7 +224,7 @@ export class GroupForm extends Component {
         )}
 
         <div className="flex justify-evenly bg-secondary border-2 border-tertiary rounded-xl shadow-lg w-full">
-          <div className="m-4 flex flex-row w-full justify-between space-x-4">
+          <div className="m-4 flex flex-col-reverse 2xl:flex-row w-full justify-between space-x-4">
             <div className="w-full space-y-1">
               <InputContainer
                 label="Name"
@@ -275,7 +275,7 @@ export class GroupForm extends Component {
                 ></InputContainer>
                 <InputContainer
                   className={`${single ? "" : "opacity-20"}`}
-                  label="Watch Date"
+                  label={`${status || "Watched "} Date`}
                   type={INPUT_TEXTAREA}
                   name="watched_date"
                   value={watched_date || ""}

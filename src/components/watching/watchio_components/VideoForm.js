@@ -223,7 +223,7 @@ export class VideoForm extends Component {
                   onChange={this.onChange}
                 ></InputContainer>
                 <InputContainer
-                  label="Watch Date"
+                  label={`${status || "Watched "} Date`}
                   type={INPUT_TEXTAREA}
                   name="watched_date"
                   value={watched_date || ""}
