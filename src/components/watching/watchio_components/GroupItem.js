@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import { BLANK_VALUE, DEFAULT_IMAGE } from "../../../util/constants";
+import { BLANK_VALUE } from "../../../util/constants";
 
 import Poster from "./Poster";
 import SVGPencil from "../../generic/svg/SVGPencil";
@@ -45,17 +45,17 @@ export class GroupItem extends Component {
     const poster = images[0];
 
     return (
-      <div className="m-5 p-2 border-2 shadow-2xl rounded-xl bg-secondary border-tertiary relative overflow-hidden">
+      <div className="m-5 p-2 border-2 shadow-2xl rounded-xl bg-secondary border-tertiary relative">
+        {poster && (
+          <div className="absolute w-full h-full opacity-10 overflow-hidden right-0 top-0 rounded-xl">
+            <img
+              src={poster.image}
+              alt="Placeholder"
+              className="w-full absolute rounded-lg -top-220 right-0"
+            />
+          </div>
+        )}
         <div className="flex my-2 ">
-          {poster && (
-            <div className="absolute w-full opacity-10 -top-220 right-0">
-              <img
-                src={poster.image}
-                alt="Placeholder"
-                className="w-full rounded-lg"
-              />
-            </div>
-          )}
           <div className={`min-w-60 ${showPoster ? "" : "hidden"}`}>
             <Poster
               images={images}
@@ -64,7 +64,7 @@ export class GroupItem extends Component {
               watchioType={watchioType}
             ></Poster>
           </div>
-          <div className="mx-5 p-2 border-2 shadow-2xl rounded-xl bg-secondary z-10 border-tertiary w-full h-full">
+          <div className="mx-5 p-2 border-2 shadow-2xl rounded-xl bg-secondary z-10 border-tertiary w-full h-full relative overflow-visible">
             {edit ? (
               <GroupForm
                 watchioType={watchioType}
