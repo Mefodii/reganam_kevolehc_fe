@@ -1,6 +1,5 @@
 module.exports = {
-  purge: [],
-  darkMode: false, // or 'media' or 'class'
+  content: ["./src/**/*.{html,js}"],
   theme: {
     extend: {
       colors: {
@@ -35,16 +34,16 @@ module.exports = {
       },
     },
   },
-  variants: {
-    extend: {
-      animation: ["group-hover", "hover"],
-      rotate: ["group-hover"],
-      scale: ["group-hover", "group-focus"],
-      backgroundColor: ["active"],
-      backgroundOpacity: ["active"],
-      textColor: ["active"],
-      brightness: ["hover", "active"],
-    },
-  },
+  // variants: {
+  //   extend: {
+  //     animation: ["group-hover", "hover"],
+  //     rotate: ["group-hover"],
+  //     scale: ["group-hover", "group-focus"],
+  //     backgroundColor: ["active"],
+  //     backgroundOpacity: ["active"],
+  //     textColor: ["active"],
+  //     brightness: ["hover", "active"],
+  //   },
+  // },
   plugins: [],
 };

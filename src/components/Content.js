@@ -31,13 +31,27 @@ class Content extends Component {
         >
           <Header />
           <Switch>
-            <Route exact path="/" component={Home}></Route>
-            <Route exact path="/watchio" component={WatchioDashboard}></Route>
-            <Route exact path="/watchio/movies" component={Movies}></Route>
-            <Route exact path="/watchio/serials" component={Serials}></Route>
-            <Route exact path="/watchio/anime" component={Anime}></Route>
-            <Route exact path="/gamio" component={GamioDashboard}></Route>
-            <Route exact path="/readio" component={ReadioDashboard}></Route>
+            <Route exact path="/">
+              <Home />
+            </Route>
+            <Route exact path="/watchio">
+              <WatchioDashboard />
+            </Route>
+            <Route exact path="/watchio/movies">
+              <Movies />
+            </Route>
+            <Route exact path="/watchio/serials">
+              <Serials />
+            </Route>
+            <Route exact path="/watchio/anime">
+              <Anime />
+            </Route>
+            <Route exact path="/gamio">
+              <GamioDashboard />
+            </Route>
+            <Route exact path="/readio">
+              <ReadioDashboard />
+            </Route>
           </Switch>
         </div>
       </Router>

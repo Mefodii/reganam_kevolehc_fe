@@ -75,7 +75,7 @@
 }
 
 .option-selected {
-  @apply bg-green-500 bg-opacity-40;
+  @apply bg-emerald-500 bg-opacity-40;
 }
 
 .option-dropdown-container {
@@ -105,7 +105,7 @@
 }
 
 .wiggling-clickable {
-  @apply transform opacity-10 group-hover:opacity-100 hover:animate-wiggle cursor-pointer hover:text-green-300 transition ease-in duration-150;
+  @apply transform opacity-10 group-hover:opacity-100 hover:animate-wiggle cursor-pointer hover:text-emerald-300 transition ease-in duration-150;
 }
 
 @tailwind utilities;

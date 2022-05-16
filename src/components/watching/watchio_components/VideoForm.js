@@ -11,6 +11,7 @@ import InputContainer, {
 import { objectEqualsSimple } from "../../../util/functions";
 
 import { addVideo, updateVideo, deleteVideo } from "../../../actions/videos";
+import { isEmpty } from "lodash";
 
 export class VideoForm extends Component {
   static propTypes = {
@@ -121,7 +122,7 @@ export class VideoForm extends Component {
       aliases,
       year,
       status,
-      watched_date,
+      watched_date: isEmpty(watched_date) ? null : watched_date,
       order,
       episodes,
       rating,
