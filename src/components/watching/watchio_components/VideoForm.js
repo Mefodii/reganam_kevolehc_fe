@@ -8,10 +8,11 @@ import InputContainer, {
   INPUT_TEXTAREA,
 } from "../../generic/form/InputContainer";
 
-import { objectEqualsSimple } from "../../../util/functions";
+import { getToday, objectEqualsSimple } from "../../../util/functions";
 
 import { addVideo, updateVideo, deleteVideo } from "../../../actions/videos";
 import { isEmpty } from "lodash";
+import SVGCalendar from "../../generic/svg/SVGCalendar";
 
 export class VideoForm extends Component {
   static propTypes = {
@@ -64,6 +65,7 @@ export class VideoForm extends Component {
     newAliases[i] = e.target.value;
     this.setState({ aliases: newAliases });
   };
+  setWatchedkDate = (value) => this.setState({ watched_date: value });
 
   addAliasFields = (count = 1) => {
     const newAliases = [...Array(count).keys()].map((_) => "");
@@ -174,9 +176,10 @@ export class VideoForm extends Component {
           </div>
         )}
         <div className="flex justify-evenly bg-secondary border-2 border-tertiary rounded-xl shadow-lg w-full">
-          <div className="m-4 flex flex-row w-full justify-between space-x-4">
+          <div className="m-4 flex flex-col-reverse 2xl:flex-row w-full justify-between 2xl:space-x-4">
             <div className="w-full">
               <InputContainer
+                className="title"
                 label="Name"
                 type={INPUT_TEXTAREA}
                 name="name"
@@ -186,6 +189,7 @@ export class VideoForm extends Component {
 
               <div className="flex flex-row w-full justify-between space-x-2">
                 <InputContainer
+                  className="w-1/3"
                   label="Year"
                   type={INPUT_NUMBER}
                   name="year"
@@ -193,6 +197,7 @@ export class VideoForm extends Component {
                   onChange={this.onChange}
                 ></InputContainer>
                 <InputContainer
+                  className="w-1/3"
                   label="Order"
                   type={INPUT_NUMBER}
                   name="order"
@@ -200,6 +205,7 @@ export class VideoForm extends Component {
                   onChange={this.onChange}
                 ></InputContainer>
                 <InputContainer
+                  className="w-1/3"
                   label="Episodes *"
                   type={INPUT_NUMBER}
                   name="episodes"
@@ -207,6 +213,7 @@ export class VideoForm extends Component {
                   onChange={this.onChange}
                 ></InputContainer>
                 <InputContainer
+                  className="w-1/3"
                   label="Rating"
                   type={INPUT_NUMBER}
                   name="rating"
@@ -223,14 +230,23 @@ export class VideoForm extends Component {
                   options={this.props.statusTypes}
                   onChange={this.onChange}
                 ></InputContainer>
-                <InputContainer
-                  label={`${status || "Watched "} Date`}
-                  type={INPUT_TEXTAREA}
-                  name="watched_date"
-                  value={watched_date || ""}
-                  onChange={this.onChange}
-                  maxLength={10}
-                ></InputContainer>
+                <div className="group w-full">
+                  <InputContainer
+                    label={`${status || "Watched "} Date`}
+                    type={INPUT_TEXTAREA}
+                    name="watched_date"
+                    value={watched_date || ""}
+                    onChange={this.onChange}
+                    maxLength={10}
+                  >
+                    <div
+                      className="absolute right-2 top-1"
+                      onClick={() => this.setWatchedkDate(getToday())}
+                    >
+                      <SVGCalendar className="w-6 simple-clickable"></SVGCalendar>
+                    </div>
+                  </InputContainer>
+                </div>
               </div>
 
               {!edit && (
@@ -259,6 +275,7 @@ export class VideoForm extends Component {
             <div className="w-full">
               {aliases.map((alias, i) => (
                 <InputContainer
+                  className="title"
                   label={`Alias ${i + 1}`}
                   type={INPUT_TEXTAREA}
                   key={i}

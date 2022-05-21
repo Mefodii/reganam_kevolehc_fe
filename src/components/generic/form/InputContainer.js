@@ -4,6 +4,7 @@ import Select from "./Select";
 import Checkbox from "./Checkbox";
 import Radio from "./Radio";
 import Options from "./Options";
+import Number from "./Number";
 
 export const INPUT_TEXT = "input-text";
 export const INPUT_TEXTAREA = "input-textarea";
@@ -22,11 +23,10 @@ export class InputContainer extends Component {
     if (type === INPUT_TEXT) inputType = "text";
     if (type === INPUT_PASSWORD) inputType = "password";
     if (type === INPUT_EMAIL) inputType = "email";
-    if (type === INPUT_NUMBER) inputType = "number";
 
     return (
       <input
-        className={`input-text ${type === INPUT_NUMBER && "text-center"}`}
+        className="input-text"
         type={inputType}
         name={this.props.name}
         onChange={this.props.onChange}
@@ -55,6 +55,19 @@ export class InputContainer extends Component {
         disabled={this.props.disabled}
         rows="1"
         maxLength={this.props.maxLength}
+      />
+    );
+  };
+
+  renderNumber = () => {
+    return (
+      <Number
+        name={this.props.name}
+        onChange={this.props.onChange}
+        onKeyDown={this.props.onKeyDown}
+        value={this.props.value}
+        disabled={this.props.disabled}
+        hideArrows={this.props.hideArrows}
       />
     );
   };
@@ -112,7 +125,7 @@ export class InputContainer extends Component {
     if (type === INPUT_TEXT) return this.renderInput();
     if (type === INPUT_PASSWORD) return this.renderInput();
     if (type === INPUT_EMAIL) return this.renderInput();
-    if (type === INPUT_NUMBER) return this.renderInput();
+    if (type === INPUT_NUMBER) return this.renderNumber();
     if (type === INPUT_TEXTAREA) return this.renderTextarea();
     if (type === INPUT_SELECT) return this.renderSelect();
     if (type === INPUT_CHECKBOX) return this.renderCheckbox();

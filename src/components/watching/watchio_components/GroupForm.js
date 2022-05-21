@@ -9,6 +9,8 @@ import InputContainer, {
   INPUT_NUMBER,
 } from "../../generic/form/InputContainer";
 
+import SVGCalendar from "../../generic/svg/SVGCalendar";
+
 import { addGroup, updateGroup, deleteGroup } from "../../../actions/groups";
 import { getToday, objectEqualsSimple } from "../../../util/functions";
 import { BLANK_VALUE } from "../../../util/constants";
@@ -71,6 +73,8 @@ export class GroupForm extends Component {
     newAliases[i] = e.target.value;
     this.setState({ aliases: newAliases });
   };
+  setLastCheckDate = (value) => this.setState({ check_date: value });
+  setWatchedkDate = (value) => this.setState({ watched_date: value });
 
   toggleSingle = (e) => {
     const single = !this.state.single;
@@ -224,9 +228,10 @@ export class GroupForm extends Component {
         )}
 
         <div className="flex justify-evenly bg-secondary border-2 border-tertiary rounded-xl shadow-lg w-full">
-          <div className="m-4 flex flex-col-reverse 2xl:flex-row w-full justify-between space-x-4">
+          <div className="m-4 flex flex-col-reverse 2xl:flex-row w-full justify-between 2xl:space-x-4">
             <div className="w-full space-y-1">
               <InputContainer
+                className="title"
                 label="Name"
                 type={INPUT_TEXTAREA}
                 name="name"
@@ -234,14 +239,23 @@ export class GroupForm extends Component {
                 onChange={this.onChange}
               ></InputContainer>
               <div className="flex flex-row w-full justify-between space-x-4 text-center">
-                <InputContainer
-                  label="Last Check Date"
-                  type={INPUT_TEXTAREA}
-                  name="check_date"
-                  value={check_date || ""}
-                  onChange={this.onChange}
-                  maxLength={10}
-                ></InputContainer>
+                <div className="group w-full">
+                  <InputContainer
+                    label="Last Check Date"
+                    type={INPUT_TEXTAREA}
+                    name="check_date"
+                    value={check_date || ""}
+                    onChange={this.onChange}
+                    maxLength={10}
+                  >
+                    <div
+                      className="absolute right-2 top-1"
+                      onClick={() => this.setLastCheckDate(getToday())}
+                    >
+                      <SVGCalendar className="w-6 simple-clickable"></SVGCalendar>
+                    </div>
+                  </InputContainer>
+                </div>
                 <InputContainer
                   label="Airing Status"
                   type={INPUT_SELECT}
@@ -273,16 +287,28 @@ export class GroupForm extends Component {
                   onChange={this.onChange}
                   disabled={!single}
                 ></InputContainer>
-                <InputContainer
-                  className={`${single ? "" : "opacity-20"}`}
-                  label={`${status || "Watched "} Date`}
-                  type={INPUT_TEXTAREA}
-                  name="watched_date"
-                  value={watched_date || ""}
-                  onChange={this.onChange}
-                  maxLength={10}
-                  disabled={!single}
-                ></InputContainer>
+
+                <div className="group w-full">
+                  <InputContainer
+                    className={`${single ? "" : "opacity-20"}`}
+                    label={`${status || "Watched "} Date`}
+                    type={INPUT_TEXTAREA}
+                    name="watched_date"
+                    value={watched_date || ""}
+                    onChange={this.onChange}
+                    maxLength={10}
+                    disabled={!single}
+                  >
+                    <div
+                      className={`absolute right-2 top-1 ${
+                        !single ? "hidden" : ""
+                      }`}
+                      onClick={() => this.setWatchedkDate(getToday())}
+                    >
+                      <SVGCalendar className="w-6 simple-clickable"></SVGCalendar>
+                    </div>
+                  </InputContainer>
+                </div>
                 <InputContainer
                   className={`${single ? "" : "opacity-20"}`}
                   label="Year"
@@ -337,6 +363,7 @@ export class GroupForm extends Component {
             <div className="w-full">
               {aliases.map((alias, i) => (
                 <InputContainer
+                  className="title"
                   label={`Alias ${i + 1}`}
                   type={INPUT_TEXTAREA}
                   key={i}

@@ -13,9 +13,13 @@ body {
   background: #102a54;
 }
 
-* {
+#root {
   font-family: Quicksand, Oswald, Mulish;
 }
+.title {
+  font-family: Oswald;
+}
+
 /* to remove the top and left whitespace */
 #sky {
   position: absolute;

@@ -1,6 +1,14 @@
 @tailwind base;
 @tailwind components;
 
+@layer utilities {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
 .drop-down {
   @apply absolute;
 }
@@ -106,6 +114,10 @@
 
 .wiggling-clickable {
   @apply transform opacity-10 group-hover:opacity-100 hover:animate-wiggle cursor-pointer hover:text-emerald-300 transition ease-in duration-150;
+}
+
+.simple-clickable {
+  @apply transform opacity-40 hover:opacity-100 cursor-pointer hover:text-emerald-300 transition ease-in duration-150;
 }
 
 @tailwind utilities;

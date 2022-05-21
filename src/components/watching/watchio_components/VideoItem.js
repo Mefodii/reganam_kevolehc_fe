@@ -51,8 +51,8 @@ export class VideoItem extends Component {
       <div className="flex group">
         <div className="my-2 p-2 border-2 shadow-2xl rounded-xl bg-secondary border-tertiary w-full">
           <div className="flex flex-col 2xl:flex-row">
-            <div className="w-full break-all">
-              <div className="text-xl font-bold overflow-auto">{name}</div>
+            <div className="title w-full break-all">
+              <div className="text-xl font-bold">{name}</div>
               {aliases.length > 0 && (
                 <div className="mt-3">
                   <div className="text-xs">Alias:</div>

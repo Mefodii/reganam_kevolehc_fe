@@ -76,7 +76,7 @@ export class GroupItem extends Component {
             ) : (
               <div className="ml-2 group">
                 <div className="flex justify-between">
-                  <div className="w-full break-all">
+                  <div className="title w-full break-all">
                     <div className="text-3xl font-bold">{name}</div>
                     {aliases.length > 0 && (
                       <div className="mt-3">
