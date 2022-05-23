@@ -14,27 +14,39 @@
 }
 
 .default-theme {
-  --primary: rgb(31, 41, 55);
-  --secondary: rgb(31, 41, 55);
-  --tertiary: rgb(55, 65, 81);
+  --primary: #1f2937;
+  --primaryRGB: 31, 41, 55;
+  --secondary: #1f2937;
+  --secondaryRGB: 31, 41, 55;
+  --tertiary: #374151;
+  --tertiaryRGB: 55, 65, 81;
 }
 
 .anime-theme {
   --primary: #150017;
+  --primaryRGB: 21, 0, 23;
   --secondary: #210024;
+  --secondaryRGB: 33, 0, 36;
   --tertiary: #320138;
+  --tertiaryRGB: 50, 1, 56;
 }
 
 .serials-theme {
   --primary: #190903;
+  --primaryRGB: 25, 9, 3;
   --secondary: #331107;
+  --secondaryRGB: 51, 17, 7;
   --tertiary: #3f160a;
+  --tertiaryRGB: 63, 22, 10;
 }
 
 .movies-theme {
   --primary: #004857;
+  --primaryRGB: 0, 72, 87;
   --secondary: #004d5a;
+  --secondaryRGB: 0, 77, 90;
   --tertiary: #006b70;
+  --tertiaryRGB: 0, 107, 112;
 }
 
 .btn {

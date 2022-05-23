@@ -1,11 +1,23 @@
+const wrapColor =
+  (colorRGBVariable) =>
+  ({ opacityVariable, opacityValue }) => {
+    if (opacityValue !== undefined) {
+      return `rgba(var(--${colorRGBVariable}), ${opacityValue})`;
+    }
+    if (opacityVariable !== undefined) {
+      return `rgba(var(--${colorRGBVariable}), var(${opacityVariable}, 1))`;
+    }
+    return `rgb(var(--${colorRGBVariable}))`;
+  };
+
 module.exports = {
   content: ["./src/**/*.{html,js}"],
   theme: {
     extend: {
       colors: {
-        primary: "var(--primary)",
-        secondary: "var(--secondary)",
-        tertiary: "var(--tertiary)",
+        primary: wrapColor("primaryRGB"),
+        secondary: wrapColor("secondaryRGB"),
+        tertiary: wrapColor("tertiaryRGB"),
       },
       outline: {
         red: ["2px solid #ad0d02", "1px"],
@@ -34,16 +46,5 @@ module.exports = {
       },
     },
   },
-  // variants: {
-  //   extend: {
-  //     animation: ["group-hover", "hover"],
-  //     rotate: ["group-hover"],
-  //     scale: ["group-hover", "group-focus"],
-  //     backgroundColor: ["active"],
-  //     backgroundOpacity: ["active"],
-  //     textColor: ["active"],
-  //     brightness: ["hover", "active"],
-  //   },
-  // },
   plugins: [],
 };
