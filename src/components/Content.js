@@ -13,6 +13,7 @@ import ReadioDashboard from "./reading/Dashboard";
 import Movies from "./watching/movies/Movies";
 import Serials from "./watching/serials/Serials";
 import Anime from "./watching/anime/Anime";
+import ThemeChanger from "./layout/ThemeChanger";
 
 class Content extends Component {
   static propTypes = {
@@ -29,6 +30,7 @@ class Content extends Component {
         <div
           className={`text-gray-100 ${this.props.theme} bg-gradient-to-t from-secondary to-tertiary min-h-screen`}
         >
+          <ThemeChanger />
           <Header />
           <Switch>
             <Route exact path="/">
