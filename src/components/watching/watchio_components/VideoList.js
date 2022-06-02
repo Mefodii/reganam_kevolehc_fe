@@ -36,7 +36,7 @@ export class VideoList extends Component {
         <div className="flex">
           <div className="w-full p-1 border-2 shadow-2xl rounded-xl bg-secondary border-tertiary text-center font-extrabold">
             <div
-              className="cursor-pointer mb-1"
+              className="cursor-pointer mb-1 hover:bg-tertiary/70 opacity-50 hover:opacity-100 transition ease-in duration-150"
               onClick={this.toggleShowVideoForm}
             >
               {showVideoForm ? "↑ Hide form ↑" : "↓ Add new Video ↓"}
@@ -46,6 +46,7 @@ export class VideoList extends Component {
                 watchioType={watchioType}
                 groupId={groupId}
                 hideTitle
+                defaultOrder={videos.length > 0 ? videos.at(-1).order + 1 : 1}
               ></VideoForm>
             )}
           </div>

@@ -16,7 +16,8 @@ body {
 #root {
   font-family: Quicksand, Oswald, Mulish;
 }
-.title {
+
+.simple-font {
   font-family: Oswald;
 }
 

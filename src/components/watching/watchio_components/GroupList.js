@@ -58,7 +58,7 @@ export class GroupList extends Component {
           <div className="p-6 bg-primary border border-tertiary rounded-lg">
             <div className="w-full p-1 border-2 shadow-2xl rounded-xl bg-secondary border-tertiary text-center font-extrabold">
               <div
-                className="cursor-pointer mb-1"
+                className="cursor-pointer mb-1 hover:bg-tertiary/70 opacity-50 hover:opacity-100 transition ease-in duration-150"
                 onClick={this.toggleShowGroupForm}
               >
                 {showGroupForm ? "↑ Hide form ↑" : "↓ Add new Group ↓"}
