@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 
-import { OPTION_SELECTED } from "../../../util/constants";
-
 export class Checkbox extends Component {
   onClick = (e) => {
     e.target.name = this.props.name;
@@ -13,7 +11,7 @@ export class Checkbox extends Component {
     const { checked, text, title } = this.props;
     return (
       <div
-        className={`option click-transition ${checked && OPTION_SELECTED}`}
+        className={`option click-transition ${checked && "option-selected"}`}
         title={title}
         onClick={this.onClick}
       >

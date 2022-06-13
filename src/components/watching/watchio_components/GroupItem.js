@@ -45,7 +45,7 @@ export class GroupItem extends Component {
     const poster = images[0];
 
     return (
-      <div className="m-5 p-2 border-2 shadow-2xl rounded-xl bg-secondary border-tertiary relative">
+      <div className="watchio-element relative">
         {poster && (
           <div className="absolute w-full h-full opacity-10 overflow-hidden right-0 top-0 rounded-xl">
             <img
@@ -64,7 +64,7 @@ export class GroupItem extends Component {
               watchioType={watchioType}
             ></Poster>
           </div>
-          <div className="mx-5 p-2 border-2 shadow-2xl rounded-xl bg-secondary z-10 border-tertiary w-full h-full relative overflow-visible">
+          <div className="watchio-element mx-5 z-10 h-full relative overflow-visible">
             {edit ? (
               <GroupForm
                 watchioType={watchioType}

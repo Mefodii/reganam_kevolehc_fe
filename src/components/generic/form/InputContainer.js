@@ -59,78 +59,18 @@ export class InputContainer extends Component {
     );
   };
 
-  renderNumber = () => {
-    return (
-      <Number
-        name={this.props.name}
-        onChange={this.props.onChange}
-        onKeyDown={this.props.onKeyDown}
-        value={this.props.value}
-        disabled={this.props.disabled}
-        hideArrows={this.props.hideArrows}
-      />
-    );
-  };
-
-  renderSelect = () => {
-    return (
-      <Select
-        name={this.props.name}
-        value={this.props.value}
-        placeholder={this.props.placeholder}
-        options={this.props.options}
-        onChange={this.props.onChange}
-        disabled={this.props.disabled}
-      ></Select>
-    );
-  };
-
-  renderCheckbox = () => {
-    return (
-      <Checkbox
-        name={this.props.name}
-        text={this.props.text}
-        title={this.props.title}
-        checked={this.props.checked}
-        onClick={this.props.onClick}
-      ></Checkbox>
-    );
-  };
-
-  renderRadio = () => {
-    return (
-      <Radio
-        name={this.props.name}
-        value={this.props.value}
-        options={this.props.options}
-        onClick={this.props.onClick}
-      ></Radio>
-    );
-  };
-
-  renderOptions = () => {
-    return (
-      <Options
-        name={this.props.name}
-        value={this.props.value}
-        options={this.props.options}
-        onClick={this.props.onClick}
-      ></Options>
-    );
-  };
-
   renderByType = () => {
     const { type } = this.props;
 
     if (type === INPUT_TEXT) return this.renderInput();
     if (type === INPUT_PASSWORD) return this.renderInput();
     if (type === INPUT_EMAIL) return this.renderInput();
-    if (type === INPUT_NUMBER) return this.renderNumber();
+    if (type === INPUT_NUMBER) return <Number {...this.props} />;
     if (type === INPUT_TEXTAREA) return this.renderTextarea();
-    if (type === INPUT_SELECT) return this.renderSelect();
-    if (type === INPUT_CHECKBOX) return this.renderCheckbox();
-    if (type === INPUT_RADIO) return this.renderRadio();
-    if (type === INPUT_OPTIONS) return this.renderOptions();
+    if (type === INPUT_SELECT) return <Select {...this.props}></Select>;
+    if (type === INPUT_CHECKBOX) return <Checkbox {...this.props}></Checkbox>;
+    if (type === INPUT_RADIO) return <Radio {...this.props}></Radio>;
+    if (type === INPUT_OPTIONS) return <Options {...this.props}></Options>;
   };
 
   render() {

@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 
-import { OPTION_SELECTED } from "../../../util/constants";
-
 export class Radio extends Component {
   onClick = (value) => (e) => {
     e.target.name = this.props.name;
@@ -16,7 +14,7 @@ export class Radio extends Component {
         {options.map(({ key, value }) => (
           <div
             className={`option click-transition ${
-              currentValue === key && OPTION_SELECTED
+              currentValue === key && "option-selected"
             }`}
             key={key}
             value={key}

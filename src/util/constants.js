@@ -8,6 +8,4 @@ export const MOVIES_BACKGROUND =
 export const SERIALS_BACKGROUND =
   window.location.origin + "/static/icons/serials-background.avif";
 
-export const OPTION_SELECTED = "option-selected";
-
 export const BLANK_VALUE = " ----- ";
