@@ -14,11 +14,6 @@ export class GroupList extends Component {
     backgroundPicture: PropTypes.string.isRequired,
   };
 
-  onFilterChange = (e) => {
-    const filters = { ...this.state.filters, [e.target.name]: e.target.value };
-    this.setState(filters);
-  };
-
   filterByTitle = (groups) => {
     const titleFilter = this.props.watchioFilter.title;
     if (titleFilter.length === 0) return groups;

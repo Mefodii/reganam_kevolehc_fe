@@ -30,7 +30,7 @@ export class Select extends Component {
     });
 
   isOptionSelected = (options, value) =>
-    options.find((option) => option.value === value);
+    options.find((option) => option === value);
 
   componentDidUpdate = (prevProps, prevState) => {
     if (prevProps.options !== this.props.options) {
