@@ -613,28 +613,24 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 
 .option {
-  margin-bottom: 0.25rem;
   cursor: pointer;
   border-radius: 0.5rem;
   border-width: 2px;
   --tw-border-opacity: 1;
   border-color: rgb(156 163 175 / var(--tw-border-opacity));
-  padding: 0.25rem;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
 }
 
 .option-inline {
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
   margin-right: 0.5rem;
   cursor: pointer;
   border-radius: 0.5rem;
   border-width: 2px;
   --tw-border-opacity: 1;
   border-color: rgb(156 163 175 / var(--tw-border-opacity));
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 .option-selected {
@@ -1155,6 +1151,12 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-bottom: calc(1.25rem * var(--tw-space-y-reverse));
 }
 
+.space-y-2 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
+}
+
 .overflow-hidden {
   overflow: hidden;
 }
@@ -1283,6 +1285,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .p-1 {
   padding: 0.25rem;
+}
+
+.p-4 {
+  padding: 1rem;
 }
 
 .py-4 {

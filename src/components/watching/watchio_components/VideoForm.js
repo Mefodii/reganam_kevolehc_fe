@@ -3,16 +3,16 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 import InputContainer, {
+  INPUT_DATE,
   INPUT_NUMBER,
   INPUT_SELECT,
   INPUT_TEXTAREA,
 } from "../../generic/form/InputContainer";
 
-import { getToday, objectEqualsSimple } from "../../../util/functions";
+import { objectEqualsSimple } from "../../../util/functions";
 
 import { addVideo, updateVideo, deleteVideo } from "../../../actions/videos";
 import { isEmpty } from "lodash";
-import SVGCalendar from "../../generic/svg/SVGCalendar";
 import SVGCheck from "../../generic/svg/SVGCheck";
 
 export class VideoForm extends Component {
@@ -89,7 +89,6 @@ export class VideoForm extends Component {
     newAliases[i] = e.target.value;
     this.setState({ aliases: newAliases });
   };
-  setWatchedkDate = (value) => this.setState({ watched_date: value });
   setCurrentEpisodeMax = () =>
     this.setState({ current_episode: this.state.episodes });
 
@@ -218,128 +217,91 @@ export class VideoForm extends Component {
             Add Video
           </div>
         )}
-        <div className="flex justify-evenly bg-secondary border-2 border-tertiary rounded-xl shadow-lg w-full">
-          <div className="m-4 flex flex-col-reverse 2xl:flex-row w-full justify-between 2xl:space-x-4">
-            <div className="w-full">
-              <div className="simple-font">
+
+        <div className="p-4 justify-evenly bg-secondary border-2 border-tertiary rounded-xl shadow-lg w-full">
+          <div className="simple-font flex flex-col 2xl:flex-row w-full justify-between 2xl:space-x-4">
+            <div className="w-full space-y-1">
+              <InputContainer
+                label="Name"
+                type={INPUT_TEXTAREA}
+                name="name"
+                value={name}
+                onChange={this.onChange}
+              />
+
+              <div className="flex flex-row w-full space-x-2">
                 <InputContainer
-                  label="Name"
+                  label="Comment"
                   type={INPUT_TEXTAREA}
-                  name="name"
-                  value={name}
+                  name="comment"
+                  value={comment}
                   onChange={this.onChange}
-                ></InputContainer>
-
-                <div className="flex flex-row w-full space-x-2">
-                  <InputContainer
-                    className="h-full"
-                    label="Comment"
-                    type={INPUT_TEXTAREA}
-                    name="comment"
-                    value={comment}
-                    onChange={this.onChange}
-                  ></InputContainer>
-                  <InputContainer
-                    className="text-center"
-                    label="Watch status"
-                    type={INPUT_SELECT}
-                    name="status"
-                    placeholder="Select status"
-                    value={status}
-                    options={this.props.statusTypes}
-                    onChange={this.onChange}
-                  ></InputContainer>
-                  <div className="group w-full">
-                    <InputContainer
-                      label={`${status || "Watched "} Date`}
-                      type={INPUT_TEXTAREA}
-                      name="watched_date"
-                      value={watched_date || ""}
-                      onChange={this.onChange}
-                      maxLength={10}
-                    >
-                      <div
-                        className="absolute right-2 top-1"
-                        onClick={() => this.setWatchedkDate(getToday())}
-                      >
-                        <SVGCalendar className="w-6 simple-clickable"></SVGCalendar>
-                      </div>
-                    </InputContainer>
-                  </div>
-                </div>
-
-                <div className="flex flex-row w-full justify-between space-x-2">
-                  <InputContainer
-                    label="Year"
-                    type={INPUT_NUMBER}
-                    name="year"
-                    value={year || ""}
-                    onChange={this.onChange}
-                  ></InputContainer>
-                  <InputContainer
-                    label="Order"
-                    type={INPUT_NUMBER}
-                    name="order"
-                    value={order}
-                    onChange={this.onChange}
-                  ></InputContainer>
-                  <div className="group w-full">
-                    <InputContainer
-                      className="h-full"
-                      label="Current ep."
-                      type={INPUT_NUMBER}
-                      name="current_episode"
-                      value={current_episode}
-                      onChange={this.onChange}
-                    >
-                      <div
-                        className="absolute right-4 top-1"
-                        onClick={this.setCurrentEpisodeMax}
-                      >
-                        <SVGCheck className="w-6 simple-clickable"></SVGCheck>
-                      </div>
-                    </InputContainer>
-                  </div>
-                  <InputContainer
-                    label="Episodes"
-                    type={INPUT_NUMBER}
-                    name="episodes"
-                    value={episodes}
-                    onChange={this.onChange}
-                  ></InputContainer>
-                  <InputContainer
-                    label="Rating"
-                    type={INPUT_NUMBER}
-                    name="rating"
-                    value={rating}
-                    onChange={this.onChange}
-                  ></InputContainer>
-                </div>
+                />
+                <InputContainer
+                  label="Watch status"
+                  type={INPUT_SELECT}
+                  name="status"
+                  placeholder="Select status"
+                  value={status}
+                  options={this.props.statusTypes}
+                  onChange={this.onChange}
+                />
+                <InputContainer
+                  label={`${status || "Watched "} Date`}
+                  type={INPUT_DATE}
+                  name="watched_date"
+                  value={watched_date || ""}
+                  onChange={this.onChange}
+                  maxLength={10}
+                />
               </div>
 
-              {!edit && (
-                <div
-                  className="w-max btn option-selected"
-                  onClick={this.addVideo}
+              <div className="flex flex-row w-full justify-between space-x-2">
+                <InputContainer
+                  label="Year"
+                  type={INPUT_NUMBER}
+                  name="year"
+                  value={year || ""}
+                  onChange={this.onChange}
+                />
+                <InputContainer
+                  label="Order"
+                  type={INPUT_NUMBER}
+                  name="order"
+                  value={order}
+                  onChange={this.onChange}
+                />
+                <InputContainer
+                  label="Current ep."
+                  type={INPUT_NUMBER}
+                  name="current_episode"
+                  value={current_episode}
+                  onChange={this.onChange}
                 >
-                  Add Video
-                </div>
-              )}
-
-              {edit && (
-                <div className="flex space-x-1">
                   <div
-                    className={`w-max btn option-selected`}
-                    onClick={this.saveChanges}
+                    className="absolute right-4 top-1"
+                    onClick={this.setCurrentEpisodeMax}
                   >
-                    Save Changes
+                    <SVGCheck className="w-6 simple-clickable"></SVGCheck>
                   </div>
-                  <div className="w-max btn" onClick={this.props.closeForm}>
-                    Discard Changes
-                  </div>
-                </div>
-              )}
+                </InputContainer>
+                <InputContainer
+                  label="Episodes"
+                  type={INPUT_NUMBER}
+                  name="episodes"
+                  value={episodes}
+                  onChange={this.onChange}
+                />
+                <InputContainer
+                  label="Rating"
+                  type={INPUT_NUMBER}
+                  name="rating"
+                  value={rating}
+                  onChange={this.onChange}
+                />
+              </div>
             </div>
+
             <div className="w-full">
               {aliases.map((alias, i) => (
                 <InputContainer
@@ -349,7 +311,7 @@ export class VideoForm extends Component {
                   key={i}
                   value={alias}
                   onChange={this.onChangeAlias(i)}
-                ></InputContainer>
+                />
               ))}
               <div className="flex justify-between">
                 <div className="flex">
@@ -360,16 +322,39 @@ export class VideoForm extends Component {
                     -
                   </div>
                 </div>
-                {edit && (
-                  <div
-                    className="w-max btn bg-pink-900"
-                    onClick={this.deleteVideo}
-                  >
-                    Delete Video
-                  </div>
-                )}
               </div>
             </div>
+          </div>
+
+          <div className="flex justify-between">
+            {!edit && (
+              <div
+                className="w-max btn option-selected"
+                onClick={this.addVideo}
+              >
+                Add Video
+              </div>
+            )}
+
+            {edit && (
+              <div className="flex space-x-1">
+                <div
+                  className={`w-max btn option-selected`}
+                  onClick={this.saveChanges}
+                >
+                  Save Changes
+                </div>
+                <div className="w-max btn" onClick={this.props.closeForm}>
+                  Discard Changes
+                </div>
+              </div>
+            )}
+
+            {edit && (
+              <div className="w-max btn bg-pink-900" onClick={this.deleteVideo}>
+                Delete Video
+              </div>
+            )}
           </div>
         </div>
       </Fragment>

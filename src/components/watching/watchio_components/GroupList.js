@@ -6,99 +6,22 @@ import GroupForm from "./GroupForm";
 import GroupItem from "./GroupItem";
 import Toggler from "./Toggler";
 import FilterForm from "./FilterForm";
+import { filterGroups } from "../../../util/filters/watchioFilter";
 
 export class GroupList extends Component {
   static propTypes = {
     groups: PropTypes.array.isRequired,
     watchioType: PropTypes.string.isRequired,
     backgroundPicture: PropTypes.string.isRequired,
-  };
-
-  filterByTitle = (groups) => {
-    const titleFilter = this.props.watchioFilter.title;
-    if (titleFilter.length === 0) return groups;
-
-    return groups.filter((group) => {
-      const inName = group.name
-        .toLowerCase()
-        .includes(titleFilter.toLowerCase());
-      const inAlias = group.aliases.find((alias) =>
-        alias.toLowerCase().includes(titleFilter.toLowerCase())
-      );
-
-      return inName || inAlias;
-    });
-  };
-
-  filterFromDate = (groups) => {
-    const fromDateFilter = this.props.watchioFilter.fromDate;
-    if (fromDateFilter.length === 0) return groups;
-
-    return groups.filter((group) => {
-      const { single, watched_date, videos } = group;
-      const inGroup =
-        single && watched_date !== null && watched_date >= fromDateFilter;
-
-      const inVideos = videos.find(
-        (video) =>
-          video.watched_date !== null && video.watched_date >= fromDateFilter
-      );
-
-      return inGroup || inVideos;
-    });
-  };
-
-  filterToDate = (groups) => {
-    const toDateFilter = this.props.watchioFilter.toDate;
-    if (toDateFilter.length === 0) return groups;
-
-    return groups.filter((group) => {
-      const { single, watched_date, videos } = group;
-      const inGroup =
-        single && watched_date !== null && watched_date <= toDateFilter;
-
-      const inVideos = videos.find(
-        (video) =>
-          video.watched_date !== null && video.watched_date <= toDateFilter
-      );
-
-      return inGroup || inVideos;
-    });
-  };
-
-  filterByStatuses = (groups) => {
-    const statusesFilter = this.props.watchioFilter.statuses;
-    if (statusesFilter.length === 0) return groups;
-
-    return groups.filter((group) => {
-      const { single, status, videos } = group;
-      const inGroup = single && statusesFilter.find((_) => _ === status);
-
-      const inVideos = videos.find((video) =>
-        statusesFilter.find((_) => _ === video.status)
-      );
-
-      return inGroup || inVideos;
-    });
-  };
-
-  filterGroups = (groups) => {
-    let newGroups = this.filterByTitle(groups);
-    newGroups = this.filterFromDate(newGroups);
-    newGroups = this.filterToDate(newGroups);
-    newGroups = this.filterByStatuses(newGroups);
-    return newGroups;
+    watchioFilter: PropTypes.object.isRequired,
   };
 
   render() {
-    const {
-      watchioType,
-      groups,
-      backgroundPicture,
-      watchioFilter: { showPosters },
-    } = this.props;
+    const { watchioType, groups, backgroundPicture, watchioFilter } =
+      this.props;
+    const { showPosters } = watchioFilter;
 
-    const filteredGroups = this.filterGroups(groups);
+    const filteredGroups = filterGroups(watchioFilter, groups);
 
     return (
       <div className="w-full flex flex-col items-center relative overflow-hidden">

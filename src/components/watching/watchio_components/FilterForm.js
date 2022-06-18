@@ -6,12 +6,11 @@ import InputContainer, {
   INPUT_TEXTAREA,
   INPUT_OPTIONS,
   INPUT_CHECKBOX,
+  INPUT_DATE,
 } from "../../generic/form/InputContainer";
 
-import { getToday, objectEqualsSimple } from "../../../util/functions";
-
+import { objectEqualsSimple } from "../../../util/functions";
 import { updateWatchioFilter } from "../../../actions/itemsFIilters";
-import SVGCalendar from "../../generic/svg/SVGCalendar";
 
 export class FilterForm extends Component {
   static propTypes = {
@@ -96,70 +95,47 @@ export class FilterForm extends Component {
 
     return (
       <Fragment>
-        <div className="flex justify-evenly bg-secondary border-2 border-tertiary rounded-xl shadow-lg w-full">
-          <div className="m-4 flex flex-col-reverse 2xl:flex-row w-full justify-between 2xl:space-x-4">
-            <div className="w-full">
-              <div className="simple-font">
+        <div className="p-4 justify-evenly bg-secondary border-2 border-tertiary rounded-xl shadow-lg w-full">
+          <div className="simple-font flex flex-col 2xl:flex-row w-full justify-between 2xl:space-x-4">
+            <div className="w-full space-y-1">
+              <InputContainer
+                label="Title (including aliases)"
+                type={INPUT_TEXTAREA}
+                name="title"
+                value={title}
+                onChange={this.onChange}
+              />
+
+              <div className="flex flex-row w-full justify-between space-x-2">
                 <InputContainer
-                  label="Title (including aliases)"
-                  type={INPUT_TEXTAREA}
-                  name="title"
-                  value={title}
-                  onChange={this.onChange}
-                ></InputContainer>
-
-                <div className="flex flex-row w-full justify-between space-x-2">
+                  className="text-center"
+                  showLabel={false}
+                  type={INPUT_CHECKBOX}
+                  name="showPosters"
+                  text="Show Posters"
+                  checked={showPosters}
+                  onClick={this.onChange}
+                />
+                <div className="group w-full">
                   <InputContainer
-                    className="text-center"
-                    showLabel={false}
-                    type={INPUT_CHECKBOX}
-                    name="showPosters"
-                    text="Show Posters"
-                    checked={showPosters}
-                    onClick={this.onChange}
-                  ></InputContainer>
-                  <div className="group w-full">
-                    <InputContainer
-                      label="From Date"
-                      type={INPUT_TEXTAREA}
-                      name="fromDate"
-                      value={fromDate || ""}
-                      onChange={this.onChange}
-                      maxLength={10}
-                    >
-                      <div
-                        className="absolute right-2 top-1"
-                        onClick={() => this.setFromDate(getToday())}
-                      >
-                        <SVGCalendar className="w-6 simple-clickable"></SVGCalendar>
-                      </div>
-                    </InputContainer>
-                  </div>
-                  <div className="group w-full">
-                    <InputContainer
-                      label="To Date"
-                      type={INPUT_TEXTAREA}
-                      name="toDate"
-                      value={toDate || ""}
-                      onChange={this.onChange}
-                      maxLength={10}
-                    >
-                      <div
-                        className="absolute right-2 top-1"
-                        onClick={() => this.setToDate(getToday())}
-                      >
-                        <SVGCalendar className="w-6 simple-clickable"></SVGCalendar>
-                      </div>
-                    </InputContainer>
-                  </div>
+                    label="From Date"
+                    type={INPUT_DATE}
+                    name="fromDate"
+                    value={fromDate || ""}
+                    onChange={this.onChange}
+                    maxLength={10}
+                  />
                 </div>
-              </div>
-
-              <div
-                className="w-max btn option-selected"
-                onClick={this.saveChanges}
-              >
-                Save Changes
+                <div className="group w-full">
+                  <InputContainer
+                    label="To Date"
+                    type={INPUT_DATE}
+                    name="toDate"
+                    value={toDate || ""}
+                    onChange={this.onChange}
+                    maxLength={10}
+                  />
+                </div>
               </div>
             </div>
             <div className="w-full">
@@ -171,8 +147,12 @@ export class FilterForm extends Component {
                 options={statusTypes}
                 onChange={this.onChange}
                 asStrings
-              ></InputContainer>
+              />
             </div>
+          </div>
+
+          <div className="w-max btn option-selected" onClick={this.saveChanges}>
+            Save Changes
           </div>
         </div>
       </Fragment>

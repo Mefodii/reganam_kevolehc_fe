@@ -87,11 +87,11 @@
 }
 
 .option {
-  @apply p-1 mb-1 cursor-pointer border-2 border-gray-400 rounded-lg;
+  @apply px-1 cursor-pointer border-2 border-gray-400 rounded-lg;
 }
 
 .option-inline {
-  @apply py-1 px-2 my-1 mr-2 cursor-pointer border-2 border-gray-400 rounded-lg;
+  @apply px-4 mr-2 cursor-pointer border-2 border-gray-400 rounded-lg;
 }
 
 .option-selected {

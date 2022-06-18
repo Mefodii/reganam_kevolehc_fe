@@ -7,9 +7,8 @@ import InputContainer, {
   INPUT_CHECKBOX,
   INPUT_SELECT,
   INPUT_NUMBER,
+  INPUT_DATE,
 } from "../../generic/form/InputContainer";
-
-import SVGCalendar from "../../generic/svg/SVGCalendar";
 
 import { addGroup, updateGroup, deleteGroup } from "../../../actions/groups";
 import { getToday, objectEqualsSimple } from "../../../util/functions";
@@ -73,8 +72,6 @@ export class GroupForm extends Component {
     newAliases[i] = e.target.value;
     this.setState({ aliases: newAliases });
   };
-  setLastCheckDate = (value) => this.setState({ check_date: value });
-  setWatchedkDate = (value) => this.setState({ watched_date: value });
 
   toggleSingle = (e) => {
     const single = !this.state.single;
@@ -227,138 +224,85 @@ export class GroupForm extends Component {
           </div>
         )}
 
-        <div className="flex justify-evenly bg-secondary border-2 border-tertiary rounded-xl shadow-lg w-full">
-          <div className="m-4 flex flex-col-reverse 2xl:flex-row w-full justify-between 2xl:space-x-4">
+        <div className="p-4 justify-evenly bg-secondary border-2 border-tertiary rounded-xl shadow-lg w-full">
+          <div className="simple-font flex flex-col 2xl:flex-row w-full justify-between 2xl:space-x-4">
             <div className="w-full space-y-1">
-              <div className="simple-font">
+              <InputContainer
+                label="Name"
+                type={INPUT_TEXTAREA}
+                name="name"
+                value={name}
+                onChange={this.onChange}
+              />
+              <div className="flex flex-row w-full justify-between space-x-4 text-center">
                 <InputContainer
-                  label="Name"
-                  type={INPUT_TEXTAREA}
-                  name="name"
-                  value={name}
+                  label="Last Check Date"
+                  type={INPUT_DATE}
+                  name="check_date"
+                  value={check_date || ""}
                   onChange={this.onChange}
-                ></InputContainer>
-                <div className="flex flex-row w-full justify-between space-x-4 text-center">
-                  <div className="group w-full">
-                    <InputContainer
-                      label="Last Check Date"
-                      type={INPUT_TEXTAREA}
-                      name="check_date"
-                      value={check_date || ""}
-                      onChange={this.onChange}
-                      maxLength={10}
-                    >
-                      <div
-                        className="absolute right-2 top-1"
-                        onClick={() => this.setLastCheckDate(getToday())}
-                      >
-                        <SVGCalendar className="w-6 simple-clickable"></SVGCalendar>
-                      </div>
-                    </InputContainer>
-                  </div>
-                  <InputContainer
-                    label="Airing Status"
-                    type={INPUT_SELECT}
-                    name="airing_status"
-                    placeholder={BLANK_VALUE}
-                    value={airing_status}
-                    options={this.props.airStatusTypes}
-                    onChange={this.onChange}
-                  ></InputContainer>
-                  <InputContainer
-                    showLabel={false}
-                    type={INPUT_CHECKBOX}
-                    name="single"
-                    text="SINGLE"
-                    title="Single group has no child videos"
-                    checked={single}
-                    onClick={this.toggleSingle}
-                  ></InputContainer>
-                </div>
-                <div className="flex flex-row w-full justify-between space-x-4 text-center">
-                  <InputContainer
-                    className={`${single ? "" : "opacity-20"}`}
-                    label="Watch status"
-                    type={INPUT_SELECT}
-                    name="status"
-                    placeholder={BLANK_VALUE}
-                    value={status || ""}
-                    options={this.props.statusTypes}
-                    onChange={this.onChange}
-                    disabled={!single}
-                  ></InputContainer>
-
-                  <div className="group w-full">
-                    <InputContainer
-                      className={`${single ? "" : "opacity-20"}`}
-                      label={`${status || "Watched "} Date`}
-                      type={INPUT_TEXTAREA}
-                      name="watched_date"
-                      value={watched_date || ""}
-                      onChange={this.onChange}
-                      maxLength={10}
-                      disabled={!single}
-                    >
-                      <div
-                        className={`absolute right-2 top-1 ${
-                          !single ? "hidden" : ""
-                        }`}
-                        onClick={() => this.setWatchedkDate(getToday())}
-                      >
-                        <SVGCalendar className="w-6 simple-clickable"></SVGCalendar>
-                      </div>
-                    </InputContainer>
-                  </div>
-                  <InputContainer
-                    className={`${single ? "" : "opacity-20"}`}
-                    label="Year"
-                    type={INPUT_NUMBER}
-                    name="year"
-                    value={year || ""}
-                    onChange={this.onChange}
-                    disabled={!single}
-                  ></InputContainer>
-                  <InputContainer
-                    className={`${single ? "" : "opacity-20"}`}
-                    label="Rating"
-                    type={INPUT_NUMBER}
-                    name="rating"
-                    value={rating || ""}
-                    onChange={this.onChange}
-                    disabled={!single}
-                  ></InputContainer>
-                </div>
+                  maxLength={10}
+                />
+                <InputContainer
+                  label="Airing Status"
+                  type={INPUT_SELECT}
+                  name="airing_status"
+                  placeholder={BLANK_VALUE}
+                  value={airing_status}
+                  options={this.props.airStatusTypes}
+                  onChange={this.onChange}
+                />
+                <InputContainer
+                  showLabel={false}
+                  type={INPUT_CHECKBOX}
+                  name="single"
+                  text="SINGLE"
+                  title="Single group has no child videos"
+                  checked={single}
+                  onClick={this.toggleSingle}
+                />
               </div>
-
-              {!edit && (
-                <div
-                  className="w-max btn option-selected"
-                  onClick={this.addGroup}
-                >
-                  Add Group
-                </div>
-              )}
-
-              {edit && (
-                <div className="flex space-x-1">
-                  <div
-                    className={`w-max btn option-selected`}
-                    onClick={this.saveChanges}
-                  >
-                    Save Changes
-                  </div>
-                  <div className="w-max btn" onClick={this.props.closeForm}>
-                    Discard Changes
-                  </div>
-                </div>
-              )}
-
-              {single && edit && (
-                <div className="text-yellow-300 overflow-visible">
-                  Warning: by choosing SINGLE, all videos under this group will
-                  be deleted
-                </div>
-              )}
+              <div className="flex flex-row w-full justify-between space-x-4 text-center">
+                <InputContainer
+                  className={`${single ? "" : "opacity-20"}`}
+                  label="Watch status"
+                  type={INPUT_SELECT}
+                  name="status"
+                  placeholder={BLANK_VALUE}
+                  value={status || ""}
+                  options={this.props.statusTypes}
+                  onChange={this.onChange}
+                  disabled={!single}
+                />
+                <InputContainer
+                  className={`${single ? "" : "opacity-20"}`}
+                  label={`${status || "Watched "} Date`}
+                  type={INPUT_DATE}
+                  name="watched_date"
+                  value={watched_date || ""}
+                  onChange={this.onChange}
+                  maxLength={10}
+                  disabled={!single}
+                />
+                <InputContainer
+                  className={`${single ? "" : "opacity-20"}`}
+                  label="Year"
+                  type={INPUT_NUMBER}
+                  name="year"
+                  value={year || ""}
+                  onChange={this.onChange}
+                  disabled={!single}
+                />
+                <InputContainer
+                  className={`${single ? "" : "opacity-20"}`}
+                  label="Rating"
+                  type={INPUT_NUMBER}
+                  name="rating"
+                  value={rating || ""}
+                  onChange={this.onChange}
+                  disabled={!single}
+                />
+              </div>
             </div>
 
             <div className="w-full">
@@ -382,17 +326,46 @@ export class GroupForm extends Component {
                     -
                   </div>
                 </div>
-                {edit && (
-                  <div
-                    className="w-max btn bg-pink-900"
-                    onClick={this.deleteGroup}
-                  >
-                    Delete Group
-                  </div>
-                )}
               </div>
             </div>
           </div>
+
+          <div className="flex justify-between">
+            {!edit && (
+              <div
+                className="w-max btn option-selected"
+                onClick={this.addGroup}
+              >
+                Add Group
+              </div>
+            )}
+            {edit && (
+              <div className="flex space-x-1">
+                <div
+                  className={`w-max btn option-selected`}
+                  onClick={this.saveChanges}
+                >
+                  Save Changes
+                </div>
+                <div className="w-max btn" onClick={this.props.closeForm}>
+                  Discard Changes
+                </div>
+              </div>
+            )}
+
+            {edit && (
+              <div className="w-max btn bg-pink-900" onClick={this.deleteGroup}>
+                Delete Group
+              </div>
+            )}
+          </div>
+
+          {single && edit && (
+            <div className="text-yellow-300 overflow-visible">
+              Warning: by choosing SINGLE, all videos under this group will be
+              deleted
+            </div>
+          )}
         </div>
       </Fragment>
     );

@@ -56,7 +56,7 @@ export class Select extends Component {
           isSelected && "option-selected"
         }`}
       >
-        <div>{currentValue}</div>
+        <div className="text-center">{currentValue}</div>
         {!disabled && (
           <div
             className="w-full absolute rounded-sm shadow-md border bg-secondary border-tertiary origin-top
