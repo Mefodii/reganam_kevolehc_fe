@@ -24,9 +24,10 @@ export class InputContainer extends Component {
   renderByType = () => {
     const { type } = this.props;
 
-    if (type === INPUT_TEXT) return <Text {...this.props} />;
-    if (type === INPUT_PASSWORD) return <Text {...this.props} />;
-    if (type === INPUT_EMAIL) return <Text {...this.props} />;
+    if (type === INPUT_TEXT) return <Text {...this.props} type="text" />;
+    if (type === INPUT_PASSWORD)
+      return <Text {...this.props} type="password" />;
+    if (type === INPUT_EMAIL) return <Text {...this.props} type="email" />;
     if (type === INPUT_NUMBER) return <Number {...this.props} />;
     if (type === INPUT_DATE) return <Date {...this.props} />;
     if (type === INPUT_TEXTAREA) return <Textarea {...this.props} />;

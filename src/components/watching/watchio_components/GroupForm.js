@@ -13,6 +13,12 @@ import InputContainer, {
 import { addGroup, updateGroup, deleteGroup } from "../../../actions/groups";
 import { getToday, objectEqualsSimple } from "../../../util/functions";
 import { BLANK_VALUE } from "../../../util/constants";
+import {
+  addAliasFields,
+  cleanAliases,
+  removeAliasField,
+} from "../util/functions";
+import { isEmpty } from "lodash";
 
 export class GroupForm extends Component {
   static propTypes = {
@@ -80,9 +86,8 @@ export class GroupForm extends Component {
     if (single) {
       newState = {
         watched_date: getToday(),
-        rating: 1,
+        rating: 0,
         year: 2000,
-        single,
       };
     } else {
       newState = {
@@ -90,27 +95,17 @@ export class GroupForm extends Component {
         watched_date: null,
         rating: null,
         year: null,
-        single,
       };
     }
 
-    this.setState(newState);
+    this.setState({ ...newState, single });
   };
 
-  addAliasFields = (count = 1) => {
-    const newAliases = [...Array(count).keys()].map((_) => "");
-    this.setState({ aliases: [...this.state.aliases, ...newAliases] });
-  };
+  addAliasFields = (count = 1) =>
+    this.setState({ aliases: addAliasFields(this.state.aliases, count) });
 
-  removeAliasField = () => {
-    this.setState({ aliases: [...this.state.aliases.slice(0, -1)] });
-  };
-
-  cleanAliases = (aliases) => {
-    return aliases
-      .map((alias) => alias.trim())
-      .filter((alias) => alias.length > 0);
-  };
+  removeAliasField = () =>
+    this.setState({ aliases: removeAliasField(this.state.aliases) });
 
   hasGroupDataChanged = () => {
     const oldGroup = {
@@ -127,7 +122,7 @@ export class GroupForm extends Component {
 
     const newGroup = {
       name: this.state.name,
-      aliases: this.cleanAliases(this.state.aliases),
+      aliases: cleanAliases(this.state.aliases),
       check_date: this.state.check_date,
       airing_status: this.state.airing_status,
       single: this.state.single,
@@ -141,44 +136,22 @@ export class GroupForm extends Component {
   };
 
   buildGroup = () => {
-    var {
-      name,
-      check_date,
-      airing_status,
-      single,
-      status,
-      watched_date,
-      year,
-      rating,
-    } = this.state;
-    const { watchioType: type } = this.props;
-    const id = this.props.group?.id;
-
-    if (!single) {
-      status = null;
-      watched_date = null;
-      year = null;
-      rating = null;
-    } else {
-      watched_date =
-        watched_date && watched_date.length > 0 ? watched_date : null;
-    }
-    check_date = check_date && check_date.length > 0 ? check_date : null;
-    const aliases = this.cleanAliases(this.state.aliases);
-
     const group = {
-      id,
-      name,
-      type,
-      aliases,
-      check_date,
-      airing_status,
-      single,
-      status,
-      watched_date,
-      year,
-      rating,
+      id: this.props.group?.id,
+      type: this.props.watchioType,
+      name: this.state.name,
+      aliases: cleanAliases(this.state.aliases),
+      check_date: isEmpty(this.state.check_date) ? null : this.state.check_date,
+      airing_status: this.state.airing_status,
+      single: this.state.single,
+      status: this.state.status,
+      watched_date: isEmpty(this.state.watched_date)
+        ? null
+        : this.state.watched_date,
+      year: this.state.year,
+      rating: this.state.rating,
     };
+
     return group;
   };
 

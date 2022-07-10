@@ -14,6 +14,11 @@ import { objectEqualsSimple } from "../../../util/functions";
 import { addVideo, updateVideo, deleteVideo } from "../../../actions/videos";
 import { isEmpty } from "lodash";
 import SVGCheck from "../../generic/svg/SVGCheck";
+import {
+  addAliasFields,
+  cleanAliases,
+  removeAliasField,
+} from "../util/functions";
 
 export class VideoForm extends Component {
   static propTypes = {
@@ -92,20 +97,11 @@ export class VideoForm extends Component {
   setCurrentEpisodeMax = () =>
     this.setState({ current_episode: this.state.episodes });
 
-  addAliasFields = (count = 1) => {
-    const newAliases = [...Array(count).keys()].map((_) => "");
-    this.setState({ aliases: [...this.state.aliases, ...newAliases] });
-  };
+  addAliasFields = (count = 1) =>
+    this.setState({ aliases: addAliasFields(this.state.aliases, count) });
 
-  removeAliasField = () => {
-    this.setState({ aliases: [...this.state.aliases.slice(0, -1)] });
-  };
-
-  cleanAliases = (aliases) => {
-    return aliases
-      .map((alias) => alias.trim())
-      .filter((alias) => alias.length > 0);
-  };
+  removeAliasField = () =>
+    this.setState({ aliases: removeAliasField(this.state.aliases) });
 
   hasVideoDataChanged = () => {
     const oldVideo = {
@@ -124,9 +120,11 @@ export class VideoForm extends Component {
     const newVideo = {
       name: this.state.name,
       comment: this.state.comment,
-      aliases: this.cleanAliases(this.state.aliases),
+      aliases: cleanAliases(this.state.aliases),
       status: this.state.status,
-      watched_date: this.state.status.watched_date,
+      watched_date: isEmpty(this.state.status.watched_date)
+        ? null
+        : this.state.status.watched_date,
       year: this.state.year,
       order: this.state.order,
       current_episode: this.state.current_episode,
@@ -138,37 +136,24 @@ export class VideoForm extends Component {
   };
 
   buildVideo = () => {
-    const {
-      name,
-      comment,
-      year,
-      status,
-      watched_date,
-      order,
-      current_episode,
-      episodes,
-      rating,
-    } = this.state;
-    const { watchioType: type, groupId: group } = this.props;
-    const id = this.props.video?.id;
-
-    const aliases = this.cleanAliases(this.state.aliases);
-
     const video = {
-      id,
-      name,
-      comment,
-      type,
-      group,
-      aliases,
-      year,
-      status,
-      watched_date: isEmpty(watched_date) ? null : watched_date,
-      order,
-      current_episode,
-      episodes,
-      rating,
+      id: this.props.video?.id,
+      type: this.props.watchioType,
+      group: this.props.groupId,
+      name: this.state.name,
+      comment: this.state.comment,
+      aliases: cleanAliases(this.state.aliases),
+      year: this.state.year,
+      status: this.state.status,
+      watched_date: isEmpty(this.state.watched_date)
+        ? null
+        : this.state.watched_date,
+      order: this.state.order,
+      current_episode: this.state.current_episode,
+      episodes: this.state.episodes,
+      rating: this.state.rating,
     };
+
     return video;
   };
 

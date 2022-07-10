@@ -35,3 +35,6 @@ export const getToday = () => {
   const day = today.getDate().toString().padStart(2, "0");
   return `${year}-${month}-${day}`;
 };
+
+export const initArray = (length, defaultValue = null) =>
+  [...Array(length).keys()].map((_) => defaultValue);

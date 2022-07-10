@@ -8,12 +8,16 @@ import Poster from "./Poster";
 import SVGPencil from "../../generic/svg/SVGPencil";
 import GroupForm from "./GroupForm";
 import VideoList from "./VideoList";
+import SVGCheck from "../../generic/svg/SVGCheck";
+import { isFinished, setGroupFinished } from "../util/functions";
+import { updateGroup } from "../../../actions/groups";
 
 export class GroupItem extends Component {
   static propTypes = {
     group: PropTypes.object.isRequired,
     watchioType: PropTypes.string.isRequired,
     showPoster: PropTypes.bool.isRequired,
+    updateGroup: PropTypes.func.isRequired,
   };
 
   state = {
@@ -22,6 +26,20 @@ export class GroupItem extends Component {
 
   toggleEdit = () => {
     this.setState({ edit: !this.state.edit });
+  };
+
+  setFinised = () => {
+    const rating = prompt("Set group rating");
+    if (isNaN(rating)) {
+      alert(`${rating} is not a number`);
+      return;
+    }
+
+    const group = {
+      ...setGroupFinished(this.props.group),
+      rating: parseInt(rating),
+    };
+    this.props.updateGroup(group, this.props.watchioType);
   };
 
   render() {
@@ -119,8 +137,15 @@ export class GroupItem extends Component {
                       </div>
                     </div>
                   </div>
-                  <div onClick={this.toggleEdit}>
-                    <SVGPencil className="w-7 wiggling-clickable"></SVGPencil>
+                  <div>
+                    <div onClick={this.toggleEdit}>
+                      <SVGPencil className="w-7 wiggling-clickable"></SVGPencil>
+                    </div>
+                    {!isFinished(status) && single && (
+                      <div onClick={this.setFinised}>
+                        <SVGCheck className="w-7 wiggling-clickable"></SVGCheck>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -140,4 +165,4 @@ export class GroupItem extends Component {
   }
 }
 
-export default connect(null, null)(GroupItem);
+export default connect(null, { updateGroup })(GroupItem);

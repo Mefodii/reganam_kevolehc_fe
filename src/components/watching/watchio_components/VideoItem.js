@@ -5,11 +5,15 @@ import { connect } from "react-redux";
 import SVGPencil from "../../generic/svg/SVGPencil";
 import VideoForm from "./VideoForm";
 import { BLANK_VALUE } from "../../../util/constants";
+import SVGCheck from "../../generic/svg/SVGCheck";
+import { isFinished, setVideoFinished } from "../util/functions";
+import { updateVideo } from "../../../actions/videos";
 
 export class VideoItem extends Component {
   static propTypes = {
     video: PropTypes.object.isRequired,
     watchioType: PropTypes.string.isRequired,
+    updateVideo: PropTypes.func.isRequired,
   };
 
   state = {
@@ -18,6 +22,24 @@ export class VideoItem extends Component {
 
   toggleEdit = () => {
     this.setState({ edit: !this.state.edit });
+  };
+
+  setFinised = () => {
+    const rating = prompt("Set video rating");
+    if (isNaN(rating)) {
+      alert(`${rating} is not a number`);
+      return;
+    }
+
+    const video = {
+      ...setVideoFinished(this.props.video),
+      rating: parseInt(rating),
+    };
+    this.props.updateVideo(
+      video,
+      this.props.video.group,
+      this.props.watchioType
+    );
   };
 
   render() {
@@ -95,8 +117,15 @@ export class VideoItem extends Component {
                 <div className="font-bold">{`${rating} / 10`}</div>
               </div>
             </div>
-            <div onClick={this.toggleEdit}>
-              <SVGPencil className="w-7 wiggling-clickable"></SVGPencil>
+            <div>
+              <div onClick={this.toggleEdit}>
+                <SVGPencil className="w-7 wiggling-clickable"></SVGPencil>
+              </div>
+              {!isFinished(status) && (
+                <div onClick={this.setFinised}>
+                  <SVGCheck className="w-7 wiggling-clickable"></SVGCheck>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -105,4 +134,4 @@ export class VideoItem extends Component {
   }
 }
 
-export default connect(null, null)(VideoItem);
+export default connect(null, { updateVideo })(VideoItem);

@@ -24,7 +24,7 @@ export class VideoList extends Component {
           ></VideoItem>
         ))}
 
-        <Toggler activeText="Hide Form" inactiveText="Add new Group">
+        <Toggler activeText="Hide Form" inactiveText="Add new Video">
           <VideoForm
             watchioType={watchioType}
             groupId={groupId}
