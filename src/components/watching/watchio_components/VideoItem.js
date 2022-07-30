@@ -8,6 +8,7 @@ import { BLANK_VALUE } from "../../../util/constants";
 import SVGCheck from "../../generic/svg/SVGCheck";
 import { isFinished, setVideoFinished } from "../util/functions";
 import { updateVideo } from "../../../actions/videos";
+import { promptNumber } from "../../../util/functions";
 
 export class VideoItem extends Component {
   static propTypes = {
@@ -25,15 +26,14 @@ export class VideoItem extends Component {
   };
 
   setFinised = () => {
-    const rating = prompt("Set video rating");
-    if (isNaN(rating)) {
-      alert(`${rating} is not a number`);
+    const rating = promptNumber("Set video rating");
+    if (rating === undefined) {
       return;
     }
 
     const video = {
       ...setVideoFinished(this.props.video),
-      rating: parseInt(rating),
+      rating,
     };
     this.props.updateVideo(
       video,

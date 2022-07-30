@@ -38,3 +38,12 @@ export const getToday = () => {
 
 export const initArray = (length, defaultValue = null) =>
   [...Array(length).keys()].map((_) => defaultValue);
+
+export const promptNumber = (text) => {
+  const result = prompt(text);
+  if (isNaN(result)) {
+    alert(`${result} is not a number`);
+    return undefined;
+  }
+  return parseInt(result);
+};

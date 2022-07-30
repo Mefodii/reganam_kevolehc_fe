@@ -11,6 +11,7 @@ import VideoList from "./VideoList";
 import SVGCheck from "../../generic/svg/SVGCheck";
 import { isFinished, setGroupFinished } from "../util/functions";
 import { updateGroup } from "../../../actions/groups";
+import { promptNumber } from "../../../util/functions";
 
 export class GroupItem extends Component {
   static propTypes = {
@@ -29,15 +30,14 @@ export class GroupItem extends Component {
   };
 
   setFinised = () => {
-    const rating = prompt("Set group rating");
-    if (isNaN(rating)) {
-      alert(`${rating} is not a number`);
+    const rating = promptNumber("Set group rating");
+    if (rating === undefined) {
       return;
     }
 
     const group = {
       ...setGroupFinished(this.props.group),
-      rating: parseInt(rating),
+      rating,
     };
     this.props.updateGroup(group, this.props.watchioType);
   };
