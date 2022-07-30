@@ -7,13 +7,25 @@ import { PropTypes } from "prop-types";
 import Header from "./layout/Header";
 import Home from "./Home";
 import WatchioDashboard from "./watching/Dashboard";
-import GamioDashboard from "./gaming/Dashboard";
+import GameioDashboard from "./gaming/Dashboard";
 import ReadioDashboard from "./reading/Dashboard";
+import ContentioDashboard from "./contenting/Dashboard";
+import AudioDashboard from "./listening/Dashboard";
 
 import Movies from "./watching/movies/Movies";
 import Serials from "./watching/serials/Serials";
 import Anime from "./watching/anime/Anime";
 import ThemeChanger from "./layout/ThemeChanger";
+import {
+  ANIME_URL,
+  AUDIO_URL,
+  CONTENTIO_URL,
+  GAMEIO_URL,
+  MOVIES_URL,
+  READIO_URL,
+  SERIALS_URL,
+  WATCHIO_URL,
+} from "../util/urls";
 
 class Content extends Component {
   static propTypes = {
@@ -36,23 +48,29 @@ class Content extends Component {
             <Route exact path="/">
               <Home />
             </Route>
-            <Route exact path="/watchio">
+            <Route exact path={WATCHIO_URL}>
               <WatchioDashboard />
             </Route>
-            <Route exact path="/watchio/movies">
+            <Route exact path={MOVIES_URL}>
               <Movies />
             </Route>
-            <Route exact path="/watchio/serials">
+            <Route exact path={SERIALS_URL}>
               <Serials />
             </Route>
-            <Route exact path="/watchio/anime">
+            <Route exact path={ANIME_URL}>
               <Anime />
             </Route>
-            <Route exact path="/gamio">
-              <GamioDashboard />
+            <Route exact path={GAMEIO_URL}>
+              <GameioDashboard />
             </Route>
-            <Route exact path="/readio">
+            <Route exact path={READIO_URL}>
               <ReadioDashboard />
+            </Route>
+            <Route exact path={CONTENTIO_URL}>
+              <ContentioDashboard />
+            </Route>
+            <Route exact path={AUDIO_URL}>
+              <AudioDashboard />
             </Route>
           </Switch>
         </div>

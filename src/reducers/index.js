@@ -5,6 +5,7 @@ import anime from "./anime";
 import serials from "./serials";
 import movies from "./movies";
 import itemsFilters from "./itemsFilters";
+import modal from "./modal";
 
 export default combineReducers({
   info,
@@ -13,4 +14,5 @@ export default combineReducers({
   movies,
   page,
   itemsFilters,
+  modal,
 });

@@ -1,5 +1,14 @@
 import React, { Component } from "react";
 import { NavLink, withRouter } from "react-router-dom";
+import {
+  ANIME_URL,
+  AUDIO_URL,
+  CONTENTIO_URL,
+  GAMEIO_URL,
+  MOVIES_URL,
+  READIO_URL,
+  SERIALS_URL,
+} from "../../util/urls";
 
 import SVGDownArrow from "../generic/svg/SVGDownArrow";
 
@@ -44,7 +53,7 @@ class Header extends Component {
                 <li className="p-2">
                   <NavLink
                     className="hover:underline hover:text-red-200"
-                    to="/watchio/movies"
+                    to={MOVIES_URL}
                   >
                     Movies
                   </NavLink>
@@ -52,7 +61,7 @@ class Header extends Component {
                 <li className="p-2">
                   <NavLink
                     className="hover:underline hover:text-red-200"
-                    to="/watchio/serials"
+                    to={SERIALS_URL}
                   >
                     Serials
                   </NavLink>
@@ -60,7 +69,7 @@ class Header extends Component {
                 <li className="p-2">
                   <NavLink
                     className="hover:underline hover:text-red-200"
-                    to="/watchio/anime"
+                    to={ANIME_URL}
                   >
                     Anime
                   </NavLink>
@@ -69,10 +78,16 @@ class Header extends Component {
             </div>
           </li>
           <li className="m-2 hover:underline hover:text-red-200">
-            <NavLink to="/gamio">GameIO</NavLink>
+            <NavLink to={GAMEIO_URL}>GameIO</NavLink>
           </li>
           <li className="m-2 hover:underline hover:text-red-200">
-            <NavLink to="/readio">ReadIO</NavLink>
+            <NavLink to={READIO_URL}>ReadIO</NavLink>
+          </li>
+          <li className="m-2 hover:underline hover:text-red-200">
+            <NavLink to={CONTENTIO_URL}>ContentIO</NavLink>
+          </li>
+          <li className="m-2 hover:underline hover:text-red-200">
+            <NavLink to={AUDIO_URL}>AudIO</NavLink>
           </li>
         </ul>
       </nav>

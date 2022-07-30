@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import { getGroups } from "../../../actions/groups";
 
 import GroupList from "../watchio_components/GroupList";
-import { ANIME_BACKGROUND } from "../../../util/constants";
+import { ANIME_BACKGROUND } from "../../../util/urls";
 
 export class Anime extends Component {
   static propTypes = {

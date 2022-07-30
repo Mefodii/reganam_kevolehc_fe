@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { DEFAULT_IMAGE } from "../../../util/constants";
+import { DEFAULT_IMAGE } from "../../../util/urls";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
