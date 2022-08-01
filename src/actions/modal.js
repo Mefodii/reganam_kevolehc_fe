@@ -1,6 +1,6 @@
 import { CLOSE_MODAL, OPEN_MODAL } from "./types";
 
-const CREATE_CONTENT_WATCHER_MODAL = "CREATE_CONTENT_WATCHER_MODAL";
+export const CREATE_CONTENT_WATCHER_MODAL = "CREATE_CONTENT_WATCHER_MODAL";
 
 export const openCreateContentWatcherModal = (data) => (dispatch) => {
   openModal(CREATE_CONTENT_WATCHER_MODAL, data)(dispatch);

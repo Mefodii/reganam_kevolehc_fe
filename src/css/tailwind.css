@@ -49,6 +49,26 @@
   --tertiaryRGB: 0, 107, 112;
 }
 
+.modal {
+  @apply fixed bottom-0 left-0 h-full w-full text-center flex items-center justify-center z-30;
+}
+
+.modal-bg {
+  @apply fixed bottom-0 left-0 h-full w-full bg-gray-700 opacity-90;
+}
+
+.modal-card {
+  @apply border-primary border-2 rounded-xl shadow-2xl text-gray-100 bg-gradient-to-t from-secondary to-tertiary z-40;
+}
+
+.modal-row {
+  @apply mb-4 flex flex-row w-full justify-between space-x-4;
+}
+
+.modal-close-button {
+  @apply flex justify-end m-3 pr-3 cursor-pointer font-bold hover:text-purple-300 active:text-purple-800;
+}
+
 .btn {
   @apply text-center cursor-pointer focus:outline-none font-bold py-2 px-4 rounded border-2 
   bg-tertiary border-primary hover:brightness-125 active:brightness-150 filter brightness-110;

@@ -1,23 +1,13 @@
 import {
-  GET_GROUPS,
   GET_ANIME_GROUPS,
-  ADD_GROUP,
   ADD_ANIME_GROUP,
-  UPDATE_GROUP,
   UPDATE_ANIME_GROUP,
-  DELETE_GROUP,
   DELETE_ANIME_GROUP,
-  ADD_VIDEO,
   ADD_ANIME_VIDEO,
-  DELETE_VIDEO,
   DELETE_ANIME_VIDEO,
-  UPDATE_VIDEO,
   UPDATE_ANIME_VIDEO,
-  ADD_POSTER,
   ADD_ANIME_POSTER,
-  UPDATE_POSTER,
   UPDATE_ANIME_POSTER,
-  DELETE_POSTER,
   DELETE_ANIME_POSTER,
 } from "../actions/types.js";
 
@@ -27,44 +17,21 @@ const initialState = {
   groups: [],
 };
 
-const TYPES = {
-  [GET_ANIME_GROUPS]: GET_GROUPS,
-  [ADD_ANIME_GROUP]: ADD_GROUP,
-  [UPDATE_ANIME_GROUP]: UPDATE_GROUP,
-  [DELETE_ANIME_GROUP]: DELETE_GROUP,
-  [ADD_ANIME_VIDEO]: ADD_VIDEO,
-  [UPDATE_ANIME_VIDEO]: UPDATE_VIDEO,
-  [DELETE_ANIME_VIDEO]: DELETE_VIDEO,
-  [ADD_ANIME_POSTER]: ADD_POSTER,
-  [UPDATE_ANIME_POSTER]: UPDATE_POSTER,
-  [DELETE_ANIME_POSTER]: DELETE_POSTER,
-};
-const reduceType = (type) => (TYPES[type] ? TYPES[type] : type);
-
-const GROUP_ACTION_TYPES = [
-  GET_GROUPS,
-  ADD_GROUP,
-  UPDATE_GROUP,
-  DELETE_GROUP,
-  ADD_VIDEO,
-  UPDATE_VIDEO,
-  DELETE_VIDEO,
-  ADD_POSTER,
-  UPDATE_POSTER,
-  DELETE_POSTER,
-];
-const isGroupType = (type) => GROUP_ACTION_TYPES.find((_) => type === _);
-
 const reducer = (state = initialState, action) => {
-  const { groups } = state;
-  const { payload } = action;
-  const type = reduceType(action.type);
-
-  switch (type) {
-    case isGroupType(type):
+  switch (action.type) {
+    case GET_ANIME_GROUPS:
+    case ADD_ANIME_GROUP:
+    case UPDATE_ANIME_GROUP:
+    case DELETE_ANIME_GROUP:
+    case ADD_ANIME_VIDEO:
+    case UPDATE_ANIME_VIDEO:
+    case DELETE_ANIME_VIDEO:
+    case ADD_ANIME_POSTER:
+    case UPDATE_ANIME_POSTER:
+    case DELETE_ANIME_POSTER:
       return {
         ...state,
-        groups: groupReducer(groups, { payload, type }),
+        groups: groupReducer(state.groups, action),
       };
     default:
       return state;

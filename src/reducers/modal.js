@@ -1,8 +1,8 @@
 import { OPEN_MODAL, CLOSE_MODAL } from "../actions/types.js";
 
 const initialState = {
-  modalType: null,
-  data: null,
+  modalType: "",
+  data: {},
   isOpen: false,
 };
 
