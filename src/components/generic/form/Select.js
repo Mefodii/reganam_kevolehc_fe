@@ -59,14 +59,14 @@ export class Select extends Component {
         <div className="text-center">{currentValue}</div>
         {!disabled && (
           <div
-            className="w-full absolute rounded-sm shadow-md border bg-secondary border-tertiary origin-top
+            className="w-full absolute rounded-sm shadow-md border bg-theme-2 border-theme-3 origin-top
                       transform scale-0 duration-300 ease-in-out group-hover:scale-100 z-10 overflow-y-auto max-h-52"
           >
             {options.map((option, i) => {
               const value = valueAttrName ? option[valueAttrName] : option;
               return (
                 <div
-                  className="p-1 text-center truncate hover:bg-tertiary"
+                  className="p-1 text-center truncate hover:bg-theme-3"
                   key={i}
                   onClick={this.onOptionClick(option)}
                 >

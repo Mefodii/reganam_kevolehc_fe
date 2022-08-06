@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import { closeModal } from "../../actions/modal";
+import Modal from "./Modal";
 
 export class ContentWatcherModal extends Component {
   static propTypes = {
@@ -15,7 +16,11 @@ export class ContentWatcherModal extends Component {
   };
 
   render() {
-    return <div>Content watcher modal</div>;
+    return (
+      <Modal>
+        <div>Content watcher modal</div>
+      </Modal>
+    );
   }
 }
 

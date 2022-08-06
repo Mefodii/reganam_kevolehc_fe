@@ -197,7 +197,7 @@ export class GroupForm extends Component {
           </div>
         )}
 
-        <div className="p-4 justify-evenly bg-secondary border-2 border-tertiary rounded-xl shadow-lg w-full">
+        <div className="p-4 justify-evenly bg-theme-2 border-2 border-theme-3 rounded-xl shadow-lg w-full">
           <div className="simple-font flex flex-col 2xl:flex-row w-full justify-between 2xl:space-x-4">
             <div className="w-full space-y-1">
               <InputContainer

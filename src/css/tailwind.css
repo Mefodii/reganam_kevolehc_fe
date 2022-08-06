@@ -14,39 +14,55 @@
 }
 
 .default-theme {
-  --primary: #1f2937;
-  --primaryRGB: 31, 41, 55;
-  --secondary: #1f2937;
-  --secondaryRGB: 31, 41, 55;
-  --tertiary: #374151;
-  --tertiaryRGB: 55, 65, 81;
+  --theme-1: #1f2937;
+  --theme-1RGB: 31, 41, 55;
+  --theme-2: #1f2937;
+  --theme-2RGB: 31, 41, 55;
+  --theme-3: #374151;
+  --theme-3RGB: 55, 65, 81;
+  --highlight-1: #ffffff;
+  --highlight-1RGB: 255, 255, 255;
+  --text-1: #f3f4f6;
+  --text-1RGB: 243, 244, 246;
 }
 
 .anime-theme {
-  --primary: #150017;
-  --primaryRGB: 21, 0, 23;
-  --secondary: #210024;
-  --secondaryRGB: 33, 0, 36;
-  --tertiary: #320138;
-  --tertiaryRGB: 50, 1, 56;
+  --theme-1: #150017;
+  --theme-1RGB: 21, 0, 23;
+  --theme-2: #210024;
+  --theme-2RGB: 33, 0, 36;
+  --theme-3: #320138;
+  --theme-3RGB: 50, 1, 56;
+  --highlight-1: #ffffff;
+  --highlight-1RGB: 255, 255, 255;
+  --text-1: #f3f4f6;
+  --text-1RGB: 243, 244, 246;
 }
 
 .serials-theme {
-  --primary: #190903;
-  --primaryRGB: 25, 9, 3;
-  --secondary: #331107;
-  --secondaryRGB: 51, 17, 7;
-  --tertiary: #3f160a;
-  --tertiaryRGB: 63, 22, 10;
+  --theme-1: #190903;
+  --theme-1RGB: 25, 9, 3;
+  --theme-2: #331107;
+  --theme-2RGB: 51, 17, 7;
+  --theme-3: #3f160a;
+  --theme-3RGB: 63, 22, 10;
+  --highlight-1: #ffffff;
+  --highlight-1RGB: 255, 255, 255;
+  --text-1: #f3f4f6;
+  --text-1RGB: 243, 244, 246;
 }
 
 .movies-theme {
-  --primary: #004857;
-  --primaryRGB: 0, 72, 87;
-  --secondary: #004d5a;
-  --secondaryRGB: 0, 77, 90;
-  --tertiary: #006b70;
-  --tertiaryRGB: 0, 107, 112;
+  --theme-1: #004857;
+  --theme-1RGB: 0, 72, 87;
+  --theme-2: #004d5a;
+  --theme-2RGB: 0, 77, 90;
+  --theme-3: #006b70;
+  --theme-3RGB: 0, 107, 112;
+  --highlight-1: #ffffff;
+  --highlight-1RGB: 255, 255, 255;
+  --text-1: #f3f4f6;
+  --text-1RGB: 243, 244, 246;
 }
 
 .modal {
@@ -58,7 +74,7 @@
 }
 
 .modal-card {
-  @apply border-primary border-2 rounded-xl shadow-2xl text-gray-100 bg-gradient-to-t from-secondary to-tertiary z-40;
+  @apply border-theme-1 border-2 rounded-xl shadow-2xl bg-gradient-to-t from-theme-2 to-theme-3 z-40;
 }
 
 .modal-row {
@@ -71,7 +87,7 @@
 
 .btn {
   @apply text-center cursor-pointer focus:outline-none font-bold py-2 px-4 rounded border-2 
-  bg-tertiary border-primary hover:brightness-125 active:brightness-150 filter brightness-110;
+  bg-theme-3 border-theme-1 hover:brightness-125 active:brightness-150 filter brightness-110;
 }
 
 .ring-error {
@@ -120,16 +136,16 @@
 
 .option-dropdown-container {
   @apply absolute rounded-sm shadow-md border
-  bg-secondary border-tertiary origin-top
+  bg-theme-2 border-theme-3 origin-top
   transform scale-0 duration-300 ease-in-out group-hover:scale-100;
 }
 
 .option-dropdown-item {
-  @apply hover:bg-tertiary;
+  @apply hover:bg-theme-3;
 }
 
 .dropdown-container {
-  @apply flex flex-col absolute origin-top hover-up bg-primary;
+  @apply flex flex-col absolute origin-top hover-up bg-theme-1;
 }
 
 .dropdown-item {
@@ -153,11 +169,11 @@
 }
 
 .watchio-container {
-  @apply p-5 bg-primary border border-tertiary rounded-lg;
+  @apply p-5 bg-theme-1 border border-theme-3 rounded-lg;
 }
 
 .watchio-element {
-  @apply w-full p-2 border-2 shadow-2xl rounded-xl bg-secondary border-tertiary;
+  @apply w-full p-2 border-2 shadow-2xl rounded-xl bg-theme-2 border-theme-3;
 }
 
 @tailwind utilities;

@@ -44,9 +44,7 @@ export class InputContainer extends Component {
         <div
           className={`w-full h-full relative ${
             showLabel ? "pb-2 pt-6" : "py-4"
-          } px-3 border-b-2 bg-tertiary border-primary ${
-            error && "ring-error"
-          }`}
+          } px-3 border-b-2 bg-theme-3 border-theme-1 ${error && "ring-error"}`}
         >
           {showLabel && <div className="input-label">{label}</div>}
           {type && this.renderByType()}

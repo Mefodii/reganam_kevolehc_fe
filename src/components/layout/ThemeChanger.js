@@ -8,7 +8,7 @@ import { updateTheme } from "../../actions/page";
 class ThemeChanger extends Component {
   state = {};
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (this.props.location.pathname !== prevProps.location.pathname)
       this.props.updateTheme();
   }

@@ -10,7 +10,7 @@ const Toggler = ({ activeText, inactiveText, children, show = false }) => {
     <div className="watchio-element">
       <div
         className="flex space-x-1 mb-1 justify-center cursor-pointer text-center
-           font-extrabold hover:bg-tertiary/70 opacity-50 hover:opacity-100 transition ease-in duration-150"
+           font-extrabold hover:bg-theme-2/70 opacity-50 hover:opacity-100 transition ease-in duration-150"
         onClick={() => setActive(!isActive)}
       >
         <SVGArrow

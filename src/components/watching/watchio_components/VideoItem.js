@@ -73,7 +73,7 @@ export class VideoItem extends Component {
 
     return (
       <div className="flex group">
-        <div className="my-2 p-2 border-2 shadow-2xl rounded-xl bg-secondary border-tertiary w-full">
+        <div className="my-2 p-2 border-2 shadow-2xl rounded-xl bg-theme-2 border-theme-3 w-full">
           <div className="flex flex-col 2xl:flex-row">
             <div className="simple-font w-full break-all">
               <div className="text-xl font-bold">

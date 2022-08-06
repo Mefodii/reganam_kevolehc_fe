@@ -26,6 +26,7 @@ import {
   SERIALS_URL,
   WATCHIO_URL,
 } from "../util/urls";
+import ModalSwitcher from "./modals/ModalSwitcher";
 
 class Content extends Component {
   static propTypes = {
@@ -34,14 +35,14 @@ class Content extends Component {
   };
 
   render() {
-    if (this.props.isLoading)
-      return <div className="text-gray-100">Loading....</div>;
+    if (this.props.isLoading) return <div>Loading....</div>;
 
     return (
       <Router>
         <div
-          className={`text-gray-100 ${this.props.theme} bg-gradient-to-t from-secondary to-tertiary min-h-screen`}
+          className={`${this.props.theme} text-text-1 bg-gradient-to-t from-theme-2 to-theme-3 min-h-screen`}
         >
+          <ModalSwitcher />
           <ThemeChanger />
           <Header />
           <Switch>

@@ -2,14 +2,12 @@ import { connect } from "react-redux";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-import { closeModal, CREATE_CONTENT_WATCHER_MODAL } from "../../actions/modal";
-import ContentWatcherModal from "../contenting/ContentWatcherModal";
+import { closeModal } from "../../actions/modal";
 
 export class Modal extends Component {
   static propTypes = {
     closeModal: PropTypes.func.isRequired,
     isOpen: PropTypes.bool.isRequired,
-    modalType: PropTypes.string.isRequired,
     data: PropTypes.object.isRequired,
   };
 
@@ -17,28 +15,18 @@ export class Modal extends Component {
     this.props.closeModal();
   };
 
-  renderModalContent = () => {
-    switch (this.props.modalType) {
-      case CREATE_CONTENT_WATCHER_MODAL:
-        return <ContentWatcherModal />;
-      default:
-        return <div>Undefined modal type: {this.props.modalType}</div>;
-    }
-  };
-
   render() {
-    if (!this.props.isOpen) return null;
+    const { isOpen, data, children } = this.props;
+    if (!isOpen) return null;
 
     return (
       <div className="modal">
         <div className="modal-bg" onClick={this.closeModal}></div>
-        <div
-          className={`${this.props.data?.cardClassName || "w-1/2"} modal-card`}
-        >
+        <div className={`${data?.cardClassName || "w-1/2"} modal-card`}>
           <div className="modal-close-button" onClick={this.closeModal}>
             X
           </div>
-          {this.renderModalContent()}
+          {children}
         </div>
       </div>
     );
@@ -48,7 +36,6 @@ export class Modal extends Component {
 const mapStateToProps = (state) => ({
   isOpen: state.modal.isOpen,
   data: state.modal.data,
-  modalType: state.modal.modalType,
 });
 
 export default connect(mapStateToProps, { closeModal })(Modal);

@@ -15,9 +15,11 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: wrapColor("primaryRGB"),
-        secondary: wrapColor("secondaryRGB"),
-        tertiary: wrapColor("tertiaryRGB"),
+        "theme-1": wrapColor("theme-1RGB"),
+        "theme-2": wrapColor("theme-2RGB"),
+        "theme-3": wrapColor("theme-3RGB"),
+        "highlight-1": wrapColor("highlight-1RGB"),
+        "text-1": wrapColor("text-1RGB"),
       },
       outline: {
         red: ["2px solid #ad0d02", "1px"],

@@ -33,7 +33,7 @@ class Header extends Component {
 
     return (
       <nav
-        className={`${theme} text-gray-200 shadow-md bg-primary sticky top-0 z-20`}
+        className={`${theme} text-gray-200 shadow-md bg-theme-1 sticky top-0 z-20`}
       >
         <ul className="flex p-2 items-center text-lg">
           <li className="font-bold m-2">
@@ -47,7 +47,7 @@ class Header extends Component {
             <div className="inline-block">WatchIO</div>
             <SVGDownArrow className="inline transform group-hover:-rotate-180 transition ease-in duration-150 opacity-75 scale-75"></SVGDownArrow>
             <div
-              className={`drop-down ${dropDownVisibility} bg-primary border border-tertiary shadow-md z-10`}
+              className={`drop-down ${dropDownVisibility} bg-theme-1 border border-theme-3 shadow-md z-10`}
             >
               <ul>
                 <li className="p-2">
