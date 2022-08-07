@@ -2,13 +2,6 @@ import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import InputContainer, {
-  INPUT_DATE,
-  INPUT_NUMBER,
-  INPUT_SELECT,
-  INPUT_TEXTAREA,
-} from "../../generic/form/InputContainer";
-
 import { objectEqualsSimple } from "../../../util/functions";
 
 import { addVideo, updateVideo, deleteVideo } from "../../../actions/videos";
@@ -19,6 +12,10 @@ import {
   cleanAliases,
   removeAliasField,
 } from "../util/functions";
+import Number from "../../generic/form/Number";
+import Date from "../../generic/form/Date";
+import Textarea from "../../generic/form/Textarea";
+import DropdownSelect from "../../generic/form/DropdownSelect";
 
 export class VideoForm extends Component {
   static propTypes = {
@@ -39,7 +36,7 @@ export class VideoForm extends Component {
     aliases: ["", ""],
     status: "",
     watched_date: null,
-    year: null,
+    year: 0,
     order: 1,
     current_episode: 0,
     episodes: 1,
@@ -206,34 +203,31 @@ export class VideoForm extends Component {
         <div className="p-4 justify-evenly bg-theme-2 border-2 border-theme-3 rounded-xl shadow-lg w-full">
           <div className="simple-font flex flex-col 2xl:flex-row w-full justify-between 2xl:space-x-4">
             <div className="w-full space-y-1">
-              <InputContainer
+              <Textarea
                 label="Name"
-                type={INPUT_TEXTAREA}
                 name="name"
                 value={name}
                 onChange={this.onChange}
               />
 
               <div className="flex flex-row w-full space-x-2">
-                <InputContainer
+                <Textarea
                   label="Comment"
-                  type={INPUT_TEXTAREA}
                   name="comment"
                   value={comment}
                   onChange={this.onChange}
                 />
-                <InputContainer
+                <DropdownSelect
+                  className="text-center"
                   label="Watch status"
-                  type={INPUT_SELECT}
                   name="status"
                   placeholder="Select status"
                   value={status}
                   options={this.props.statusTypes}
                   onChange={this.onChange}
                 />
-                <InputContainer
+                <Date
                   label={`${status || "Watched "} Date`}
-                  type={INPUT_DATE}
                   name="watched_date"
                   value={watched_date || ""}
                   onChange={this.onChange}
@@ -242,23 +236,20 @@ export class VideoForm extends Component {
               </div>
 
               <div className="flex flex-row w-full justify-between space-x-2">
-                <InputContainer
+                <Number
                   label="Year"
-                  type={INPUT_NUMBER}
                   name="year"
-                  value={year || ""}
+                  value={year}
                   onChange={this.onChange}
                 />
-                <InputContainer
+                <Number
                   label="Order"
-                  type={INPUT_NUMBER}
                   name="order"
                   value={order}
                   onChange={this.onChange}
                 />
-                <InputContainer
+                <Number
                   label="Current ep."
-                  type={INPUT_NUMBER}
                   name="current_episode"
                   value={current_episode}
                   onChange={this.onChange}
@@ -269,17 +260,15 @@ export class VideoForm extends Component {
                   >
                     <SVGCheck className="w-6 simple-clickable"></SVGCheck>
                   </div>
-                </InputContainer>
-                <InputContainer
+                </Number>
+                <Number
                   label="Episodes"
-                  type={INPUT_NUMBER}
                   name="episodes"
                   value={episodes}
                   onChange={this.onChange}
                 />
-                <InputContainer
+                <Number
                   label="Rating"
-                  type={INPUT_NUMBER}
                   name="rating"
                   value={rating}
                   onChange={this.onChange}
@@ -289,10 +278,9 @@ export class VideoForm extends Component {
 
             <div className="w-full">
               {aliases.map((alias, i) => (
-                <InputContainer
-                  className="simple-font"
+                <Textarea
                   label={`Alias ${i + 1}`}
-                  type={INPUT_TEXTAREA}
+                  name={`Alias ${i + 1}`}
                   key={i}
                   value={alias}
                   onChange={this.onChangeAlias(i)}

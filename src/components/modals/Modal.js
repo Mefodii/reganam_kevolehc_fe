@@ -16,15 +16,23 @@ export class Modal extends Component {
   };
 
   render() {
-    const { isOpen, data, children } = this.props;
+    const { isOpen, data, children, title = "" } = this.props;
     if (!isOpen) return null;
 
     return (
       <div className="modal">
         <div className="modal-bg" onClick={this.closeModal}></div>
-        <div className={`${data?.cardClassName || "w-1/2"} modal-card`}>
-          <div className="modal-close-button" onClick={this.closeModal}>
-            X
+        <div className={`${data?.cardClassName || "w-2/3"} modal-card`}>
+          <div className="flex m-2 p-1">
+            <div className="w-full text-xl uppercase font-bold text-center">
+              {title}
+            </div>
+            <div
+              className="cursor-pointer font-bold hover:text-purple-300 active:text-purple-800"
+              onClick={this.closeModal}
+            >
+              X
+            </div>
           </div>
           {children}
         </div>

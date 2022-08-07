@@ -1,23 +1,25 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { isEmpty } from "lodash";
 
-import { addGroup, updateGroup, deleteGroup } from "../../../actions/groups";
-import { getToday, objectEqualsSimple } from "../../../util/functions";
-import { BLANK_VALUE } from "../../../util/constants";
+import { addGroup, updateGroup, deleteGroup } from "../../actions/groups";
+import { getToday, objectEqualsSimple } from "../../util/functions";
+import { BLANK_VALUE } from "../../util/constants";
 import {
   addAliasFields,
   cleanAliases,
   removeAliasField,
-} from "../util/functions";
-import { isEmpty } from "lodash";
-import Number from "../../generic/form/Number";
-import Date from "../../generic/form/Date";
-import SingleSelect from "../../generic/form/SingleSelect";
-import Textarea from "../../generic/form/Textarea";
-import DropdownSelect from "../../generic/form/DropdownSelect";
+} from "../watching/util/functions";
+import Modal from "./Modal";
+import Text from "../generic/form/Text";
+import Number from "../generic/form/Number";
+import Date from "../generic/form/Date";
+import SingleSelect from "../generic/form/SingleSelect";
+import Textarea from "../generic/form/Textarea";
+import DropdownSelect from "../generic/form/DropdownSelect";
 
-export class GroupForm extends Component {
+export class GroupModal extends Component {
   static propTypes = {
     edit: PropTypes.bool,
     watchioType: PropTypes.string.isRequired,
@@ -184,16 +186,10 @@ export class GroupForm extends Component {
       watched_date,
       year,
     } = this.state;
-    const { hideTitle, edit } = this.props;
+    const { edit } = this.props;
 
     return (
-      <Fragment>
-        {!hideTitle && (
-          <div className="text-xl uppercase font-bold m-4 text-center">
-            Create Group
-          </div>
-        )}
-
+      <Modal title="Create Group">
         <div className="p-4 justify-evenly bg-theme-2 border-2 border-theme-3 rounded-xl shadow-lg w-full">
           <div className="simple-font flex flex-col 2xl:flex-row w-full justify-between 2xl:space-x-4">
             <div className="w-full space-y-1">
@@ -203,7 +199,19 @@ export class GroupForm extends Component {
                 value={name}
                 onChange={this.onChange}
               />
+              <Text
+                label="Test"
+                name="test"
+                value={this.props.test}
+                onChange={this.onChange}
+              />
               <div className="flex flex-row w-full justify-between space-x-4 text-center">
+                <Text
+                  label="Test"
+                  name="test"
+                  value={this.props.test}
+                  onChange={this.onChange}
+                />
                 <Date
                   label="Last Check Date"
                   name="check_date"
@@ -220,7 +228,7 @@ export class GroupForm extends Component {
                   onChange={this.onChange}
                 />
                 <SingleSelect
-                  label="Group Type"
+                  label="Group type"
                   name="single"
                   text="SINGLE"
                   value={single}
@@ -262,6 +270,7 @@ export class GroupForm extends Component {
                   value={rating}
                   onChange={this.onChange}
                   disabled={!single}
+                  minmax={[0, 10]}
                 />
               </div>
             </div>
@@ -327,7 +336,7 @@ export class GroupForm extends Component {
             </div>
           )}
         </div>
-      </Fragment>
+      </Modal>
     );
   }
 }
@@ -343,4 +352,4 @@ const mapDispatchToProps = {
   deleteGroup,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(GroupForm);
+export default connect(mapStateToProps, mapDispatchToProps)(GroupModal);

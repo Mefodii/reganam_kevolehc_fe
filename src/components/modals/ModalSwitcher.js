@@ -2,9 +2,10 @@ import { connect } from "react-redux";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-import { CREATE_CONTENT_WATCHER_MODAL } from "../../actions/modal";
+import { CREATE_CONTENT_WATCHER_MODAL, GROUP_MODAL } from "../../actions/modal";
 import ContentWatcherModal from "./ContentWatcherModal";
 import Modal from "./Modal";
+import GroupModal from "./GroupModal";
 
 export class ModalSwitcher extends Component {
   static propTypes = {
@@ -15,6 +16,8 @@ export class ModalSwitcher extends Component {
     switch (this.props.modalType) {
       case CREATE_CONTENT_WATCHER_MODAL:
         return <ContentWatcherModal />;
+      case GROUP_MODAL:
+        return <GroupModal />;
       default:
         return (
           <Modal>

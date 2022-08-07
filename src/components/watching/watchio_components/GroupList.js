@@ -7,6 +7,7 @@ import GroupItem from "./GroupItem";
 import Toggler from "./Toggler";
 import FilterForm from "./FilterForm";
 import { filterGroups } from "../../../util/filters/watchioFilter";
+import { openGroupModal } from "../../../actions/modal";
 
 export class GroupList extends Component {
   static propTypes = {
@@ -14,6 +15,7 @@ export class GroupList extends Component {
     watchioType: PropTypes.string.isRequired,
     backgroundPicture: PropTypes.string.isRequired,
     watchioFilter: PropTypes.object.isRequired,
+    openGroupModal: PropTypes.func.isRequired,
   };
 
   render() {
@@ -33,7 +35,10 @@ export class GroupList extends Component {
           />
         </div>
 
-        <h2 className="text-xl uppercase font-bold m-4 z-10">
+        <h2
+          className="text-xl uppercase font-bold m-4 z-10"
+          onClick={() => this.props.openGroupModal()}
+        >
           Welcome to {watchioType}, fellow watcher
         </h2>
 
@@ -70,4 +75,4 @@ const mapStateToProps = (state) => ({
   watchioFilter: state.itemsFilters.watchioFilter,
 });
 
-export default connect(mapStateToProps, null)(GroupList);
+export default connect(mapStateToProps, { openGroupModal })(GroupList);

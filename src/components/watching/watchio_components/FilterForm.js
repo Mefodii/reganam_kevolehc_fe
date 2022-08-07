@@ -2,15 +2,13 @@ import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import InputContainer, {
-  INPUT_TEXTAREA,
-  INPUT_OPTIONS,
-  INPUT_CHECKBOX,
-  INPUT_DATE,
-} from "../../generic/form/InputContainer";
-
 import { objectEqualsSimple } from "../../../util/functions";
 import { updateWatchioFilter } from "../../../actions/itemsFIilters";
+import MultiSelect from "../../generic/form/MultiSelect";
+import Date from "../../generic/form/Date";
+import SingleSelect from "../../generic/form/SingleSelect";
+import Textarea from "../../generic/form/Textarea";
+import Radio from "../../generic/form/Radio";
 
 export class FilterForm extends Component {
   static propTypes = {
@@ -22,6 +20,7 @@ export class FilterForm extends Component {
     title: "",
     showPosters: true,
     statuses: [],
+    test: null,
     fromDate: null,
     toDate: null,
   };
@@ -98,28 +97,24 @@ export class FilterForm extends Component {
         <div className="p-4 justify-evenly bg-theme-2 border-2 border-theme-3 rounded-xl shadow-lg w-full">
           <div className="simple-font flex flex-col 2xl:flex-row w-full justify-between 2xl:space-x-4">
             <div className="w-full space-y-1">
-              <InputContainer
+              <Textarea
                 label="Title (including aliases)"
-                type={INPUT_TEXTAREA}
                 name="title"
                 value={title}
                 onChange={this.onChange}
               />
 
               <div className="flex flex-row w-full justify-between space-x-2">
-                <InputContainer
+                <SingleSelect
                   className="text-center"
-                  showLabel={false}
-                  type={INPUT_CHECKBOX}
                   name="showPosters"
                   text="Show Posters"
-                  checked={showPosters}
+                  value={showPosters}
                   onClick={this.onChange}
                 />
                 <div className="group w-full">
-                  <InputContainer
+                  <Date
                     label="From Date"
-                    type={INPUT_DATE}
                     name="fromDate"
                     value={fromDate || ""}
                     onChange={this.onChange}
@@ -127,9 +122,8 @@ export class FilterForm extends Component {
                   />
                 </div>
                 <div className="group w-full">
-                  <InputContainer
+                  <Date
                     label="To Date"
-                    type={INPUT_DATE}
                     name="toDate"
                     value={toDate || ""}
                     onChange={this.onChange}
@@ -139,14 +133,23 @@ export class FilterForm extends Component {
               </div>
             </div>
             <div className="w-full">
-              <InputContainer
+              <MultiSelect
                 label="Statuses"
-                type={INPUT_OPTIONS}
                 name="statuses"
                 value={statuses}
                 options={statusTypes}
                 onChange={this.onChange}
-                asStrings
+              />
+              <Radio
+                label="test"
+                name="test"
+                value={this.state.test}
+                options={[
+                  "value 1cascasc",
+                  "value zcascasc3",
+                  "valuwger  erger  wef e 2",
+                ]}
+                onChange={this.onChange}
               />
             </div>
           </div>

@@ -18,7 +18,7 @@ module.exports = {
         "theme-1": wrapColor("theme-1RGB"),
         "theme-2": wrapColor("theme-2RGB"),
         "theme-3": wrapColor("theme-3RGB"),
-        "highlight-1": wrapColor("highlight-1RGB"),
+        "active-1": wrapColor("active-1RGB"),
         "text-1": wrapColor("text-1RGB"),
       },
       outline: {
