@@ -26,21 +26,25 @@ export class Number extends Component {
 
   onIncrement = (e) => {
     e.target.name = this.props.name;
-    e.target.value = parseInt(this.props.value) + 1;
+    e.target.valueAsNumber = parseInt(this.props.value) + 1;
     this.onChange(e);
   };
 
   onDecrement = (e) => {
     e.target.name = this.props.name;
-    e.target.value = parseInt(this.props.value) - 1;
+    e.target.valueAsNumber = parseInt(this.props.value) - 1;
     this.onChange(e);
   };
 
   onChange = (e) => {
-    if (this.isValid(e.target.value)) this.props.onChange(e);
+    if (this.isValid(e.target.valueAsNumber)) {
+      this.props.onChange(e);
+    }
   };
 
   isValid = (value) => {
+    if (isNaN(value)) return false;
+
     const [min, max] = this.props.minmax || [undefined, undefined];
     if (!isNaN(min) && value < min) {
       return false;
@@ -86,7 +90,7 @@ export class Number extends Component {
             className={`input-text text-center input-border-placeholder ${this.props.className}`}
             type="number"
             name={this.props.name}
-            onChange={this.props.onChange}
+            onChange={this.onChange}
             onKeyDown={this.props.onKeyDown}
             value={this.props.value}
             disabled={this.props.disabled}

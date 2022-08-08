@@ -86,6 +86,8 @@ export class VideoForm extends Component {
   };
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
+  onChangeNumber = (e) =>
+    this.setState({ [e.target.name]: e.target.valueAsNumber });
   onChangeAlias = (i) => (e) => {
     const newAliases = [...this.state.aliases];
     newAliases[i] = e.target.value;
@@ -240,19 +242,19 @@ export class VideoForm extends Component {
                   label="Year"
                   name="year"
                   value={year}
-                  onChange={this.onChange}
+                  onChange={this.onChangeNumber}
                 />
                 <Number
                   label="Order"
                   name="order"
                   value={order}
-                  onChange={this.onChange}
+                  onChange={this.onChangeNumber}
                 />
                 <Number
                   label="Current ep."
                   name="current_episode"
                   value={current_episode}
-                  onChange={this.onChange}
+                  onChange={this.onChangeNumber}
                 >
                   <div
                     className="absolute right-4 top-1"
@@ -265,13 +267,13 @@ export class VideoForm extends Component {
                   label="Episodes"
                   name="episodes"
                   value={episodes}
-                  onChange={this.onChange}
+                  onChange={this.onChangeNumber}
                 />
                 <Number
                   label="Rating"
                   name="rating"
                   value={rating}
-                  onChange={this.onChange}
+                  onChange={this.onChangeNumber}
                 />
               </div>
             </div>

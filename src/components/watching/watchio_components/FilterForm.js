@@ -8,7 +8,6 @@ import MultiSelect from "../../generic/form/MultiSelect";
 import Date from "../../generic/form/Date";
 import SingleSelect from "../../generic/form/SingleSelect";
 import Textarea from "../../generic/form/Textarea";
-import Radio from "../../generic/form/Radio";
 
 export class FilterForm extends Component {
   static propTypes = {
@@ -20,7 +19,6 @@ export class FilterForm extends Component {
     title: "",
     showPosters: true,
     statuses: [],
-    test: null,
     fromDate: null,
     toDate: null,
   };
@@ -138,17 +136,6 @@ export class FilterForm extends Component {
                 name="statuses"
                 value={statuses}
                 options={statusTypes}
-                onChange={this.onChange}
-              />
-              <Radio
-                label="test"
-                name="test"
-                value={this.state.test}
-                options={[
-                  "value 1cascasc",
-                  "value zcascasc3",
-                  "valuwger  erger  wef e 2",
-                ]}
                 onChange={this.onChange}
               />
             </div>

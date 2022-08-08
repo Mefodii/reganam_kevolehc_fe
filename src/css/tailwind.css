@@ -84,6 +84,14 @@
 /* ___________________________________________ */
 
 /* FORM */
+.form-row {
+  @apply w-full flex flex-col 2xl:flex-row justify-between 2xl:space-x-3;
+}
+
+.form-column {
+  @apply w-full space-y-1;
+}
+
 .input-container {
   @apply w-full pb-3 pt-7 relative px-3 border-b-2 bg-theme-3 border-theme-1;
 }

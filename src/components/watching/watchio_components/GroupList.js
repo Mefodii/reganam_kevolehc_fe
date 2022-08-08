@@ -18,6 +18,10 @@ export class GroupList extends Component {
     openGroupModal: PropTypes.func.isRequired,
   };
 
+  openGroupModal = () => {
+    this.props.openGroupModal({ watchioType: this.props.watchioType });
+  };
+
   render() {
     const { watchioType, groups, backgroundPicture, watchioFilter } =
       this.props;
@@ -37,7 +41,7 @@ export class GroupList extends Component {
 
         <h2
           className="text-xl uppercase font-bold m-4 z-10"
-          onClick={() => this.props.openGroupModal()}
+          onClick={this.openGroupModal}
         >
           Welcome to {watchioType}, fellow watcher
         </h2>

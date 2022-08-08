@@ -12,11 +12,11 @@ import {
   removeAliasField,
 } from "../watching/util/functions";
 import Modal from "./Modal";
-import Text from "../generic/form/Text";
 import Number from "../generic/form/Number";
 import Date from "../generic/form/Date";
 import SingleSelect from "../generic/form/SingleSelect";
 import Textarea from "../generic/form/Textarea";
+import Text from "../generic/form/Text";
 import DropdownSelect from "../generic/form/DropdownSelect";
 
 export class GroupModal extends Component {
@@ -72,6 +72,8 @@ export class GroupModal extends Component {
   };
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
+  onChangeNumber = (e) =>
+    this.setState({ [e.target.name]: e.target.valueAsNumber });
   onChangeAlias = (i) => (e) => {
     const newAliases = [...this.state.aliases];
     newAliases[i] = e.target.value;
@@ -92,8 +94,8 @@ export class GroupModal extends Component {
       newState = {
         status: null,
         watched_date: null,
-        rating: null,
-        year: null,
+        rating: 0,
+        year: 0,
       };
     }
 
@@ -190,28 +192,18 @@ export class GroupModal extends Component {
 
     return (
       <Modal title="Create Group">
-        <div className="p-4 justify-evenly bg-theme-2 border-2 border-theme-3 rounded-xl shadow-lg w-full">
-          <div className="simple-font flex flex-col 2xl:flex-row w-full justify-between 2xl:space-x-4">
-            <div className="w-full space-y-1">
-              <Textarea
-                label="Name"
-                name="name"
-                value={name}
-                onChange={this.onChange}
-              />
-              <Text
-                label="Test"
-                name="test"
-                value={this.props.test}
-                onChange={this.onChange}
-              />
-              <div className="flex flex-row w-full justify-between space-x-4 text-center">
+        <div className="simple-font p-4 justify-evenly bg-theme-2 border-2 border-theme-3 rounded-xl shadow-lg w-full">
+          <div className="form-row">
+            <div className="form-column">
+              <div className="form-row">
                 <Text
-                  label="Test"
-                  name="test"
-                  value={this.props.test}
+                  label="Name"
+                  name="name"
+                  value={name}
                   onChange={this.onChange}
                 />
+              </div>
+              <div className="form-row">
                 <Date
                   label="Last Check Date"
                   name="check_date"
@@ -235,7 +227,7 @@ export class GroupModal extends Component {
                   onClick={this.toggleSingle}
                 />
               </div>
-              <div className="flex flex-row w-full justify-between space-x-4 text-center">
+              <div className="form-row">
                 <DropdownSelect
                   containerClassName={`${single ? "" : "opacity-20"}`}
                   label="Watch status"
@@ -260,7 +252,7 @@ export class GroupModal extends Component {
                   label="Year"
                   name="year"
                   value={year}
-                  onChange={this.onChange}
+                  onChange={this.onChangeNumber}
                   disabled={!single}
                 />
                 <Number
@@ -268,32 +260,31 @@ export class GroupModal extends Component {
                   label="Rating"
                   name="rating"
                   value={rating}
-                  onChange={this.onChange}
+                  onChange={this.onChangeNumber}
                   disabled={!single}
                   minmax={[0, 10]}
                 />
               </div>
             </div>
 
-            <div className="w-full">
+            <div className="form-column">
               {aliases.map((alias, i) => (
-                <Textarea
-                  label={`Alias ${i + 1}`}
-                  name={`Alias ${i + 1}`}
-                  key={i}
-                  value={alias}
-                  onChange={this.onChangeAlias(i)}
-                />
+                <div className="form-row" key={i}>
+                  <Textarea
+                    label={`Alias ${i + 1}`}
+                    name={`Alias ${i + 1}`}
+                    value={alias}
+                    onChange={this.onChangeAlias(i)}
+                  />
+                </div>
               ))}
 
-              <div className="flex justify-between">
-                <div className="flex">
-                  <div className="w-16 btn" onClick={this.addAliasFields}>
-                    +
-                  </div>
-                  <div className="w-16 btn" onClick={this.removeAliasField}>
-                    -
-                  </div>
+              <div className="flex flex-row justify-start 2xl:space-x-1">
+                <div className="w-16 btn" onClick={this.addAliasFields}>
+                  +
+                </div>
+                <div className="w-16 btn" onClick={this.removeAliasField}>
+                  -
                 </div>
               </div>
             </div>
@@ -344,6 +335,8 @@ export class GroupModal extends Component {
 const mapStateToProps = (state) => ({
   statusTypes: state.info.statusTypes,
   airStatusTypes: state.info.airStatusTypes,
+  watchioType: state.modal.data?.watchioType,
+  watchioMovie: state.info.watchioTypes.movie,
 });
 
 const mapDispatchToProps = {

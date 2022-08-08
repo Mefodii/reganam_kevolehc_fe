@@ -16,6 +16,7 @@ import Date from "../../generic/form/Date";
 import SingleSelect from "../../generic/form/SingleSelect";
 import Textarea from "../../generic/form/Textarea";
 import DropdownSelect from "../../generic/form/DropdownSelect";
+import { hasChanged } from "../../../models/group";
 
 export class GroupForm extends Component {
   static propTypes = {
@@ -70,6 +71,8 @@ export class GroupForm extends Component {
   };
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
+  onChangeNumber = (e) =>
+    this.setState({ [e.target.name]: e.target.valueAsNumber });
   onChangeAlias = (i) => (e) => {
     const newAliases = [...this.state.aliases];
     newAliases[i] = e.target.value;
@@ -129,7 +132,11 @@ export class GroupForm extends Component {
       rating: this.state.rating,
     };
 
-    return !objectEqualsSimple(oldGroup, newGroup);
+    const r1 = !objectEqualsSimple(oldGroup, newGroup);
+    const r2 = hasChanged(oldGroup, newGroup);
+
+    console.log(r1, r2);
+    return r1;
   };
 
   buildGroup = () => {
@@ -252,7 +259,7 @@ export class GroupForm extends Component {
                   label="Year"
                   name="year"
                   value={year}
-                  onChange={this.onChange}
+                  onChange={this.onChangeNumber}
                   disabled={!single}
                 />
                 <Number
@@ -260,7 +267,7 @@ export class GroupForm extends Component {
                   label="Rating"
                   name="rating"
                   value={rating}
-                  onChange={this.onChange}
+                  onChange={this.onChangeNumber}
                   disabled={!single}
                 />
               </div>

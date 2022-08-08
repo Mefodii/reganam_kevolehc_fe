@@ -7,9 +7,11 @@ export const openCreateContentWatcherModal = (data) => (dispatch) => {
   openModal(CREATE_CONTENT_WATCHER_MODAL, data)(dispatch);
 };
 
-export const openGroupModal = (data) => (dispatch) => {
-  openModal(GROUP_MODAL, data)(dispatch);
-};
+export const openGroupModal =
+  (data = {}) =>
+  (dispatch) => {
+    openModal(GROUP_MODAL, data)(dispatch);
+  };
 
 export const openModal = (modalType, data) => (dispatch) => {
   dispatch({
