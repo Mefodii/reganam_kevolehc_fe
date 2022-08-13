@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import { updateWatchioFilter } from "../../actions/itemsFIilters";
+import { updateWatchioFilter } from "../../actions/itemsFilters";
 
 import MultiSelect from "../generic/form/MultiSelect";
 import Date from "../generic/form/Date";
