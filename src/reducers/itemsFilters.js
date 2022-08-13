@@ -1,18 +1,12 @@
 import { UPDATE_WATCHIO_FILTER } from "../actions/types.js";
+import WatchioFilterModel from "../models/filters/watchioFilter.js";
 
 const watchioFilter = localStorage.getItem("watchioFilter");
-const initialWatchioFilter = {
-  title: "",
-  showPosters: true,
-  statuses: [],
-  fromDate: "",
-  toDate: "",
-};
 
 const initialState = {
   watchioFilter: watchioFilter
     ? JSON.parse(watchioFilter)
-    : initialWatchioFilter,
+    : new WatchioFilterModel().getInitialState,
 };
 
 const reducer = (state = initialState, action) => {

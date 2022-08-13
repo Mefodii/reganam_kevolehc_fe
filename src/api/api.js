@@ -5,7 +5,7 @@ import {
   API_POSTERS,
   API_GET_WATCHIO_INFO,
   API_VIDEOS,
-} from "./urls";
+} from "./backend-urls";
 
 import {
   jsonConfig as json,

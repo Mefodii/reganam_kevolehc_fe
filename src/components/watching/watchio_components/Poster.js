@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { DEFAULT_IMAGE } from "../../../util/urls";
+import { DEFAULT_IMAGE } from "../../../util/frontend-urls";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
@@ -56,17 +56,17 @@ export class Poster extends Component {
         {!disabled && (
           <div className="absolute bottom-0 w-full flex justify-center transform opacity-0 group-hover:opacity-100 transition ease-in duration-300">
             <div className="absolute w-full bg-gray-800 h-full opacity-80"></div>
-            <div className="text-purple-400 z-10 p-1">
+            <div className="text-active-1/40 z-10 p-1">
               <FontAwesomeIcon
                 icon={faCamera}
                 size="lg"
-                className="hover:text-purple-300 cursor-pointer mx-2"
+                className="hover:text-active-1 cursor-pointer mx-2"
                 onClick={this.openPosterSelector}
               />
               <FontAwesomeIcon
                 icon={faTimes}
                 size="lg"
-                className="hover:text-purple-300 cursor-pointer mx-2"
+                className="hover:text-active-1 cursor-pointer mx-2"
                 onClick={this.deletePoster}
               />
             </div>

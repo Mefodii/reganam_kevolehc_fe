@@ -1,3 +1,54 @@
+class WatchioFilterModel {
+  updateModel = (data) => {};
+
+  getInitialState = () => ({
+    title: "",
+    showPosters: true,
+    statuses: [],
+    fromDate: null,
+    toDate: null,
+  });
+
+  toState = (props) => {
+    const { watchioFilter } = props;
+    return {
+      title: watchioFilter.title,
+      showPosters: watchioFilter.showPosters,
+      statuses: watchioFilter.statuses,
+      fromDate: watchioFilter.fromDate,
+      toDate: watchioFilter.toDate,
+    };
+  };
+
+  toModel = (state, props) => ({
+    title: state.title,
+    showPosters: state.showPosters,
+    statuses: state.statuses,
+    fromDate: state.fromDate,
+    toDate: state.toDate,
+  });
+
+  validate = (state, props) => {
+    const isValid = true;
+    const error = {};
+
+    return [isValid, error];
+  };
+
+  equals = (state, props) => {
+    const o1 = this.toModel(state, props);
+    const o2 = props.watchioFilter;
+
+    if (o1?.title !== o2?.title) return false;
+    if (o1?.showPosters !== o2?.showPosters) return false;
+    if (o1?.statuses !== o2?.statuses) return false;
+    if (o1?.fromDate !== o2?.fromDate) return false;
+    if (o1?.toDate !== o2?.toDate) return false;
+
+    return true;
+  };
+}
+
 const filterByTitle = (titleFilter, groups) => {
   if (titleFilter.length === 0) return groups;
 
@@ -12,7 +63,7 @@ const filterByTitle = (titleFilter, groups) => {
 };
 
 const filterFromDate = (fromDateFilter, groups) => {
-  if (fromDateFilter.length === 0) return groups;
+  if (!fromDateFilter || fromDateFilter.length === 0) return groups;
 
   return groups.filter((group) => {
     const { single, watched_date, videos } = group;
@@ -29,7 +80,7 @@ const filterFromDate = (fromDateFilter, groups) => {
 };
 
 const filterToDate = (toDateFilter, groups) => {
-  if (toDateFilter.length === 0) return groups;
+  if (!toDateFilter || toDateFilter.length === 0) return groups;
 
   return groups.filter((group) => {
     const { single, watched_date, videos } = group;
@@ -68,3 +119,5 @@ export const filterGroups = (filter, groups) => {
   newGroups = filterByStatuses(statuses, newGroups);
   return newGroups;
 };
+
+export default WatchioFilterModel;

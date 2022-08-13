@@ -6,12 +6,12 @@ import { BLANK_VALUE } from "../../../util/constants";
 
 import Poster from "./Poster";
 import SVGPencil from "../../generic/svg/SVGPencil";
-import GroupForm from "./GroupForm";
 import VideoList from "./VideoList";
 import SVGCheck from "../../generic/svg/SVGCheck";
-import { isFinished, setGroupFinished } from "../util/functions";
 import { updateGroup } from "../../../actions/groups";
-import { promptNumber } from "../../../util/functions";
+import { isWatchioFinished, promptNumber } from "../../../util/functions";
+import { openGroupModal } from "../../../actions/modal";
+import GroupModel from "../../../models/group";
 
 export class GroupItem extends Component {
   static propTypes = {
@@ -19,14 +19,15 @@ export class GroupItem extends Component {
     watchioType: PropTypes.string.isRequired,
     showPoster: PropTypes.bool.isRequired,
     updateGroup: PropTypes.func.isRequired,
+    openGroupModal: PropTypes.func.isRequired,
   };
 
-  state = {
-    edit: false,
-  };
+  openEdit = () => {
+    const { group, watchioType } = this.props;
+    const { single } = group;
+    const edit = true;
 
-  toggleEdit = () => {
-    this.setState({ edit: !this.state.edit });
+    this.props.openGroupModal({ watchioType, single, edit, group });
   };
 
   setFinised = () => {
@@ -36,14 +37,13 @@ export class GroupItem extends Component {
     }
 
     const group = {
-      ...setGroupFinished(this.props.group),
+      ...GroupModel.setFinished(this.props.group),
       rating,
     };
     this.props.updateGroup(group, this.props.watchioType);
   };
 
   render() {
-    const { edit } = this.state;
     const { watchioType, showPoster } = this.props;
     const {
       id,
@@ -78,80 +78,67 @@ export class GroupItem extends Component {
             <Poster
               images={images}
               groupId={id}
-              disabled={!edit}
               watchioType={watchioType}
             ></Poster>
           </div>
           <div className="watchio-element mx-5 z-10 h-full relative overflow-visible">
-            {edit ? (
-              <GroupForm
-                watchioType={watchioType}
-                closeForm={this.toggleEdit}
-                group={this.props.group}
-                hideTitle
-                edit
-              ></GroupForm>
-            ) : (
-              <div className="ml-2 group">
-                <div className="flex justify-between">
-                  <div className="simple-font w-full break-all">
-                    <div className="text-3xl font-bold">{name}</div>
-                    {aliases.length > 0 && (
-                      <div className="mt-3">
-                        <div className="text-xs">Alias:</div>
-                        <div>
-                          {aliases.map((alias, i) => (
-                            <div key={i}>{" - " + alias}</div>
-                          ))}
-                        </div>
+            <div className="ml-2 group">
+              <div className="flex justify-between">
+                <div className="simple-font w-full break-all">
+                  <div className="text-3xl font-bold">{name}</div>
+                  {aliases.length > 0 && (
+                    <div className="mt-3">
+                      <div className="text-xs">Alias:</div>
+                      <div>
+                        {aliases.map((alias, i) => (
+                          <div key={i}>{" - " + alias}</div>
+                        ))}
                       </div>
-                    )}
+                    </div>
+                  )}
+                </div>
+                <div className="flex flex-wrap 2xl:flex-nowrap px-3 justify-end text-center">
+                  <div className={`w-24 m-1 ${!single && "invisible"}`}>
+                    <div className="text-xs">Status</div>
+                    <div className="font-bold">{status}</div>
                   </div>
-                  <div className="flex flex-wrap 2xl:flex-nowrap px-3 justify-end text-center">
-                    <div className={`w-24 m-1 ${!single && "invisible"}`}>
-                      <div className="text-xs">Status</div>
-                      <div className="font-bold">{status}</div>
-                    </div>
-                    <div className={`w-24 m-1 ${!single && "invisible"}`}>
-                      <div className="text-xs">{status || "Watched "} Date</div>
-                      <div className="font-bold">
-                        {watched_date || BLANK_VALUE}
-                      </div>
-                    </div>
-                    <div className={`w-24 m-1 ${!single && "invisible"}`}>
-                      <div className="text-xs">Year</div>
-                      <div className="font-bold">{year}</div>
-                    </div>
-                    <div className={`w-24 m-1 ${!single && "invisible"}`}>
-                      <div className="text-xs">Rating</div>
-                      <div className="font-bold">{rating} / 10</div>
-                    </div>
-                    <div className="w-24 m-1">
-                      <div className="text-xs">Airing Status</div>
-                      <div className="font-bold">{airing_status}</div>
-                    </div>
-                    <div className="w-24 m-1">
-                      <div className="text-xs">Check Date</div>
-                      <div className="font-bold">
-                        {check_date || BLANK_VALUE}
-                      </div>
+                  <div className={`w-24 m-1 ${!single && "invisible"}`}>
+                    <div className="text-xs">{status || "Watched "} Date</div>
+                    <div className="font-bold">
+                      {watched_date || BLANK_VALUE}
                     </div>
                   </div>
-                  <div>
-                    <div onClick={this.toggleEdit}>
-                      <SVGPencil className="w-7 wiggling-clickable"></SVGPencil>
-                    </div>
-                    {!isFinished(status) && single && (
-                      <div onClick={this.setFinised}>
-                        <SVGCheck className="w-7 wiggling-clickable"></SVGCheck>
-                      </div>
-                    )}
+                  <div className={`w-24 m-1 ${!single && "invisible"}`}>
+                    <div className="text-xs">Year</div>
+                    <div className="font-bold">{year}</div>
+                  </div>
+                  <div className={`w-24 m-1 ${!single && "invisible"}`}>
+                    <div className="text-xs">Rating</div>
+                    <div className="font-bold">{rating} / 10</div>
+                  </div>
+                  <div className="w-24 m-1">
+                    <div className="text-xs">Airing Status</div>
+                    <div className="font-bold">{airing_status}</div>
+                  </div>
+                  <div className="w-24 m-1">
+                    <div className="text-xs">Check Date</div>
+                    <div className="font-bold">{check_date || BLANK_VALUE}</div>
                   </div>
                 </div>
+                <div>
+                  <div onClick={this.openEdit}>
+                    <SVGPencil className="w-7 wiggling-clickable"></SVGPencil>
+                  </div>
+                  {!isWatchioFinished(status) && single && (
+                    <div onClick={this.setFinised}>
+                      <SVGCheck className="w-7 wiggling-clickable"></SVGCheck>
+                    </div>
+                  )}
+                </div>
               </div>
-            )}
+            </div>
 
-            {!edit && !single && (
+            {!single && (
               <VideoList
                 videos={videos}
                 watchioType={watchioType}
@@ -165,4 +152,4 @@ export class GroupItem extends Component {
   }
 }
 
-export default connect(null, { updateGroup })(GroupItem);
+export default connect(null, { updateGroup, openGroupModal })(GroupItem);

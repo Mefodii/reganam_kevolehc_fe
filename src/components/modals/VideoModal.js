@@ -3,11 +3,11 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import Modal from "./Modal";
-import GroupForm from "../forms/GroupForm";
+import VideoForm from "../forms/VideoForm";
 
 import { closeModal } from "../../actions/modal";
 
-export class GroupModal extends Component {
+export class VideoModal extends Component {
   static propTypes = {
     closeModal: PropTypes.func.isRequired,
   };
@@ -15,13 +15,13 @@ export class GroupModal extends Component {
   render() {
     return (
       <Modal>
-        <GroupForm
+        <VideoForm
           {...this.props}
           onSuccess={this.props.closeModal}
-        ></GroupForm>
+        ></VideoForm>
       </Modal>
     );
   }
 }
 
-export default connect(null, { closeModal })(GroupModal);
+export default connect(null, { closeModal })(VideoModal);

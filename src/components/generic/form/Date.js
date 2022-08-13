@@ -25,31 +25,43 @@ export class Date extends Component {
 
   static defaultProps = {
     autoComplete: "off",
+    maxLength: 10,
+    // TODO: dateFormat props (yyyy-mm-dd)
   };
 
   setToday = (e) => {
     e.target.name = this.props.name;
     e.target.value = getToday();
-    this.props.onChange(e);
+
+    const form = {
+      name: e.target.name,
+      value: e.target.value,
+    };
+    this.props.onChange(e, form);
   };
+
+  isNoValue = (value) => value === undefined || value === null || value === "";
+  getValueOrNull = (value) => (this.isNoValue(value) ? null : value);
 
   onChange = (e) => {
     const form = {
       name: e.target.name,
-      value: e.target.value,
+      value: this.getValueOrNull(e.target.value),
     };
 
     this.props.onChange(e, form);
   };
 
   renderInput = () => {
+    const value = this.isNoValue(this.props.value) ? "" : this.props.value;
+
     return (
       <>
         <input
           className={`input-text input-border-placeholder ${this.props.className}`}
           type="text"
           name={this.props.name}
-          value={this.props.value}
+          value={value}
           maxLength={this.props.maxLength}
           onChange={this.onChange}
           onKeyDown={this.props.onKeyDown}

@@ -1,4 +1,9 @@
-import { ANIME_URL, CONTENTIO_URL, MOVIES_URL, SERIALS_URL } from "./urls";
+import {
+  ANIME_URL,
+  CONTENTIO_URL,
+  MOVIES_URL,
+  SERIALS_URL,
+} from "./frontend-urls";
 
 const ANIME_THEME = "anime-theme";
 const SERIALS_THEME = "serials-theme";

@@ -2,13 +2,15 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import SVGPencil from "../../generic/svg/SVGPencil";
-import VideoForm from "./VideoForm";
 import { BLANK_VALUE } from "../../../util/constants";
-import SVGCheck from "../../generic/svg/SVGCheck";
-import { isFinished, setVideoFinished } from "../util/functions";
+import { isWatchioFinished, promptNumber } from "../../../util/functions";
+
 import { updateVideo } from "../../../actions/videos";
-import { promptNumber } from "../../../util/functions";
+import { openVideoModal } from "../../../actions/modal";
+
+import SVGPencil from "../../generic/svg/SVGPencil";
+import SVGCheck from "../../generic/svg/SVGCheck";
+import VideoModel from "../../../models/video";
 
 export class VideoItem extends Component {
   static propTypes = {
@@ -21,8 +23,16 @@ export class VideoItem extends Component {
     edit: false,
   };
 
-  toggleEdit = () => {
-    this.setState({ edit: !this.state.edit });
+  openEdit = () => {
+    const { watchioType, video } = this.props;
+    const edit = true;
+
+    this.props.openVideoModal({
+      groupId: video.group,
+      watchioType,
+      video,
+      edit,
+    });
   };
 
   setFinised = () => {
@@ -32,7 +42,7 @@ export class VideoItem extends Component {
     }
 
     const video = {
-      ...setVideoFinished(this.props.video),
+      ...VideoModel.setFinished(this.props.video),
       rating,
     };
     this.props.updateVideo(
@@ -43,8 +53,6 @@ export class VideoItem extends Component {
   };
 
   render() {
-    const edit = this.state.edit;
-    const { watchioType } = this.props;
     const {
       name,
       comment,
@@ -55,21 +63,7 @@ export class VideoItem extends Component {
       current_episode,
       episodes,
       rating,
-      group,
     } = this.props.video;
-
-    if (edit) {
-      return (
-        <VideoForm
-          groupId={group}
-          video={this.props.video}
-          watchioType={watchioType}
-          closeForm={this.toggleEdit}
-          hideTitle
-          edit
-        ></VideoForm>
-      );
-    }
 
     return (
       <div className="flex group">
@@ -118,10 +112,10 @@ export class VideoItem extends Component {
               </div>
             </div>
             <div>
-              <div onClick={this.toggleEdit}>
+              <div onClick={this.openEdit}>
                 <SVGPencil className="w-7 wiggling-clickable"></SVGPencil>
               </div>
-              {!isFinished(status) && (
+              {!isWatchioFinished(status) && (
                 <div onClick={this.setFinised}>
                   <SVGCheck className="w-7 wiggling-clickable"></SVGCheck>
                 </div>
@@ -134,4 +128,4 @@ export class VideoItem extends Component {
   }
 }
 
-export default connect(null, { updateVideo })(VideoItem);
+export default connect(null, { updateVideo, openVideoModal })(VideoItem);

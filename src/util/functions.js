@@ -1,3 +1,5 @@
+import { WATCHIO_STATUS_FINISHED } from "./constants";
+
 /**
  * Compare 2 objects by given key
  * @param  {String} key key value
@@ -16,18 +18,6 @@ export const compareByKey = (key, options) => (a, b) => {
   return valueA > valueB ? 1 : -1;
 };
 
-export const objectEqualsSimple = (o1, o2) =>
-  JSON.stringify(o1) === JSON.stringify(o2);
-
-export const isObject = (variable) => {
-  return typeof variable === "object";
-};
-
-export const isObjEmpty = (obj) =>
-  obj && // 👈 null and undefined check
-  Object.keys(obj).length === 0 &&
-  obj.constructor === Object;
-
 export const getToday = () => {
   var today = new Date();
   const year = today.getFullYear();
@@ -36,7 +26,7 @@ export const getToday = () => {
   return `${year}-${month}-${day}`;
 };
 
-export const initArray = (length, defaultValue = null) =>
+export const newArray = (length, defaultValue = null) =>
   [...Array(length).keys()].map((_) => defaultValue);
 
 export const promptNumber = (text) => {
@@ -47,3 +37,5 @@ export const promptNumber = (text) => {
   }
   return parseInt(result);
 };
+
+export const isWatchioFinished = (status) => status === WATCHIO_STATUS_FINISHED;

@@ -75,7 +75,7 @@
 }
 
 .modal-card {
-  @apply border-theme-1 border-2 rounded-xl shadow-2xl bg-gradient-to-t from-theme-2 to-theme-3 z-40;
+  @apply w-2/3 border-theme-1 border-2 rounded-xl shadow-2xl bg-gradient-to-t from-theme-2 to-theme-3 z-40;
 }
 
 .modal-row {
@@ -167,12 +167,13 @@
   bg-theme-3 border-theme-1 hover:brightness-125 active:brightness-150 filter brightness-110;
 }
 
+/* TODO: group-hover + opacity should be other class */
 .wiggling-clickable {
-  @apply transform opacity-10 group-hover:opacity-100 hover:animate-wiggle cursor-pointer hover:text-emerald-300 transition ease-in duration-150;
+  @apply transform opacity-10 group-hover:opacity-100 hover:animate-wiggle cursor-pointer hover:text-active-1 transition ease-in duration-150;
 }
 
 .simple-clickable {
-  @apply transform opacity-40 hover:opacity-100 cursor-pointer hover:text-emerald-300 transition ease-in duration-150;
+  @apply transform opacity-40 hover:opacity-100 cursor-pointer hover:text-active-1 transition ease-in duration-150;
 }
 
 .watchio-container {
@@ -181,6 +182,10 @@
 
 .watchio-element {
   @apply w-full p-2 border-2 shadow-2xl rounded-xl bg-theme-2 border-theme-3;
+}
+
+.title {
+  @apply text-xl uppercase font-bold mb-4 text-center;
 }
 /* ___________________________________________ */
 

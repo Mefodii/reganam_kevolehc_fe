@@ -8,7 +8,7 @@ import {
   MOVIES_URL,
   READIO_URL,
   SERIALS_URL,
-} from "../../util/urls";
+} from "../../util/frontend-urls";
 
 import SVGDownArrow from "../generic/svg/SVGDownArrow";
 

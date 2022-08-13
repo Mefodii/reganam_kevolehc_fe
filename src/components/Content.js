@@ -25,7 +25,7 @@ import {
   READIO_URL,
   SERIALS_URL,
   WATCHIO_URL,
-} from "../util/urls";
+} from "../util/frontend-urls";
 import ModalSwitcher from "./modals/ModalSwitcher";
 
 class Content extends Component {

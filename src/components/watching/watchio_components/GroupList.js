@@ -2,12 +2,11 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import GroupForm from "./GroupForm";
 import GroupItem from "./GroupItem";
 import Toggler from "./Toggler";
-import FilterForm from "./FilterForm";
-import { filterGroups } from "../../../util/filters/watchioFilter";
+import FilterForm from "../../forms/FilterForm";
 import { openGroupModal } from "../../../actions/modal";
+import { filterGroups } from "../../../models/filters/watchioFilter";
 
 export class GroupList extends Component {
   static propTypes = {
@@ -19,7 +18,11 @@ export class GroupList extends Component {
   };
 
   openGroupModal = () => {
-    this.props.openGroupModal({ watchioType: this.props.watchioType });
+    const watchioType = this.props.watchioType;
+    const single = watchioType === this.props.movieType;
+    const edit = false;
+
+    this.props.openGroupModal({ watchioType, single, edit });
   };
 
   render() {
@@ -53,12 +56,6 @@ export class GroupList extends Component {
             </Toggler>
           </div>
 
-          <div className="watchio-container">
-            <Toggler activeText="Hide Form" inactiveText="Add new Group">
-              <GroupForm watchioType={watchioType} hideTitle></GroupForm>
-            </Toggler>
-          </div>
-
           <div className="watchio-container space-y-5">
             {filteredGroups.map((group) => (
               <GroupItem
@@ -77,6 +74,7 @@ export class GroupList extends Component {
 
 const mapStateToProps = (state) => ({
   watchioFilter: state.itemsFilters.watchioFilter,
+  movieType: state.info.watchioTypes.movie,
 });
 
 export default connect(mapStateToProps, { openGroupModal })(GroupList);
