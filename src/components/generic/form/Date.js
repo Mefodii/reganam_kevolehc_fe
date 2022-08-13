@@ -18,7 +18,13 @@ export class Date extends Component {
     maxLength: PropTypes.number,
     onChange: PropTypes.func.isRequired,
     onKeyDown: PropTypes.func,
+    autoComplete: PropTypes.string,
     disabled: PropTypes.bool,
+    simple: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    autoComplete: "off",
   };
 
   setToday = (e) => {
@@ -27,22 +33,29 @@ export class Date extends Component {
     this.props.onChange(e);
   };
 
-  render() {
+  onChange = (e) => {
+    const form = {
+      name: e.target.name,
+      value: e.target.value,
+    };
+
+    this.props.onChange(e, form);
+  };
+
+  renderInput = () => {
     return (
-      <InputContainer
-        label={this.props.label}
-        error={this.props.error}
-        className={this.props.containerClassName}
-      >
+      <>
         <input
           className={`input-text input-border-placeholder ${this.props.className}`}
           type="text"
           name={this.props.name}
           value={this.props.value}
           maxLength={this.props.maxLength}
-          onChange={this.props.onChange}
+          onChange={this.onChange}
           onKeyDown={this.props.onKeyDown}
           disabled={this.props.disabled}
+          autoComplete={this.props.autoComplete}
+          ref={this.props.innerRef}
         />
         <div
           className={`absolute right-2 top-1 ${
@@ -52,9 +65,25 @@ export class Date extends Component {
         >
           <SVGCalendar className="w-6 simple-clickable"></SVGCalendar>
         </div>
+      </>
+    );
+  };
+
+  render() {
+    if (this.props.simple) return this.renderInput();
+
+    return (
+      <InputContainer
+        label={this.props.label}
+        error={this.props.error}
+        className={this.props.containerClassName}
+      >
+        {this.renderInput()}
       </InputContainer>
     );
   }
 }
 
-export default Date;
+export default React.forwardRef((props, ref) => (
+  <Date innerRef={ref} {...props} />
+));

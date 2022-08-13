@@ -21,29 +21,56 @@ export class Text extends Component {
     onChange: PropTypes.func.isRequired,
     onKeyDown: PropTypes.func,
     disabled: PropTypes.bool,
+    autoComplete: PropTypes.string,
+    simple: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    type: TYPE_TEXT,
+    autoComplete: "off",
+  };
+
+  onChange = (e) => {
+    const form = {
+      name: e.target.name,
+      value: e.target.value,
+    };
+
+    this.props.onChange(e, form);
+  };
+
+  renderInput = () => {
+    return (
+      <input
+        className={`input-text input-border-placeholder ${this.props.className}`}
+        type={this.props.type}
+        name={this.props.name}
+        value={this.props.value}
+        maxLength={this.props.maxLength}
+        onChange={this.onChange}
+        onKeyDown={this.props.onKeyDown}
+        disabled={this.props.disabled}
+        autoComplete={this.props.autoComplete}
+        ref={this.props.innerRef}
+      />
+    );
   };
 
   render() {
-    const { type = TYPE_TEXT } = this.props;
+    if (this.props.simple) return this.renderInput();
+
     return (
       <InputContainer
         label={this.props.label}
         error={this.props.error}
         className={this.props.containerClassName}
       >
-        <input
-          className={`input-text input-border-placeholder ${this.props.className}`}
-          type={type}
-          name={this.props.name}
-          value={this.props.value}
-          maxLength={this.props.maxLength}
-          onChange={this.props.onChange}
-          onKeyDown={this.props.onKeyDown}
-          disabled={this.props.disabled}
-        />
+        {this.renderInput()}
       </InputContainer>
     );
   }
 }
 
-export default Text;
+export default React.forwardRef((props, ref) => (
+  <Text innerRef={ref} {...props} />
+));

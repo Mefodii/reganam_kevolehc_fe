@@ -15,14 +15,26 @@ export class Textarea extends Component {
     maxLength: PropTypes.number,
     onChange: PropTypes.func.isRequired,
     onKeyDown: PropTypes.func,
+    autoComplete: PropTypes.string,
     disabled: PropTypes.bool,
+    simple: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    autoComplete: "off",
   };
 
   textAreaRef = React.createRef();
 
   onChange = (e) => {
     this.autoSize(e);
-    this.props.onChange(e);
+
+    const form = {
+      name: e.target.name,
+      value: e.target.value,
+    };
+
+    this.props.onChange(e, form);
   };
 
   autoSize = (e) => {
@@ -37,27 +49,36 @@ export class Textarea extends Component {
     }px`;
   }
 
+  renderInput() {
+    return (
+      <textarea
+        className={`input-text overflow-hidden resize-none
+          ${this.props.className}
+          `}
+        type="textarea"
+        name={this.props.name}
+        value={this.props.value}
+        rows="1"
+        maxLength={this.props.maxLength}
+        onChange={this.onChange}
+        onKeyDown={this.props.onKeyDown}
+        autoComplete={this.props.autoComplete}
+        disabled={this.props.disabled}
+        ref={this.textAreaRef}
+      />
+    );
+  }
+
   render() {
+    if (this.props.simple) return this.renderInput();
+
     return (
       <InputContainer
         label={this.props.label}
         error={this.props.error}
         className={this.props.containerClassName}
       >
-        <textarea
-          className={`input-text overflow-hidden resize-none
-          ${this.props.className}
-          `}
-          type="textarea"
-          name={this.props.name}
-          value={this.props.value}
-          rows="1"
-          maxLength={this.props.maxLength}
-          onChange={this.onChange}
-          onKeyDown={this.props.onKeyDown}
-          disabled={this.props.disabled}
-          ref={this.textAreaRef}
-        />
+        {this.renderInput()}
       </InputContainer>
     );
   }

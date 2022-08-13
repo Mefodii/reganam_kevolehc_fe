@@ -20,29 +20,46 @@ export class SingleSelect extends Component {
   onClick = (e) => {
     e.target.name = this.props.name;
     e.target.value = !this.props.value;
-    this.props.onClick(e);
+
+    const form = {
+      name: e.target.name,
+      value: e.target.value,
+    };
+
+    this.props.onClick(e, form);
   };
 
+  renderInput() {
+    return (
+      <div
+        className={`option-single 
+          ${this.props.value && "option-selected"}
+          ${this.props.disabled && "option-disabled"}
+          ${this.props.className}
+          `}
+        onClick={this.onClick}
+        ref={this.props.innerRef}
+      >
+        {this.props.text}
+      </div>
+    );
+  }
+
   render() {
+    if (this.props.simple) return this.renderInput();
+
     return (
       <InputContainer
         label={this.props.label}
         error={this.props.error}
         className={this.props.containerClassName}
       >
-        <div
-          className={`option-single 
-          ${this.props.value && "option-selected"}
-          ${this.props.disabled && "option-disabled"}
-          ${this.props.className}
-          `}
-          onClick={this.onClick}
-        >
-          {this.props.text}
-        </div>
+        {this.renderInput()}
       </InputContainer>
     );
   }
 }
 
-export default SingleSelect;
+export default React.forwardRef((props, ref) => (
+  <SingleSelect innerRef={ref} {...props} />
+));

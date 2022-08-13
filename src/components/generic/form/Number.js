@@ -17,40 +17,55 @@ export class Number extends Component {
     onChange: PropTypes.func.isRequired,
     onKeyDown: PropTypes.func,
     disabled: PropTypes.bool,
+    autoComplete: PropTypes.string,
     hideArrows: PropTypes.bool,
+    simple: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    autoComplete: "off",
+    minmax: [undefined, undefined],
   };
 
   state = {
     focus: false,
   };
 
-  onIncrement = (e) => {
+  onArrowClick = (e, i) => {
     e.target.name = this.props.name;
-    e.target.valueAsNumber = parseInt(this.props.value) + 1;
+
+    const value = this.getValueOrZero(this.props.value) + i;
+    e.target.valueAsNumber = value;
+    e.target.value = value;
     this.onChange(e);
   };
 
-  onDecrement = (e) => {
-    e.target.name = this.props.name;
-    e.target.valueAsNumber = parseInt(this.props.value) - 1;
-    this.onChange(e);
-  };
+  isNoValue = (value) => value === undefined || value === null || value === "";
+  getValueOrZero = (value) => (this.isNoValue(value) ? 0 : value);
 
   onChange = (e) => {
-    if (this.isValid(e.target.valueAsNumber)) {
-      this.props.onChange(e);
+    const { name, value, valueAsNumber } = e.target;
+    if (this.isValid(e.target.value)) {
+      const form = {
+        name,
+        value: this.isNoValue(value) ? null : valueAsNumber,
+      };
+      this.props.onChange(e, form);
     }
   };
 
   isValid = (value) => {
+    if (this.isNoValue(value)) return true;
+
     if (isNaN(value)) return false;
 
-    const [min, max] = this.props.minmax || [undefined, undefined];
-    if (!isNaN(min) && value < min) {
+    const intValue = parseInt(value);
+    const [min, max] = this.props.minmax;
+    if (!isNaN(min) && intValue < min) {
       return false;
     }
 
-    if (!isNaN(max) && value > max) {
+    if (!isNaN(max) && intValue > max) {
       return false;
     }
 
@@ -67,41 +82,51 @@ export class Number extends Component {
           this.state.focus ? "scale-100" : "scale-0"
         } group-hover:scale-100 ease-in duration-100`}
       >
-        <div onClick={this.onIncrement}>
+        <div onClick={(e) => this.onArrowClick(e, 1)}>
           <SVGArrow className="w-3 -rotate-90 simple-clickable"></SVGArrow>
         </div>
-        <div onClick={this.onDecrement}>
+        <div onClick={(e) => this.onArrowClick(e, -1)}>
           <SVGArrow className="w-3 rotate-90 simple-clickable"></SVGArrow>
         </div>
       </div>
     );
   };
 
+  renderInput = () => {
+    const value = this.isNoValue(this.props.value) ? "" : this.props.value;
+    return (
+      <div className="group" onFocus={this.onFocus} onBlur={this.onBlur}>
+        <input
+          className={`input-text text-center input-border-placeholder ${this.props.className}`}
+          type="number"
+          name={this.props.name}
+          onChange={this.onChange}
+          onKeyDown={this.props.onKeyDown}
+          value={value}
+          disabled={this.props.disabled}
+          autoComplete={this.props.autoComplete}
+          ref={this.props.innerRef}
+        />
+        {!this.props.hideArrows && !this.props.disabled && this.renderArrows()}
+      </div>
+    );
+  };
+
   render() {
-    // TODO: Check the error with null (when switching group type single)
+    if (this.props.simple) return this.renderInput();
+
     return (
       <InputContainer
         label={this.props.label}
         error={this.props.error}
         className={this.props.containerClassName}
       >
-        <div className="group" onFocus={this.onFocus} onBlur={this.onBlur}>
-          <input
-            className={`input-text text-center input-border-placeholder ${this.props.className}`}
-            type="number"
-            name={this.props.name}
-            onChange={this.onChange}
-            onKeyDown={this.props.onKeyDown}
-            value={this.props.value}
-            disabled={this.props.disabled}
-          />
-          {!this.props.hideArrows &&
-            !this.props.disabled &&
-            this.renderArrows()}
-        </div>
+        {this.renderInput()}
       </InputContainer>
     );
   }
 }
 
-export default Number;
+export default React.forwardRef((props, ref) => (
+  <Number innerRef={ref} {...props} />
+));
