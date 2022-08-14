@@ -11,6 +11,9 @@ import Textarea from "../generic/form/Textarea";
 import DropdownSelect from "../generic/form/DropdownSelect";
 import VideoModel from "../../models/video";
 import { withForm } from "./form-functions";
+import SVGCross from "../generic/svg/SVGCross";
+import SVGTrash from "../generic/svg/SVGTrash";
+import CompactButton from "../generic/buttons/CompactButton";
 
 export class VideoForm extends Component {
   static propTypes = {
@@ -207,34 +210,41 @@ export class VideoForm extends Component {
             </div>
           </div>
 
-          <div className="flex justify-between">
+          <div className="flex justify-end w-full bg-theme-3 border-2 border-theme-1 py-1">
             {!edit && (
-              <div
-                className="w-max btn option-selected"
+              <CompactButton
+                className={"group hover:bg-theme-2"}
+                text="Add Video"
                 onClick={this.addVideo}
               >
-                Add Video
-              </div>
+                <SVGCheck className="w-6 transition-all duration-300" />
+              </CompactButton>
             )}
 
             {edit && (
-              <div className="flex space-x-1">
-                <div
-                  className={`w-max btn option-selected`}
+              <>
+                <CompactButton
+                  className={"group hover:bg-theme-2"}
+                  text="Save Changes"
                   onClick={this.saveChanges}
                 >
-                  Save Changes
-                </div>
-                <div className="w-max btn" onClick={onSuccess}>
-                  Discard Changes
-                </div>
-              </div>
-            )}
-
-            {edit && (
-              <div className="w-max btn bg-pink-900" onClick={this.deleteVideo}>
-                Delete Video
-              </div>
+                  <SVGCheck className="w-6 transition-all duration-300" />
+                </CompactButton>
+                <CompactButton
+                  className={"group hover:bg-theme-2"}
+                  text="Discard Changes"
+                  onClick={onSuccess}
+                >
+                  <SVGCross className="w-6 transition-all duration-300" />
+                </CompactButton>
+                <CompactButton
+                  className={"group hover:bg-theme-2"}
+                  text="Delete Video"
+                  onClick={this.deleteVideo}
+                >
+                  <SVGTrash className="w-6 transition-all duration-300" />
+                </CompactButton>
+              </>
             )}
           </div>
         </div>

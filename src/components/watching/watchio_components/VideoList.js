@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 
 import VideoItem from "./VideoItem";
 import { openVideoModal } from "../../../actions/modal";
+import SVGPlusCircle from "../../generic/svg/SVGPlusCircle";
+import CompactButton from "../../generic/buttons/CompactButton";
 
 export class VideoList extends Component {
   static propTypes = {
@@ -32,7 +34,13 @@ export class VideoList extends Component {
           ></VideoItem>
         ))}
 
-        <div onClick={this.openVideoModal}>Add Video</div>
+        <CompactButton
+          className="w-min group border-2 border-theme-1/0 hover:border-theme-1/100"
+          text="Add Video"
+          onClick={this.openVideoModal}
+        >
+          <SVGPlusCircle className="w-6 transition-all duration-300" />
+        </CompactButton>
       </>
     );
   }

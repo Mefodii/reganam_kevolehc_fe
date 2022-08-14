@@ -25,7 +25,14 @@ const Toggler = ({ activeText, inactiveText, children, show = false }) => {
           }`}
         ></SVGArrow>
       </div>
-      {isActive && children}
+      <div
+        className={`w-full transition-all duration-700
+        ${!isActive && "h-0 opacity-0"}
+        ${isActive && "h-full opacity-100"}
+      `}
+      >
+        {isActive && children}
+      </div>
     </div>
   );
 };
