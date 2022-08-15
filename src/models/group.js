@@ -21,7 +21,7 @@ class GroupModel {
     id: null,
     name: "",
     aliases: this.aliasModel.getInitialState(),
-    airing_status: "",
+    airing_status: null,
     single: this.single,
     status: null,
     watched_date: this.single ? getToday() : null,

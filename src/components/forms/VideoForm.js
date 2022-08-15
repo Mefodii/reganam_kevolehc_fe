@@ -11,9 +11,11 @@ import Textarea from "../generic/form/Textarea";
 import DropdownSelect from "../generic/form/DropdownSelect";
 import VideoModel from "../../models/video";
 import { withForm } from "./form-functions";
-import SVGCross from "../generic/svg/SVGCross";
 import SVGTrash from "../generic/svg/SVGTrash";
 import CompactButton from "../generic/buttons/CompactButton";
+import SVGPlus from "../generic/svg/SVGPlus";
+import SVGMinus from "../generic/svg/SVGMinus";
+import Text from "../generic/form/Text";
 
 export class VideoForm extends Component {
   static propTypes = {
@@ -105,112 +107,115 @@ export class VideoForm extends Component {
       episodes,
       rating,
     } = this.props.formState;
-    const { edit, onFieldChange, onSuccess } = this.props;
+    const { edit, onFieldChange } = this.props;
 
     const title = edit ? "Edit Video" : "Add Video";
     return (
       <div className="simple-font p-4 justify-evenly bg-theme-2 border-2 border-theme-3 rounded-xl shadow-lg w-full">
         <div className="title">{title}</div>
 
-        <div className="p-4 justify-evenly bg-theme-2 border-2 border-theme-3 rounded-xl shadow-lg w-full">
-          <div className="simple-font flex flex-col 2xl:flex-row w-full justify-between 2xl:space-x-4">
-            <div className="w-full space-y-1">
-              <Textarea
-                label="Name"
-                name="name"
-                value={name}
-                onChange={onFieldChange}
-              />
+        <div className="form-row">
+          <Textarea
+            label="Name"
+            name="name"
+            value={name}
+            onChange={onFieldChange}
+          />
+        </div>
 
-              <div className="flex flex-row w-full space-x-2">
-                <Textarea
-                  label="Comment"
-                  name="comment"
-                  value={comment}
-                  onChange={onFieldChange}
-                />
-                <DropdownSelect
-                  className="text-center"
-                  label="Watch status"
-                  name="status"
-                  placeholder="Select status"
-                  value={status}
-                  options={this.props.statusTypes}
-                  onChange={onFieldChange}
-                />
-                <Date
-                  label={`${status || "Watched "} Date`}
-                  name="watched_date"
-                  value={watched_date}
-                  onChange={onFieldChange}
-                />
-              </div>
+        <div className="form-row">
+          <Text
+            label="Comment"
+            name="comment"
+            value={comment}
+            onChange={onFieldChange}
+          />
+          <Number
+            label="Order"
+            name="order"
+            value={order}
+            onChange={onFieldChange}
+          />
+          <DropdownSelect
+            className="text-center"
+            label="Watch status"
+            name="status"
+            placeholder="Select status"
+            value={status}
+            options={this.props.statusTypes}
+            onChange={onFieldChange}
+          />
+          <Date
+            label={`${status || "Watched "} Date`}
+            name="watched_date"
+            value={watched_date}
+            onChange={onFieldChange}
+          />
+        </div>
 
-              <div className="flex flex-row w-full justify-between space-x-2">
-                <Number
-                  label="Year"
-                  name="year"
-                  value={year}
-                  onChange={onFieldChange}
-                />
-                <Number
-                  label="Order"
-                  name="order"
-                  value={order}
-                  onChange={onFieldChange}
-                />
-                <Number
-                  label="Current ep."
-                  name="current_episode"
-                  value={current_episode}
-                  onChange={onFieldChange}
-                >
-                  <div
-                    className="absolute right-4 top-1"
-                    onClick={this.setCurrentEpisodeMax}
-                  >
-                    <SVGCheck className="w-6 simple-clickable"></SVGCheck>
-                  </div>
-                </Number>
-                <Number
-                  label="Episodes"
-                  name="episodes"
-                  value={episodes}
-                  onChange={onFieldChange}
-                />
-                <Number
-                  label="Rating"
-                  name="rating"
-                  value={rating}
-                  onChange={onFieldChange}
-                />
-              </div>
+        <div className="form-row">
+          <Number
+            label="Year"
+            name="year"
+            value={year}
+            onChange={onFieldChange}
+          />
+          <Number
+            label="Current ep."
+            name="current_episode"
+            value={current_episode}
+            onChange={onFieldChange}
+          >
+            <div
+              className="absolute right-4 top-1"
+              onClick={this.setCurrentEpisodeMax}
+            >
+              <SVGCheck className="w-6 simple-clickable"></SVGCheck>
             </div>
+          </Number>
+          <Number
+            label="Episodes"
+            name="episodes"
+            value={episodes}
+            onChange={onFieldChange}
+          />
+          <Number
+            label="Rating"
+            name="rating"
+            value={rating}
+            onChange={onFieldChange}
+          />
+        </div>
 
-            <div className="w-full">
-              {aliases.map((alias, i) => (
-                <Textarea
-                  label={`Alias ${i + 1}`}
-                  name={`Alias ${i + 1}`}
-                  key={i}
-                  value={alias}
-                  onChange={this.onChangeAlias(i)}
-                />
-              ))}
-              <div className="flex justify-between">
-                <div className="flex">
-                  <div className="w-16 btn" onClick={this.addAliasField}>
-                    +
-                  </div>
-                  <div className="w-16 btn" onClick={this.removeAliasField}>
-                    -
-                  </div>
-                </div>
-              </div>
-            </div>
+        {aliases.map((alias, i) => (
+          <Textarea
+            label={`Alias ${i + 1}`}
+            name={`Alias ${i + 1}`}
+            key={i}
+            value={alias}
+            onChange={this.onChangeAlias(i)}
+          />
+        ))}
+
+        <div className="form-row justify-between">
+          <div className="flex">
+            <CompactButton
+              className={"group hover:bg-theme-2"}
+              text="Add Alias"
+              onClick={this.addAliasField}
+            >
+              <SVGPlus className="w-6 transition-all duration-300" />
+            </CompactButton>
+            <CompactButton
+              className={"group hover:bg-theme-2"}
+              text="Remove Alias"
+              onClick={this.removeAliasField}
+            >
+              <SVGMinus className="w-6 transition-all duration-300" />
+            </CompactButton>
           </div>
 
-          <div className="flex justify-end w-full bg-theme-3 border-2 border-theme-1 py-1">
+          <div className="flex">
             {!edit && (
               <CompactButton
                 className={"group hover:bg-theme-2"}
@@ -229,13 +234,6 @@ export class VideoForm extends Component {
                   onClick={this.saveChanges}
                 >
                   <SVGCheck className="w-6 transition-all duration-300" />
-                </CompactButton>
-                <CompactButton
-                  className={"group hover:bg-theme-2"}
-                  text="Discard Changes"
-                  onClick={onSuccess}
-                >
-                  <SVGCross className="w-6 transition-all duration-300" />
                 </CompactButton>
                 <CompactButton
                   className={"group hover:bg-theme-2"}

@@ -1,11 +1,11 @@
 class AliasModel {
   updateModel = (data) => {};
 
-  getInitialState = () => ["", ""];
+  getInitialState = () => [""];
 
   toState = (aliases) => {
     var result = [...aliases];
-    while (result.length < 2) {
+    while (result.length < 1) {
       result.push("");
     }
 

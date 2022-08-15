@@ -6,12 +6,15 @@ import { addGroup, updateGroup, deleteGroup } from "../../actions/groups";
 import { BLANK_VALUE } from "../../util/constants";
 import Number from "../generic/form/Number";
 import Date from "../generic/form/Date";
-import SingleSelect from "../generic/form/SingleSelect";
 import Textarea from "../generic/form/Textarea";
-import Text from "../generic/form/Text";
 import DropdownSelect from "../generic/form/DropdownSelect";
 import GroupModel from "../../models/group";
 import { withForm } from "./form-functions";
+import CompactButton from "../generic/buttons/CompactButton";
+import SVGCheck from "../generic/svg/SVGCheck";
+import SVGTrash from "../generic/svg/SVGTrash";
+import SVGPlus from "../generic/svg/SVGPlus";
+import SVGMinus from "../generic/svg/SVGMinus";
 
 export class GroupForm extends Component {
   static propTypes = {
@@ -80,6 +83,67 @@ export class GroupForm extends Component {
     deleteGroup(group.id, watchioType).then(onSuccess);
   };
 
+  renderSingle = () => {
+    const { status, rating, watched_date, year } = this.props.formState;
+    const { onFieldChange } = this.props;
+
+    return (
+      <div className="form-row">
+        <DropdownSelect
+          label="Watch status"
+          name="status"
+          placeholder={BLANK_VALUE}
+          value={status}
+          options={this.props.statusTypes}
+          onChange={onFieldChange}
+        />
+        <Date
+          label={`${status || "Watched "} Date`}
+          name="watched_date"
+          value={watched_date}
+          onChange={onFieldChange}
+        />
+        <Number
+          label="Year"
+          name="year"
+          value={year}
+          onChange={onFieldChange}
+        />
+        <Number
+          label="Rating"
+          name="rating"
+          value={rating}
+          onChange={onFieldChange}
+          minmax={[0, 10]}
+        />
+      </div>
+    );
+  };
+
+  renderNotSingle = () => {
+    const { airing_status, check_date } = this.props.formState;
+    const { onFieldChange } = this.props;
+
+    return (
+      <div className="form-row">
+        <DropdownSelect
+          label="Airing Status"
+          name="airing_status"
+          placeholder={BLANK_VALUE}
+          value={airing_status}
+          options={this.props.airStatusTypes}
+          onChange={onFieldChange}
+        />
+        <Date
+          label="Last Check Date"
+          name="check_date"
+          value={check_date}
+          onChange={onFieldChange}
+        />
+      </div>
+    );
+  };
+
   componentDidMount() {
     const { edit, single } = this.props;
     this.props.updateModel({ edit, single });
@@ -87,152 +151,85 @@ export class GroupForm extends Component {
   }
 
   render() {
-    const {
-      name,
-      aliases,
-      check_date,
-      single,
-      status,
-      airing_status,
-      rating,
-      watched_date,
-      year,
-    } = this.props.formState;
-    const { edit, onFieldChange, onSuccess } = this.props;
+    const { single, aliases, name } = this.props.formState;
+    const { edit, watchioType, onFieldChange } = this.props;
 
-    const title = edit ? "Edit Group" : "Add Group";
+    const title = edit ? `Edit ${watchioType}` : `Add ${watchioType}`;
     return (
       <div className="simple-font p-4 justify-evenly bg-theme-2 border-2 border-theme-3 rounded-xl shadow-lg w-full">
         <div className="title">{title}</div>
 
         <div className="form-row">
-          <div className="form-column">
-            <div className="form-row">
-              <Text
-                label="Name"
-                name="name"
-                value={name}
-                onChange={onFieldChange}
-              />
-            </div>
-            <div className="form-row">
-              <Date
-                label="Last Check Date"
-                name="check_date"
-                value={check_date}
-                onChange={onFieldChange}
-              />
-              <DropdownSelect
-                label="Airing Status"
-                name="airing_status"
-                placeholder={BLANK_VALUE}
-                value={airing_status}
-                options={this.props.airStatusTypes}
-                onChange={onFieldChange}
-              />
-              <SingleSelect
-                label="Group type"
-                name="single"
-                text="SINGLE"
-                value={single}
-                onClick={onFieldChange}
-              />
-            </div>
-            <div className="form-row">
-              <DropdownSelect
-                containerClassName={`${single ? "" : "opacity-20"}`}
-                label="Watch status"
-                name="status"
-                placeholder={BLANK_VALUE}
-                value={status}
-                options={this.props.statusTypes}
-                onChange={onFieldChange}
-                disabled={!single}
-              />
-              <Date
-                containerClassName={`${single ? "" : "opacity-20"}`}
-                label={`${status || "Watched "} Date`}
-                name="watched_date"
-                value={watched_date}
-                onChange={onFieldChange}
-                disabled={!single}
-              />
-              <Number
-                containerClassName={`${single ? "" : "opacity-20"}`}
-                label="Year"
-                name="year"
-                value={year}
-                onChange={onFieldChange}
-                disabled={!single}
-              />
-              <Number
-                containerClassName={`${single ? "" : "opacity-20"}`}
-                label="Rating"
-                name="rating"
-                value={rating}
-                onChange={onFieldChange}
-                disabled={!single}
-                minmax={[0, 10]}
-              />
-            </div>
-          </div>
-
-          <div className="form-column">
-            {aliases.map((alias, i) => (
-              <div className="form-row" key={i}>
-                <Textarea
-                  label={`Alias ${i + 1}`}
-                  name={`Alias ${i + 1}`}
-                  value={alias}
-                  onChange={this.onChangeAlias(i)}
-                />
-              </div>
-            ))}
-
-            <div className="flex flex-row justify-start 2xl:space-x-1">
-              <div className="w-16 btn" onClick={this.addAliasField}>
-                +
-              </div>
-              <div className="w-16 btn" onClick={this.removeAliasField}>
-                -
-              </div>
-            </div>
-          </div>
+          <Textarea
+            label="Name"
+            name="name"
+            value={name}
+            onChange={onFieldChange}
+          />
         </div>
 
-        <div className="flex justify-between">
-          {!edit && (
-            <div className="w-max btn option-selected" onClick={this.addGroup}>
-              Add Group
-            </div>
-          )}
-          {edit && (
-            <div className="flex space-x-1">
-              <div
-                className={`w-max btn option-selected`}
-                onClick={this.saveChanges}
+        {single ? this.renderSingle() : this.renderNotSingle()}
+
+        {aliases.map((alias, i) => (
+          <div className="form-row" key={i}>
+            <Textarea
+              label={`Alias ${i + 1}`}
+              name={`Alias ${i + 1}`}
+              value={alias}
+              onChange={this.onChangeAlias(i)}
+            />
+          </div>
+        ))}
+
+        <div className="form-row justify-between">
+          <div className="flex">
+            <CompactButton
+              className={"group hover:bg-theme-2"}
+              text="Add Alias"
+              onClick={this.addAliasField}
+            >
+              <SVGPlus className="w-6 transition-all duration-300" />
+            </CompactButton>
+            <CompactButton
+              className={"group hover:bg-theme-2"}
+              text="Remove Alias"
+              onClick={this.removeAliasField}
+            >
+              <SVGMinus className="w-6 transition-all duration-300" />
+            </CompactButton>
+          </div>
+
+          <div className="flex">
+            {!edit && (
+              <CompactButton
+                className={"group hover:bg-theme-2"}
+                text="Add Group"
+                onClick={this.addGroup}
               >
-                Save Changes
-              </div>
-              <div className="w-max btn" onClick={onSuccess}>
-                Discard Changes
-              </div>
-            </div>
-          )}
+                <SVGCheck className="w-6 transition-all duration-300" />
+              </CompactButton>
+            )}
 
-          {edit && (
-            <div className="w-max btn bg-pink-900" onClick={this.deleteGroup}>
-              Delete Group
-            </div>
-          )}
-        </div>
-
-        {single && edit && (
-          <div className="text-yellow-300 overflow-visible">
-            Warning: by choosing SINGLE, all videos under this group will be
-            deleted
+            {edit && (
+              <>
+                <CompactButton
+                  className={"group hover:bg-theme-2"}
+                  text="Save Changes"
+                  onClick={this.saveChanges}
+                >
+                  <SVGCheck className="w-6 transition-all duration-300" />
+                </CompactButton>
+                <CompactButton
+                  className={"group hover:bg-theme-2"}
+                  text="Delete Group"
+                  onClick={this.deleteGroup}
+                >
+                  <SVGTrash className="w-6 transition-all duration-300" />
+                </CompactButton>
+              </>
+            )}
           </div>
-        )}
+        </div>
       </div>
     );
   }

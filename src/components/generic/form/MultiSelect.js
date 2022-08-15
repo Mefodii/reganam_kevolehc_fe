@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import InputContainer from "./InputContainer";
+import SVGCheckCircle from "../svg/SVGCheckCircle";
+import SVGXCircle from "../svg/SVGXCircle";
 
 export class MultiSelect extends Component {
   static propTypes = {
@@ -44,6 +46,35 @@ export class MultiSelect extends Component {
     this.props.onChange(e, form);
   };
 
+  selectAll = (e) => {
+    e.target.name = this.props.name;
+    e.target.value = [...this.props.options];
+    this.onChange(e);
+  };
+
+  deselectAll = (e) => {
+    e.target.name = this.props.name;
+    e.target.value = [];
+    this.onChange(e);
+  };
+
+  renderButtons = () => {
+    return (
+      <div
+        className={`flex flex-col justify-center absolute right-2 h-full top-0 space-y-1`}
+      >
+        <div onClick={this.selectAll}>
+          <SVGCheckCircle className="w-5 simple-clickable">
+            Select All
+          </SVGCheckCircle>
+        </div>
+        <div onClick={this.deselectAll}>
+          <SVGXCircle className="w-5 simple-clickable">Deselect All</SVGXCircle>
+        </div>
+      </div>
+    );
+  };
+
   renderInput() {
     const { optionDisplay = (option) => option, disabled } = this.props;
 
@@ -52,6 +83,7 @@ export class MultiSelect extends Component {
         className={`input-multi-options ${this.props.className}`}
         ref={this.props.innerRef}
       >
+        {this.renderButtons()}
         {this.props.options.map((option, i) => {
           const isSelected = this.isOptionSelected(option);
           const onClick = isSelected
