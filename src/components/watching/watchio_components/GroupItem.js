@@ -10,8 +10,9 @@ import VideoList from "./VideoList";
 import SVGCheck from "../../generic/svg/SVGCheck";
 import { updateGroup } from "../../../actions/groups";
 import { isWatchioFinished, promptNumber } from "../../../util/functions";
-import { openGroupModal } from "../../../actions/modal";
+import { openGroupModal, openVideoModal } from "../../../actions/modal";
 import GroupModel from "../../../models/group";
+import SVGPlus from "../../generic/svg/SVGPlus";
 
 export class GroupItem extends Component {
   static propTypes = {
@@ -20,6 +21,7 @@ export class GroupItem extends Component {
     showPoster: PropTypes.bool.isRequired,
     updateGroup: PropTypes.func.isRequired,
     openGroupModal: PropTypes.func.isRequired,
+    openVideoModal: PropTypes.func.isRequired,
   };
 
   openEdit = () => {
@@ -28,6 +30,15 @@ export class GroupItem extends Component {
     const edit = true;
 
     this.props.openGroupModal({ watchioType, single, edit, group });
+  };
+
+  openVideoModal = () => {
+    const { watchioType, group } = this.props;
+    const { id: groupId, videos } = group;
+
+    const defaultOrder = videos.length > 0 ? videos.at(-1).order + 1 : 1;
+    const edit = false;
+    this.props.openVideoModal({ watchioType, groupId, defaultOrder, edit });
   };
 
   setFinised = () => {
@@ -140,11 +151,16 @@ export class GroupItem extends Component {
                 </div>
                 <div>
                   <div onClick={this.openEdit}>
-                    <SVGPencil className="w-7 wiggling-clickable"></SVGPencil>
+                    <SVGPencil className="w-6 wiggling-clickable" />
                   </div>
                   {!isWatchioFinished(status) && single && (
                     <div onClick={this.setFinised}>
-                      <SVGCheck className="w-7 wiggling-clickable"></SVGCheck>
+                      <SVGCheck className="w-6 wiggling-clickable" />
+                    </div>
+                  )}
+                  {!single && (
+                    <div onClick={this.openVideoModal}>
+                      <SVGPlus className="w-6 wiggling-clickable" />
                     </div>
                   )}
                 </div>
@@ -156,7 +172,7 @@ export class GroupItem extends Component {
                 videos={videos}
                 watchioType={watchioType}
                 groupId={id}
-              ></VideoList>
+              />
             )}
           </div>
         </div>
@@ -165,4 +181,6 @@ export class GroupItem extends Component {
   }
 }
 
-export default connect(null, { updateGroup, openGroupModal })(GroupItem);
+export default connect(null, { updateGroup, openGroupModal, openVideoModal })(
+  GroupItem
+);

@@ -10,6 +10,8 @@ import SingleSelect from "../generic/form/SingleSelect";
 import Textarea from "../generic/form/Textarea";
 import WatchioFilterModel from "../../models/filters/watchioFilter";
 import { withForm } from "./form-functions";
+import Button from "../generic/buttons/Button";
+import SVGCheck from "../generic/svg/SVGCheck";
 
 export class FilterForm extends Component {
   static propTypes = {
@@ -25,7 +27,6 @@ export class FilterForm extends Component {
     validateForm: PropTypes.func.isRequired,
     hasFormChanged: PropTypes.func.isRequired,
     model: PropTypes.object.isRequired,
-    updateModel: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -45,10 +46,6 @@ export class FilterForm extends Component {
     updateWatchioFilter(this.props.model.getInitialState()).then(onSuccess);
   };
 
-  componentDidMount() {
-    this.props.loadFormState();
-  }
-
   render() {
     const { title, showPosters, statuses, fromDate, toDate } =
       this.props.formState;
@@ -56,55 +53,56 @@ export class FilterForm extends Component {
 
     return (
       <Fragment>
-        <div className="p-4 justify-evenly bg-theme-2 border-2 border-theme-3 rounded-xl shadow-lg w-full">
-          <div className="simple-font flex flex-col 2xl:flex-row w-full justify-between 2xl:space-x-4">
-            <div className="w-full space-y-1">
-              <Textarea
-                label="Title (including aliases)"
-                name="title"
-                value={title}
-                onChange={onFieldChange}
-              />
+        <div className="simple-font p-4 justify-evenly bg-theme-2 border-2 border-theme-3 rounded-xl shadow-lg w-full">
+          <div className="title">Watchio Filters</div>
 
-              <div className="flex flex-row w-full justify-between space-x-2">
-                <SingleSelect
-                  className="text-center"
-                  name="showPosters"
-                  text="Show Posters"
-                  value={showPosters}
-                  onClick={onFieldChange}
-                />
-                <div className="group w-full">
-                  <Date
-                    label="From Date"
-                    name="fromDate"
-                    value={fromDate}
-                    onChange={onFieldChange}
-                  />
-                </div>
-                <div className="group w-full">
-                  <Date
-                    label="To Date"
-                    name="toDate"
-                    value={toDate}
-                    onChange={onFieldChange}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="w-full">
-              <MultiSelect
-                label="Statuses"
-                name="statuses"
-                value={statuses}
-                options={statusTypes}
+          <div className="form-row">
+            <Textarea
+              label="Title (including aliases)"
+              name="title"
+              value={title}
+              onChange={onFieldChange}
+            />
+          </div>
+
+          <div className="form-row">
+            <SingleSelect
+              className="text-center"
+              name="showPosters"
+              text="Show Posters"
+              value={showPosters}
+              onClick={onFieldChange}
+            />
+            <Date
+              label="From Date"
+              name="fromDate"
+              value={fromDate}
+              onChange={onFieldChange}
+            />
+            <div className="group w-full">
+              <Date
+                label="To Date"
+                name="toDate"
+                value={toDate}
                 onChange={onFieldChange}
               />
             </div>
           </div>
 
-          <div className="w-max btn option-selected" onClick={this.saveChanges}>
-            Save Changes
+          <div className="form-row">
+            <MultiSelect
+              label="Statuses"
+              name="statuses"
+              value={statuses}
+              options={statusTypes}
+              onChange={onFieldChange}
+            />
+          </div>
+
+          <div className="form-row">
+            <Button tooltip="Save Changes" onClick={this.saveChanges}>
+              <SVGCheck className="w-6 transition-all duration-300" />
+            </Button>
           </div>
         </div>
       </Fragment>
@@ -121,7 +119,9 @@ const mapDispatchToProps = {
   updateWatchioFilter,
 };
 
+const model = new WatchioFilterModel();
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withForm(FilterForm, WatchioFilterModel));
+)(withForm(FilterForm, model));

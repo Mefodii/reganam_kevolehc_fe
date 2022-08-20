@@ -1,9 +1,9 @@
 import React from "react";
+import BaseModel from "../../models/base-model";
 
-export const withForm = (WrappedComponent, ModelClass) => {
+export const withForm = (WrappedComponent, modelObj = new BaseModel()) => {
   return class extends React.Component {
-    model = new ModelClass();
-    updateModel = (data) => this.model.updateModel(data);
+    model = modelObj;
 
     state = this.model.getInitialState(this.props);
     resetState = () => this.setState(this.model.getInitialState(this.props));
@@ -14,8 +14,7 @@ export const withForm = (WrappedComponent, ModelClass) => {
     setErrors = (formErrors) => this.setState({ formErrors });
 
     validate = () => {
-      const obj = this.model.toModel(this.state, this.props);
-      const [isValid, error] = this.model.validate(this.state, this.props);
+      const [obj, isValid, error] = this.model.validate(this.state, this.props);
       this.setErrors(error);
 
       let equals = undefined;
@@ -27,6 +26,11 @@ export const withForm = (WrappedComponent, ModelClass) => {
     };
 
     hasFormChanged = () => !this.model.equals(this.state, this.props);
+
+    componentDidMount = () => {
+      this.model.init(this.props);
+      this.updateState(this.model.buildState(this.props));
+    };
 
     render() {
       return (
@@ -40,7 +44,6 @@ export const withForm = (WrappedComponent, ModelClass) => {
           hasFormChanged={this.hasFormChanged}
           formState={this.state}
           model={this.model}
-          updateModel={this.updateModel}
         />
       );
     }

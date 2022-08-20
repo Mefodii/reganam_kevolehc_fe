@@ -12,10 +12,10 @@ import DropdownSelect from "../generic/form/DropdownSelect";
 import VideoModel from "../../models/video";
 import { withForm } from "./form-functions";
 import SVGTrash from "../generic/svg/SVGTrash";
-import CompactButton from "../generic/buttons/CompactButton";
 import SVGPlus from "../generic/svg/SVGPlus";
 import SVGMinus from "../generic/svg/SVGMinus";
 import Text from "../generic/form/Text";
+import Button from "../generic/buttons/Button";
 
 export class VideoForm extends Component {
   static propTypes = {
@@ -38,7 +38,6 @@ export class VideoForm extends Component {
     validateForm: PropTypes.func.isRequired,
     hasFormChanged: PropTypes.func.isRequired,
     model: PropTypes.object.isRequired,
-    updateModel: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -59,10 +58,12 @@ export class VideoForm extends Component {
       aliases: this.props.model.addAlias(this.props.formState.aliases),
     });
 
-  removeAliasField = () =>
+  removeAliasField = () => {
+    if (this.props.formState.aliases.length === 1) return;
     this.props.updateFormState({
       aliases: this.props.model.deleteAlias(this.props.formState.aliases),
     });
+  };
 
   addVideo = () => {
     const { watchioType, groupId, validateForm, addVideo, onSuccess } =
@@ -87,12 +88,6 @@ export class VideoForm extends Component {
     const { id, group } = this.props.video;
     deleteVideo(id, group, watchioType).then(onSuccess);
   };
-
-  componentDidMount() {
-    const { edit } = this.props;
-    this.props.updateModel({ edit });
-    edit ? this.props.loadFormState() : this.props.resetFormState();
-  }
 
   render() {
     const {
@@ -187,64 +182,56 @@ export class VideoForm extends Component {
           />
         </div>
 
-        {aliases.map((alias, i) => (
-          <Textarea
-            label={`Alias ${i + 1}`}
-            name={`Alias ${i + 1}`}
-            key={i}
-            value={alias}
-            onChange={this.onChangeAlias(i)}
-          />
-        ))}
+        {aliases.map((alias, i) => {
+          const aliasField = (
+            <Textarea
+              label={`Alias ${i + 1}`}
+              name={`Alias ${i + 1}`}
+              key={i}
+              value={alias}
+              onChange={this.onChangeAlias(i)}
+            />
+          );
 
-        <div className="form-row justify-between">
-          <div className="flex">
-            <CompactButton
-              className={"group hover:bg-theme-2"}
-              text="Add Alias"
-              onClick={this.addAliasField}
-            >
-              <SVGPlus className="w-6 transition-all duration-300" />
-            </CompactButton>
-            <CompactButton
-              className={"group hover:bg-theme-2"}
-              text="Remove Alias"
-              onClick={this.removeAliasField}
-            >
-              <SVGMinus className="w-6 transition-all duration-300" />
-            </CompactButton>
-          </div>
+          if (i > 0)
+            return (
+              <div className="form-row" key={i}>
+                {aliasField}
+              </div>
+            );
 
-          <div className="flex">
-            {!edit && (
-              <CompactButton
-                className={"group hover:bg-theme-2"}
-                text="Add Video"
-                onClick={this.addVideo}
-              >
+          return (
+            <div className="form-row space-x-2" key={i}>
+              {aliasField}
+              <div className="w-10 h-full flex flex-col space-y-1 items-center">
+                <Button tooltip="Add Alias" onClick={this.addAliasField}>
+                  <SVGPlus className="w-3 transition-all duration-300" />
+                </Button>
+                <Button tooltip="Remove Alias" onClick={this.removeAliasField}>
+                  <SVGMinus className="w-3 transition-all duration-300" />
+                </Button>
+              </div>
+            </div>
+          );
+        })}
+
+        <div className="flex">
+          {!edit && (
+            <Button tooltip="Add Video" onClick={this.addVideo}>
+              <SVGCheck className="w-6 transition-all duration-300" />
+            </Button>
+          )}
+
+          {edit && (
+            <>
+              <Button tooltip="Save Changes" onClick={this.saveChanges}>
                 <SVGCheck className="w-6 transition-all duration-300" />
-              </CompactButton>
-            )}
-
-            {edit && (
-              <>
-                <CompactButton
-                  className={"group hover:bg-theme-2"}
-                  text="Save Changes"
-                  onClick={this.saveChanges}
-                >
-                  <SVGCheck className="w-6 transition-all duration-300" />
-                </CompactButton>
-                <CompactButton
-                  className={"group hover:bg-theme-2"}
-                  text="Delete Video"
-                  onClick={this.deleteVideo}
-                >
-                  <SVGTrash className="w-6 transition-all duration-300" />
-                </CompactButton>
-              </>
-            )}
-          </div>
+              </Button>
+              <Button tooltip="Delete Video" onClick={this.deleteVideo}>
+                <SVGTrash className="w-6 transition-all duration-300" />
+              </Button>
+            </>
+          )}
         </div>
       </div>
     );
@@ -261,7 +248,9 @@ const mapDispatchToProps = {
   deleteVideo,
 };
 
+const model = new VideoModel();
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withForm(VideoForm, VideoModel));
+)(withForm(VideoForm, model));

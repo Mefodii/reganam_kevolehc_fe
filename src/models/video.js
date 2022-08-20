@@ -1,22 +1,20 @@
 import { WATCHIO_STATUS_FINISHED } from "../util/constants";
 import { getToday } from "../util/functions";
 import AliasModel from "./alias";
+import BaseModel from "./base-model";
 
-class VideoModel {
-  constructor(data = { edit: false }) {
-    this.aliasModel = new AliasModel();
-
-    const { edit } = data;
-    this.edit = edit;
+class VideoModel extends BaseModel {
+  constructor() {
+    super();
+    this.aliasModel = new AliasModel(AliasModel.VIDEO);
   }
 
-  updateModel = (data) => {
-    const { edit, single } = data;
-    if (edit !== undefined) this.edit = edit;
-    if (single !== undefined) this.single = single;
+  init = (props) => {
+    this.edit = props.edit;
+    this.aliasModel.init(props);
   };
 
-  getInitialState = (props = {}) => ({
+  getInitialState = (props) => ({
     id: null,
     name: "",
     comment: "",
@@ -36,7 +34,7 @@ class VideoModel {
       id: video.id,
       name: video.name,
       comment: video.comment,
-      aliases: this.aliasModel.toState(video.aliases),
+      aliases: this.aliasModel.toState(props),
       year: video.year,
       status: video.status,
       order: video.order,
@@ -47,13 +45,17 @@ class VideoModel {
     };
   };
 
+  buildState = (props) => {
+    return this.edit ? this.toState(props) : this.getInitialState(props);
+  };
+
   toModel = (state, props) => ({
     id: state.id,
     type: props.watchioType,
     group: props.groupId,
     name: state.name,
     comment: state.comment,
-    aliases: this.aliasModel.toModel(state.aliases),
+    aliases: this.aliasModel.toModel(state, props),
     year: state.year,
     status: state.status,
     watched_date: state.watched_date,
@@ -64,10 +66,11 @@ class VideoModel {
   });
 
   validate = (state, props) => {
+    const model = this.toModel(state, props);
     const isValid = true;
     const error = {};
 
-    return [isValid, error];
+    return [model, isValid, error];
   };
 
   equals = (state, props) => {
@@ -83,7 +86,7 @@ class VideoModel {
     if (o1?.current_episode !== o2?.current_episode) return false;
     if (o1?.episodes !== o2?.episodes) return false;
     if (o1?.rating !== o2?.rating) return false;
-    if (!this.aliasModel.equals(o1.aliases, o2.aliases)) return false;
+    if (!this.aliasModel.equals(state, props)) return false;
 
     return true;
   };

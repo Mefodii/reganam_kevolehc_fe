@@ -14,7 +14,7 @@ export class WatchioFilterModal extends Component {
 
   render() {
     return (
-      <Modal>
+      <Modal className={"w-1/4"}>
         <FilterForm
           {...this.props}
           onSuccess={this.props.closeModal}

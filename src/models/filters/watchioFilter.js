@@ -1,7 +1,9 @@
-class WatchioFilterModel {
-  updateModel = (data) => {};
+import BaseModel from "../base-model";
 
-  getInitialState = () => ({
+class WatchioFilterModel extends BaseModel {
+  init = (props) => {};
+
+  getInitialState = (props) => ({
     title: "",
     showPosters: true,
     statuses: [],
@@ -28,11 +30,16 @@ class WatchioFilterModel {
     toDate: state.toDate,
   });
 
+  buildState = (props) => {
+    return this.toState(props);
+  };
+
   validate = (state, props) => {
+    const model = this.toModel(state, props);
     const isValid = true;
     const error = {};
 
-    return [isValid, error];
+    return [model, isValid, error];
   };
 
   equals = (state, props) => {

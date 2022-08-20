@@ -10,7 +10,7 @@ import Textarea from "../generic/form/Textarea";
 import DropdownSelect from "../generic/form/DropdownSelect";
 import GroupModel from "../../models/group";
 import { withForm } from "./form-functions";
-import CompactButton from "../generic/buttons/CompactButton";
+import Button from "../generic/buttons/Button";
 import SVGCheck from "../generic/svg/SVGCheck";
 import SVGTrash from "../generic/svg/SVGTrash";
 import SVGPlus from "../generic/svg/SVGPlus";
@@ -38,7 +38,6 @@ export class GroupForm extends Component {
     validateForm: PropTypes.func.isRequired,
     hasFormChanged: PropTypes.func.isRequired,
     model: PropTypes.object.isRequired,
-    updateModel: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -57,10 +56,12 @@ export class GroupForm extends Component {
       aliases: this.props.model.addAlias(this.props.formState.aliases),
     });
 
-  removeAliasField = () =>
+  removeAliasField = () => {
+    if (this.props.formState.aliases.length === 1) return;
     this.props.updateFormState({
       aliases: this.props.model.deleteAlias(this.props.formState.aliases),
     });
+  };
 
   addGroup = () => {
     const { validateForm, addGroup, onSuccess } = this.props;
@@ -144,12 +145,6 @@ export class GroupForm extends Component {
     );
   };
 
-  componentDidMount() {
-    const { edit, single } = this.props;
-    this.props.updateModel({ edit, single });
-    edit ? this.props.loadFormState() : this.props.resetFormState();
-  }
-
   render() {
     const { single, aliases, name } = this.props.formState;
     const { edit, watchioType, onFieldChange } = this.props;
@@ -170,65 +165,51 @@ export class GroupForm extends Component {
 
         {single ? this.renderSingle() : this.renderNotSingle()}
 
-        {aliases.map((alias, i) => (
-          <div className="form-row" key={i}>
+        {aliases.map((alias, i) => {
+          const aliasField = (
             <Textarea
               label={`Alias ${i + 1}`}
               name={`Alias ${i + 1}`}
+              key={i}
               value={alias}
               onChange={this.onChangeAlias(i)}
             />
-          </div>
-        ))}
+          );
 
-        <div className="form-row justify-between">
-          <div className="flex">
-            <CompactButton
-              className={"group hover:bg-theme-2"}
-              text="Add Alias"
-              onClick={this.addAliasField}
-            >
-              <SVGPlus className="w-6 transition-all duration-300" />
-            </CompactButton>
-            <CompactButton
-              className={"group hover:bg-theme-2"}
-              text="Remove Alias"
-              onClick={this.removeAliasField}
-            >
-              <SVGMinus className="w-6 transition-all duration-300" />
-            </CompactButton>
-          </div>
+          if (i > 0) return <div className="form-row">{aliasField}</div>;
 
-          <div className="flex">
-            {!edit && (
-              <CompactButton
-                className={"group hover:bg-theme-2"}
-                text="Add Group"
-                onClick={this.addGroup}
-              >
+          return (
+            <div className="form-row space-x-2" key={i}>
+              {aliasField}
+              <div className="w-10 h-full flex flex-col space-y-1 items-center">
+                <Button tooltip="Add Alias" onClick={this.addAliasField}>
+                  <SVGPlus className="w-3 transition-all duration-300" />
+                </Button>
+                <Button tooltip="Remove Alias" onClick={this.removeAliasField}>
+                  <SVGMinus className="w-3 transition-all duration-300" />
+                </Button>
+              </div>
+            </div>
+          );
+        })}
+
+        <div className="flex">
+          {!edit && (
+            <Button tooltip="Add Group" onClick={this.addGroup}>
+              <SVGCheck className="w-6 transition-all duration-300" />
+            </Button>
+          )}
+
+          {edit && (
+            <>
+              <Button tooltip="Save Changes" onClick={this.saveChanges}>
                 <SVGCheck className="w-6 transition-all duration-300" />
-              </CompactButton>
-            )}
-
-            {edit && (
-              <>
-                <CompactButton
-                  className={"group hover:bg-theme-2"}
-                  text="Save Changes"
-                  onClick={this.saveChanges}
-                >
-                  <SVGCheck className="w-6 transition-all duration-300" />
-                </CompactButton>
-                <CompactButton
-                  className={"group hover:bg-theme-2"}
-                  text="Delete Group"
-                  onClick={this.deleteGroup}
-                >
-                  <SVGTrash className="w-6 transition-all duration-300" />
-                </CompactButton>
-              </>
-            )}
-          </div>
+              </Button>
+              <Button tooltip="Delete Group" onClick={this.deleteGroup}>
+                <SVGTrash className="w-6 transition-all duration-300" />
+              </Button>
+            </>
+          )}
         </div>
       </div>
     );
@@ -246,7 +227,9 @@ const mapDispatchToProps = {
   deleteGroup,
 };
 
+const model = new GroupModel();
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withForm(GroupForm, GroupModel));
+)(withForm(GroupForm, model));

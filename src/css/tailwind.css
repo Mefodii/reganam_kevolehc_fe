@@ -20,8 +20,33 @@
   --theme-2RGB: 31, 41, 55;
   --theme-3: #374151;
   --theme-3RGB: 55, 65, 81;
+  --theme-1: #111827;
+  --theme-1RGB: 17, 24, 39;
+  --theme-2: #172035;
+  --theme-2RGB: 23, 32, 53;
+  --theme-3: #1d2942;
+  --theme-3RGB: 29, 41, 66;
+  --theme-4: #233150;
+  --theme-4RGB: 35, 49, 80;
   --active-1: #6ee7b7;
   --active-1RGB: 110, 231, 183;
+  --active-1: #d8b4fe;
+  --active-1RGB: 216, 180, 254;
+  --text-1: #f3f4f6;
+  --text-1RGB: 243, 244, 246;
+}
+
+.dark-theme {
+  --theme-1: #121212;
+  --theme-1RGB: 18, 18, 18;
+  --theme-2: #191919;
+  --theme-2RGB: 25, 25, 25;
+  --theme-3: #232323;
+  --theme-3RGB: 35, 35, 35;
+  --theme-4: #272727;
+  --theme-4RGB: 39, 39, 39;
+  --active-1: #d8b4fe;
+  --active-1RGB: 216, 180, 254;
   --text-1: #f3f4f6;
   --text-1RGB: 243, 244, 246;
 }
@@ -165,6 +190,10 @@
 .btn {
   @apply text-center cursor-pointer focus:outline-none font-bold py-2 px-4 rounded border-2 
   bg-theme-3 border-theme-1 hover:brightness-125 active:brightness-150 filter brightness-110;
+}
+
+.nav-link {
+  @apply hover:text-active-1 hover:bg-theme-3;
 }
 
 /* TODO: group-hover + opacity should be other class */

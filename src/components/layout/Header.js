@@ -50,43 +50,34 @@ class Header extends Component {
               className={`drop-down ${dropDownVisibility} bg-theme-1 border border-theme-3 shadow-md z-10`}
             >
               <ul>
-                <li className="p-2">
-                  <NavLink
-                    className="hover:underline hover:text-red-200"
-                    to={MOVIES_URL}
-                  >
+                <li className="p-2 nav-link">
+                  <NavLink className="" to={MOVIES_URL}>
                     Movies
                   </NavLink>
                 </li>
-                <li className="p-2">
-                  <NavLink
-                    className="hover:underline hover:text-red-200"
-                    to={SERIALS_URL}
-                  >
+                <li className="p-2 nav-link">
+                  <NavLink className="" to={SERIALS_URL}>
                     Serials
                   </NavLink>
                 </li>
-                <li className="p-2">
-                  <NavLink
-                    className="hover:underline hover:text-red-200"
-                    to={ANIME_URL}
-                  >
+                <li className="p-2 nav-link">
+                  <NavLink className="" to={ANIME_URL}>
                     Anime
                   </NavLink>
                 </li>
               </ul>
             </div>
           </li>
-          <li className="m-2 hover:underline hover:text-red-200">
+          <li className="p-2 nav-link">
             <NavLink to={GAMEIO_URL}>GameIO</NavLink>
           </li>
-          <li className="m-2 hover:underline hover:text-red-200">
+          <li className="p-2 nav-link">
             <NavLink to={READIO_URL}>ReadIO</NavLink>
           </li>
-          <li className="m-2 hover:underline hover:text-red-200">
+          <li className="p-2 nav-link">
             <NavLink to={CONTENTIO_URL}>ContentIO</NavLink>
           </li>
-          <li className="m-2 hover:underline hover:text-red-200">
+          <li className="p-2 nav-link">
             <NavLink to={AUDIO_URL}>AudIO</NavLink>
           </li>
         </ul>

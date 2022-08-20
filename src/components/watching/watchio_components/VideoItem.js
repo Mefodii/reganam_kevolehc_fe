@@ -113,11 +113,11 @@ export class VideoItem extends Component {
             </div>
             <div>
               <div onClick={this.openEdit}>
-                <SVGPencil className="w-7 wiggling-clickable"></SVGPencil>
+                <SVGPencil className="w-6 wiggling-clickable"></SVGPencil>
               </div>
               {!isWatchioFinished(status) && (
                 <div onClick={this.setFinised}>
-                  <SVGCheck className="w-7 wiggling-clickable"></SVGCheck>
+                  <SVGCheck className="w-6 wiggling-clickable"></SVGCheck>
                 </div>
               )}
             </div>

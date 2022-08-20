@@ -8,9 +8,11 @@ import Content from "./Content";
 class App extends Component {
   render() {
     return (
-      <Provider store={store}>
-        <Content></Content>
-      </Provider>
+      <React.StrictMode>
+        <Provider store={store}>
+          <Content></Content>
+        </Provider>
+      </React.StrictMode>
     );
   }
 }
