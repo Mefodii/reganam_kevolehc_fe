@@ -30,6 +30,24 @@ export const addPoster =
     });
   };
 
+export const updatePoster =
+  (poster, image, groupId, watchioType) => async (dispatch, getState) => {
+    const posterForm = new FormData();
+    posterForm.append("group", groupId);
+    posterForm.append("image", image);
+
+    const { data } = await api.updatePoster(poster, posterForm);
+    const dispatchType = getDispatchType(UPDATE, watchioType, getState);
+
+    dispatch({
+      type: dispatchType,
+      payload: {
+        poster: data,
+        groupId,
+      },
+    });
+  };
+
 export const deletePoster =
   (id, groupId, watchioType) => async (dispatch, getState) => {
     await api.deletePoster(id);

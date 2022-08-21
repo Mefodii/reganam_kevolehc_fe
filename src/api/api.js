@@ -41,8 +41,11 @@ export const deleteVideo = async (id) =>
 // ----------------------------- //
 
 // POSTERS API
-export const addPoster = async (poster) =>
-  await axios.post(API_POSTERS, poster, formConf());
+export const addPoster = async (posterForm) =>
+  await axios.post(API_POSTERS, posterForm, formConf());
+
+export const updatePoster = async (poster, posterForm) =>
+  await axios.put(`${API_POSTERS}${poster.id}/`, posterForm, formConf());
 
 export const deletePoster = async (id) =>
   await axios.delete(`${API_POSTERS}${id}/`, json());

@@ -5,7 +5,11 @@ import { faCamera, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import { addPoster, deletePoster } from "../../../actions/posters";
+import {
+  addPoster,
+  updatePoster,
+  deletePoster,
+} from "../../../actions/posters";
 
 export class Poster extends Component {
   static propTypes = {
@@ -14,6 +18,7 @@ export class Poster extends Component {
     watchioType: PropTypes.string.isRequired,
     images: PropTypes.array.isRequired,
     addPoster: PropTypes.func.isRequired,
+    updatePoster: PropTypes.func.isRequired,
     deletePoster: PropTypes.func.isRequired,
   };
 
@@ -22,14 +27,21 @@ export class Poster extends Component {
     const oldImage = this.props.images[0];
     // Update poster
     if (image && oldImage) {
+      console.log("Update");
+      const { groupId, watchioType } = this.props;
+      this.props.updatePoster(oldImage, image, groupId, watchioType);
       return;
     }
+
     // Add poster
     if (image && !oldImage) {
       const { groupId, watchioType } = this.props;
       this.props.addPoster(image, groupId, watchioType);
       return;
     }
+
+    // 👇️ reset file input
+    e.target.value = null;
   };
 
   deletePoster = () => {
@@ -91,4 +103,4 @@ export class Poster extends Component {
   }
 }
 
-export default connect(null, { addPoster, deletePoster })(Poster);
+export default connect(null, { addPoster, updatePoster, deletePoster })(Poster);
