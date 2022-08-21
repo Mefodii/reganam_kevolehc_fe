@@ -22,26 +22,50 @@ export class Poster extends Component {
     deletePoster: PropTypes.func.isRequired,
   };
 
-  posterSelected = (e) => {
+  state = {
+    dragOver: false,
+  };
+
+  onDragEnter = (e) => {
+    this.setState({ dragOver: true });
+  };
+
+  onDragLeave = (e) => {
+    this.setState({ dragOver: false });
+  };
+
+  onDrop = (e) => {
+    e.preventDefault();
+    const image = e.dataTransfer.files[0];
+
+    if (!image.type.startsWith("image/")) {
+      console.error("Unacceptable file type: ", image);
+      return;
+    }
+
+    this.changePoster(image);
+  };
+
+  onFileSelect = (e) => {
     const image = e.target.files[0];
+    this.changePoster(image);
+  };
+
+  changePoster = (newImage) => {
     const oldImage = this.props.images[0];
     // Update poster
-    if (image && oldImage) {
-      console.log("Update");
+    if (newImage && oldImage) {
       const { groupId, watchioType } = this.props;
-      this.props.updatePoster(oldImage, image, groupId, watchioType);
+      this.props.updatePoster(oldImage, newImage, groupId, watchioType);
       return;
     }
 
     // Add poster
-    if (image && !oldImage) {
+    if (newImage && !oldImage) {
       const { groupId, watchioType } = this.props;
-      this.props.addPoster(image, groupId, watchioType);
+      this.props.addPoster(newImage, groupId, watchioType);
       return;
     }
-
-    // 👇️ reset file input
-    e.target.value = null;
   };
 
   deletePoster = () => {
@@ -62,9 +86,19 @@ export class Poster extends Component {
     var imgPath = poster ? poster.image : DEFAULT_IMAGE;
 
     const { disabled } = this.props;
+    const { dragOver } = this.state;
+    console.log(dragOver);
 
     return (
-      <div className="relative group">
+      <div
+        className={`relative group
+        ${dragOver ? "border-2 border-active-1 shadow-inner" : ""}
+        `}
+        onDragOver={(e) => e.preventDefault()}
+        onDragEnter={this.onDragEnter}
+        onDragLeave={this.onDragLeave}
+        onDrop={this.onDrop}
+      >
         {!disabled && (
           <div className="absolute bottom-0 w-full flex justify-center transform opacity-0 group-hover:opacity-100 transition ease-in duration-300">
             <div className="absolute w-full bg-gray-800 h-full opacity-80"></div>
@@ -88,7 +122,7 @@ export class Poster extends Component {
               id="poster"
               name="poster"
               accept="image/*"
-              onChange={this.posterSelected}
+              onChange={this.onFileSelect}
               ref={this.fileUploadRef}
             ></input>
           </div>
