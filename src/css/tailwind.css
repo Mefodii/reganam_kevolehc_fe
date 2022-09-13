@@ -9,10 +9,6 @@
   }
 }
 
-.drop-down {
-  @apply absolute;
-}
-
 .default-theme {
   --theme-1: #1f2937;
   --theme-1RGB: 31, 41, 55;

@@ -81,6 +81,7 @@ export class GroupItem extends Component {
               src={poster.image}
               alt="Placeholder"
               className="w-full absolute rounded-lg -top-220 right-0"
+              draggable="false"
             />
           </div>
         )}

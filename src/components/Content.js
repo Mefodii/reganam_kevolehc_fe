@@ -11,6 +11,7 @@ import GameioDashboard from "./gaming/Dashboard";
 import ReadioDashboard from "./reading/Dashboard";
 import ContentioDashboard from "./contenting/Dashboard";
 import AudioDashboard from "./listening/Dashboard";
+import HelpersDashboard from "./helpers/Dashboard";
 
 import Movies from "./watching/movies/Movies";
 import Serials from "./watching/serials/Serials";
@@ -25,8 +26,11 @@ import {
   READIO_URL,
   SERIALS_URL,
   WATCHIO_URL,
+  HELPERS_URL,
 } from "../util/frontend-urls";
 import ModalSwitcher from "./modals/ModalSwitcher";
+
+// TODO Lazy loading - https://www.robinwieruch.de/react-router-lazy-loading/
 
 class Content extends Component {
   static propTypes = {
@@ -72,6 +76,9 @@ class Content extends Component {
             </Route>
             <Route exact path={AUDIO_URL}>
               <AudioDashboard />
+            </Route>
+            <Route exact path={HELPERS_URL}>
+              <HelpersDashboard />
             </Route>
           </Switch>
         </div>

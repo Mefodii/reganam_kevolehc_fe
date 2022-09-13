@@ -8,6 +8,7 @@ export const MOVIES_BACKGROUND =
 export const SERIALS_BACKGROUND =
   window.location.origin + "/static/icons/serials-background.avif";
 
+export const HELPERS_URL = "/helpers";
 export const WATCHIO_URL = "/watchio";
 export const GAMEIO_URL = "/gameio";
 export const READIO_URL = "/readio";

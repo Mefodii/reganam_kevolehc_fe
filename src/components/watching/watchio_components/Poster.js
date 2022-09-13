@@ -87,7 +87,6 @@ export class Poster extends Component {
 
     const { disabled } = this.props;
     const { dragOver } = this.state;
-    console.log(dragOver);
 
     return (
       <div
@@ -131,6 +130,7 @@ export class Poster extends Component {
           src={imgPath}
           alt="Placeholder"
           className="shadow-sm rounded-lg object-center w-60"
+          draggable="false"
         />
       </div>
     );
