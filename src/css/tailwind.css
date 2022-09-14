@@ -9,6 +9,13 @@
   }
 }
 
+html,
+body,
+#root {
+  min-height: 100% !important;
+  height: 100%;
+}
+
 .default-theme {
   --theme-1: #1f2937;
   --theme-1RGB: 31, 41, 55;
@@ -189,7 +196,7 @@
 }
 
 .nav-link {
-  @apply hover:text-active-1 hover:bg-theme-3;
+  @apply hover:bg-theme-3 ease-in duration-150;
 }
 
 /* TODO: group-hover + opacity should be other class */

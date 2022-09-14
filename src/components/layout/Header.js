@@ -34,7 +34,7 @@ class Header extends Component {
 
     return (
       <nav
-        className={`${theme} text-gray-200 shadow-md bg-theme-1 sticky top-0 z-20`}
+        className={`${theme} shadow-md bg-theme-1 border-b-2 border-theme-3 sticky top-0 z-20`}
       >
         <div className="flex p-2 items-center text-lg justify-between">
           <div className="flex">

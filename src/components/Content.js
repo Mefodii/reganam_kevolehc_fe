@@ -44,7 +44,7 @@ class Content extends Component {
     return (
       <Router>
         <div
-          className={`${this.props.theme} text-text-1 bg-gradient-to-t from-theme-2 to-theme-3 min-h-screen`}
+          className={`${this.props.theme} text-text-1 bg-gradient-to-t from-theme-2 to-theme-3 min-h-full flex flex-col`}
         >
           <ModalSwitcher />
           <ThemeChanger />
