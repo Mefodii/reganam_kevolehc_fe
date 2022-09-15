@@ -13,15 +13,19 @@ export class Textarea extends Component {
     name: PropTypes.string.isRequired,
     value: PropTypes.string,
     maxLength: PropTypes.number,
+    rows: PropTypes.number,
     onChange: PropTypes.func.isRequired,
     onKeyDown: PropTypes.func,
     autoComplete: PropTypes.string,
     disabled: PropTypes.bool,
     simple: PropTypes.bool,
+    autoSize: PropTypes.bool,
   };
 
   static defaultProps = {
     autoComplete: "off",
+    rows: 1,
+    autoSize: true,
   };
 
   textAreaRef = React.createRef();
@@ -38,11 +42,15 @@ export class Textarea extends Component {
   };
 
   autoSize = (e) => {
+    if (!this.props.autoSize) return;
+
     e.target.style.height = `inherit`;
     e.target.style.height = `${e.target.scrollHeight - 1}px`;
   };
 
   componentDidMount() {
+    if (!this.props.autoSize) return;
+
     this.textAreaRef.current.style.heigh = `inherit`;
     this.textAreaRef.current.style.height = `${
       this.textAreaRef.current.scrollHeight - 1
@@ -52,13 +60,14 @@ export class Textarea extends Component {
   renderInput() {
     return (
       <textarea
-        className={`input-text overflow-hidden resize-none
+        className={`input-text resize-none
+          ${this.props.autoSize ? "overflow-hidden" : ""}
           ${this.props.className}
           `}
         type="textarea"
         name={this.props.name}
         value={this.props.value}
-        rows="1"
+        rows={this.props.rows}
         maxLength={this.props.maxLength}
         onChange={this.onChange}
         onKeyDown={this.props.onKeyDown}
