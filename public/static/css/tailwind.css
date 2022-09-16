@@ -1285,10 +1285,6 @@ body,
   height: 0px;
 }
 
-.h-1\/2 {
-  height: 50%;
-}
-
 .min-h-full {
   min-height: 100%;
 }
@@ -1490,6 +1486,18 @@ body,
 
 .overflow-visible {
   overflow: visible;
+}
+
+.overflow-x-auto {
+  overflow-x: auto;
+}
+
+.overflow-x-clip {
+  overflow-x: clip;
+}
+
+.overflow-x-scroll {
+  overflow-x: scroll;
 }
 
 .whitespace-nowrap {

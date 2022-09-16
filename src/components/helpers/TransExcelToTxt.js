@@ -3,9 +3,12 @@ import Button from "../generic/buttons/Button";
 import Textarea from "../generic/form/Textarea";
 
 const SEPARATOR = "<SEPARATOR>";
+const UNDERLINE =
+  "________________________________________________________________________________________________________________________________________________________________";
 
 export class TransExcelToTxt extends Component {
   state = {
+    artist: "",
     excelValue: "",
     txtValue: "",
   };
@@ -19,24 +22,45 @@ export class TransExcelToTxt extends Component {
 
   transform = () => {
     const excelLines = this.state.excelValue.split("\n");
-    let txtLines = [];
+    const [name, date, ...tracks] = excelLines;
+
+    this.setState({ artist: name }, () => {
+      const year = date.slice(-4);
+      const month = date.slice(3, 5);
+      const day = date.slice(0, 2);
+
+      const txtName = `-> Name: ${name}`;
+      const txtDate = `-> Date: ${year}.${month}.${day}`;
+      const trackList = this.transformExcelLines(tracks);
+
+      const txtArray = [txtName, txtDate, UNDERLINE, ...trackList];
+      const txtValue = txtArray.reduce((val, line) => `${val}${line}\n`, "");
+      this.setState({ txtValue });
+    });
+  };
+
+  transformExcelLines = (tracks) => {
+    let trackList = [];
 
     let checked = true;
-    excelLines.forEach((line) => {
+    tracks.forEach((line) => {
       if (line === SEPARATOR) {
         checked = false;
-      } else {
-        txtLines.push(this.parseLine(line, checked));
+      }
+
+      if (line !== SEPARATOR && line.length > 0) {
+        trackList.push(this.parseTrack(line, checked));
       }
     });
 
-    const txtValue = txtLines.reduce((val, line) => `${val}${line}\n`, "");
-    this.setState({ txtValue });
+    trackList.sort((a, b) => a.slice(6).localeCompare(b.slice(6)));
+    return trackList;
   };
 
-  parseLine = (line, checked) => {
-    // TODO
-    return `${checked}-${line}`;
+  parseTrack = (line, checked) => {
+    const head = `  [${checked ? "X" : "-"}] ${this.state.artist} - ${line}`;
+    const tail = " ".repeat(119 - head.length) + "# -";
+    return `${head}${tail}`;
   };
 
   render() {
@@ -45,6 +69,7 @@ export class TransExcelToTxt extends Component {
       <div onKeyDown={this.onKeyDown}>
         <div className="form-row">
           <Textarea
+            containerClassName="w-1/2"
             label="Excel"
             rows={40}
             autoSize={false}
