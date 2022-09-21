@@ -1,6 +1,6 @@
-import { GET_WATCHIO_INFO, LOAD_COMPLETE, UPDATE_THEME } from "./types";
+import { GET_INFO, LOAD_COMPLETE, UPDATE_THEME } from "./types";
 
-import { getInfo as getInfoApi } from "../api/api";
+import { getWatchingInfo, getContentingInfo } from "../api/api";
 
 import { getThemeForUrl } from "../util/colors";
 
@@ -12,10 +12,13 @@ export const updateTheme = () => (dispatch) => {
 };
 
 export const getInfo = () => async (dispatch) => {
-  const { data: payload } = await getInfoApi();
+  const { data: watchingInfo } = await getWatchingInfo();
+  const { data: contentingInfo } = await getContentingInfo();
+
+  const payload = { ...watchingInfo, ...contentingInfo };
 
   dispatch({
-    type: GET_WATCHIO_INFO,
+    type: GET_INFO,
     payload,
   });
 

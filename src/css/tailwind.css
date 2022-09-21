@@ -219,6 +219,18 @@ body,
 .title {
   @apply text-xl uppercase font-bold mb-4 text-center;
 }
+
+.side-panel {
+  @apply sticky left-0 p-1 w-52 bg-theme-1 shadow-2xl;
+}
+
+.side-panel-el {
+  @apply p-3 cursor-pointer nav-link;
+}
+
+.side-panel-el-active {
+  @apply bg-theme-2 border-l border-active-1;
+}
 /* ___________________________________________ */
 
 @tailwind utilities;

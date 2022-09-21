@@ -5,6 +5,7 @@ import Textarea from "../generic/form/Textarea";
 const SEPARATOR = "<SEPARATOR>";
 const UNDERLINE =
   "________________________________________________________________________________________________________________________________________________________________";
+const WITH_COMMENT = false;
 
 export class TransExcelToTxt extends Component {
   state = {
@@ -59,7 +60,12 @@ export class TransExcelToTxt extends Component {
 
   parseTrack = (line, checked) => {
     const head = `  [${checked ? "X" : "-"}] ${this.state.artist} - ${line}`;
-    const tail = " ".repeat(119 - head.length) + "# -";
+    if (!WITH_COMMENT) return head;
+
+    let tail;
+    if (head.length < 119) tail = " ".repeat(119 - head.length) + "# -";
+    else tail = " # -";
+
     return `${head}${tail}`;
   };
 
