@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import InputContainer from "./InputContainer";
+import Options from "./Options";
 
 export class DropdownSelect extends Component {
   static propTypes = {
@@ -11,32 +12,49 @@ export class DropdownSelect extends Component {
     //
     className: PropTypes.string,
     optionClassName: PropTypes.string,
+    optionContainerClassName: PropTypes.string,
     name: PropTypes.string.isRequired,
     value: PropTypes.any,
     placeholder: PropTypes.string,
     options: PropTypes.array.isRequired,
     optionDisplay: PropTypes.func,
     onChange: PropTypes.func.isRequired,
+    hideOnChange: PropTypes.bool,
     disabled: PropTypes.bool,
     deselect: PropTypes.bool,
     simple: PropTypes.bool,
   };
 
-  select = (option) => (e) => {
-    e.target.name = this.props.name;
-    e.target.value = option;
-    this.onChange(e);
+  static defaultProps = {
+    className: "",
+    optionClassName: "",
+    optionContainerClassName: "",
+    containerClassName: "",
+    hideOnChange: true,
+    optionDisplay: (option) => option,
   };
 
-  deselect = () => (e) => {
-    e.target.name = this.props.name;
-    e.target.value = null;
-    this.onChange(e);
+  state = {
+    showOptions: false,
   };
 
   isSelected = () => {
     const { value, options } = this.props;
     return options.find((item) => item === value);
+  };
+
+  onOptionClick = (e, option) => {
+    if (option !== this.props.value) {
+      e.target.name = this.props.name;
+      e.target.value = option;
+      this.onChange(e);
+    }
+
+    if (option === this.props.value && this.props.deselect) {
+      e.target.name = this.props.name;
+      e.target.value = null;
+      this.onChange(e);
+    }
   };
 
   onChange = (e) => {
@@ -46,53 +64,44 @@ export class DropdownSelect extends Component {
     };
 
     this.props.onChange(e, form);
+    if (this.props.hideOnChange) this.showOptions(false);
+  };
+
+  showOptions = (showOptions) => {
+    this.setState({ showOptions });
   };
 
   renderInput = () => {
-    const {
-      optionDisplay = (option) => option,
-      disabled,
-      deselect,
-      value,
-      placeholder,
-    } = this.props;
+    const { optionDisplay, disabled, value, placeholder } = this.props;
+    const { showOptions } = this.state;
+
+    const optionsHidden = disabled || !showOptions;
     const shownValue = value ? optionDisplay(value) : placeholder;
 
     return (
-      <div className={`relative group`} ref={this.props.innerRef}>
+      <div
+        className="relative"
+        ref={this.props.innerRef}
+        onMouseEnter={() => this.showOptions(true)}
+        onMouseLeave={() => this.showOptions(false)}
+      >
         <div
           className={`option-single 
           ${this.isSelected() && "option-selected"}
-          ${this.props.disabled && "option-disabled"}
+          ${disabled && "option-disabled"}
           ${this.props.className}
           `}
         >
           {shownValue}
         </div>
-        {!disabled && (
-          <div className="option-dropdown-container">
-            {this.props.options.map((option, i) => {
-              const onClick =
-                option === value
-                  ? deselect
-                    ? this.deselect()
-                    : null
-                  : this.select(option);
-
-              return (
-                <div
-                  className={`option-dropdown-item
-                  ${this.props.optionClassName}
-                  `}
-                  key={i}
-                  onClick={onClick}
-                >
-                  {optionDisplay(option)}
-                </div>
-              );
-            })}
-          </div>
-        )}
+        <Options
+          className={this.props.optionContainerClassName}
+          optionClassName={this.props.optionClassName}
+          options={this.props.options}
+          optionDisplay={optionDisplay}
+          onClick={this.onOptionClick}
+          show={!optionsHidden}
+        />
       </div>
     );
   };

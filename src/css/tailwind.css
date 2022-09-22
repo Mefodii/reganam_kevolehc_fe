@@ -121,7 +121,8 @@ body,
 }
 
 .input-container {
-  @apply w-full pb-3 pt-7 relative px-3 border-b-2 bg-theme-3 border-theme-1;
+  @apply w-full pb-3 pt-7 relative px-3 border-b-2 bg-theme-3 border-theme-4 
+  focus-within:border-active-1/50 transition duration-150 ease-in-out;
 }
 
 .input-container-no-label {
@@ -190,9 +191,23 @@ body,
 /* ___________________________________________ */
 
 /* UNCATEGORIZED */
+.btn-base {
+  @apply relative flex focus:outline-none items-center space-x-2 py-2 px-3 font-bold 
+  transition ease-in duration-150;
+}
+
 .btn {
-  @apply text-center cursor-pointer focus:outline-none font-bold py-2 px-4 rounded border-2 
-  bg-theme-3 border-theme-1 hover:brightness-125 active:brightness-150 filter brightness-110;
+  @apply cursor-pointer p-2 text-text-1/50 border-2 border-theme-3 
+  hover:text-active-1/100 hover:bg-theme-3 active:bg-theme-4;
+}
+
+.btn-compact {
+  @apply cursor-pointer p-2 hover:text-active-1 hover:bg-theme-3;
+}
+
+.btn-compact-text {
+  @apply w-0 scale-0 group-hover:scale-100 group-hover:w-full transition-all duration-300 
+  overflow-hidden whitespace-nowrap text-left;
 }
 
 .nav-link {
@@ -201,7 +216,8 @@ body,
 
 /* TODO: group-hover + opacity should be other class */
 .wiggling-clickable {
-  @apply transform opacity-10 group-hover:opacity-100 hover:animate-wiggle cursor-pointer hover:text-active-1 transition ease-in duration-150;
+  @apply transform opacity-10 group-hover:opacity-100 hover:animate-wiggle cursor-pointer 
+  hover:text-active-1 transition ease-in duration-150;
 }
 
 .simple-clickable {
@@ -228,8 +244,21 @@ body,
   @apply p-3 cursor-pointer nav-link;
 }
 
+.side-panel-btn {
+  @apply side-panel-el box-border flex space-x-3 border border-active-1;
+}
+
 .side-panel-el-active {
   @apply bg-theme-2 border-l border-active-1;
+}
+
+.side-panel-sep {
+  @apply my-3 border-b-2 border-theme-3;
+}
+
+.tooltip {
+  @apply absolute z-30 text-text-1 text-sm font-light top-full left-1/2 -translate-x-1/2 w-max  mt-4
+  bg-theme-2 border border-text-1 px-2 py-1 cursor-default transition origin-top ease-in duration-100;
 }
 /* ___________________________________________ */
 

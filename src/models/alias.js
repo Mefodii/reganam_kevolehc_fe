@@ -5,20 +5,17 @@ class AliasModel extends BaseModel {
   static VIDEO = "VIDEO";
 
   constructor(type) {
-    super();
+    super(type);
     if (!type) console.error(`Type is required for ${this.constructor.name}`);
-    this.type = type;
   }
 
-  init = (props) => {
-    this.group = props.group ? true : false;
-  };
+  init = (props) => {};
 
   getInitialState = () => [""];
 
   getAliases = (props) => {
-    if (this.type === AliasModel.GROUP) return props.group.aliases;
-    if (this.type === AliasModel.VIDEO) return props.video.aliases;
+    if (this.isGroup()) return props.group.aliases;
+    if (this.isVideo()) return props.video.aliases;
   };
 
   toState = (props) => {
@@ -32,7 +29,7 @@ class AliasModel extends BaseModel {
   };
 
   buildState = (props) => {
-    return this.getInitialState(props);
+    return this.getInitialState();
   };
 
   toModel = (state, props) => {
@@ -65,6 +62,9 @@ class AliasModel extends BaseModel {
   addAlias = (aliases) => [...aliases, ""];
 
   deleteAlias = (aliases) => [...aliases.slice(0, -1)];
+
+  isGroup = () => this.mode === AliasModel.GROUP;
+  isVideo = () => this.mode === AliasModel.VIDEO;
 }
 
 export default AliasModel;

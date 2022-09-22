@@ -10,8 +10,8 @@ class GroupModel extends BaseModel {
   }
 
   init = (props) => {
-    this.edit = props.edit;
-    this.single = props.single;
+    if (props.edit) this.setUpdate();
+    this.setSingle(props.single);
     this.aliasModel.init(props);
   };
 
@@ -20,9 +20,9 @@ class GroupModel extends BaseModel {
     name: "",
     aliases: this.aliasModel.getInitialState(),
     airing_status: null,
-    single: this.single,
+    single: this.isSingle(),
     status: null,
-    watched_date: this.single ? getToday() : null,
+    watched_date: this.isSingle() ? getToday() : null,
     rating: 0,
     year: 0,
     check_date: getToday(),
@@ -45,7 +45,8 @@ class GroupModel extends BaseModel {
   };
 
   buildState = (props) => {
-    return this.edit ? this.toState(props) : this.getInitialState(props);
+    if (this.isUpdate()) return this.toState(props);
+    return this.getInitialState(props);
   };
 
   toModel = (state, props) => ({
@@ -90,6 +91,9 @@ class GroupModel extends BaseModel {
   addAlias = (aliases) => this.aliasModel.addAlias(aliases);
 
   deleteAlias = (aliases) => this.aliasModel.deleteAlias(aliases);
+
+  isSingle = () => this.single;
+  setSingle = (single) => (this.single = single);
 
   static setFinished = (group) => ({
     ...group,

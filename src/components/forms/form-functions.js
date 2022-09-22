@@ -8,8 +8,9 @@ export const withForm = (WrappedComponent, modelObj = new BaseModel()) => {
     state = this.model.getInitialState(this.props);
     resetState = () => this.setState(this.model.getInitialState(this.props));
     loadState = () => this.setState(this.model.toState(this.props));
-    updateState = (updatedState) => this.setState(updatedState);
-    onFieldChange = (e, field) => this.setState({ [field.name]: field.value });
+    updateState = (updatedState, cb) => this.setState(updatedState, cb);
+    onFieldChange = (e, field, cb) =>
+      this.setState({ [field.name]: field.value }, cb);
 
     setErrors = (formErrors) => this.setState({ formErrors });
 

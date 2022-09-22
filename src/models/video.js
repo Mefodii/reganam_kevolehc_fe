@@ -10,7 +10,7 @@ class VideoModel extends BaseModel {
   }
 
   init = (props) => {
-    this.edit = props.edit;
+    if (props.edit) this.setUpdate();
     this.aliasModel.init(props);
   };
 
@@ -46,7 +46,8 @@ class VideoModel extends BaseModel {
   };
 
   buildState = (props) => {
-    return this.edit ? this.toState(props) : this.getInitialState(props);
+    if (this.isUpdate()) return this.toState(props);
+    return this.getInitialState(props);
   };
 
   toModel = (state, props) => ({

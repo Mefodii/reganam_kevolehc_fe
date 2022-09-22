@@ -26,21 +26,29 @@ class Dashboard extends Component {
       <div className="flex grow">
         <div className="side-panel">
           <div
-            className="side-panel-el box-border flex space-x-3 border border-active-1"
+            className="side-panel-btn"
             onClick={() => this.props.openCreateContentWatcherModal()}
           >
             <SVGPlus className="w-5"></SVGPlus>
             <div>Add Watcher</div>
           </div>
-          <div className="my-3 border-b-2 border-theme-3"></div>
+          <div className="side-panel-sep"></div>
           <div className="side-panel-el side-panel-el-active">All Watchers</div>
           {contentWatcherSourceTypes.map((type, i) => (
             <div className="side-panel-el pl-4" key={i}>
               - {type}
             </div>
           ))}
-          <div className="side-panel-el pl-4">- Other</div>
-          <div className="my-3 border-b-2 border-theme-3"></div>
+          <div className="side-panel-sep"></div>
+          <div
+            className="side-panel-btn"
+            onClick={() => this.props.openCreateContentWatcherModal()}
+          >
+            <SVGPlus className="w-5"></SVGPlus>
+            <div>Add List</div>
+          </div>
+          <div className="side-panel-sep"></div>
+          <div className="side-panel-el pl-4">Other Lists</div>
         </div>
         <div className="py-5 px-10 bg-theme-2 w-full">{watcher}</div>
       </div>

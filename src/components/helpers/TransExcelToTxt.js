@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Button from "../generic/buttons/Button";
-import Textarea from "../generic/form/Textarea";
+import TextArea from "../generic/form/TextArea";
 
 const SEPARATOR = "<SEPARATOR>";
 const UNDERLINE =
@@ -74,7 +74,7 @@ export class TransExcelToTxt extends Component {
     return (
       <div onKeyDown={this.onKeyDown}>
         <div className="form-row">
-          <Textarea
+          <TextArea
             containerClassName="w-1/2"
             label="Excel"
             rows={40}
@@ -83,7 +83,7 @@ export class TransExcelToTxt extends Component {
             value={excelValue}
             onChange={this.onChange}
           />
-          <Textarea
+          <TextArea
             label="Text"
             name="txtValue"
             rows={40}

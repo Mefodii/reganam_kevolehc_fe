@@ -7,7 +7,7 @@ import { updateWatchioFilter } from "../../actions/itemsFilters";
 import MultiSelect from "../generic/form/MultiSelect";
 import Date from "../generic/form/Date";
 import SingleSelect from "../generic/form/SingleSelect";
-import Textarea from "../generic/form/Textarea";
+import TextArea from "../generic/form/TextArea";
 import WatchioFilterModel from "../../models/filters/watchioFilter";
 import { withForm } from "./form-functions";
 import Button from "../generic/buttons/Button";
@@ -57,7 +57,7 @@ export class FilterForm extends Component {
           <div className="title">Watchio Filters</div>
 
           <div className="form-row">
-            <Textarea
+            <TextArea
               label="Title (including aliases)"
               name="title"
               value={title}

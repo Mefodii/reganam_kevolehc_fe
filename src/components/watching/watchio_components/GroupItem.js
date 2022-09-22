@@ -75,7 +75,7 @@ export class GroupItem extends Component {
 
     return (
       <div className="watchio-element relative">
-        {poster && (
+        {poster && showPoster && (
           <div className="absolute w-full h-full opacity-10 overflow-hidden right-0 top-0 rounded-xl">
             <img
               src={poster.image}
@@ -86,13 +86,15 @@ export class GroupItem extends Component {
           </div>
         )}
         <div className="flex my-2 ">
-          <div className={`min-w-60 ${showPoster ? "" : "hidden"}`}>
-            <Poster
-              images={images}
-              groupId={id}
-              watchioType={watchioType}
-            ></Poster>
-          </div>
+          {showPoster && (
+            <div className={`min-w-60`}>
+              <Poster
+                images={images}
+                groupId={id}
+                watchioType={watchioType}
+              ></Poster>
+            </div>
+          )}
           <div className="watchio-element mx-5 z-10 h-full relative overflow-visible">
             <div className="ml-2 group">
               <div className="flex justify-between">

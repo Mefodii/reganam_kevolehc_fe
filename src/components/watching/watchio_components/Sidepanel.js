@@ -37,7 +37,7 @@ export class Sidepanel extends Component {
     return (
       <div
         className={`fixed top-64 bg-theme-3/40 border border-theme-2 rounded-3xl shadow-2xl
-        transition-all ease-in duration-300 group
+        transition-all ease-in duration-150 group
         ${!isMouseIn && "-left-5"}
         ${isMouseIn && "-left-2"}
         `}
@@ -46,10 +46,10 @@ export class Sidepanel extends Component {
       >
         <div className="divide-y-2 divide-theme-2 m-2">
           <CompactButton text="Add Group" onClick={this.openGroupModal}>
-            <SVGPlusCircle className="w-6 transition-all duration-300" />
+            <SVGPlusCircle className="w-6 transition-all duration-150" />
           </CompactButton>
           <CompactButton text="Filters" onClick={this.openWatchioFilterModal}>
-            <SVGFilter className="w-6 transition-all duration-300" />
+            <SVGFilter className="w-6 transition-all duration-150" />
           </CompactButton>
         </div>
       </div>

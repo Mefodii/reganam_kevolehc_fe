@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import InputContainer from "./InputContainer";
 
-export class Textarea extends Component {
+export class TextArea extends Component {
   static propTypes = {
     error: PropTypes.string,
     label: PropTypes.string,
@@ -93,4 +93,4 @@ export class Textarea extends Component {
   }
 }
 
-export default Textarea;
+export default TextArea;

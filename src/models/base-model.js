@@ -1,20 +1,28 @@
 class BaseModel {
+  static CREATE_MODE = "CREATE_MODE";
+  static UPDATE_MODE = "UPDATE_MODE";
+  static DELETE_MODE = "DELETE_MODE";
+
+  constructor(mode) {
+    this.mode = mode;
+  }
+
   init = (props) => {
     console.error(
-      `Function ${this.init.name} not implemented for ${this.constructor.name}`
+      `Function <init> not implemented for ${this.constructor.name}`
     );
   };
 
   getInitialState = (props) => {
     console.error(
-      `Function ${this.getInitialState.name} not implemented for ${this.constructor.name}`
+      `Function <getInitialState> not implemented for ${this.constructor.name}`
     );
     return {};
   };
 
   toState = (props) => {
     console.error(
-      `Function ${this.toState.name} not implemented for ${this.constructor.name}`
+      `Function <toState> not implemented for ${this.constructor.name}`
     );
     return {};
   };
@@ -23,14 +31,14 @@ class BaseModel {
     // This function intention is to decide which function to call getInitialState / toState
     // Depending on props received after init.
     console.error(
-      `Function ${this.buildState.name} not implemented for ${this.constructor.name}`
+      `Function <buildState> not implemented for ${this.constructor.name}`
     );
     return {};
   };
 
   toModel = (state, props) => {
     console.error(
-      `Function ${this.toModel.name} not implemented for ${this.constructor.name}`
+      `Function <toModel> not implemented for ${this.constructor.name}`
     );
     return {};
   };
@@ -41,7 +49,7 @@ class BaseModel {
     let isValid = true;
 
     console.error(
-      `Function ${this.validate.name} not implemented for ${this.constructor.name}`
+      `Function <validate> not implemented for ${this.constructor.name}`
     );
 
     return [model, isValid, error];
@@ -49,10 +57,21 @@ class BaseModel {
 
   equals = (state, props) => {
     console.error(
-      `Function ${this.equals.name} not implemented for ${this.constructor.name}`
+      `Function <equals> not implemented for ${this.constructor.name}`
     );
     return undefined;
   };
+
+  reset = () => (this.mode = undefined);
+
+  isCreate = () => this.mode === BaseModel.CREATE_MODE;
+  setCreate = () => (this.mode = BaseModel.CREATE_MODE);
+
+  isUpdate = () => this.mode === BaseModel.UPDATE_MODE;
+  setUpdate = () => (this.mode = BaseModel.UPDATE_MODE);
+
+  isDelete = () => this.mode === BaseModel.DELETE_MODE;
+  setDelete = () => (this.mode = BaseModel.DELETE_MODE);
 }
 
 export default BaseModel;

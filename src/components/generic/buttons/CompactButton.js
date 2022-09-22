@@ -1,41 +1,31 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
-import { connect } from "react-redux";
+import Btn from "./Btn";
 
 export class CompactButton extends Component {
   static propTypes = {
+    ...Btn.propTypes,
     text: PropTypes.string.isRequired,
-    onClick: PropTypes.func.isRequired,
-    className: PropTypes.string,
   };
 
   static defaultProps = {
-    className: "",
+    ...Btn.defaultProps,
   };
 
   render() {
     return (
-      <div
-        className={`p-2 cursor-pointer flex items-center space-x-2 hover:text-active-1 hover:bg-theme-3
-        ${this.props.className}
-        `}
+      <Btn
+        className={`btn-compact ${this.props.className}`}
         onClick={this.props.onClick}
+        tooltip={this.props.tooltip}
+        showTooltipDelay={this.props.showTooltipDelay}
+        loading={this.props.loading}
       >
         {this.props.children}
-        <div
-          className={`w-0 scale-0 group-hover:scale-100 group-hover:w-full transition-all duration-300 
-          overflow-hidden whitespace-nowrap text-left
-          `}
-        >
-          {this.props.text}
-        </div>
-      </div>
+        <div className={`btn-compact-text`}>{this.props.text}</div>
+      </Btn>
     );
   }
 }
 
-const mapStateToProps = (state) => ({});
-
-const mapDispatchToProps = {};
-
-export default connect(mapStateToProps, mapDispatchToProps)(CompactButton);
+export default CompactButton;

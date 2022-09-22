@@ -7,7 +7,7 @@ import { addVideo, updateVideo, deleteVideo } from "../../actions/videos";
 import SVGCheck from "../generic/svg/SVGCheck";
 import Number from "../generic/form/Number";
 import Date from "../generic/form/Date";
-import Textarea from "../generic/form/Textarea";
+import TextArea from "../generic/form/TextArea";
 import DropdownSelect from "../generic/form/DropdownSelect";
 import VideoModel from "../../models/video";
 import { withForm } from "./form-functions";
@@ -110,7 +110,7 @@ export class VideoForm extends Component {
         <div className="title">{title}</div>
 
         <div className="form-row">
-          <Textarea
+          <TextArea
             label="Name"
             name="name"
             value={name}
@@ -184,7 +184,7 @@ export class VideoForm extends Component {
 
         {aliases.map((alias, i) => {
           const aliasField = (
-            <Textarea
+            <TextArea
               label={`Alias ${i + 1}`}
               name={`Alias ${i + 1}`}
               key={i}
