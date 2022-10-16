@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 
 import { closeModal } from "../../actions/modal";
 import Modal from "./Modal";
+import ContentWatcherForm from "../forms/ContentWatcherForm";
 
 export class ContentWatcherModal extends Component {
   static propTypes = {
@@ -18,7 +19,10 @@ export class ContentWatcherModal extends Component {
   render() {
     return (
       <Modal>
-        <div>Content watcher modal</div>
+        <ContentWatcherForm
+          {...this.props}
+          onSuccess={this.props.closeModal}
+        ></ContentWatcherForm>
       </Modal>
     );
   }

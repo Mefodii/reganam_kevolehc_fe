@@ -14,7 +14,7 @@ export class VideoModal extends Component {
 
   render() {
     return (
-      <Modal className={"w-1/4"}>
+      <Modal>
         <VideoForm
           {...this.props}
           onSuccess={this.props.closeModal}

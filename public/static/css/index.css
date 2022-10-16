@@ -9,8 +9,11 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Mulish:wght@300&family=Oswald&display=swap");
 
-body {
-  background: #102a54;
+html,
+body,
+#root {
+  min-height: 100% !important;
+  height: 100%;
 }
 
 #root {
@@ -21,11 +24,40 @@ body {
   font-family: Oswald;
 }
 
-/* to remove the top and left whitespace */
-#sky {
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: inline;
-  z-index: -1;
+/* Track */
+::-webkit-scrollbar-track {
+  background: #111827;
+  border: 1px solid #172035;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #1d2942;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #233150;
+}
+
+/* Scroll bar stylings */
+::-webkit-scrollbar {
+  width: 15px;
+  height: 15px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--theme-1);
+  border: 1px solid var(--theme-2);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--theme-3);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--theme-4);
 }

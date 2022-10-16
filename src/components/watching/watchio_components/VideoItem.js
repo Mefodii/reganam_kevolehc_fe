@@ -5,22 +5,85 @@ import { connect } from "react-redux";
 import { BLANK_VALUE } from "../../../util/constants";
 import { isWatchioFinished, promptNumber } from "../../../util/functions";
 
-import { updateVideo } from "../../../actions/videos";
+import { updateVideo, addVideo } from "../../../actions/videos";
 import { openVideoModal } from "../../../actions/modal";
 
 import SVGPencil from "../../generic/svg/SVGPencil";
 import SVGCheck from "../../generic/svg/SVGCheck";
+import SVGVerticalDots from "../../generic/svg/SVGVerticalDots";
 import VideoModel from "../../../models/video";
+import VideoItemPlaceholder from "./VideoItemPlaceholder";
+
+import DragAndDrop from "../../generic/dnd/DragAndDrop";
+import { DRAG_VIDEO_ITEM } from "../../generic/dnd/dragConsts";
 
 export class VideoItem extends Component {
   static propTypes = {
     video: PropTypes.object.isRequired,
     watchioType: PropTypes.string.isRequired,
     updateVideo: PropTypes.func.isRequired,
+    addVideo: PropTypes.func.isRequired,
+    lastItem: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    lastItem: false,
   };
 
   state = {
     edit: false,
+    draggable: false,
+    dragged: false,
+    dragCopy: false,
+    dragOver: false,
+    dragOverCopy: false,
+    insertBefore: false,
+  };
+
+  onDragStart = (e, dndData) => {
+    this.setState({ dragged: true, dragCopy: dndData.copy });
+  };
+
+  onDragEnd = (e, dndData) => {
+    this.setState({ dragged: false, dragCopy: false });
+  };
+
+  onDragEnter = (e, dndData) => {
+    const { video } = this.props;
+    if (!this.isValidDragOver(dndData)) return;
+
+    const { item, copy } = dndData;
+    this.setState({
+      dragOver: true,
+      dragOverCopy: copy,
+      insertBefore: item.order > video.order,
+    });
+  };
+
+  onDragLeave = (e, dndData) => {
+    this.setState({ dragOver: false, dragOverCopy: false });
+  };
+
+  onDragOver = (e, dndData) => {};
+
+  isValidDragOver = (dndData) => {
+    const { item, type, copy } = dndData;
+    const { video } = this.props;
+
+    if (type !== DRAG_VIDEO_ITEM || item.group !== video.group) return false;
+    if (item !== video) return true;
+
+    return copy;
+  };
+
+  onDrop = (e, dndData) => {
+    if (!this.state.dragOver) return;
+    this.setState({ dragOver: false });
+
+    const { order } = this.props.video;
+    const video = { ...dndData.item, order };
+    const action = dndData.copy ? this.props.addVideo : this.props.updateVideo;
+    action(video, this.props.watchioType);
   };
 
   openEdit = () => {
@@ -45,14 +108,11 @@ export class VideoItem extends Component {
       ...VideoModel.setFinished(this.props.video),
       rating,
     };
-    this.props.updateVideo(
-      video,
-      this.props.video.group,
-      this.props.watchioType
-    );
+    this.props.updateVideo(video, this.props.watchioType);
   };
 
   render() {
+    const { dragOver, insertBefore, draggable, dragged, dragCopy } = this.state;
     const {
       name,
       comment,
@@ -66,9 +126,40 @@ export class VideoItem extends Component {
     } = this.props.video;
 
     return (
-      <div className="flex group">
-        <div className="my-2 p-2 border-2 shadow-2xl rounded-xl bg-theme-2 border-theme-3 w-full">
-          <div className="flex flex-col 2xl:flex-row">
+      <DragAndDrop
+        draggable={draggable}
+        item={this.props.video}
+        type={DRAG_VIDEO_ITEM}
+        onDragStart={this.onDragStart}
+        onDragEnd={this.onDragEnd}
+        onDragEnter={this.onDragEnter}
+        onDragLeave={this.onDragLeave}
+        onDragOver={this.onDragOver}
+        onDrop={this.onDrop}
+      >
+        <div
+          className={`flex my-2 ${
+            insertBefore ? "flex-col" : "flex-col-reverse"
+          }`}
+        >
+          <VideoItemPlaceholder
+            className={`${insertBefore ? "mb-2" : "mt-2"}`}
+            show={dragOver}
+          />
+          <div
+            className={`flex w-full group 2xl:flex-row p-2 border-2 shadow-2xl rounded-xl bg-theme-2 border-theme-3 ${
+              dragged && "border-active-1/50"
+            } ${dragged && dragCopy && "brightness-125"} ${
+              dragged && !dragCopy && "opacity-30"
+            }`}
+          >
+            <div
+              className="my-auto cursor-pointer w-3 pr-2 text-text-1/20"
+              onMouseEnter={() => this.setState({ draggable: true })}
+              onMouseLeave={() => this.setState({ draggable: false })}
+            >
+              <SVGVerticalDots className="w-1" />
+            </div>
             <div className="simple-font w-full break-all">
               <div className="text-xl font-bold">
                 {name}
@@ -123,9 +214,11 @@ export class VideoItem extends Component {
             </div>
           </div>
         </div>
-      </div>
+      </DragAndDrop>
     );
   }
 }
 
-export default connect(null, { updateVideo, openVideoModal })(VideoItem);
+export default connect(null, { updateVideo, addVideo, openVideoModal })(
+  VideoItem
+);

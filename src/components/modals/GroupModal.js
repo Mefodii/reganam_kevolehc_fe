@@ -14,7 +14,7 @@ export class GroupModal extends Component {
 
   render() {
     return (
-      <Modal className={"w-1/4"}>
+      <Modal>
         <GroupForm
           {...this.props}
           onSuccess={this.props.closeModal}

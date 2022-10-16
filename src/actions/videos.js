@@ -11,39 +11,51 @@ import {
 } from "./types";
 
 import * as api from "../api/api";
+import { addGroupLoading, deleteGroupLoading } from "./loadings";
 
 // VIDEOS ACTIONS
-export const addVideo =
-  (video, groupId, watchioType) => async (dispatch, getState) => {
-    const { data } = await api.addVideo(video);
-    const dispatchType = getDispatchType(ADD, watchioType, getState);
+export const addVideo = (video, watchioType) => async (dispatch, getState) => {
+  addGroupLoading(video.group)(dispatch);
 
-    dispatch({
-      type: dispatchType,
-      payload: { video: data, groupId },
-    });
-  };
+  const { data } = await api.addVideo(video);
+  const dispatchType = getDispatchType(ADD, watchioType, getState);
+
+  dispatch({
+    type: dispatchType,
+    payload: { group: data },
+  });
+
+  deleteGroupLoading(video.group)(dispatch);
+};
 
 export const updateVideo =
-  (video, groupId, watchioType) => async (dispatch, getState) => {
+  (video, watchioType) => async (dispatch, getState) => {
+    addGroupLoading(video.group)(dispatch);
+
     const { data } = await api.updateVideo(video);
     const dispatchType = getDispatchType(UPDATE, watchioType, getState);
 
     dispatch({
       type: dispatchType,
-      payload: { video: data, groupId },
+      payload: { group: data },
     });
+
+    deleteGroupLoading(video.group)(dispatch);
   };
 
 export const deleteVideo =
-  (id, groupId, watchioType) => async (dispatch, getState) => {
-    await api.deleteVideo(id);
+  (video, watchioType) => async (dispatch, getState) => {
+    addGroupLoading(video.group)(dispatch);
+
+    const { data } = await api.deleteVideo(video.id);
     const dispatchType = getDispatchType(DELETE, watchioType, getState);
 
     dispatch({
       type: dispatchType,
-      payload: { id, groupId },
+      payload: { group: data },
     });
+
+    deleteGroupLoading(video.group)(dispatch);
   };
 
 // ---------------------------------------------------------------------

@@ -3,27 +3,21 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import VideoItem from "./VideoItem";
-import { openVideoModal } from "../../../actions/modal";
+import LoadingOverlay from "../../generic/LoadingOverlay";
 
 export class VideoList extends Component {
   static propTypes = {
     watchioType: PropTypes.string.isRequired,
     videos: PropTypes.array.isRequired,
-    openVideoModal: PropTypes.func.isRequired,
-  };
-
-  openVideoModal = () => {
-    const { groupId, watchioType, videos } = this.props;
-    const defaultOrder = videos.length > 0 ? videos.at(-1).order + 1 : 1;
-    const edit = false;
-    this.props.openVideoModal({ watchioType, groupId, defaultOrder, edit });
+    isLoading: PropTypes.bool.isRequired,
   };
 
   render() {
-    const { watchioType, videos } = this.props;
+    const { watchioType, videos, isLoading } = this.props;
 
     return (
-      <>
+      <div className="relative">
+        <LoadingOverlay loading={isLoading} />
         {videos.map((video) => (
           <VideoItem
             video={video}
@@ -31,9 +25,18 @@ export class VideoList extends Component {
             watchioType={watchioType}
           ></VideoItem>
         ))}
-      </>
+      </div>
     );
   }
 }
 
-export default connect(null, { openVideoModal })(VideoList);
+const mapStateToProps = (state, props) => {
+  const groupId = props.videos[0]?.group ?? -1;
+  const isLoading = state.loadings.groups.includes(groupId);
+
+  return {
+    isLoading,
+  };
+};
+
+export default connect(mapStateToProps, {})(VideoList);

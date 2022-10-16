@@ -10,6 +10,9 @@ import contentItems from "./contentItems";
 import contentItemParts from "./contentItemParts";
 import itemsFilters from "./itemsFilters";
 import modal from "./modal";
+import navigation from "./navigation/navigation";
+import dragAndDrop from "./dragAndDrop";
+import loadings from "./loadings";
 
 export default combineReducers({
   info,
@@ -23,4 +26,7 @@ export default combineReducers({
   page,
   itemsFilters,
   modal,
+  navigation,
+  dndData: dragAndDrop,
+  loadings,
 });

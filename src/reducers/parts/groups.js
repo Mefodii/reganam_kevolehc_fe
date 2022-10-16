@@ -35,7 +35,7 @@ import {
 
 import { add, update, partialUpdate, del } from "../generic";
 
-import videoReducer, { VIDEOS_SORT } from "./videos";
+import { VIDEOS_SORT } from "./videos";
 import posterReducer from "./posters";
 
 import { compareByKey } from "../../util/functions";
@@ -43,11 +43,12 @@ import { compareByKey } from "../../util/functions";
 export const GROUPS_SORT = compareByKey("name", { caseSensitive: false });
 
 const get = (groups) => {
-  groups.forEach(({ videos }) => videos.sort(VIDEOS_SORT));
+  groups.forEach(({ videos }) => sortVideos(videos));
   return groups;
 };
 
-const videoAction = (action) => (group) => videoReducer(group.videos, action);
+const sortVideos = (videos) => videos.sort(VIDEOS_SORT);
+
 const posterAction = (action) => (video) => posterReducer(video.images, action);
 
 const reducer = (groups = [], action) => {
@@ -83,8 +84,8 @@ const reducer = (groups = [], action) => {
     case ADD_MOVIE_VIDEO:
     case UPDATE_MOVIE_VIDEO:
     case DELETE_MOVIE_VIDEO:
-      const id = action.payload.groupId;
-      return partialUpdate(groups, id, "videos", videoAction(action));
+      sortVideos(payload.group.videos);
+      return update(groups, payload.group).sort(GROUPS_SORT);
 
     case ADD_SERIAL_POSTER:
     case UPDATE_SERIAL_POSTER:

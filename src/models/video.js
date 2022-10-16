@@ -10,6 +10,7 @@ class VideoModel extends BaseModel {
   }
 
   init = (props) => {
+    this.reset();
     if (props.edit) this.setUpdate();
     this.aliasModel.init(props);
   };
@@ -70,6 +71,8 @@ class VideoModel extends BaseModel {
     const model = this.toModel(state, props);
     const isValid = true;
     const error = {};
+
+    // TODO
 
     return [model, isValid, error];
   };

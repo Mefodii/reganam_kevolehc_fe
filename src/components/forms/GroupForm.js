@@ -184,7 +184,7 @@ export class GroupForm extends Component {
             );
 
           return (
-            <div className="form-row space-x-2" key={i}>
+            <div className="form-row space-x-2 flex-row" key={i}>
               {aliasField}
               <div className="w-10 h-full flex flex-col space-y-1 items-center">
                 <Button tooltip="Add Alias" onClick={this.addAliasField}>

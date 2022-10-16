@@ -5,7 +5,7 @@ export const GROUP_MODAL = "GROUP_MODAL";
 export const VIDEO_MODAL = "VIDEO_MODAL";
 export const WATCHIO_FILTER_MODAL = "WATCHIO_FILTER_MODAL";
 
-export const openCreateContentWatcherModal = (data) => (dispatch) => {
+export const openContentWatcherModal = (data) => (dispatch) => {
   openModal(CREATE_CONTENT_WATCHER_MODAL, data)(dispatch);
 };
 

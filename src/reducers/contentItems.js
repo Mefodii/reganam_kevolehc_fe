@@ -12,7 +12,7 @@ const reducer = (contentItems = [], action) => {
 
   switch (type) {
     case GET_CONTENT_ITEMS:
-      return contentItems;
+      return payload.contentItems;
     case ADD_CONTENT_ITEM:
       return add(contentItems, payload.contentItem);
     case UPDATE_CONTENT_ITEM:

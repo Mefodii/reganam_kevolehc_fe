@@ -39,3 +39,14 @@ export const promptNumber = (text) => {
 };
 
 export const isWatchioFinished = (status) => status === WATCHIO_STATUS_FINISHED;
+
+export const filterComponentProps = (componentPropTypes, props) => {
+  const keys = Object.keys(componentPropTypes);
+
+  let newProps = {};
+  keys.forEach((key) => {
+    if (props[key] !== undefined) newProps[key] = props[key];
+  });
+
+  return newProps;
+};

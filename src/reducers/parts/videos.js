@@ -16,6 +16,7 @@ import { compareByKey } from "../../util/functions";
 
 export const VIDEOS_SORT = compareByKey("order");
 
+// NOTE: not used anymore, now group complete updated data is returned after any video action
 const reducer = (videos = [], action) => {
   const { type, payload } = action;
 

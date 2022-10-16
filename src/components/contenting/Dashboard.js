@@ -2,66 +2,45 @@ import { connect } from "react-redux";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-import { openCreateContentWatcherModal } from "../../actions/modal";
-import SVGPlus from "../generic/svg/SVGPlus";
+import Sidepanel from "./Sidepanel";
+import { getContentWatchers } from "../../actions/contentWatchers";
+import { getContentLists } from "../../actions/contentLists";
 
 class Dashboard extends Component {
   static propTypes = {
-    contentWatcherSourceTypes: PropTypes.array.isRequired,
-    openCreateContentWatcherModal: PropTypes.func.isRequired,
+    contentWatchers: PropTypes.array.isRequired,
+    contentLists: PropTypes.array.isRequired,
+    getContentWatchers: PropTypes.func.isRequired,
+    getContentLists: PropTypes.func.isRequired,
   };
 
-  state = {
-    watcher: undefined,
-  };
-
-  setWatcher = (watcher) => {
-    this.setState({ watcher });
-  };
+  componentDidMount() {
+    this.props.getContentWatchers();
+    this.props.getContentLists();
+  }
 
   render() {
-    const { watcher } = this.state;
-    const { contentWatcherSourceTypes } = this.props;
     return (
       <div className="flex grow">
-        <div className="side-panel">
-          <div
-            className="side-panel-btn"
-            onClick={() => this.props.openCreateContentWatcherModal()}
-          >
-            <SVGPlus className="w-5"></SVGPlus>
-            <div>Add Watcher</div>
-          </div>
-          <div className="side-panel-sep"></div>
-          <div className="side-panel-el side-panel-el-active">All Watchers</div>
-          {contentWatcherSourceTypes.map((type, i) => (
-            <div className="side-panel-el pl-4" key={i}>
-              - {type}
-            </div>
+        <Sidepanel />
+        <div className="py-5 px-10 bg-theme-2 w-full">
+          {this.props.contentWatchers.map((_, i) => (
+            <div key={i}>{JSON.stringify(_)}</div>
           ))}
-          <div className="side-panel-sep"></div>
-          <div
-            className="side-panel-btn"
-            onClick={() => this.props.openCreateContentWatcherModal()}
-          >
-            <SVGPlus className="w-5"></SVGPlus>
-            <div>Add List</div>
-          </div>
-          <div className="side-panel-sep"></div>
-          <div className="side-panel-el pl-4">Other Lists</div>
+          {this.props.contentLists.map((_, i) => (
+            <div key={i}>{JSON.stringify(_)}</div>
+          ))}
         </div>
-        <div className="py-5 px-10 bg-theme-2 w-full">{watcher}</div>
       </div>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
-  contentWatcherSourceTypes: state.info.contentWatcherSourceTypes,
+  contentWatchers: state.contentWatchers,
+  contentLists: state.contentLists,
 });
 
-const mapDispatchToProps = {
-  openCreateContentWatcherModal,
-};
+const mapDispatchToProps = { getContentWatchers, getContentLists };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

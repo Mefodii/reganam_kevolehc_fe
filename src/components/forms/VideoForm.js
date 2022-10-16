@@ -66,27 +66,24 @@ export class VideoForm extends Component {
   };
 
   addVideo = () => {
-    const { watchioType, groupId, validateForm, addVideo, onSuccess } =
-      this.props;
+    const { watchioType, validateForm, addVideo, onSuccess } = this.props;
     const [video, isValid, equals] = validateForm();
     if (!isValid || equals) return;
 
-    addVideo(video, groupId, watchioType).then(onSuccess);
+    addVideo(video, watchioType).then(onSuccess);
   };
 
   saveChanges = () => {
-    const { watchioType, groupId, validateForm, updateVideo, onSuccess } =
-      this.props;
+    const { watchioType, validateForm, updateVideo, onSuccess } = this.props;
     const [video, isValid, equals] = validateForm();
     if (!isValid || equals) return;
 
-    updateVideo(video, groupId, watchioType).then(onSuccess);
+    updateVideo(video, watchioType).then(onSuccess);
   };
 
   deleteVideo = () => {
-    const { deleteVideo, onSuccess, watchioType } = this.props;
-    const { id, group } = this.props.video;
-    deleteVideo(id, group, watchioType).then(onSuccess);
+    const { deleteVideo, onSuccess, watchioType, video } = this.props;
+    deleteVideo(video, watchioType).then(onSuccess);
   };
 
   render() {
@@ -201,7 +198,7 @@ export class VideoForm extends Component {
             );
 
           return (
-            <div className="form-row space-x-2" key={i}>
+            <div className="form-row space-x-2 flex-row" key={i}>
               {aliasField}
               <div className="w-10 h-full flex flex-col space-y-1 items-center">
                 <Button tooltip="Add Alias" onClick={this.addAliasField}>

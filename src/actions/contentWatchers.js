@@ -3,6 +3,7 @@ import {
   ADD_CONTENT_WATCHER,
   UPDATE_CONTENT_WATCHER,
   DELETE_CONTENT_WATCHER,
+  ADD_CONTENT_LIST,
 } from "./types";
 
 import {
@@ -10,21 +11,35 @@ import {
   addContentWatcher as addContentWatcherApi,
   updateContentWatcher as updateContentWatcherApi,
   deleteContentWatcher as deleteContentWatcherApi,
+  addContentList,
 } from "../api/api";
 
 // CONTENT LISTS ACTIONS
 export const getContentWatchers = () => async (dispatch, getState) => {
-  const { data: payload } = await getContentWatchersApi();
+  const { data } = await getContentWatchersApi();
 
   dispatch({
     type: GET_CONTENT_WATCHERS,
-    payload,
+    payload: { contentWatchers: data },
   });
 };
 
 export const addContentWatcher =
   (contentWatcher) => async (dispatch, getState) => {
-    const { data } = await addContentWatcherApi(contentWatcher);
+    const { data: contentList } = await addContentList({
+      name: contentWatcher.name,
+    });
+    const { data } = await addContentWatcherApi({
+      ...contentWatcher,
+      content_list: contentList.id,
+    });
+
+    dispatch({
+      type: ADD_CONTENT_LIST,
+      payload: {
+        contentList: { ...contentList, content_watcher: data.id },
+      },
+    });
 
     dispatch({
       type: ADD_CONTENT_WATCHER,

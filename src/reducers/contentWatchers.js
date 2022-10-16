@@ -12,7 +12,7 @@ const reducer = (contentWatchers = [], action) => {
 
   switch (type) {
     case GET_CONTENT_WATCHERS:
-      return contentWatchers;
+      return payload.contentWatchers;
     case ADD_CONTENT_WATCHER:
       return add(contentWatchers, payload.contentWatcher);
     case UPDATE_CONTENT_WATCHER:

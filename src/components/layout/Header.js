@@ -16,8 +16,6 @@ import SVGDownArrow from "../generic/svg/SVGDownArrow";
 class Header extends Component {
   state = {
     showDropDown: false,
-    theme: "",
-    url: "",
   };
 
   showDropDown = (e) => {
@@ -29,12 +27,12 @@ class Header extends Component {
   };
 
   render() {
-    const { theme, showDropDown } = this.state;
+    const { showDropDown } = this.state;
     const dropDownVisibility = showDropDown ? "" : "hidden";
 
     return (
       <nav
-        className={`${theme} shadow-md bg-theme-1 border-b-2 border-theme-3 sticky top-0 z-20`}
+        className={`shadow-md bg-theme-1 border-b-2 border-theme-3 sticky top-0 z-20`}
       >
         <div className="flex p-2 items-center text-lg justify-between">
           <div className="flex">

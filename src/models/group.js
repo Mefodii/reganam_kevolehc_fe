@@ -10,6 +10,7 @@ class GroupModel extends BaseModel {
   }
 
   init = (props) => {
+    this.reset();
     if (props.edit) this.setUpdate();
     this.setSingle(props.single);
     this.aliasModel.init(props);
@@ -67,6 +68,8 @@ class GroupModel extends BaseModel {
     const model = this.toModel(state, props);
     const isValid = true;
     const error = {};
+
+    // TODO
 
     return [model, isValid, error];
   };

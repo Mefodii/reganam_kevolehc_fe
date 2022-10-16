@@ -24,9 +24,7 @@ export class Modal extends Component {
     return (
       <div className="modal">
         <div className="modal-bg" onClick={this.closeModal}></div>
-        <div
-          className={`modal-card relative ${className} ${data?.cardClassName}`}
-        >
+        <div className={`modal-card ${className} ${data?.cardClassName}`}>
           <div
             className="absolute bg-theme-1 rounded-full -right-3 -top-3"
             onClick={this.closeModal}

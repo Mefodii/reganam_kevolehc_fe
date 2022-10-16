@@ -23,15 +23,17 @@ export class GroupList extends Component {
 
     return (
       <div className="w-full">
-        <div className="w-full opacity-20 right-0 blur-sm fixed">
+        {/* TODO: background image will overlap scrollbar and it cannot be clicked. Workaround??? */}
+        <div className="w-full opacity-20 right-0 blur-sm fixed mr-4">
           <img
             src={backgroundPicture}
             alt="Placeholder"
-            className="w-full rounded-lg"
+            className="w-full mr-4 rounded-lg"
+            draggable="false"
           />
         </div>
 
-        <div className="w-full flex flex-col items-center relative overflow-hidden">
+        <div className="w-full flex flex-col items-center relative">
           <h2 className="text-xl uppercase font-bold m-4">
             Welcome to {watchioType}, fellow watcher
           </h2>

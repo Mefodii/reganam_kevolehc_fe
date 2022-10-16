@@ -14,11 +14,11 @@ import {
 
 // CONTENT LISTS ACTIONS
 export const getContentItems = () => async (dispatch, getState) => {
-  const { data: payload } = await getContentItemsApi();
+  const { data } = await getContentItemsApi();
 
   dispatch({
     type: GET_CONTENT_ITEMS,
-    payload,
+    payload: { contentItems: data },
   });
 };
 
