@@ -109,7 +109,7 @@
 
 /* FORM */
 .form-row {
-  @apply w-full flex flex-col 2xl:flex-row justify-between 2xl:space-x-3;
+  @apply w-full flex flex-col 2xl:flex-row justify-between 2xl:space-x-1;
 }
 
 .form-column {
