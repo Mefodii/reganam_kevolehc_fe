@@ -10,7 +10,7 @@ import Date from "../generic/form/Date";
 import TextArea from "../generic/form/TextArea";
 import DropdownSelect from "../generic/form/DropdownSelect";
 import VideoModel from "../../models/video";
-import { withForm } from "./form-functions";
+import { withForm, withFormExtraPropTypes } from "./withFormHOC";
 import SVGTrash from "../generic/svg/SVGTrash";
 import Text from "../generic/form/Text";
 import Button from "../generic/buttons/Button";
@@ -28,15 +28,7 @@ export class VideoForm extends Component {
     updateVideo: PropTypes.func.isRequired,
     deleteVideo: PropTypes.func.isRequired,
     onSuccess: PropTypes.func,
-    // Form props
-    formState: PropTypes.object.isRequired,
-    resetFormState: PropTypes.func.isRequired,
-    loadFormState: PropTypes.func.isRequired,
-    updateFormState: PropTypes.func.isRequired,
-    onFieldChange: PropTypes.func.isRequired,
-    validateForm: PropTypes.func.isRequired,
-    hasFormChanged: PropTypes.func.isRequired,
-    model: PropTypes.object.isRequired,
+    ...withFormExtraPropTypes,
   };
 
   static defaultProps = {

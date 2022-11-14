@@ -9,7 +9,7 @@ import Date from "../generic/form/Date";
 import SingleSelect from "../generic/form/SingleSelect";
 import TextArea from "../generic/form/TextArea";
 import WatchioFilterModel from "../../models/filters/watchioFilter";
-import { withForm } from "./form-functions";
+import { withForm, withFormExtraPropTypes } from "./withFormHOC";
 import Button from "../generic/buttons/Button";
 import SVGCheck from "../generic/svg/SVGCheck";
 
@@ -18,15 +18,7 @@ export class FilterForm extends Component {
     watchioFilter: PropTypes.object.isRequired,
     updateWatchioFilter: PropTypes.func.isRequired,
     onSuccess: PropTypes.func,
-    // Form props
-    formState: PropTypes.object.isRequired,
-    resetFormState: PropTypes.func.isRequired,
-    loadFormState: PropTypes.func.isRequired,
-    updateFormState: PropTypes.func.isRequired,
-    onFieldChange: PropTypes.func.isRequired,
-    validateForm: PropTypes.func.isRequired,
-    hasFormChanged: PropTypes.func.isRequired,
-    model: PropTypes.object.isRequired,
+    ...withFormExtraPropTypes,
   };
 
   static defaultProps = {

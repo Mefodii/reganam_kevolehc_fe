@@ -12,7 +12,7 @@ import Number from "../generic/form/Number";
 import Date from "../generic/form/Date";
 import DropdownSelect from "../generic/form/DropdownSelect";
 import ContentWatcherModel from "../../models/contentWatcher";
-import { withForm } from "./form-functions";
+import { withForm, withFormExtraPropTypes } from "./withFormHOC";
 import Button from "../generic/buttons/Button";
 import SVGCheck from "../generic/svg/SVGCheck";
 import SVGTrash from "../generic/svg/SVGTrash";
@@ -30,15 +30,7 @@ export class ContentWatcherForm extends Component {
     addContentWatcher: PropTypes.func.isRequired,
     updateContentWatcher: PropTypes.func.isRequired,
     deleteContentWatcher: PropTypes.func.isRequired,
-    // Form props
-    formState: PropTypes.object.isRequired,
-    resetFormState: PropTypes.func.isRequired,
-    loadFormState: PropTypes.func.isRequired,
-    updateFormState: PropTypes.func.isRequired,
-    onFieldChange: PropTypes.func.isRequired,
-    validateForm: PropTypes.func.isRequired,
-    hasFormChanged: PropTypes.func.isRequired,
-    model: PropTypes.object.isRequired,
+    ...withFormExtraPropTypes,
   };
 
   static defaultProps = {

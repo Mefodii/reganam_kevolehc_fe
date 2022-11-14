@@ -1,4 +1,6 @@
 import React from "react";
+import PropTypes from "prop-types";
+
 import BaseModel from "../../models/base-model";
 
 export const withForm = (WrappedComponent, modelObj = new BaseModel()) => {
@@ -49,4 +51,15 @@ export const withForm = (WrappedComponent, modelObj = new BaseModel()) => {
       );
     }
   };
+};
+
+export const withFormExtraPropTypes = {
+  resetFormState: PropTypes.func.isRequired,
+  loadFormState: PropTypes.func.isRequired,
+  updateFormState: PropTypes.func.isRequired,
+  onFieldChange: PropTypes.func.isRequired,
+  validateForm: PropTypes.func.isRequired,
+  hasFormChanged: PropTypes.func.isRequired,
+  formState: PropTypes.object.isRequired,
+  model: PropTypes.object.isRequired,
 };

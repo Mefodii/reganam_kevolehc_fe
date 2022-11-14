@@ -9,7 +9,7 @@ import Date from "../generic/form/Date";
 import TextArea from "../generic/form/TextArea";
 import DropdownSelect from "../generic/form/DropdownSelect";
 import GroupModel from "../../models/group";
-import { withForm } from "./form-functions";
+import { withForm, withFormExtraPropTypes } from "./withFormHOC";
 import Button from "../generic/buttons/Button";
 import SVGCheck from "../generic/svg/SVGCheck";
 import SVGTrash from "../generic/svg/SVGTrash";
@@ -28,15 +28,7 @@ export class GroupForm extends Component {
     addGroup: PropTypes.func.isRequired,
     updateGroup: PropTypes.func.isRequired,
     deleteGroup: PropTypes.func.isRequired,
-    // Form props
-    formState: PropTypes.object.isRequired,
-    resetFormState: PropTypes.func.isRequired,
-    loadFormState: PropTypes.func.isRequired,
-    updateFormState: PropTypes.func.isRequired,
-    onFieldChange: PropTypes.func.isRequired,
-    validateForm: PropTypes.func.isRequired,
-    hasFormChanged: PropTypes.func.isRequired,
-    model: PropTypes.object.isRequired,
+    ...withFormExtraPropTypes,
   };
 
   static defaultProps = {
