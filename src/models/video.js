@@ -2,11 +2,13 @@ import { WATCHIO_STATUS_FINISHED } from "../util/constants";
 import { getToday } from "../util/functions";
 import AliasModel from "./alias";
 import BaseModel from "./base-model";
+import LinkModel from "./link";
 
 class VideoModel extends BaseModel {
   constructor() {
     super();
     this.aliasModel = new AliasModel(AliasModel.VIDEO);
+    this.linkModel = new LinkModel(LinkModel.VIDEO);
   }
 
   init = (props) => {
@@ -20,6 +22,7 @@ class VideoModel extends BaseModel {
     name: "",
     comment: "",
     aliases: this.aliasModel.getInitialState(),
+    links: this.linkModel.getInitialState(),
     status: null,
     watched_date: getToday(),
     year: 0,
@@ -36,6 +39,7 @@ class VideoModel extends BaseModel {
       name: video.name,
       comment: video.comment,
       aliases: this.aliasModel.toState(props),
+      links: this.linkModel.toState(props),
       year: video.year,
       status: video.status,
       order: video.order,
@@ -58,6 +62,7 @@ class VideoModel extends BaseModel {
     name: state.name,
     comment: state.comment,
     aliases: this.aliasModel.toModel(state, props),
+    links: this.linkModel.toModel(state, props),
     year: state.year,
     status: state.status,
     watched_date: state.watched_date,
@@ -91,13 +96,16 @@ class VideoModel extends BaseModel {
     if (o1?.episodes !== o2?.episodes) return false;
     if (o1?.rating !== o2?.rating) return false;
     if (!this.aliasModel.equals(state, props)) return false;
+    if (!this.linkModel.equals(state, props)) return false;
 
     return true;
   };
 
   addAlias = (aliases) => this.aliasModel.addAlias(aliases);
-
   deleteAlias = (aliases) => this.aliasModel.deleteAlias(aliases);
+
+  addLink = (links) => this.linkModel.addLink(links);
+  deleteLink = (links) => this.linkModel.deleteLink(links);
 
   static setFinished = (video) => ({
     ...video,

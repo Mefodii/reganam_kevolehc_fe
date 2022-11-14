@@ -63,6 +63,24 @@ export class GroupForm extends Component {
     });
   };
 
+  onChangeLink = (i) => (e, field) => {
+    const newLinks = [...this.props.formState.links];
+    newLinks[i] = field.value;
+    this.props.updateFormState({ links: newLinks });
+  };
+
+  addLinkField = () =>
+    this.props.updateFormState({
+      links: this.props.model.addLink(this.props.formState.links),
+    });
+
+  removeLinkField = () => {
+    if (this.props.formState.links.length === 1) return;
+    this.props.updateFormState({
+      links: this.props.model.deleteLink(this.props.formState.links),
+    });
+  };
+
   addGroup = () => {
     const { validateForm, addGroup, onSuccess } = this.props;
     const [group, isValid, equals] = validateForm();
@@ -146,7 +164,7 @@ export class GroupForm extends Component {
   };
 
   render() {
-    const { single, aliases, name } = this.props.formState;
+    const { single, aliases, links, name } = this.props.formState;
     const { edit, watchioType, onFieldChange } = this.props;
 
     const title = edit ? `Edit ${watchioType}` : `Add ${watchioType}`;
@@ -191,6 +209,39 @@ export class GroupForm extends Component {
                   <SVGPlus className="w-3 transition-all duration-300" />
                 </Button>
                 <Button tooltip="Remove Alias" onClick={this.removeAliasField}>
+                  <SVGMinus className="w-3 transition-all duration-300" />
+                </Button>
+              </div>
+            </div>
+          );
+        })}
+
+        {links.map((link, i) => {
+          const linkField = (
+            <TextArea
+              label={`Link ${i + 1}`}
+              name={`Link ${i + 1}`}
+              key={i}
+              value={link}
+              onChange={this.onChangeLink(i)}
+            />
+          );
+
+          if (i > 0)
+            return (
+              <div className="form-row" key={i}>
+                {linkField}
+              </div>
+            );
+
+          return (
+            <div className="form-row space-x-2 flex-row" key={i}>
+              {linkField}
+              <div className="w-10 h-full flex flex-col space-y-1 items-center">
+                <Button tooltip="Add Link" onClick={this.addLinkField}>
+                  <SVGPlus className="w-3 transition-all duration-300" />
+                </Button>
+                <Button tooltip="Remove Link" onClick={this.removeLinkField}>
                   <SVGMinus className="w-3 transition-all duration-300" />
                 </Button>
               </div>

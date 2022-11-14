@@ -16,6 +16,7 @@ import VideoItemPlaceholder from "./VideoItemPlaceholder";
 
 import DragAndDrop from "../../generic/dnd/DragAndDrop";
 import { DRAG_VIDEO_ITEM } from "../../generic/dnd/dragConsts";
+import Links from "./Links";
 
 export class VideoItem extends Component {
   static propTypes = {
@@ -117,6 +118,7 @@ export class VideoItem extends Component {
       name,
       comment,
       aliases,
+      links,
       status,
       watched_date,
       year,
@@ -167,6 +169,9 @@ export class VideoItem extends Component {
                   <div className="inline ml-2 opacity-60">[{comment}]</div>
                 )}
               </div>
+
+              <Links links={links} />
+
               {aliases.length > 0 && (
                 <div className="mt-3">
                   <div className="text-xs">Alias:</div>

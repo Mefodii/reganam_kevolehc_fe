@@ -13,6 +13,7 @@ import { isWatchioFinished, promptNumber } from "../../../util/functions";
 import { openGroupModal, openVideoModal } from "../../../actions/modal";
 import GroupModel from "../../../models/group";
 import SVGPlus from "../../generic/svg/SVGPlus";
+import Links from "./Links";
 
 export class GroupItem extends Component {
   static propTypes = {
@@ -60,6 +61,7 @@ export class GroupItem extends Component {
       id,
       name,
       aliases,
+      links,
       check_date,
       airing_status,
       status,
@@ -100,6 +102,9 @@ export class GroupItem extends Component {
               <div className="flex justify-between">
                 <div className="simple-font w-full break-all">
                   <div className="text-3xl font-bold">{name}</div>
+
+                  <Links links={links} />
+
                   {aliases.length > 0 && (
                     <div className="mt-3">
                       <div className="text-xs">Alias:</div>

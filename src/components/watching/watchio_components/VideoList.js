@@ -16,6 +16,7 @@ export class VideoList extends Component {
     const { watchioType, videos, isLoading } = this.props;
 
     return (
+      // TODO: withLoadingOverlay -> (props, isLoading)
       <div className="relative">
         <LoadingOverlay loading={isLoading} />
         {videos.map((video) => (

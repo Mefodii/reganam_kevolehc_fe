@@ -2,11 +2,13 @@ import { WATCHIO_STATUS_FINISHED } from "../util/constants";
 import { getToday } from "../util/functions";
 import AliasModel from "./alias";
 import BaseModel from "./base-model";
+import LinkModel from "./link";
 
 class GroupModel extends BaseModel {
   constructor() {
     super();
     this.aliasModel = new AliasModel(AliasModel.GROUP);
+    this.linkModel = new LinkModel(LinkModel.GROUP);
   }
 
   init = (props) => {
@@ -14,12 +16,14 @@ class GroupModel extends BaseModel {
     if (props.edit) this.setUpdate();
     this.setSingle(props.single);
     this.aliasModel.init(props);
+    this.linkModel.init(props);
   };
 
   getInitialState = (props) => ({
     id: null,
     name: "",
     aliases: this.aliasModel.getInitialState(),
+    links: this.linkModel.getInitialState(),
     airing_status: null,
     single: this.isSingle(),
     status: null,
@@ -35,6 +39,7 @@ class GroupModel extends BaseModel {
       id: group.id,
       name: group.name,
       aliases: this.aliasModel.toState(props),
+      links: this.linkModel.toState(props),
       check_date: group.check_date,
       airing_status: group.airing_status,
       single: group.single,
@@ -55,6 +60,7 @@ class GroupModel extends BaseModel {
     type: props.watchioType,
     name: state.name,
     aliases: this.aliasModel.toModel(state, props),
+    links: this.linkModel.toModel(state, props),
     check_date: state.check_date,
     airing_status: state.airing_status,
     single: state.single,
@@ -87,13 +93,16 @@ class GroupModel extends BaseModel {
     if (o1?.year !== o2?.year) return false;
     if (o1?.rating !== o2?.rating) return false;
     if (!this.aliasModel.equals(state, props)) return false;
+    if (!this.linkModel.equals(state, props)) return false;
 
     return true;
   };
 
   addAlias = (aliases) => this.aliasModel.addAlias(aliases);
-
   deleteAlias = (aliases) => this.aliasModel.deleteAlias(aliases);
+
+  addLink = (links) => this.linkModel.addLink(links);
+  deleteLink = (links) => this.linkModel.deleteLink(links);
 
   isSingle = () => this.single;
   setSingle = (single) => (this.single = single);

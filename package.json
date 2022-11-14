@@ -26,6 +26,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start-prod": "serve -s build",
     "build-css": "tailwindcss -i ./src/css/tailwind.css -o ./public/static/css/tailwind.css --watch",
     "build": "react-scripts build",
     "test": "react-scripts test",
