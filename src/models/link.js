@@ -63,7 +63,10 @@ class LinkModel extends BaseModel {
 
   addLink = (links) => [...links, ""];
 
-  deleteLink = (links) => [...links.slice(0, -1)];
+  deleteLink = (links) => {
+    if (links.length <= 1) return links;
+    return [...links.slice(0, -1)];
+  };
 
   isGroup = () => this.mode === LinkModel.GROUP;
   isVideo = () => this.mode === LinkModel.VIDEO;

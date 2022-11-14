@@ -13,8 +13,7 @@ import { withForm } from "./form-functions";
 import Button from "../generic/buttons/Button";
 import SVGCheck from "../generic/svg/SVGCheck";
 import SVGTrash from "../generic/svg/SVGTrash";
-import SVGPlus from "../generic/svg/SVGPlus";
-import SVGMinus from "../generic/svg/SVGMinus";
+import TextAreaArray from "../generic/form/TextAreaArray";
 
 export class GroupForm extends Component {
   static propTypes = {
@@ -43,42 +42,6 @@ export class GroupForm extends Component {
   static defaultProps = {
     group: {},
     onSuccess: () => {},
-  };
-
-  onChangeAlias = (i) => (e, field) => {
-    const newAliases = [...this.props.formState.aliases];
-    newAliases[i] = field.value;
-    this.props.updateFormState({ aliases: newAliases });
-  };
-
-  addAliasField = () =>
-    this.props.updateFormState({
-      aliases: this.props.model.addAlias(this.props.formState.aliases),
-    });
-
-  removeAliasField = () => {
-    if (this.props.formState.aliases.length === 1) return;
-    this.props.updateFormState({
-      aliases: this.props.model.deleteAlias(this.props.formState.aliases),
-    });
-  };
-
-  onChangeLink = (i) => (e, field) => {
-    const newLinks = [...this.props.formState.links];
-    newLinks[i] = field.value;
-    this.props.updateFormState({ links: newLinks });
-  };
-
-  addLinkField = () =>
-    this.props.updateFormState({
-      links: this.props.model.addLink(this.props.formState.links),
-    });
-
-  removeLinkField = () => {
-    if (this.props.formState.links.length === 1) return;
-    this.props.updateFormState({
-      links: this.props.model.deleteLink(this.props.formState.links),
-    });
   };
 
   addGroup = () => {
@@ -183,71 +146,23 @@ export class GroupForm extends Component {
 
         {single ? this.renderSingle() : this.renderNotSingle()}
 
-        {aliases.map((alias, i) => {
-          const aliasField = (
-            <TextArea
-              label={`Alias ${i + 1}`}
-              name={`Alias ${i + 1}`}
-              key={i}
-              value={alias}
-              onChange={this.onChangeAlias(i)}
-            />
-          );
+        <TextAreaArray
+          name="aliases"
+          labelItem={(item, i) => `Alias ${i + 1}`}
+          items={aliases}
+          onChange={onFieldChange}
+          addItem={this.props.model.addAlias}
+          removeItem={this.props.model.removeAlias}
+        />
 
-          if (i > 0)
-            return (
-              <div className="form-row" key={i}>
-                {aliasField}
-              </div>
-            );
-
-          return (
-            <div className="form-row space-x-2 flex-row" key={i}>
-              {aliasField}
-              <div className="w-10 h-full flex flex-col space-y-1 items-center">
-                <Button tooltip="Add Alias" onClick={this.addAliasField}>
-                  <SVGPlus className="w-3 transition-all duration-300" />
-                </Button>
-                <Button tooltip="Remove Alias" onClick={this.removeAliasField}>
-                  <SVGMinus className="w-3 transition-all duration-300" />
-                </Button>
-              </div>
-            </div>
-          );
-        })}
-
-        {links.map((link, i) => {
-          const linkField = (
-            <TextArea
-              label={`Link ${i + 1}`}
-              name={`Link ${i + 1}`}
-              key={i}
-              value={link}
-              onChange={this.onChangeLink(i)}
-            />
-          );
-
-          if (i > 0)
-            return (
-              <div className="form-row" key={i}>
-                {linkField}
-              </div>
-            );
-
-          return (
-            <div className="form-row space-x-2 flex-row" key={i}>
-              {linkField}
-              <div className="w-10 h-full flex flex-col space-y-1 items-center">
-                <Button tooltip="Add Link" onClick={this.addLinkField}>
-                  <SVGPlus className="w-3 transition-all duration-300" />
-                </Button>
-                <Button tooltip="Remove Link" onClick={this.removeLinkField}>
-                  <SVGMinus className="w-3 transition-all duration-300" />
-                </Button>
-              </div>
-            </div>
-          );
-        })}
+        <TextAreaArray
+          name="links"
+          labelItem={(item, i) => `Link ${i + 1}`}
+          items={links}
+          onChange={onFieldChange}
+          addItem={this.props.model.addLink}
+          removeItem={this.props.model.removeLink}
+        />
 
         <div className="flex">
           {!edit && (

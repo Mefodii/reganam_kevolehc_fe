@@ -63,7 +63,10 @@ class AliasModel extends BaseModel {
 
   addAlias = (aliases) => [...aliases, ""];
 
-  deleteAlias = (aliases) => [...aliases.slice(0, -1)];
+  deleteAlias = (aliases) => {
+    if (aliases.length <= 1) return aliases;
+    return [...aliases.slice(0, -1)];
+  };
 
   isGroup = () => this.mode === AliasModel.GROUP;
   isVideo = () => this.mode === AliasModel.VIDEO;
