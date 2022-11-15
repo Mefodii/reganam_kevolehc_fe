@@ -41,7 +41,9 @@ export class GroupForm extends Component {
     const [group, isValid, equals] = validateForm();
     if (!isValid || equals) return;
 
-    addGroup(group, this.props.watchioType).then(onSuccess);
+    addGroup(group, this.props.watchioType).then((resGroup) =>
+      onSuccess(true, resGroup)
+    );
   };
 
   saveChanges = () => {

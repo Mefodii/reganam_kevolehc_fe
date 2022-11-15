@@ -34,6 +34,8 @@ export const addGroup = (group, watchioType) => async (dispatch, getState) => {
     type: dispatchType,
     payload: { group: data },
   });
+
+  return data;
 };
 
 export const updateGroup =
