@@ -14,11 +14,14 @@ import Button from "../generic/buttons/Button";
 import SVGCheck from "../generic/svg/SVGCheck";
 import SVGTrash from "../generic/svg/SVGTrash";
 import TextAreaArray from "../generic/form/TextAreaArray";
+import SVGPlay from "../generic/svg/SVGPlay";
+import SVGForward from "../generic/svg/SVGForward";
 
 export class GroupForm extends Component {
   static propTypes = {
     group: PropTypes.object,
     edit: PropTypes.bool.isRequired,
+    withToggle: PropTypes.bool,
     single: PropTypes.bool.isRequired,
     watchioType: PropTypes.string.isRequired,
     statusTypes: PropTypes.array.isRequired,
@@ -34,6 +37,11 @@ export class GroupForm extends Component {
   static defaultProps = {
     group: {},
     onSuccess: () => {},
+    withToggle: false,
+  };
+
+  toggleSingle = () => {
+    this.props.updateFormState({ single: !this.props.formState.single });
   };
 
   addGroup = () => {
@@ -122,7 +130,7 @@ export class GroupForm extends Component {
 
   render() {
     const { single, aliases, links, name } = this.props.formState;
-    const { edit, watchioType, onFieldChange } = this.props;
+    const { edit, withToggle, watchioType, onFieldChange } = this.props;
 
     const title = edit ? `Edit ${watchioType}` : `Add ${watchioType}`;
     return (
@@ -158,23 +166,38 @@ export class GroupForm extends Component {
           removeItem={this.props.model.removeLink}
         />
 
-        <div className="flex">
-          {!edit && (
-            <Button tooltip="Add Group" onClick={this.addGroup}>
-              <SVGCheck className="w-6 transition-all duration-300" />
-            </Button>
-          )}
-
-          {edit && (
-            <>
-              <Button tooltip="Save Changes" onClick={this.saveChanges}>
+        <div className="flex justify-between">
+          <div>
+            {!edit && (
+              <Button tooltip="Add Group" onClick={this.addGroup}>
                 <SVGCheck className="w-6 transition-all duration-300" />
               </Button>
-              <Button tooltip="Delete Group" onClick={this.deleteGroup}>
-                <SVGTrash className="w-6 transition-all duration-300" />
+            )}
+
+            {edit && (
+              <>
+                <Button tooltip="Save Changes" onClick={this.saveChanges}>
+                  <SVGCheck className="w-6 transition-all duration-300" />
+                </Button>
+                <Button tooltip="Delete Group" onClick={this.deleteGroup}>
+                  <SVGTrash className="w-6 transition-all duration-300" />
+                </Button>
+              </>
+            )}
+          </div>
+
+          <div>
+            {withToggle && single && (
+              <Button tooltip="Single" onClick={this.toggleSingle}>
+                <SVGPlay className="w-6 transition-all duration-300" />
               </Button>
-            </>
-          )}
+            )}
+            {withToggle && !single && (
+              <Button tooltip="Series" onClick={this.toggleSingle}>
+                <SVGForward className="w-6 transition-all duration-300" />
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     );

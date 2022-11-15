@@ -24,8 +24,9 @@ export class Sidepanel extends Component {
     const watchioType = this.props.watchioType;
     const single = watchioType === this.props.movieType;
     const edit = false;
+    const withToggle = !edit && watchioType === this.props.animeType;
 
-    this.props.openGroupModal({ watchioType, single, edit });
+    this.props.openGroupModal({ watchioType, single, edit, withToggle });
   };
 
   openWatchioFilterModal = () => {
@@ -59,6 +60,7 @@ export class Sidepanel extends Component {
 
 const mapStateToProps = (state) => ({
   movieType: state.info.watchioTypes.movie,
+  animeType: state.info.watchioTypes.anime,
 });
 
 const mapDispatchToProps = { openGroupModal, openWatchioFilterModal };
