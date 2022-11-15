@@ -17,7 +17,7 @@ export class VideoList extends Component {
 
     return (
       // TODO: withLoadingOverlay -> (props, isLoading)
-      <div className="relative">
+      <div className="relative max-h-200 overflow-y-auto">
         <LoadingOverlay loading={isLoading} />
         {videos.map((video) => (
           <VideoItem
