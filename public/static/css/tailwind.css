@@ -1475,6 +1475,14 @@ video {
   max-height: 100%;
 }
 
+.max-h-240 {
+  max-height: 60rem;
+}
+
+.max-h-200 {
+  max-height: 50rem;
+}
+
 .min-h-full {
   min-height: 100%;
 }
@@ -1687,8 +1695,16 @@ video {
   overflow: visible;
 }
 
+.overflow-scroll {
+  overflow: scroll;
+}
+
 .overflow-y-auto {
   overflow-y: auto;
+}
+
+.overflow-y-scroll {
+  overflow-y: scroll;
 }
 
 .break-all {

@@ -31,8 +31,6 @@ export class TextArea extends Component {
   textAreaRef = React.createRef();
 
   onChange = (e) => {
-    this.autoSize(e);
-
     const form = {
       name: e.target.name,
       value: e.target.value,
@@ -41,20 +39,19 @@ export class TextArea extends Component {
     this.props.onChange(e, form);
   };
 
-  autoSize = (e) => {
+  autoSize = () => {
     if (!this.props.autoSize) return;
 
-    e.target.style.height = `inherit`;
-    e.target.style.height = `${e.target.scrollHeight - 1}px`;
+    this.textAreaRef.current.style.height = `inherit`;
+    this.textAreaRef.current.style.height = `${this.textAreaRef.current.scrollHeight}px`;
   };
 
-  componentDidMount() {
-    if (!this.props.autoSize) return;
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.value !== this.props.value) this.autoSize();
+  }
 
-    this.textAreaRef.current.style.heigh = `inherit`;
-    this.textAreaRef.current.style.height = `${
-      this.textAreaRef.current.scrollHeight - 1
-    }px`;
+  componentDidMount() {
+    this.autoSize();
   }
 
   renderInput() {
