@@ -10,6 +10,7 @@ import {
   updatePoster,
   deletePoster,
 } from "../../../actions/posters";
+import LoadingOverlay from "../../generic/LoadingOverlay";
 
 export class Poster extends Component {
   static propTypes = {
@@ -24,7 +25,10 @@ export class Poster extends Component {
 
   state = {
     dragOver: false,
+    isLoading: false,
   };
+
+  setLoading = (isLoading, cb) => this.setState({ isLoading }, cb);
 
   onDragEnter = (e) => {
     this.setState({ dragOver: true });
@@ -43,7 +47,8 @@ export class Poster extends Component {
       return;
     }
 
-    this.changePoster(image);
+    this.setLoading(true, () => this.changePoster(image));
+    this.setState({ dragOver: false });
   };
 
   onFileSelect = (e) => {
@@ -56,14 +61,18 @@ export class Poster extends Component {
     // Update poster
     if (newImage && oldImage) {
       const { groupId, watchioType } = this.props;
-      this.props.updatePoster(oldImage, newImage, groupId, watchioType);
+      this.props
+        .updatePoster(oldImage, newImage, groupId, watchioType)
+        .then(() => this.setLoading(false));
       return;
     }
 
     // Add poster
     if (newImage && !oldImage) {
       const { groupId, watchioType } = this.props;
-      this.props.addPoster(newImage, groupId, watchioType);
+      this.props
+        .addPoster(newImage, groupId, watchioType)
+        .then(() => this.setLoading(false));
       return;
     }
   };
@@ -86,7 +95,7 @@ export class Poster extends Component {
     var imgPath = poster ? poster.image : DEFAULT_IMAGE;
 
     const { disabled } = this.props;
-    const { dragOver } = this.state;
+    const { dragOver, isLoading } = this.state;
 
     return (
       <div
@@ -98,6 +107,7 @@ export class Poster extends Component {
         onDragLeave={this.onDragLeave}
         onDrop={this.onDrop}
       >
+        <LoadingOverlay loading={isLoading} />
         {!disabled && (
           <div className="absolute bottom-0 w-full flex justify-center transform opacity-0 group-hover:opacity-100 transition ease-in duration-300">
             <div className="absolute w-full bg-gray-800 h-full opacity-80"></div>
