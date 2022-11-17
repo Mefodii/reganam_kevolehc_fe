@@ -57,6 +57,7 @@ export class GroupItem extends Component {
 
   render() {
     const { watchioType, showPoster } = this.props;
+    const { group } = this.props;
     const {
       id,
       name,
@@ -71,7 +72,7 @@ export class GroupItem extends Component {
       year,
       rating,
       videos,
-    } = this.props.group;
+    } = group;
 
     const poster = images[0];
 
@@ -119,7 +120,11 @@ export class GroupItem extends Component {
                 <div className="flex flex-wrap 2xl:flex-nowrap px-3 justify-end text-center">
                   {single && (
                     <>
-                      <div className="w-24 m-1">
+                      <div
+                        className={`w-24 m-1 ${
+                          GroupModel.isInQueue(group) && "text-active-2"
+                        }`}
+                      >
                         <div className="text-xs">Status</div>
                         <div className="font-bold">{status}</div>
                       </div>

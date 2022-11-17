@@ -1,4 +1,8 @@
-import { WATCHIO_STATUS_FINISHED } from "./constants";
+import {
+  WATCHIO_STATUS_FINISHED,
+  WATCHIO_STATUS_PLANNED,
+  WATCHIO_STATUS_WATCHING,
+} from "./constants";
 
 /**
  * Compare 2 objects by given key
@@ -39,6 +43,8 @@ export const promptNumber = (text) => {
 };
 
 export const isWatchioFinished = (status) => status === WATCHIO_STATUS_FINISHED;
+export const isWatchioQueue = (status) =>
+  status === WATCHIO_STATUS_PLANNED || status === WATCHIO_STATUS_WATCHING;
 
 export const filterComponentProps = (componentPropTypes, props) => {
   const keys = Object.keys(componentPropTypes);

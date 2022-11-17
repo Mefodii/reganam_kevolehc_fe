@@ -114,6 +114,7 @@ export class VideoItem extends Component {
 
   render() {
     const { dragOver, insertBefore, draggable, dragged, dragCopy } = this.state;
+    const { video } = this.props;
     const {
       name,
       comment,
@@ -125,7 +126,7 @@ export class VideoItem extends Component {
       current_episode,
       episodes,
       rating,
-    } = this.props.video;
+    } = video;
 
     return (
       <DragAndDrop
@@ -184,7 +185,11 @@ export class VideoItem extends Component {
               )}
             </div>
             <div className="flex flex-wrap 2xl:flex-nowrap px-3 text-center">
-              <div className="w-24 m-1">
+              <div
+                className={`w-24 m-1 ${
+                  VideoModel.isInQueue(video) && "text-active-2"
+                }`}
+              >
                 <div className="text-xs">Status</div>
                 <div className="font-bold">{status}</div>
               </div>

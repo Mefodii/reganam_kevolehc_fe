@@ -1,5 +1,5 @@
 import { WATCHIO_STATUS_FINISHED } from "../util/constants";
-import { getToday } from "../util/functions";
+import { getToday, isWatchioQueue } from "../util/functions";
 import AliasModel from "./alias";
 import BaseModel from "./base-model";
 import LinkModel from "./link";
@@ -106,6 +106,10 @@ class GroupModel extends BaseModel {
 
   isSingle = () => this.single;
   setSingle = (single) => (this.single = single);
+
+  static isInQueue = (group) => {
+    return isWatchioQueue(group.status);
+  };
 
   static setFinished = (group) => ({
     ...group,
