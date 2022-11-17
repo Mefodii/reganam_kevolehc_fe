@@ -1,5 +1,5 @@
 import { WATCHIO_STATUS_FINISHED } from "../util/constants";
-import { getToday, isWatchioQueue } from "../util/functions";
+import { getToday, isWatchioFinished, isWatchioQueue } from "../util/functions";
 import AliasModel from "./alias";
 import BaseModel from "./base-model";
 import LinkModel from "./link";
@@ -109,6 +109,10 @@ class VideoModel extends BaseModel {
 
   static isInQueue = (video) => {
     return isWatchioQueue(video.status);
+  };
+
+  static isFinished = (video) => {
+    return isWatchioFinished(video.status);
   };
 
   static setFinished = (video) => ({

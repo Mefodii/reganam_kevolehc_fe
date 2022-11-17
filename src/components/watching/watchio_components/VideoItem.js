@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 import { BLANK_VALUE } from "../../../util/constants";
-import { isWatchioFinished, promptNumber } from "../../../util/functions";
+import { promptNumber } from "../../../util/functions";
 
 import { updateVideo, addVideo } from "../../../actions/videos";
 import { openVideoModal } from "../../../actions/modal";
@@ -216,7 +216,7 @@ export class VideoItem extends Component {
               <div onClick={this.openEdit}>
                 <SVGPencil className="w-6 wiggling-clickable"></SVGPencil>
               </div>
-              {!isWatchioFinished(status) && (
+              {!VideoModel.isFinished(video) && (
                 <div onClick={this.setFinised}>
                   <SVGCheck className="w-6 wiggling-clickable"></SVGCheck>
                 </div>

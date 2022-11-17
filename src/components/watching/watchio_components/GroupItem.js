@@ -9,7 +9,7 @@ import SVGPencil from "../../generic/svg/SVGPencil";
 import VideoList from "./VideoList";
 import SVGCheck from "../../generic/svg/SVGCheck";
 import { updateGroup } from "../../../actions/groups";
-import { isWatchioFinished, promptNumber } from "../../../util/functions";
+import { promptNumber } from "../../../util/functions";
 import { openGroupModal, openVideoModal } from "../../../actions/modal";
 import GroupModel from "../../../models/group";
 import SVGPlus from "../../generic/svg/SVGPlus";
@@ -166,7 +166,7 @@ export class GroupItem extends Component {
                   <div onClick={this.openEdit}>
                     <SVGPencil className="w-6 wiggling-clickable" />
                   </div>
-                  {!isWatchioFinished(status) && single && (
+                  {!GroupModel.isFinished(group) && single && (
                     <div onClick={this.setFinised}>
                       <SVGCheck className="w-6 wiggling-clickable" />
                     </div>
