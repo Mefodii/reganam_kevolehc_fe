@@ -167,7 +167,7 @@ export class GroupForm extends Component {
         />
 
         <div className="flex justify-between">
-          <div>
+          <div className="flex">
             {!edit && (
               <Button tooltip="Add Group" onClick={this.addGroup}>
                 <SVGCheck className="w-6 transition-all duration-300" />
