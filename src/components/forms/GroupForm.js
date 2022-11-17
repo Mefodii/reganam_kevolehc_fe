@@ -143,6 +143,8 @@ export class GroupForm extends Component {
             name="name"
             value={name}
             onChange={onFieldChange}
+            copy
+            paste
           />
         </div>
 
@@ -155,6 +157,8 @@ export class GroupForm extends Component {
           onChange={onFieldChange}
           addItem={this.props.model.addAlias}
           removeItem={this.props.model.removeAlias}
+          copy
+          paste
         />
 
         <TextAreaArray
@@ -164,6 +168,8 @@ export class GroupForm extends Component {
           onChange={onFieldChange}
           addItem={this.props.model.addLink}
           removeItem={this.props.model.removeLink}
+          copy
+          paste
         />
 
         <div className="flex justify-between">

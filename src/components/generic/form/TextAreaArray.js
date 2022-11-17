@@ -18,6 +18,8 @@ export class TextAreaArray extends Component {
     addItem: PropTypes.func,
     removeItem: PropTypes.func,
     onChange: PropTypes.func.isRequired,
+    copy: PropTypes.bool,
+    paste: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -59,8 +61,16 @@ export class TextAreaArray extends Component {
   };
 
   render() {
-    const { items, labelItem, nameItem, valueItem, className, classNameItem } =
-      this.props;
+    const {
+      items,
+      labelItem,
+      nameItem,
+      valueItem,
+      className,
+      classNameItem,
+      copy,
+      paste,
+    } = this.props;
 
     if (items.length === 0) return <></>;
 
@@ -74,6 +84,8 @@ export class TextAreaArray extends Component {
               key={i}
               value={valueItem(item, i)}
               onChange={this.onChange(item, i)}
+              copy={copy}
+              paste={paste}
             />
           );
 

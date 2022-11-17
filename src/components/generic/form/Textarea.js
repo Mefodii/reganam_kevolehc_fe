@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import InputContainer from "./InputContainer";
+import SVGClipboardDocEmpty from "../svg/SVGClipboardDocEmpty";
+import SVGClipboardDoc from "../svg/SVGClipboardDoc";
+import { getTextFromClipboard, saveToClipboard } from "../../../util/functions";
 
 export class TextArea extends Component {
   static propTypes = {
@@ -20,12 +23,16 @@ export class TextArea extends Component {
     disabled: PropTypes.bool,
     simple: PropTypes.bool,
     autoSize: PropTypes.bool,
+    copy: PropTypes.bool,
+    paste: PropTypes.bool,
   };
 
   static defaultProps = {
     autoComplete: "off",
     rows: 1,
     autoSize: true,
+    copy: false,
+    paste: false,
   };
 
   textAreaRef = React.createRef();
@@ -37,6 +44,21 @@ export class TextArea extends Component {
     };
 
     this.props.onChange(e, form);
+  };
+
+  copyToClipboard = () => {
+    saveToClipboard(this.props.value);
+  };
+
+  pasteFromClipboard = (e) => {
+    getTextFromClipboard().then((value) => {
+      const form = {
+        name: this.props.name,
+        value,
+      };
+
+      this.props.onChange(e, form);
+    });
   };
 
   autoSize = () => {
@@ -55,23 +77,42 @@ export class TextArea extends Component {
   }
 
   renderInput() {
+    const { copy, paste } = this.props;
     return (
-      <textarea
-        className={`input-text resize-none
+      <>
+        <textarea
+          className={`input-text resize-none
           ${this.props.autoSize ? "overflow-hidden" : ""}
           ${this.props.className}
           `}
-        type="textarea"
-        name={this.props.name}
-        value={this.props.value}
-        rows={this.props.rows}
-        maxLength={this.props.maxLength}
-        onChange={this.onChange}
-        onKeyDown={this.props.onKeyDown}
-        autoComplete={this.props.autoComplete}
-        disabled={this.props.disabled}
-        ref={this.textAreaRef}
-      />
+          type="textarea"
+          name={this.props.name}
+          value={this.props.value}
+          rows={this.props.rows}
+          maxLength={this.props.maxLength}
+          onChange={this.onChange}
+          onKeyDown={this.props.onKeyDown}
+          autoComplete={this.props.autoComplete}
+          disabled={this.props.disabled}
+          ref={this.textAreaRef}
+        />
+        <div
+          className={`absolute right-2 top-2 flex space-x-1 ${
+            copy || paste ? "" : "hidden"
+          }`}
+        >
+          {copy && (
+            <div onClick={this.copyToClipboard}>
+              <SVGClipboardDocEmpty className="w-4 simple-clickable" />
+            </div>
+          )}
+          {paste && (
+            <div onClick={this.pasteFromClipboard}>
+              <SVGClipboardDoc className="w-4 simple-clickable" />
+            </div>
+          )}
+        </div>
+      </>
     );
   }
 

@@ -56,3 +56,6 @@ export const filterComponentProps = (componentPropTypes, props) => {
 
   return newProps;
 };
+
+export const saveToClipboard = (text) => navigator.clipboard.writeText(text);
+export const getTextFromClipboard = () => navigator.clipboard.readText();

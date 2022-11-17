@@ -82,6 +82,8 @@ export class TransExcelToTxt extends Component {
             name="excelValue"
             value={excelValue}
             onChange={this.onChange}
+            copy
+            paste
           />
           <TextArea
             label="Text"
@@ -90,6 +92,8 @@ export class TransExcelToTxt extends Component {
             autoSize={false}
             value={txtValue}
             onChange={this.onChange}
+            copy
+            paste
           />
         </div>
         <div className="form-row">
