@@ -16,8 +16,7 @@ export class VideoList extends Component {
     const { watchioType, videos, isLoading } = this.props;
 
     return (
-      // TODO: withLoadingOverlay -> (props, isLoading)
-      <div className="relative max-h-200 overflow-y-auto">
+      <div className="relative max-h-200 overflow-y-auto mt-4 border-t-2 border-theme-3">
         <LoadingOverlay loading={isLoading} />
         {videos.map((video) => (
           <VideoItem
