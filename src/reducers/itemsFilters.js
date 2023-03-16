@@ -6,7 +6,7 @@ const watchioFilter = localStorage.getItem("watchioFilter");
 const initialState = {
   watchioFilter: watchioFilter
     ? JSON.parse(watchioFilter)
-    : new WatchioFilterModel().getInitialState,
+    : new WatchioFilterModel().getInitialState(),
 };
 
 const reducer = (state = initialState, action) => {
