@@ -22,6 +22,7 @@ module.exports = {
         "theme-5": wrapColor("theme-5RGB"),
         "active-1": wrapColor("active-1RGB"),
         "active-2": wrapColor("active-2RGB"),
+        "error-1": wrapColor("error-1RGB"),
         "text-1": wrapColor("text-1RGB"),
       },
       outline: {

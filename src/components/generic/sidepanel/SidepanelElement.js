@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-export class SidepanelElement extends Component {
+export class SidepanelElement extends Component { 
   static propTypes = {
     className: PropTypes.string,
     isSelected: PropTypes.bool,

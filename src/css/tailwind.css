@@ -22,6 +22,8 @@
   --active-1RGB: 216, 180, 254;
   --active-2: #6ee7b7;
   --active-2RGB: 110, 231, 183;
+  --error-1: #be123d;
+  --error-1RGB: 190, 18, 60;
   --text-1: #f3f4f6;
   --text-1RGB: 243, 244, 246;
 }
@@ -130,8 +132,7 @@
 }
 
 .input-error {
-  /* TODO: change to error theme color */
-  @apply mt-1 text-left text-sm text-red-500;
+  @apply mt-1 text-left text-sm text-error-1;
 }
 
 .input-text {
@@ -181,8 +182,7 @@
 }
 
 .ring-error {
-  /* TODO: change to error theme color */
-  @apply ring-4 ring-red-500 ring-opacity-30;
+  @apply ring-4 ring-error-1 ring-opacity-30;
 }
 /* ___________________________________________ */
 
@@ -195,6 +195,10 @@
 .btn {
   @apply cursor-pointer p-2 text-text-1/50 border-2 border-theme-3 
   hover:text-active-1/100 hover:bg-theme-3 active:bg-theme-4;
+}
+
+.btn-selected {
+  @apply border-active-1/50 text-active-1/70;
 }
 
 .btn-compact {

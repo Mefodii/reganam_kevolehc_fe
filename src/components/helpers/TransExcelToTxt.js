@@ -73,6 +73,10 @@ export class TransExcelToTxt extends Component {
     const { excelValue, txtValue } = this.state;
     return (
       <div onKeyDown={this.onKeyDown}>
+        <div className="form-row mb-2">
+          <Button onClick={this.transform}>Transform</Button>
+        </div>
+
         <div className="form-row">
           <TextArea
             containerClassName="w-1/2"
