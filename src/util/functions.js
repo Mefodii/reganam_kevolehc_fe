@@ -57,5 +57,8 @@ export const filterComponentProps = (componentPropTypes, props) => {
   return newProps;
 };
 
+export const splitByNewline = (value) => value.split(/\r?\n/);
+export const joinByNewline = (lines, linebreak = "\n") => lines.join(linebreak);
+
 export const saveToClipboard = (text) => navigator.clipboard.writeText(text);
 export const getTextFromClipboard = () => navigator.clipboard.readText();
