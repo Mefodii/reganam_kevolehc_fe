@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import InputContainer from "./InputContainer";
-import SVGClipboardDocEmpty from "../svg/SVGClipboardDocEmpty";
-import SVGClipboardDoc from "../svg/SVGClipboardDoc";
-import { getTextFromClipboard, saveToClipboard } from "../../../util/functions";
+import InputContainer from './InputContainer';
+import SVGClipboardDocEmpty from '../svg/SVGClipboardDocEmpty';
+import SVGClipboardDoc from '../svg/SVGClipboardDoc';
+import { getTextFromClipboard, saveToClipboard } from '../../../util/functions';
 
 export class TextArea extends Component {
   static propTypes = {
@@ -25,14 +25,16 @@ export class TextArea extends Component {
     autoSize: PropTypes.bool,
     copy: PropTypes.bool,
     paste: PropTypes.bool,
+    textMono: PropTypes.bool,
   };
 
   static defaultProps = {
-    autoComplete: "off",
+    autoComplete: 'off',
     rows: 1,
     autoSize: true,
     copy: false,
     paste: false,
+    textMono: false,
   };
 
   textAreaRef = React.createRef();
@@ -82,7 +84,8 @@ export class TextArea extends Component {
       <>
         <textarea
           className={`input-text resize-none
-          ${this.props.autoSize ? "overflow-hidden" : ""}
+          ${this.props.autoSize ? 'overflow-hidden' : ''}
+          ${this.props.textMono ? 'mono-font' : ''}
           ${this.props.className}
           `}
           type="textarea"
@@ -98,7 +101,7 @@ export class TextArea extends Component {
         />
         <div
           className={`absolute right-2 top-2 flex space-x-1 ${
-            copy || paste ? "" : "hidden"
+            copy || paste ? '' : 'hidden'
           }`}
         >
           {copy && (

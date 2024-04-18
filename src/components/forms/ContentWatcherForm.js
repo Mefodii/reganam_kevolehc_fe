@@ -1,22 +1,22 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import {
   addContentWatcher,
   updateContentWatcher,
   deleteContentWatcher,
-} from "../../actions/contentWatchers";
-import { BLANK_VALUE } from "../../util/constants";
-import Number from "../generic/form/Number";
-import Date from "../generic/form/Date";
-import DropdownSelect from "../generic/form/DropdownSelect";
-import ContentWatcherModel from "../../models/contentWatcher";
-import { withForm, withFormExtraPropTypes } from "./withFormHOC";
-import Button from "../generic/buttons/Button";
-import SVGCheck from "../generic/svg/SVGCheck";
-import SVGTrash from "../generic/svg/SVGTrash";
-import Text from "../generic/form/Text";
+} from '../../actions/contentWatchers';
+import { BLANK_VALUE } from '../../util/constants';
+import Number from '../generic/form/Number';
+import Date from '../generic/form/Date';
+import DropdownSelect from '../generic/form/DropdownSelect';
+import ContentWatcherModel from '../../models/contentWatcher';
+import { withForm, withFormExtraPropTypes } from './withFormHOC';
+import Button from '../generic/buttons/Button';
+import SVGCheck from '../generic/svg/SVGCheck';
+import SVGTrash from '../generic/svg/SVGTrash';
+import Text from '../generic/form/Text';
 
 export class ContentWatcherForm extends Component {
   static propTypes = {

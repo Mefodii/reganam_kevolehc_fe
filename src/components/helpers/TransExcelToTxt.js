@@ -1,28 +1,28 @@
-import React, { Component } from "react";
-import Button from "../generic/buttons/Button";
-import TextArea from "../generic/form/TextArea";
+import React, { Component } from 'react';
+import Button from '../generic/buttons/Button';
+import TextArea from '../generic/form/TextArea';
 
-const SEPARATOR = "<SEPARATOR>";
+const SEPARATOR = '<SEPARATOR>';
 const UNDERLINE =
-  "________________________________________________________________________________________________________________________________________________________________";
+  '________________________________________________________________________________________________________________________________________________________________';
 const WITH_COMMENT = false;
 
 export class TransExcelToTxt extends Component {
   state = {
-    artist: "",
-    excelValue: "",
-    txtValue: "",
+    artist: '',
+    excelValue: '',
+    txtValue: '',
   };
 
   onChange = (e, field) => this.setState({ [field.name]: field.value });
   onKeyDown = (e) => {
-    if (e.ctrlKey && e.key === "Enter") {
+    if (e.ctrlKey && e.key === 'Enter') {
       this.transform();
     }
   };
 
   transform = () => {
-    const excelLines = this.state.excelValue.split("\n");
+    const excelLines = this.state.excelValue.split('\n');
     const [name, date, ...tracks] = excelLines;
 
     this.setState({ artist: name }, () => {
@@ -35,7 +35,7 @@ export class TransExcelToTxt extends Component {
       const trackList = this.transformExcelLines(tracks);
 
       const txtArray = [txtName, txtDate, UNDERLINE, ...trackList];
-      const txtValue = txtArray.reduce((val, line) => `${val}${line}\n`, "");
+      const txtValue = txtArray.reduce((val, line) => `${val}${line}\n`, '');
       this.setState({ txtValue });
     });
   };
@@ -59,12 +59,12 @@ export class TransExcelToTxt extends Component {
   };
 
   parseTrack = (line, checked) => {
-    const head = `  [${checked ? "X" : "-"}] ${this.state.artist} - ${line}`;
+    const head = `  [${checked ? 'X' : '-'}] ${this.state.artist} - ${line}`;
     if (!WITH_COMMENT) return head;
 
     let tail;
-    if (head.length < 119) tail = " ".repeat(119 - head.length) + "# -";
-    else tail = " # -";
+    if (head.length < 119) tail = ' '.repeat(119 - head.length) + '# -';
+    else tail = ' # -';
 
     return `${head}${tail}`;
   };
@@ -88,6 +88,7 @@ export class TransExcelToTxt extends Component {
             onChange={this.onChange}
             copy
             paste
+            textMono
           />
           <TextArea
             label="Text"
@@ -98,6 +99,7 @@ export class TransExcelToTxt extends Component {
             onChange={this.onChange}
             copy
             paste
+            textMono
           />
         </div>
         <div className="form-row">

@@ -1,13 +1,14 @@
 /* fonts */
 @font-face {
-  font-family: "Quicksand";
-  src: url("../fonts/Quicksand-Light.woff2") format("woff2"),
-    url("../fonts/Quicksand-Light.woff") format("woff");
+  font-family: 'Quicksand';
+  src: url('../fonts/Quicksand-Light.woff2') format('woff2'),
+    url('../fonts/Quicksand-Light.woff') format('woff');
   font-weight: 300;
   font-style: normal;
 }
 
-@import url("https://fonts.googleapis.com/css2?family=Mulish:wght@300&family=Oswald&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@300&family=Oswald&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
 
 html,
 body,
@@ -22,6 +23,13 @@ body,
 
 .simple-font {
   font-family: Oswald;
+}
+
+.mono-font {
+  font-family: 'Roboto Mono', monospace;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
 }
 
 /* Track */

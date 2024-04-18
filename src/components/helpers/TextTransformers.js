@@ -1,22 +1,23 @@
-import React, { Component } from "react";
-import Button from "../generic/buttons/Button";
-import TextArea from "../generic/form/TextArea";
-import playlistSquareToCurly from "./transformers/playlistSquareToCurly";
-import playlistItemNumbering from "./transformers/playlistItemNumbering";
-import playlistAddCarret from "./transformers/playlistAddCarret";
-import { joinByNewline, splitByNewline } from "../../util/functions";
+import React, { Component } from 'react';
+import Button from '../generic/buttons/Button';
+import TextArea from '../generic/form/TextArea';
+import playlistSquareToCurly from './transformers/playlistSquareToCurly';
+import playlistItemNumbering from './transformers/playlistItemNumbering';
+import playlistAddCarret from './transformers/playlistAddCarret';
+import playlistToYoutubePlaylist from './transformers/playlistToYoutubePlaylist';
+import { joinByNewline, splitByNewline } from '../../util/functions';
 
 export class TextTransformers extends Component {
   state = {
     transformer: playlistSquareToCurly,
-    inputValue: "",
-    outputValue: "",
+    inputValue: '',
+    outputValue: '',
     isError: false,
   };
 
   onChange = (e, field) => this.setState({ [field.name]: field.value });
   onKeyDown = (e) => {
-    if (e.ctrlKey && e.key === "Enter") {
+    if (e.ctrlKey && e.key === 'Enter') {
       this.transform();
     }
   };
@@ -43,19 +44,19 @@ export class TextTransformers extends Component {
                 onClick={() => this.onTransformerClick(playlistSquareToCurly)}
                 className={
                   transformer.name === playlistSquareToCurly.name
-                    ? "btn-selected"
-                    : ""
+                    ? 'btn-selected'
+                    : ''
                 }
                 tooltip="Transform Square brackets to Curly"
               >
-                {"[] -> {}"}
+                {'[] -> {}'}
               </Button>
               <Button
                 onClick={() => this.onTransformerClick(playlistItemNumbering)}
                 className={
                   transformer.name === playlistItemNumbering.name
-                    ? "btn-selected"
-                    : ""
+                    ? 'btn-selected'
+                    : ''
                 }
               >
                 Add playlist numbering
@@ -64,8 +65,8 @@ export class TextTransformers extends Component {
                 onClick={() => this.onTransformerClick(playlistAddCarret)}
                 className={
                   transformer.name === playlistAddCarret.name
-                    ? "btn-selected"
-                    : ""
+                    ? 'btn-selected'
+                    : ''
                 }
               >
                 {`Add Carret "^"`}
@@ -75,31 +76,44 @@ export class TextTransformers extends Component {
           <div className="mb-4">
             <div className="text-2xl mb-2">Other scripts:</div>
             <div className="flex flex-wrap justify-start mb-1">
-              <Button>{`Nothing yet`}</Button>
+              <Button
+                onClick={() =>
+                  this.onTransformerClick(playlistToYoutubePlaylist)
+                }
+                className={
+                  transformer.name === playlistToYoutubePlaylist.name
+                    ? 'btn-selected'
+                    : ''
+                }
+              >
+                {`Extract youtube playlist`}
+              </Button>
             </div>
           </div>
         </div>
         <div className="form-row">
           <TextArea
-            containerClassName={isError ? "border border-error-1" : ""}
+            containerClassName={isError ? 'border border-error-1' : ''}
             label="Input"
-            rows={40}
+            rows={32}
             autoSize={false}
             name="inputValue"
             value={inputValue}
             onChange={this.onChange}
             copy
             paste
+            textMono
           />
           <TextArea
             label="Output"
             name="outputValue"
-            rows={40}
+            rows={32}
             autoSize={false}
             value={outputValue}
             onChange={this.onChange}
             copy
             paste
+            textMono
           />
         </div>
         <div className="form-row">
