@@ -1,27 +1,27 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
-import { BLANK_VALUE } from "../../../util/constants";
-import { promptNumber } from "../../../util/functions";
+import { BLANK_VALUE } from '../../../util/constants';
+import { promptNumber } from '../../../util/functions';
 
-import { updateVideo, addVideo } from "../../../actions/videos";
-import { openVideoModal } from "../../../actions/modal";
+import { updateVideo, addVideo } from '../../../actions/videos';
+import { openVideoModal } from '../../../actions/modal';
 
-import SVGPencil from "../../generic/svg/SVGPencil";
-import SVGCheck from "../../generic/svg/SVGCheck";
-import SVGVerticalDots from "../../generic/svg/SVGVerticalDots";
-import VideoModel from "../../../models/video";
-import VideoItemPlaceholder from "./VideoItemPlaceholder";
+import SVGPencil from '../../generic/svg/SVGPencil';
+import SVGCheck from '../../generic/svg/SVGCheck';
+import SVGVerticalDots from '../../generic/svg/SVGVerticalDots';
+import VideoModel from '../../../models/video';
+import VideoItemPlaceholder from './VideoItemPlaceholder';
 
-import DragAndDrop from "../../generic/dnd/DragAndDrop";
-import { DRAG_VIDEO_ITEM } from "../../generic/dnd/dragConsts";
-import Links from "./Links";
+import DragAndDrop from '../../generic/dnd/DragAndDrop';
+import { DRAG_VIDEO_ITEM } from '../../generic/dnd/dragConsts';
+import Links from './Links';
 
 export class VideoItem extends Component {
   static propTypes = {
     video: PropTypes.object.isRequired,
-    watchioType: PropTypes.string.isRequired,
+    watchingType: PropTypes.string.isRequired,
     updateVideo: PropTypes.func.isRequired,
     addVideo: PropTypes.func.isRequired,
     lastItem: PropTypes.bool,
@@ -84,23 +84,23 @@ export class VideoItem extends Component {
     const { order } = this.props.video;
     const video = { ...dndData.item, order };
     const action = dndData.copy ? this.props.addVideo : this.props.updateVideo;
-    action(video, this.props.watchioType);
+    action(video, this.props.watchingType);
   };
 
   openEdit = () => {
-    const { watchioType, video } = this.props;
+    const { watchingType, video } = this.props;
     const edit = true;
 
     this.props.openVideoModal({
       groupId: video.group,
-      watchioType,
+      watchingType,
       video,
       edit,
     });
   };
 
   setFinised = () => {
-    const rating = promptNumber("Set video rating");
+    const rating = promptNumber('Set video rating');
     if (rating === undefined) {
       return;
     }
@@ -109,7 +109,7 @@ export class VideoItem extends Component {
       ...VideoModel.setFinished(this.props.video),
       rating,
     };
-    this.props.updateVideo(video, this.props.watchioType);
+    this.props.updateVideo(video, this.props.watchingType);
   };
 
   render() {
@@ -142,83 +142,83 @@ export class VideoItem extends Component {
       >
         <div
           className={`flex my-2 ${
-            insertBefore ? "flex-col" : "flex-col-reverse"
+            insertBefore ? 'flex-col' : 'flex-col-reverse'
           }`}
         >
           <VideoItemPlaceholder
-            className={`${insertBefore ? "mb-2" : "mt-2"}`}
+            className={`${insertBefore ? 'mb-2' : 'mt-2'}`}
             show={dragOver}
           />
           <div
             className={`flex w-full group 2xl:flex-row p-2 border-2 shadow-2xl rounded-xl bg-theme-2 border-theme-3 ${
-              dragged && "border-active-1/50"
-            } ${dragged && dragCopy && "brightness-125"} ${
-              dragged && !dragCopy && "opacity-30"
+              dragged && 'border-active-1/50'
+            } ${dragged && dragCopy && 'brightness-125'} ${
+              dragged && !dragCopy && 'opacity-30'
             }`}
           >
             <div
-              className="my-auto cursor-pointer w-3 pr-2 text-text-1/20"
+              className='my-auto cursor-pointer w-3 pr-2 text-text-1/20'
               onMouseEnter={() => this.setState({ draggable: true })}
               onMouseLeave={() => this.setState({ draggable: false })}
             >
-              <SVGVerticalDots className="w-1" />
+              <SVGVerticalDots className='w-1' />
             </div>
-            <div className="simple-font w-full break-all">
-              <div className="text-xl font-bold">
+            <div className='simple-font w-full break-all'>
+              <div className='text-xl font-bold'>
                 {name}
                 {comment && (
-                  <div className="inline ml-2 opacity-60">[{comment}]</div>
+                  <div className='inline ml-2 opacity-60'>[{comment}]</div>
                 )}
               </div>
 
               <Links links={links} />
 
               {aliases.length > 0 && (
-                <div className="mt-3">
-                  <div className="text-xs">Alias:</div>
+                <div className='mt-3'>
+                  <div className='text-xs'>Alias:</div>
                   <div>
                     {aliases.map((alias, i) => (
-                      <div key={i}>{" - " + alias}</div>
+                      <div key={i}>{' - ' + alias}</div>
                     ))}
                   </div>
                 </div>
               )}
             </div>
-            <div className="flex flex-wrap 2xl:flex-nowrap px-3 text-center">
+            <div className='flex flex-wrap 2xl:flex-nowrap px-3 text-center'>
               <div
                 className={`w-24 m-1 ${
-                  VideoModel.isInQueue(video) && "text-active-2"
+                  VideoModel.isInQueue(video) && 'text-active-2'
                 }`}
               >
-                <div className="text-xs">Status</div>
-                <div className="font-bold">{status}</div>
+                <div className='text-xs'>Status</div>
+                <div className='font-bold'>{status}</div>
               </div>
-              <div className="w-24 m-1">
-                <div className="text-xs">{status || "Watched "} Date</div>
-                <div className="font-bold">{watched_date || BLANK_VALUE}</div>
+              <div className='w-24 m-1'>
+                <div className='text-xs'>{status || 'Watched '} Date</div>
+                <div className='font-bold'>{watched_date || BLANK_VALUE}</div>
               </div>
-              <div className="w-24 m-1">
-                <div className="text-xs">Episodes</div>
-                <div className="font-bold">
+              <div className='w-24 m-1'>
+                <div className='text-xs'>Episodes</div>
+                <div className='font-bold'>
                   {current_episode} / {episodes}
                 </div>
               </div>
-              <div className="w-24 m-1">
-                <div className="text-xs">Year</div>
-                <div className="font-bold">{year || "----"}</div>
+              <div className='w-24 m-1'>
+                <div className='text-xs'>Year</div>
+                <div className='font-bold'>{year || '----'}</div>
               </div>
-              <div className="w-24 m-1">
-                <div className="text-xs">Rating</div>
-                <div className="font-bold">{`${rating} / 10`}</div>
+              <div className='w-24 m-1'>
+                <div className='text-xs'>Rating</div>
+                <div className='font-bold'>{`${rating} / 10`}</div>
               </div>
             </div>
             <div>
               <div onClick={this.openEdit}>
-                <SVGPencil className="w-6 wiggling-clickable"></SVGPencil>
+                <SVGPencil className='w-6 wiggling-clickable'></SVGPencil>
               </div>
               {!VideoModel.isFinished(video) && (
                 <div onClick={this.setFinised}>
-                  <SVGCheck className="w-6 wiggling-clickable"></SVGCheck>
+                  <SVGCheck className='w-6 wiggling-clickable'></SVGCheck>
                 </div>
               )}
             </div>

@@ -3,12 +3,12 @@ import {
   SET_WATCHER,
   SET_LISTS,
   SET_LIST,
-} from "../../actions/types.js";
+} from '../../actions/types';
 
-import contentioReducer, { initialState as contentioIS } from "./contentio";
+import contentingReducer, { initialState as contentingIS } from './contenting';
 
 const initialState = {
-  contentio: contentioIS,
+  contenting: contentingIS,
 };
 
 const reducer = (state = initialState, action) => {
@@ -19,7 +19,7 @@ const reducer = (state = initialState, action) => {
     case SET_LIST:
       return {
         ...state,
-        contentio: contentioReducer(state.contentio, action),
+        contenting: contentingReducer(state.contenting, action),
       };
     default:
       return state;

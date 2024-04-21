@@ -1,11 +1,11 @@
-import { connect } from "react-redux";
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import { connect } from 'react-redux';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import Modal from "./Modal";
-import GroupForm from "../forms/GroupForm";
+import Modal from './Modal';
+import GroupForm from '../forms/GroupForm';
 
-import { closeModal, openVideoModal } from "../../actions/modal";
+import { closeModal, openVideoModal } from '../../actions/modal';
 
 export class GroupModal extends Component {
   static propTypes = {
@@ -18,10 +18,10 @@ export class GroupModal extends Component {
   };
 
   openVideoModal = (group) => {
-    const { watchioType, edit } = this.props;
+    const { watchingType, edit } = this.props;
     const groupId = group.id;
     const defaultOrder = 1;
-    this.props.openVideoModal({ watchioType, groupId, defaultOrder, edit });
+    this.props.openVideoModal({ watchingType, groupId, defaultOrder, edit });
   };
 
   render() {

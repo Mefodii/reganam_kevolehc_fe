@@ -1,9 +1,9 @@
-import { CLOSE_MODAL, OPEN_MODAL } from "./types";
+import { CLOSE_MODAL, OPEN_MODAL } from './types';
 
-export const CREATE_CONTENT_WATCHER_MODAL = "CREATE_CONTENT_WATCHER_MODAL";
-export const GROUP_MODAL = "GROUP_MODAL";
-export const VIDEO_MODAL = "VIDEO_MODAL";
-export const WATCHIO_FILTER_MODAL = "WATCHIO_FILTER_MODAL";
+export const CREATE_CONTENT_WATCHER_MODAL = 'CREATE_CONTENT_WATCHER_MODAL';
+export const GROUP_MODAL = 'GROUP_MODAL';
+export const VIDEO_MODAL = 'VIDEO_MODAL';
+export const WATCHING_FILTER_MODAL = 'WATCHING_FILTER_MODAL';
 
 export const openContentWatcherModal = (data) => (dispatch) => {
   openModal(CREATE_CONTENT_WATCHER_MODAL, data)(dispatch);
@@ -21,10 +21,10 @@ export const openVideoModal =
     openModal(VIDEO_MODAL, data)(dispatch);
   };
 
-export const openWatchioFilterModal =
+export const openWatchingFilterModal =
   (data = {}) =>
   (dispatch) => {
-    openModal(WATCHIO_FILTER_MODAL, data)(dispatch);
+    openModal(WATCHING_FILTER_MODAL, data)(dispatch);
   };
 
 export const openModal = (modalType, data) => (dispatch) => {

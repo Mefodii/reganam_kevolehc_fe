@@ -11,14 +11,15 @@ import {
   DELETE_ANIME_GROUP,
   DELETE_SERIAL_GROUP,
   DELETE_MOVIE_GROUP,
-} from "./types";
+} from './types';
 
-import * as api from "../api/api";
+import * as api from '../api/api';
+import { selectWatchingTypes } from '../features/watching/info/infoSlice';
 
 // GROUP ACTIONS
-export const getGroups = (watchioType) => async (dispatch, getState) => {
-  const { data: payload } = await api.getGroups(watchioType);
-  const dispatchType = getDispatchType(GET, watchioType, getState);
+export const getGroups = (watchingType) => async (dispatch, getState) => {
+  const { data: payload } = await api.getGroups(watchingType);
+  const dispatchType = getDispatchType(GET, watchingType, getState);
 
   dispatch({
     type: dispatchType,
@@ -26,9 +27,9 @@ export const getGroups = (watchioType) => async (dispatch, getState) => {
   });
 };
 
-export const addGroup = (group, watchioType) => async (dispatch, getState) => {
+export const addGroup = (group, watchingType) => async (dispatch, getState) => {
   const { data } = await api.addGroup(group);
-  const dispatchType = getDispatchType(ADD, watchioType, getState);
+  const dispatchType = getDispatchType(ADD, watchingType, getState);
 
   dispatch({
     type: dispatchType,
@@ -39,9 +40,9 @@ export const addGroup = (group, watchioType) => async (dispatch, getState) => {
 };
 
 export const updateGroup =
-  (group, watchioType) => async (dispatch, getState) => {
+  (group, watchingType) => async (dispatch, getState) => {
     const { data } = await api.updateGroup(group);
-    const dispatchType = getDispatchType(UPDATE, watchioType, getState);
+    const dispatchType = getDispatchType(UPDATE, watchingType, getState);
 
     dispatch({
       type: dispatchType,
@@ -49,9 +50,9 @@ export const updateGroup =
     });
   };
 
-export const deleteGroup = (id, watchioType) => async (dispatch, getState) => {
+export const deleteGroup = (id, watchingType) => async (dispatch, getState) => {
   await api.deleteGroup(id);
-  const dispatchType = getDispatchType(DELETE, watchioType, getState);
+  const dispatchType = getDispatchType(DELETE, watchingType, getState);
   dispatch({
     type: dispatchType,
     payload: { id },
@@ -59,12 +60,12 @@ export const deleteGroup = (id, watchioType) => async (dispatch, getState) => {
 };
 
 // ---------------------------------------------------------------------
-const GET = "GET";
-const ADD = "ADD";
-const UPDATE = "UPDATE";
-const DELETE = "DELETE";
-const getDispatchType = (action, watchioType, getState) => {
-  const { anime, serial, movie } = getState().info.watchioTypes;
+const GET = 'GET';
+const ADD = 'ADD';
+const UPDATE = 'UPDATE';
+const DELETE = 'DELETE';
+const getDispatchType = (action, watchingType, getState) => {
+  const { anime, serial, movie } = selectWatchingTypes(getState());
   var dispatchTypes = {};
 
   if (action === GET) {
@@ -98,5 +99,5 @@ const getDispatchType = (action, watchioType, getState) => {
       [movie]: DELETE_MOVIE_GROUP,
     };
   }
-  return dispatchTypes[watchioType];
+  return dispatchTypes[watchingType];
 };

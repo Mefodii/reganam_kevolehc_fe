@@ -1,18 +1,18 @@
-import { connect } from "react-redux";
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import { connect } from 'react-redux';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import {
   CREATE_CONTENT_WATCHER_MODAL,
   GROUP_MODAL,
   VIDEO_MODAL,
-  WATCHIO_FILTER_MODAL,
-} from "../../actions/modal";
-import ContentWatcherModal from "./ContentWatcherModal";
-import Modal from "./Modal";
-import GroupModal from "./GroupModal";
-import VideoModal from "./VideoModal";
-import WatchioFilterModal from "./WatchioFilterModal";
+  WATCHING_FILTER_MODAL,
+} from '../../actions/modal';
+import ContentWatcherModal from './ContentWatcherModal';
+import Modal from './Modal';
+import GroupModal from './GroupModal';
+import VideoModal from './VideoModal';
+import WatchingFilterModal from './WatchingFilterModal';
 
 export class ModalSwitcher extends Component {
   static propTypes = {
@@ -29,8 +29,8 @@ export class ModalSwitcher extends Component {
         return <GroupModal {...data} />;
       case VIDEO_MODAL:
         return <VideoModal {...data} />;
-      case WATCHIO_FILTER_MODAL:
-        return <WatchioFilterModal {...data} />;
+      case WATCHING_FILTER_MODAL:
+        return <WatchingFilterModal {...data} />;
       default:
         return (
           <Modal>

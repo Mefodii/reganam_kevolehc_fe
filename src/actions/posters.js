@@ -8,18 +8,19 @@ import {
   UPDATE_ANIME_POSTER,
   UPDATE_MOVIE_POSTER,
   UPDATE_SERIAL_POSTER,
-} from "./types";
+} from './types';
 
-import * as api from "../api/api";
+import * as api from '../api/api';
+import { selectWatchingTypes } from '../features/watching/info/infoSlice';
 
 export const addPoster =
-  (image, groupId, watchioType) => async (dispatch, getState) => {
+  (image, groupId, watchingType) => async (dispatch, getState) => {
     const posterForm = new FormData();
-    posterForm.append("group", groupId);
-    posterForm.append("image", image);
+    posterForm.append('group', groupId);
+    posterForm.append('image', image);
 
     const { data } = await api.addPoster(posterForm);
-    const dispatchType = getDispatchType(ADD, watchioType, getState);
+    const dispatchType = getDispatchType(ADD, watchingType, getState);
 
     dispatch({
       type: dispatchType,
@@ -31,13 +32,13 @@ export const addPoster =
   };
 
 export const updatePoster =
-  (poster, image, groupId, watchioType) => async (dispatch, getState) => {
+  (poster, image, groupId, watchingType) => async (dispatch, getState) => {
     const posterForm = new FormData();
-    posterForm.append("group", groupId);
-    posterForm.append("image", image);
+    posterForm.append('group', groupId);
+    posterForm.append('image', image);
 
     const { data } = await api.updatePoster(poster, posterForm);
-    const dispatchType = getDispatchType(UPDATE, watchioType, getState);
+    const dispatchType = getDispatchType(UPDATE, watchingType, getState);
 
     dispatch({
       type: dispatchType,
@@ -49,9 +50,9 @@ export const updatePoster =
   };
 
 export const deletePoster =
-  (id, groupId, watchioType) => async (dispatch, getState) => {
+  (id, groupId, watchingType) => async (dispatch, getState) => {
     await api.deletePoster(id);
-    const dispatchType = getDispatchType(DELETE, watchioType, getState);
+    const dispatchType = getDispatchType(DELETE, watchingType, getState);
 
     dispatch({
       type: dispatchType,
@@ -60,11 +61,11 @@ export const deletePoster =
   };
 
 // ---------------------------------------------------------------------
-const ADD = "ADD";
-const UPDATE = "UPDATE";
-const DELETE = "DELETE";
-const getDispatchType = (action, watchioType, getState) => {
-  const { anime, serial, movie } = getState().info.watchioTypes;
+const ADD = 'ADD';
+const UPDATE = 'UPDATE';
+const DELETE = 'DELETE';
+const getDispatchType = (action, watchingType, getState) => {
+  const { anime, serial, movie } = selectWatchingTypes(getState());
   var dispatchTypes = {};
 
   if (action === ADD) {
@@ -90,5 +91,5 @@ const getDispatchType = (action, watchioType, getState) => {
       [movie]: DELETE_MOVIE_POSTER,
     };
   }
-  return dispatchTypes[watchioType];
+  return dispatchTypes[watchingType];
 };

@@ -1,13 +1,14 @@
-import React, { Component } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import React, { Component } from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 
-import { connect } from "react-redux";
-import { PropTypes } from "prop-types";
+import { connect } from 'react-redux';
+import { PropTypes } from 'prop-types';
 
-import Header from "./layout/Header";
-import ThemeChanger from "./layout/ThemeChanger";
-import ModalSwitcher from "./modals/ModalSwitcher";
-import Routes from "./Routes";
+import Header from './layout/Header';
+import ThemeChanger from './layout/ThemeChanger';
+import ModalSwitcher from './modals/ModalSwitcher';
+import Routes from './Routes';
+import { selectTheme } from '../features/page/pageSlice';
 
 class Content extends Component {
   static propTypes = {
@@ -31,7 +32,7 @@ class Content extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  theme: state.page.theme,
+  theme: selectTheme(state),
 });
 
 export default connect(mapStateToProps, null)(Content);

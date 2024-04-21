@@ -17,6 +17,11 @@ import Button from '../generic/buttons/Button';
 import SVGCheck from '../generic/svg/SVGCheck';
 import SVGTrash from '../generic/svg/SVGTrash';
 import Text from '../generic/form/Text';
+import {
+  selecctFileExtensionTypes,
+  selectContentWatcherSourceTypes,
+  selectContentWatcherStatusTypes,
+} from '../../features/contenting/info/infoSlice';
 
 export class ContentWatcherForm extends Component {
   static propTypes = {
@@ -74,59 +79,59 @@ export class ContentWatcherForm extends Component {
     const title = edit ? `Edit Watcher` : `Add Watcher`;
     return (
       // TODO -> to tailwind classname
-      <div className="simple-font p-4 justify-evenly bg-theme-2 border-2 border-theme-3 rounded-xl shadow-lg w-full">
-        <div className="title">{title}</div>
+      <div className='simple-font p-4 justify-evenly bg-theme-2 border-2 border-theme-3 rounded-xl shadow-lg w-full'>
+        <div className='title'>{title}</div>
 
-        <div className="form-row">
+        <div className='form-row'>
           <Text
-            label="Name"
-            name="name"
+            label='Name'
+            name='name'
             value={name}
             onChange={onFieldChange}
           />
           <Text
-            label="Watcher ID"
-            name="watcher_id"
+            label='Watcher ID'
+            name='watcher_id'
             value={watcher_id}
             onChange={onFieldChange}
           />
         </div>
 
-        <div className="form-row">
+        <div className='form-row'>
           <Date
             label={`Check Date (UTC-0)`}
-            name="check_date"
+            name='check_date'
             value={check_date}
             onChange={onFieldChange}
           />
           <Number
-            label="Count"
-            name="download_count"
+            label='Count'
+            name='download_count'
             value={download_count}
             onChange={onFieldChange}
           />
         </div>
 
-        <div className="form-row">
+        <div className='form-row'>
           <DropdownSelect
-            label="Watcher Type"
-            name="source_type"
+            label='Watcher Type'
+            name='source_type'
             value={source_type}
             placeholder={BLANK_VALUE}
             options={this.props.sourceTypes}
             onChange={onFieldChange}
           />
           <DropdownSelect
-            label="Status"
-            name="status"
+            label='Status'
+            name='status'
             value={status}
             placeholder={BLANK_VALUE}
             options={this.props.statusTypes}
             onChange={onFieldChange}
           />
           <DropdownSelect
-            label="Extension"
-            name="file_extension"
+            label='Extension'
+            name='file_extension'
             value={file_extension}
             placeholder={BLANK_VALUE}
             options={this.props.extensionTypes}
@@ -134,23 +139,23 @@ export class ContentWatcherForm extends Component {
           />
         </div>
 
-        <div className="flex">
+        <div className='flex'>
           {!edit && (
-            <Button tooltip="Add Group" onClick={this.addContentWatcher}>
-              <SVGCheck className="w-6 transition-all duration-300" />
+            <Button tooltip='Add Group' onClick={this.addContentWatcher}>
+              <SVGCheck className='w-6 transition-all duration-300' />
             </Button>
           )}
 
           {edit && (
             <>
-              <Button tooltip="Save Changes" onClick={this.saveChanges}>
-                <SVGCheck className="w-6 transition-all duration-300" />
+              <Button tooltip='Save Changes' onClick={this.saveChanges}>
+                <SVGCheck className='w-6 transition-all duration-300' />
               </Button>
               <Button
-                tooltip="Delete Group"
+                tooltip='Delete Group'
                 onClick={this.deleteContentWatcher}
               >
-                <SVGTrash className="w-6 transition-all duration-300" />
+                <SVGTrash className='w-6 transition-all duration-300' />
               </Button>
             </>
           )}
@@ -161,9 +166,9 @@ export class ContentWatcherForm extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  sourceTypes: state.info.contentWatcherSourceTypes,
-  statusTypes: state.info.contentWatcherStatusTypes,
-  extensionTypes: state.info.fileExtensionTypes,
+  sourceTypes: selectContentWatcherSourceTypes(state),
+  statusTypes: selectContentWatcherStatusTypes(state),
+  extensionTypes: selecctFileExtensionTypes(state),
 });
 
 const mapDispatchToProps = {

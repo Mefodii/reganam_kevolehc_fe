@@ -1,22 +1,22 @@
-import React, { Component } from "react";
-import { DEFAULT_IMAGE } from "../../../util/frontend-urls";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCamera, faTimes } from "@fortawesome/free-solid-svg-icons";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import { DEFAULT_IMAGE } from '../../../util/frontend-urls';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCamera, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import {
   addPoster,
   updatePoster,
   deletePoster,
-} from "../../../actions/posters";
-import LoadingOverlay from "../../generic/LoadingOverlay";
+} from '../../../actions/posters';
+import LoadingOverlay from '../../generic/LoadingOverlay';
 
 export class Poster extends Component {
   static propTypes = {
     disabled: PropTypes.bool,
     groupId: PropTypes.number.isRequired,
-    watchioType: PropTypes.string.isRequired,
+    watchingType: PropTypes.string.isRequired,
     images: PropTypes.array.isRequired,
     addPoster: PropTypes.func.isRequired,
     updatePoster: PropTypes.func.isRequired,
@@ -42,8 +42,8 @@ export class Poster extends Component {
     e.preventDefault();
     const image = e.dataTransfer.files[0];
 
-    if (!image.type.startsWith("image/")) {
-      console.error("Unacceptable file type: ", image);
+    if (!image.type.startsWith('image/')) {
+      console.error('Unacceptable file type: ', image);
       return;
     }
 
@@ -60,28 +60,28 @@ export class Poster extends Component {
     const oldImage = this.props.images[0];
     // Update poster
     if (newImage && oldImage) {
-      const { groupId, watchioType } = this.props;
+      const { groupId, watchingType } = this.props;
       this.props
-        .updatePoster(oldImage, newImage, groupId, watchioType)
+        .updatePoster(oldImage, newImage, groupId, watchingType)
         .then(() => this.setLoading(false));
       return;
     }
 
     // Add poster
     if (newImage && !oldImage) {
-      const { groupId, watchioType } = this.props;
+      const { groupId, watchingType } = this.props;
       this.props
-        .addPoster(newImage, groupId, watchioType)
+        .addPoster(newImage, groupId, watchingType)
         .then(() => this.setLoading(false));
       return;
     }
   };
 
   deletePoster = () => {
-    const { images, groupId, watchioType } = this.props;
+    const { images, groupId, watchingType } = this.props;
     const poster = images[0];
 
-    if (poster) this.props.deletePoster(poster.id, groupId, watchioType);
+    if (poster) this.props.deletePoster(poster.id, groupId, watchingType);
   };
 
   fileUploadRef = React.createRef();
@@ -100,7 +100,7 @@ export class Poster extends Component {
     return (
       <div
         className={`relative group
-        ${dragOver ? "border-2 border-active-1 shadow-inner" : ""}
+        ${dragOver ? 'border-2 border-active-1 shadow-inner' : ''}
         `}
         onDragOver={(e) => e.preventDefault()}
         onDragEnter={this.onDragEnter}
@@ -109,28 +109,28 @@ export class Poster extends Component {
       >
         <LoadingOverlay loading={isLoading} />
         {!disabled && (
-          <div className="absolute bottom-0 w-full flex justify-center transform opacity-0 group-hover:opacity-100 transition ease-in duration-300">
-            <div className="absolute w-full bg-gray-800 h-full opacity-80"></div>
-            <div className="text-active-1/40 z-10 p-1">
+          <div className='absolute bottom-0 w-full flex justify-center transform opacity-0 group-hover:opacity-100 transition ease-in duration-300'>
+            <div className='absolute w-full bg-gray-800 h-full opacity-80'></div>
+            <div className='text-active-1/40 z-10 p-1'>
               <FontAwesomeIcon
                 icon={faCamera}
-                size="lg"
-                className="hover:text-active-1 cursor-pointer mx-2"
+                size='lg'
+                className='hover:text-active-1 cursor-pointer mx-2'
                 onClick={this.openPosterSelector}
               />
               <FontAwesomeIcon
                 icon={faTimes}
-                size="lg"
-                className="hover:text-active-1 cursor-pointer mx-2"
+                size='lg'
+                className='hover:text-active-1 cursor-pointer mx-2'
                 onClick={this.deletePoster}
               />
             </div>
             <input
-              className="hidden"
-              type="file"
-              id="poster"
-              name="poster"
-              accept="image/*"
+              className='hidden'
+              type='file'
+              id='poster'
+              name='poster'
+              accept='image/*'
               onChange={this.onFileSelect}
               ref={this.fileUploadRef}
             ></input>
@@ -138,9 +138,9 @@ export class Poster extends Component {
         )}
         <img
           src={imgPath}
-          alt="Placeholder"
-          className="shadow-sm rounded-lg object-center w-60"
-          draggable="false"
+          alt='Placeholder'
+          className='shadow-sm rounded-lg object-center w-60'
+          draggable='false'
         />
       </div>
     );

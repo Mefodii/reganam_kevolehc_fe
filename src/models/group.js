@@ -1,8 +1,12 @@
-import { WATCHIO_STATUS_FINISHED } from "../util/constants";
-import { getToday, isWatchioFinished, isWatchioQueue } from "../util/functions";
-import AliasModel from "./alias";
-import BaseModel from "./base-model";
-import LinkModel from "./link";
+import { WATCHING_STATUS_FINISHED } from '../util/constants';
+import {
+  getToday,
+  isWatchingFinished,
+  isWatchingQueue,
+} from '../util/functions';
+import AliasModel from './alias';
+import BaseModel from './base-model';
+import LinkModel from './link';
 
 class GroupModel extends BaseModel {
   constructor() {
@@ -21,7 +25,7 @@ class GroupModel extends BaseModel {
 
   getInitialState = (props) => ({
     id: null,
-    name: "",
+    name: '',
     aliases: this.aliasModel.getInitialState(),
     links: this.linkModel.getInitialState(),
     airing_status: null,
@@ -57,7 +61,7 @@ class GroupModel extends BaseModel {
 
   toModel = (state, props) => ({
     id: state.id,
-    type: props.watchioType,
+    type: props.watchingType,
     name: state.name,
     aliases: this.aliasModel.toModel(state, props),
     links: this.linkModel.toModel(state, props),
@@ -108,16 +112,16 @@ class GroupModel extends BaseModel {
   setSingle = (single) => (this.single = single);
 
   static isInQueue = (group) => {
-    return isWatchioQueue(group.status);
+    return isWatchingQueue(group.status);
   };
 
   static isFinished = (group) => {
-    return isWatchioFinished(group.status);
+    return isWatchingFinished(group.status);
   };
 
   static setFinished = (group) => ({
     ...group,
-    status: WATCHIO_STATUS_FINISHED,
+    status: WATCHING_STATUS_FINISHED,
     watched_date: getToday(),
   });
 }

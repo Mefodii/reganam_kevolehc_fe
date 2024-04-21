@@ -1,8 +1,12 @@
-import { WATCHIO_STATUS_FINISHED } from "../util/constants";
-import { getToday, isWatchioFinished, isWatchioQueue } from "../util/functions";
-import AliasModel from "./alias";
-import BaseModel from "./base-model";
-import LinkModel from "./link";
+import { WATCHING_STATUS_FINISHED } from '../util/constants';
+import {
+  getToday,
+  isWatchingFinished,
+  isWatchingQueue,
+} from '../util/functions';
+import AliasModel from './alias';
+import BaseModel from './base-model';
+import LinkModel from './link';
 
 class VideoModel extends BaseModel {
   constructor() {
@@ -19,8 +23,8 @@ class VideoModel extends BaseModel {
 
   getInitialState = (props) => ({
     id: null,
-    name: "",
-    comment: "",
+    name: '',
+    comment: '',
     aliases: this.aliasModel.getInitialState(),
     links: this.linkModel.getInitialState(),
     status: null,
@@ -57,7 +61,7 @@ class VideoModel extends BaseModel {
 
   toModel = (state, props) => ({
     id: state.id,
-    type: props.watchioType,
+    type: props.watchingType,
     group: props.groupId,
     name: state.name,
     comment: state.comment,
@@ -108,16 +112,16 @@ class VideoModel extends BaseModel {
   deleteLink = (links) => this.linkModel.deleteLink(links);
 
   static isInQueue = (video) => {
-    return isWatchioQueue(video.status);
+    return isWatchingQueue(video.status);
   };
 
   static isFinished = (video) => {
-    return isWatchioFinished(video.status);
+    return isWatchingFinished(video.status);
   };
 
   static setFinished = (video) => ({
     ...video,
-    status: WATCHIO_STATUS_FINISHED,
+    status: WATCHING_STATUS_FINISHED,
     current_episode: video.episodes,
     watched_date: getToday(),
   });

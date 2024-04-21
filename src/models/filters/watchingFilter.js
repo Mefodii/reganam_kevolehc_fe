@@ -1,10 +1,10 @@
-import BaseModel from "../base-model";
+import BaseModel from '../base-model';
 
-class WatchioFilterModel extends BaseModel {
+class WatchingFilterModel extends BaseModel {
   init = (props) => {};
 
   getInitialState = (props) => ({
-    title: "",
+    title: '',
     showPosters: true,
     statuses: [],
     fromDate: null,
@@ -12,13 +12,13 @@ class WatchioFilterModel extends BaseModel {
   });
 
   toState = (props) => {
-    const { watchioFilter } = props;
+    const { watchingFilter } = props;
     return {
-      title: watchioFilter.title,
-      showPosters: watchioFilter.showPosters,
-      statuses: watchioFilter.statuses,
-      fromDate: watchioFilter.fromDate,
-      toDate: watchioFilter.toDate,
+      title: watchingFilter.title,
+      showPosters: watchingFilter.showPosters,
+      statuses: watchingFilter.statuses,
+      fromDate: watchingFilter.fromDate,
+      toDate: watchingFilter.toDate,
     };
   };
 
@@ -46,7 +46,7 @@ class WatchioFilterModel extends BaseModel {
 
   equals = (state, props) => {
     const o1 = this.toModel(state, props);
-    const o2 = props.watchioFilter;
+    const o2 = props.watchingFilter;
 
     if (o1?.title !== o2?.title) return false;
     if (o1?.showPosters !== o2?.showPosters) return false;
@@ -129,4 +129,4 @@ export const filterGroups = (filter, groups) => {
   return newGroups;
 };
 
-export default WatchioFilterModel;
+export default WatchingFilterModel;

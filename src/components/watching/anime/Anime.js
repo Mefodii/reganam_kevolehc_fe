@@ -1,11 +1,12 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-import { getGroups } from "../../../actions/groups";
+import { getGroups } from '../../../actions/groups';
 
-import GroupList from "../watchio_components/GroupList";
-import { ANIME_BACKGROUND } from "../../../util/frontend-urls";
+import GroupList from '../watching_components/GroupList';
+import { ANIME_BACKGROUND } from '../../../util/frontend-urls';
+import { selectAnimeType } from '../../../features/watching/info/infoSlice';
 
 export class Anime extends Component {
   static propTypes = {
@@ -14,14 +15,14 @@ export class Anime extends Component {
   };
 
   componentDidMount() {
-    this.props.getGroups(this.props.watchioAnime);
+    this.props.getGroups(this.props.animeType);
   }
 
   render() {
-    const { watchioAnime, groups } = this.props;
+    const { animeType, groups } = this.props;
     return (
       <GroupList
-        watchioType={watchioAnime}
+        watchingType={animeType}
         groups={groups}
         backgroundPicture={ANIME_BACKGROUND}
       ></GroupList>
@@ -31,7 +32,7 @@ export class Anime extends Component {
 
 const mapStateToProps = (state) => ({
   groups: state.anime.groups,
-  watchioAnime: state.info.watchioTypes.anime,
+  animeType: selectAnimeType(state),
 });
 
 export default connect(mapStateToProps, {

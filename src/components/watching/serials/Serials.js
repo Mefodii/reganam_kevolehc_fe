@@ -1,11 +1,12 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-import { getGroups } from "../../../actions/groups";
+import { getGroups } from '../../../actions/groups';
 
-import GroupList from "../watchio_components/GroupList";
-import { SERIALS_BACKGROUND } from "../../../util/frontend-urls";
+import GroupList from '../watching_components/GroupList';
+import { SERIALS_BACKGROUND } from '../../../util/frontend-urls';
+import { selectSerialType } from '../../../features/watching/info/infoSlice';
 
 export class Serials extends Component {
   static propTypes = {
@@ -14,14 +15,14 @@ export class Serials extends Component {
   };
 
   componentDidMount() {
-    this.props.getGroups(this.props.watchioSerial);
+    this.props.getGroups(this.props.serialType);
   }
 
   render() {
-    const { watchioSerial, groups } = this.props;
+    const { serialType, groups } = this.props;
     return (
       <GroupList
-        watchioType={watchioSerial}
+        watchingType={serialType}
         groups={groups}
         backgroundPicture={SERIALS_BACKGROUND}
       ></GroupList>
@@ -31,7 +32,7 @@ export class Serials extends Component {
 
 const mapStateToProps = (state) => ({
   groups: state.serials.groups,
-  watchioSerial: state.info.watchioTypes.serial,
+  serialType: selectSerialType(state),
 });
 
 export default connect(mapStateToProps, {

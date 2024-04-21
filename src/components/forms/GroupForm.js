@@ -1,21 +1,25 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-import { addGroup, updateGroup, deleteGroup } from "../../actions/groups";
-import { BLANK_VALUE } from "../../util/constants";
-import Number from "../generic/form/Number";
-import Date from "../generic/form/Date";
-import TextArea from "../generic/form/TextArea";
-import DropdownSelect from "../generic/form/DropdownSelect";
-import GroupModel from "../../models/group";
-import { withForm, withFormExtraPropTypes } from "./withFormHOC";
-import Button from "../generic/buttons/Button";
-import SVGCheck from "../generic/svg/SVGCheck";
-import SVGTrash from "../generic/svg/SVGTrash";
-import TextAreaArray from "../generic/form/TextAreaArray";
-import SVGPlay from "../generic/svg/SVGPlay";
-import SVGForward from "../generic/svg/SVGForward";
+import { addGroup, updateGroup, deleteGroup } from '../../actions/groups';
+import { BLANK_VALUE } from '../../util/constants';
+import Number from '../generic/form/Number';
+import Date from '../generic/form/Date';
+import TextArea from '../generic/form/TextArea';
+import DropdownSelect from '../generic/form/DropdownSelect';
+import GroupModel from '../../models/group';
+import { withForm, withFormExtraPropTypes } from './withFormHOC';
+import Button from '../generic/buttons/Button';
+import SVGCheck from '../generic/svg/SVGCheck';
+import SVGTrash from '../generic/svg/SVGTrash';
+import TextAreaArray from '../generic/form/TextAreaArray';
+import SVGPlay from '../generic/svg/SVGPlay';
+import SVGForward from '../generic/svg/SVGForward';
+import {
+  selectAirStatusTypes,
+  selectStatusTypes,
+} from '../../features/watching/info/infoSlice';
 
 export class GroupForm extends Component {
   static propTypes = {
@@ -23,7 +27,7 @@ export class GroupForm extends Component {
     edit: PropTypes.bool.isRequired,
     withToggle: PropTypes.bool,
     single: PropTypes.bool.isRequired,
-    watchioType: PropTypes.string.isRequired,
+    watchingType: PropTypes.string.isRequired,
     statusTypes: PropTypes.array.isRequired,
     airStatusTypes: PropTypes.array.isRequired,
     //
@@ -49,7 +53,7 @@ export class GroupForm extends Component {
     const [group, isValid, equals] = validateForm();
     if (!isValid || equals) return;
 
-    addGroup(group, this.props.watchioType).then((resGroup) =>
+    addGroup(group, this.props.watchingType).then((resGroup) =>
       onSuccess(true, resGroup)
     );
   };
@@ -59,12 +63,12 @@ export class GroupForm extends Component {
     const [group, isValid, equals] = validateForm();
     if (!isValid || equals) return;
 
-    updateGroup(group, this.props.watchioType).then(onSuccess);
+    updateGroup(group, this.props.watchingType).then(onSuccess);
   };
 
   deleteGroup = () => {
-    const { deleteGroup, onSuccess, group, watchioType } = this.props;
-    deleteGroup(group.id, watchioType).then(onSuccess);
+    const { deleteGroup, onSuccess, group, watchingType } = this.props;
+    deleteGroup(group.id, watchingType).then(onSuccess);
   };
 
   renderSingle = () => {
@@ -72,30 +76,30 @@ export class GroupForm extends Component {
     const { onFieldChange } = this.props;
 
     return (
-      <div className="form-row">
+      <div className='form-row'>
         <DropdownSelect
-          label="Watch status"
-          name="status"
+          label='Watch status'
+          name='status'
           placeholder={BLANK_VALUE}
           value={status}
           options={this.props.statusTypes}
           onChange={onFieldChange}
         />
         <Date
-          label={`${status || "Watched "} Date`}
-          name="watched_date"
+          label={`${status || 'Watched '} Date`}
+          name='watched_date'
           value={watched_date}
           onChange={onFieldChange}
         />
         <Number
-          label="Year"
-          name="year"
+          label='Year'
+          name='year'
           value={year}
           onChange={onFieldChange}
         />
         <Number
-          label="Rating"
-          name="rating"
+          label='Rating'
+          name='rating'
           value={rating}
           onChange={onFieldChange}
           minmax={[0, 10]}
@@ -109,18 +113,18 @@ export class GroupForm extends Component {
     const { onFieldChange } = this.props;
 
     return (
-      <div className="form-row">
+      <div className='form-row'>
         <DropdownSelect
-          label="Airing Status"
-          name="airing_status"
+          label='Airing Status'
+          name='airing_status'
           placeholder={BLANK_VALUE}
           value={airing_status}
           options={this.props.airStatusTypes}
           onChange={onFieldChange}
         />
         <Date
-          label="Last Check Date"
-          name="check_date"
+          label='Last Check Date'
+          name='check_date'
           value={check_date}
           onChange={onFieldChange}
         />
@@ -130,17 +134,17 @@ export class GroupForm extends Component {
 
   render() {
     const { single, aliases, links, name } = this.props.formState;
-    const { edit, withToggle, watchioType, onFieldChange } = this.props;
+    const { edit, withToggle, watchingType, onFieldChange } = this.props;
 
-    const title = edit ? `Edit ${watchioType}` : `Add ${watchioType}`;
+    const title = edit ? `Edit ${watchingType}` : `Add ${watchingType}`;
     return (
-      <div className="simple-font p-4 justify-evenly bg-theme-2 border-2 border-theme-3 rounded-xl shadow-lg w-full">
-        <div className="title">{title}</div>
+      <div className='simple-font p-4 justify-evenly bg-theme-2 border-2 border-theme-3 rounded-xl shadow-lg w-full'>
+        <div className='title'>{title}</div>
 
-        <div className="form-row">
+        <div className='form-row'>
           <TextArea
-            label="Name"
-            name="name"
+            label='Name'
+            name='name'
             value={name}
             onChange={onFieldChange}
             copy
@@ -151,7 +155,7 @@ export class GroupForm extends Component {
         {single ? this.renderSingle() : this.renderNotSingle()}
 
         <TextAreaArray
-          name="aliases"
+          name='aliases'
           labelItem={(item, i) => `Alias ${i + 1}`}
           items={aliases}
           onChange={onFieldChange}
@@ -162,7 +166,7 @@ export class GroupForm extends Component {
         />
 
         <TextAreaArray
-          name="links"
+          name='links'
           labelItem={(item, i) => `Link ${i + 1}`}
           items={links}
           onChange={onFieldChange}
@@ -172,21 +176,21 @@ export class GroupForm extends Component {
           paste
         />
 
-        <div className="flex justify-between">
-          <div className="flex">
+        <div className='flex justify-between'>
+          <div className='flex'>
             {!edit && (
-              <Button tooltip="Add Group" onClick={this.addGroup}>
-                <SVGCheck className="w-6 transition-all duration-300" />
+              <Button tooltip='Add Group' onClick={this.addGroup}>
+                <SVGCheck className='w-6 transition-all duration-300' />
               </Button>
             )}
 
             {edit && (
               <>
-                <Button tooltip="Save Changes" onClick={this.saveChanges}>
-                  <SVGCheck className="w-6 transition-all duration-300" />
+                <Button tooltip='Save Changes' onClick={this.saveChanges}>
+                  <SVGCheck className='w-6 transition-all duration-300' />
                 </Button>
-                <Button tooltip="Delete Group" onClick={this.deleteGroup}>
-                  <SVGTrash className="w-6 transition-all duration-300" />
+                <Button tooltip='Delete Group' onClick={this.deleteGroup}>
+                  <SVGTrash className='w-6 transition-all duration-300' />
                 </Button>
               </>
             )}
@@ -194,13 +198,13 @@ export class GroupForm extends Component {
 
           <div>
             {withToggle && single && (
-              <Button tooltip="Single" onClick={this.toggleSingle}>
-                <SVGPlay className="w-6 transition-all duration-300" />
+              <Button tooltip='Single' onClick={this.toggleSingle}>
+                <SVGPlay className='w-6 transition-all duration-300' />
               </Button>
             )}
             {withToggle && !single && (
-              <Button tooltip="Series" onClick={this.toggleSingle}>
-                <SVGForward className="w-6 transition-all duration-300" />
+              <Button tooltip='Series' onClick={this.toggleSingle}>
+                <SVGForward className='w-6 transition-all duration-300' />
               </Button>
             )}
           </div>
@@ -211,8 +215,8 @@ export class GroupForm extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  statusTypes: state.info.statusTypes,
-  airStatusTypes: state.info.airStatusTypes,
+  statusTypes: selectStatusTypes(state),
+  airStatusTypes: selectAirStatusTypes(state),
 });
 
 const mapDispatchToProps = {

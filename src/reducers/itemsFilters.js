@@ -1,22 +1,22 @@
-import { UPDATE_WATCHIO_FILTER } from "../actions/types.js";
-import WatchioFilterModel from "../models/filters/watchioFilter.js";
+import { UPDATE_WATCHING_FILTER } from '../actions/types.js';
+import WatchingFilterModel from '../models/filters/watchingFilter.js';
 
-const watchioFilter = localStorage.getItem("watchioFilter");
+const watchingFilter = localStorage.getItem('watchingFilter');
 
 const initialState = {
-  watchioFilter: watchioFilter
-    ? JSON.parse(watchioFilter)
-    : new WatchioFilterModel().getInitialState(),
+  watchingFilter: watchingFilter
+    ? JSON.parse(watchingFilter)
+    : new WatchingFilterModel().getInitialState(),
 };
 
 const reducer = (state = initialState, action) => {
   const payload = action.payload;
   switch (action.type) {
-    case UPDATE_WATCHIO_FILTER:
-      localStorage.setItem("watchioFilter", JSON.stringify(payload));
+    case UPDATE_WATCHING_FILTER:
+      localStorage.setItem('watchingFilter', JSON.stringify(payload));
       return {
         ...state,
-        watchioFilter: payload,
+        watchingFilter: payload,
       };
     default:
       return state;

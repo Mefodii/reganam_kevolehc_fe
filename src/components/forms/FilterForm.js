@@ -1,22 +1,23 @@
-import React, { Component, Fragment } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-import { updateWatchioFilter } from "../../actions/itemsFilters";
+import { updateWatchingFilter } from '../../actions/itemsFilters';
 
-import MultiSelect from "../generic/form/MultiSelect";
-import Date from "../generic/form/Date";
-import SingleSelect from "../generic/form/SingleSelect";
-import TextArea from "../generic/form/TextArea";
-import WatchioFilterModel from "../../models/filters/watchioFilter";
-import { withForm, withFormExtraPropTypes } from "./withFormHOC";
-import Button from "../generic/buttons/Button";
-import SVGCheck from "../generic/svg/SVGCheck";
+import MultiSelect from '../generic/form/MultiSelect';
+import Date from '../generic/form/Date';
+import SingleSelect from '../generic/form/SingleSelect';
+import TextArea from '../generic/form/TextArea';
+import WatchingFilterModel from '../../models/filters/watchingFilter';
+import { withForm, withFormExtraPropTypes } from './withFormHOC';
+import Button from '../generic/buttons/Button';
+import SVGCheck from '../generic/svg/SVGCheck';
+import { selectStatusTypes } from '../../features/watching/info/infoSlice';
 
 export class FilterForm extends Component {
   static propTypes = {
-    watchioFilter: PropTypes.object.isRequired,
-    updateWatchioFilter: PropTypes.func.isRequired,
+    watchingFilter: PropTypes.object.isRequired,
+    updateWatchingFilter: PropTypes.func.isRequired,
     onSuccess: PropTypes.func,
     ...withFormExtraPropTypes,
   };
@@ -26,16 +27,16 @@ export class FilterForm extends Component {
   };
 
   saveChanges = () => {
-    const { validateForm, updateWatchioFilter, onSuccess } = this.props;
-    const [watchioFilter, isValid, equals] = validateForm();
+    const { validateForm, updateWatchingFilter, onSuccess } = this.props;
+    const [watchingFilter, isValid, equals] = validateForm();
     if (!isValid || equals) return;
 
-    updateWatchioFilter(watchioFilter).then(onSuccess);
+    updateWatchingFilter(watchingFilter).then(onSuccess);
   };
 
-  resetWatchioFilter = () => {
-    const { updateWatchioFilter, onSuccess } = this.props;
-    updateWatchioFilter(this.props.model.getInitialState()).then(onSuccess);
+  resetWatchingFilter = () => {
+    const { updateWatchingFilter, onSuccess } = this.props;
+    updateWatchingFilter(this.props.model.getInitialState()).then(onSuccess);
   };
 
   render() {
@@ -45,55 +46,55 @@ export class FilterForm extends Component {
 
     return (
       <Fragment>
-        <div className="simple-font p-4 justify-evenly bg-theme-2 border-2 border-theme-3 rounded-xl shadow-lg w-full">
-          <div className="title">Watchio Filters</div>
+        <div className='simple-font p-4 justify-evenly bg-theme-2 border-2 border-theme-3 rounded-xl shadow-lg w-full'>
+          <div className='title'>WatchIO Filters</div>
 
-          <div className="form-row">
+          <div className='form-row'>
             <TextArea
-              label="Title (including aliases)"
-              name="title"
+              label='Title (including aliases)'
+              name='title'
               value={title}
               onChange={onFieldChange}
             />
           </div>
 
-          <div className="form-row">
+          <div className='form-row'>
             <SingleSelect
-              className="text-center"
-              name="showPosters"
-              text="Show Posters"
+              className='text-center'
+              name='showPosters'
+              text='Show Posters'
               value={showPosters}
               onClick={onFieldChange}
             />
             <Date
-              label="From Date"
-              name="fromDate"
+              label='From Date'
+              name='fromDate'
               value={fromDate}
               onChange={onFieldChange}
             />
-            <div className="group w-full">
+            <div className='group w-full'>
               <Date
-                label="To Date"
-                name="toDate"
+                label='To Date'
+                name='toDate'
                 value={toDate}
                 onChange={onFieldChange}
               />
             </div>
           </div>
 
-          <div className="form-row">
+          <div className='form-row'>
             <MultiSelect
-              label="Statuses"
-              name="statuses"
+              label='Statuses'
+              name='statuses'
               value={statuses}
               options={statusTypes}
               onChange={onFieldChange}
             />
           </div>
 
-          <div className="form-row">
-            <Button tooltip="Save Changes" onClick={this.saveChanges}>
-              <SVGCheck className="w-6 transition-all duration-300" />
+          <div className='form-row'>
+            <Button tooltip='Save Changes' onClick={this.saveChanges}>
+              <SVGCheck className='w-6 transition-all duration-300' />
             </Button>
           </div>
         </div>
@@ -103,15 +104,15 @@ export class FilterForm extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  statusTypes: state.info.statusTypes,
-  watchioFilter: state.itemsFilters.watchioFilter,
+  statusTypes: selectStatusTypes(state),
+  watchingFilter: state.itemsFilters.watchingFilter,
 });
 
 const mapDispatchToProps = {
-  updateWatchioFilter,
+  updateWatchingFilter,
 };
 
-const model = new WatchioFilterModel();
+const model = new WatchingFilterModel();
 
 export default connect(
   mapStateToProps,

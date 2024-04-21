@@ -1,8 +1,9 @@
 import {
-  WATCHIO_STATUS_FINISHED,
-  WATCHIO_STATUS_PLANNED,
-  WATCHIO_STATUS_WATCHING,
-} from "./constants";
+  APIStatus,
+  WATCHING_STATUS_FINISHED,
+  WATCHING_STATUS_PLANNED,
+  WATCHING_STATUS_WATCHING,
+} from './constants';
 
 /**
  * Compare 2 objects by given key
@@ -25,8 +26,8 @@ export const compareByKey = (key, options) => (a, b) => {
 export const getToday = () => {
   var today = new Date();
   const year = today.getFullYear();
-  const month = (today.getMonth() + 1).toString().padStart(2, "0");
-  const day = today.getDate().toString().padStart(2, "0");
+  const month = (today.getMonth() + 1).toString().padStart(2, '0');
+  const day = today.getDate().toString().padStart(2, '0');
   return `${year}-${month}-${day}`;
 };
 
@@ -42,9 +43,10 @@ export const promptNumber = (text) => {
   return parseInt(result);
 };
 
-export const isWatchioFinished = (status) => status === WATCHIO_STATUS_FINISHED;
-export const isWatchioQueue = (status) =>
-  status === WATCHIO_STATUS_PLANNED || status === WATCHIO_STATUS_WATCHING;
+export const isWatchingFinished = (status) =>
+  status === WATCHING_STATUS_FINISHED;
+export const isWatchingQueue = (status) =>
+  status === WATCHING_STATUS_PLANNED || status === WATCHING_STATUS_WATCHING;
 
 export const filterComponentProps = (componentPropTypes, props) => {
   const keys = Object.keys(componentPropTypes);
@@ -58,7 +60,10 @@ export const filterComponentProps = (componentPropTypes, props) => {
 };
 
 export const splitByNewline = (value) => value.split(/\r?\n/);
-export const joinByNewline = (lines, linebreak = "\n") => lines.join(linebreak);
+export const joinByNewline = (lines, linebreak = '\n') => lines.join(linebreak);
 
 export const saveToClipboard = (text) => navigator.clipboard.writeText(text);
 export const getTextFromClipboard = () => navigator.clipboard.readText();
+
+export const isAPIStatusRequestDone = (apiStatus) =>
+  [APIStatus.Ok, APIStatus.NotOk].includes(apiStatus);

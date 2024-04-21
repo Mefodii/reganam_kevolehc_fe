@@ -1,20 +1,22 @@
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 
-import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
+import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 
-import { updateTheme } from "../../actions/page";
+import { themeUpdated } from '../../features/page/pageSlice';
+import { getThemeForUrl } from '../../util/colors';
 
 class ThemeChanger extends Component {
   state = {};
 
   componentDidUpdate(prevProps) {
-    if (this.props.location.pathname !== prevProps.location.pathname)
-      this.props.updateTheme();
+    if (this.props.location.pathname !== prevProps.location.pathname) {
+      this.props.themeUpdated(getThemeForUrl(window.location.href));
+    }
   }
 
   componentDidMount() {
-    this.props.updateTheme();
+    this.props.themeUpdated(getThemeForUrl(window.location.href));
   }
 
   render() {
@@ -22,4 +24,4 @@ class ThemeChanger extends Component {
   }
 }
 
-export default withRouter(connect(null, { updateTheme })(ThemeChanger));
+export default withRouter(connect(null, { themeUpdated })(ThemeChanger));

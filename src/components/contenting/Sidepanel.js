@@ -1,16 +1,17 @@
-import { connect } from "react-redux";
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import { connect } from 'react-redux';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import { openContentWatcherModal } from "../../actions/modal";
-import { setWatchers, setLists } from "../../actions/navigation/contentio";
-import SVGPlus from "../generic/svg/SVGPlus";
-import SideButton from "../generic/buttons/SideButton";
-import SidepanelElement from "../generic/sidepanel/SidepanelElement";
+import { openContentWatcherModal } from '../../actions/modal';
+import { setWatchers, setLists } from '../../actions/navigation/contenting';
+import SVGPlus from '../generic/svg/SVGPlus';
+import SideButton from '../generic/buttons/SideButton';
+import SidepanelElement from '../generic/sidepanel/SidepanelElement';
+import { selectContentWatcherSourceTypes } from '../../features/contenting/info/infoSlice';
 
 class Sidepanel extends Component {
   static propTypes = {
-    contentio: PropTypes.object.isRequired,
+    contenting: PropTypes.object.isRequired,
     contentWatcherSourceTypes: PropTypes.array.isRequired,
     openContentWatcherModal: PropTypes.func.isRequired,
     setWatchers: PropTypes.func.isRequired,
@@ -33,15 +34,15 @@ class Sidepanel extends Component {
 
   render() {
     const { contentWatcherSourceTypes } = this.props;
-    const { showWatchers, showLists, watcherType } = this.props.contentio;
+    const { showWatchers, showLists, watcherType } = this.props.contenting;
 
     return (
-      <div className="side-panel">
+      <div className='side-panel'>
         <SideButton onClick={() => this.openContentWatcherModal()}>
-          <SVGPlus className="w-5"></SVGPlus>
+          <SVGPlus className='w-5'></SVGPlus>
           <div>Add Watcher</div>
         </SideButton>
-        <div className="side-panel-sep"></div>
+        <div className='side-panel-sep'></div>
 
         <SidepanelElement
           isSelected={showWatchers && !watcherType}
@@ -60,13 +61,13 @@ class Sidepanel extends Component {
             - {type}
           </SidepanelElement>
         ))}
-        <div className="side-panel-sep"></div>
+        <div className='side-panel-sep'></div>
 
         <SideButton onClick={() => this.openContentListModal()}>
-          <SVGPlus className="w-5"></SVGPlus>
+          <SVGPlus className='w-5'></SVGPlus>
           <div>Add List</div>
         </SideButton>
-        <div className="side-panel-sep"></div>
+        <div className='side-panel-sep'></div>
         <SidepanelElement
           isSelected={showLists}
           onClick={() => this.showLists()}
@@ -79,8 +80,8 @@ class Sidepanel extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  contentWatcherSourceTypes: state.info.contentWatcherSourceTypes,
-  contentio: state.navigation.contentio,
+  contentWatcherSourceTypes: selectContentWatcherSourceTypes(state),
+  contenting: state.navigation.contenting,
 });
 
 const mapDispatchToProps = {

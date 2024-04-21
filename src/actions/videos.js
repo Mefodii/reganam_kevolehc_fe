@@ -8,17 +8,18 @@ import {
   DELETE_ANIME_VIDEO,
   DELETE_SERIAL_VIDEO,
   DELETE_MOVIE_VIDEO,
-} from "./types";
+} from './types';
 
-import * as api from "../api/api";
-import { addGroupLoading, deleteGroupLoading } from "./loadings";
+import * as api from '../api/api';
+import { addGroupLoading, deleteGroupLoading } from './loadings';
+import { selectWatchingTypes } from '../features/watching/info/infoSlice';
 
 // VIDEOS ACTIONS
-export const addVideo = (video, watchioType) => async (dispatch, getState) => {
+export const addVideo = (video, watchingType) => async (dispatch, getState) => {
   addGroupLoading(video.group)(dispatch);
 
   const { data } = await api.addVideo(video);
-  const dispatchType = getDispatchType(ADD, watchioType, getState);
+  const dispatchType = getDispatchType(ADD, watchingType, getState);
 
   dispatch({
     type: dispatchType,
@@ -29,11 +30,11 @@ export const addVideo = (video, watchioType) => async (dispatch, getState) => {
 };
 
 export const updateVideo =
-  (video, watchioType) => async (dispatch, getState) => {
+  (video, watchingType) => async (dispatch, getState) => {
     addGroupLoading(video.group)(dispatch);
 
     const { data } = await api.updateVideo(video);
-    const dispatchType = getDispatchType(UPDATE, watchioType, getState);
+    const dispatchType = getDispatchType(UPDATE, watchingType, getState);
 
     dispatch({
       type: dispatchType,
@@ -44,11 +45,11 @@ export const updateVideo =
   };
 
 export const deleteVideo =
-  (video, watchioType) => async (dispatch, getState) => {
+  (video, watchingType) => async (dispatch, getState) => {
     addGroupLoading(video.group)(dispatch);
 
     const { data } = await api.deleteVideo(video.id);
-    const dispatchType = getDispatchType(DELETE, watchioType, getState);
+    const dispatchType = getDispatchType(DELETE, watchingType, getState);
 
     dispatch({
       type: dispatchType,
@@ -59,11 +60,11 @@ export const deleteVideo =
   };
 
 // ---------------------------------------------------------------------
-const ADD = "ADD";
-const UPDATE = "UPDATE";
-const DELETE = "DELETE";
-const getDispatchType = (action, watchioType, getState) => {
-  const { anime, serial, movie } = getState().info.watchioTypes;
+const ADD = 'ADD';
+const UPDATE = 'UPDATE';
+const DELETE = 'DELETE';
+const getDispatchType = (action, watchingType, getState) => {
+  const { anime, serial, movie } = selectWatchingTypes(getState());
   var dispatchTypes = {};
 
   if (action === ADD) {
@@ -89,5 +90,5 @@ const getDispatchType = (action, watchioType, getState) => {
       [movie]: DELETE_MOVIE_VIDEO,
     };
   }
-  return dispatchTypes[watchioType];
+  return dispatchTypes[watchingType];
 };

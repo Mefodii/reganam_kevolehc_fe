@@ -83,8 +83,8 @@
 }
 
 @layer utilities {
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button {
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
@@ -224,11 +224,11 @@
   @apply transform opacity-40 hover:opacity-100 cursor-pointer hover:text-active-1 transition ease-in duration-150;
 }
 
-.watchio-container {
+.watching-container {
   @apply p-5 bg-theme-1 border border-theme-3 rounded-lg;
 }
 
-.watchio-element {
+.watching-element {
   @apply w-full p-2 border-2 shadow-2xl rounded-xl bg-theme-2 border-theme-3;
 }
 
