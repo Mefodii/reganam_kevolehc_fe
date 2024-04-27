@@ -2,27 +2,30 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { getGroups } from '../../../actions/groups';
-
 import GroupList from '../watching_components/GroupList';
 import { MOVIES_BACKGROUND } from '../../../util/frontend-urls';
 import { selectMovieType } from '../../../features/watching/info/infoSlice';
+import {
+  fetchGroups,
+  selectGroupsByWatchingType,
+} from '../../../features/watching/groups/groupsSlice';
 
 export class Movies extends Component {
   static propTypes = {
+    watchingType: PropTypes.string.isRequired,
     groups: PropTypes.array.isRequired,
-    getGroups: PropTypes.func.isRequired,
+    fetchGroups: PropTypes.func.isRequired,
   };
 
   componentDidMount() {
-    this.props.getGroups(this.props.movieType);
+    this.props.fetchGroups(this.props.watchingType);
   }
 
   render() {
-    const { movieType, groups } = this.props;
+    const { watchingType, groups } = this.props;
     return (
       <GroupList
-        watchingType={movieType}
+        watchingType={watchingType}
         groups={groups}
         backgroundPicture={MOVIES_BACKGROUND}
       ></GroupList>
@@ -30,11 +33,14 @@ export class Movies extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  groups: state.movies.groups,
-  movieType: selectMovieType(state),
-});
+const mapStateToProps = (state) => {
+  const watchingType = selectMovieType(state);
+  return {
+    groups: selectGroupsByWatchingType(state, watchingType),
+    watchingType,
+  };
+};
 
 export default connect(mapStateToProps, {
-  getGroups,
+  fetchGroups,
 })(Movies);

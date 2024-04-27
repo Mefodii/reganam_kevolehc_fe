@@ -8,14 +8,14 @@ import Poster from './Poster';
 import SVGPencil from '../../generic/svg/SVGPencil';
 import VideoList from './VideoList';
 import SVGCheck from '../../generic/svg/SVGCheck';
-import { updateGroup } from '../../../actions/groups';
 import { promptNumber } from '../../../util/functions';
-import { openGroupModal, openVideoModal } from '../../../actions/modal';
 import GroupModel from '../../../models/group';
 import SVGPlus from '../../generic/svg/SVGPlus';
 import Links from './Links';
+import { updateGroup } from '../../../features/watching/groups/groupsSlice';
+import { openGroupModal, openVideoModal } from '../../../redux/modalSlice';
 
-export class GroupItem extends Component {
+class GroupItem extends Component {
   static propTypes = {
     group: PropTypes.object.isRequired,
     watchingType: PropTypes.string.isRequired,
@@ -52,7 +52,7 @@ export class GroupItem extends Component {
       ...GroupModel.setFinished(this.props.group),
       rating,
     };
-    this.props.updateGroup(group, this.props.watchingType);
+    this.props.updateGroup(group);
   };
 
   render() {
@@ -194,6 +194,8 @@ export class GroupItem extends Component {
   }
 }
 
-export default connect(null, { updateGroup, openGroupModal, openVideoModal })(
-  GroupItem
-);
+export default connect(undefined, {
+  updateGroup,
+  openGroupModal,
+  openVideoModal,
+})(GroupItem);

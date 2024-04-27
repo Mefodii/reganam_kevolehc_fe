@@ -5,8 +5,9 @@ import PropTypes from 'prop-types';
 import GroupItem from './GroupItem';
 import { filterGroups } from '../../../models/filters/watchingFilter';
 import Sidepanel from './Sidepanel';
+import { selectWatchingFilter } from '../../../features/watching/filters/filtersSlice';
 
-export class GroupList extends Component {
+class GroupList extends Component {
   static propTypes = {
     groups: PropTypes.array.isRequired,
     watchingType: PropTypes.string.isRequired,
@@ -59,7 +60,7 @@ export class GroupList extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  watchingFilter: state.itemsFilters.watchingFilter,
+  watchingFilter: selectWatchingFilter(state),
 });
 
 export default connect(mapStateToProps, {})(GroupList);

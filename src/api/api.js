@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 import {
   API_GROUPS,
@@ -10,13 +10,13 @@ import {
   API_CONTENT_ITEM_PARTS,
   API_CONTENT_WATCHERS,
   API_CONTENTING_INFO,
-} from "./backend-urls";
+} from './backend-urls';
 
 import {
   jsonConfig as json,
   jsonWithParamsConfig as paramsConf,
   formDataConfig as formConf,
-} from "./config";
+} from './config';
 
 // GROUPS API
 export const getGroups = async (videoType) =>
@@ -49,8 +49,8 @@ export const deleteVideo = async (id) =>
 export const addPoster = async (posterForm) =>
   await axios.post(API_POSTERS, posterForm, formConf());
 
-export const updatePoster = async (poster, posterForm) =>
-  await axios.put(`${API_POSTERS}${poster.id}/`, posterForm, formConf());
+export const updatePoster = async (id, posterForm) =>
+  await axios.put(`${API_POSTERS}${id}/`, posterForm, formConf());
 
 export const deletePoster = async (id) =>
   await axios.delete(`${API_POSTERS}${id}/`, json());

@@ -8,7 +8,7 @@ import Header from './layout/Header';
 import ThemeChanger from './layout/ThemeChanger';
 import ModalSwitcher from './modals/ModalSwitcher';
 import Routes from './Routes';
-import { selectTheme } from '../features/page/pageSlice';
+import { selectTheme } from '../redux/pageSlice';
 
 class Content extends Component {
   static propTypes = {

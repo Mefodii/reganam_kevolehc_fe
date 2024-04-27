@@ -14,11 +14,13 @@ const slice = createSlice({
       state.theme = action.payload;
     },
   },
+  selectors: {
+    selectTheme: (state) => state.theme,
+  },
 });
 
-const getSliceState = (state) => state[name];
-
-export const selectTheme = (state) => getSliceState(state).theme;
-
+export const selectSlice = (state) => state[name];
+export const { selectTheme } = slice.getSelectors(selectSlice);
 export const { themeUpdated } = slice.actions;
+export const reducer = slice.reducer;
 export default slice;

@@ -5,12 +5,12 @@ import { faCamera, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import LoadingOverlay from '../../generic/LoadingOverlay';
 import {
-  addPoster,
+  createPoster,
   updatePoster,
   deletePoster,
-} from '../../../actions/posters';
-import LoadingOverlay from '../../generic/LoadingOverlay';
+} from '../../../features/watching/groups/groupsSlice';
 
 export class Poster extends Component {
   static propTypes = {
@@ -18,7 +18,7 @@ export class Poster extends Component {
     groupId: PropTypes.number.isRequired,
     watchingType: PropTypes.string.isRequired,
     images: PropTypes.array.isRequired,
-    addPoster: PropTypes.func.isRequired,
+    createPoster: PropTypes.func.isRequired,
     updatePoster: PropTypes.func.isRequired,
     deletePoster: PropTypes.func.isRequired,
   };
@@ -56,32 +56,33 @@ export class Poster extends Component {
     this.changePoster(image);
   };
 
-  changePoster = (newImage) => {
-    const oldImage = this.props.images[0];
+  changePoster = (image) => {
+    if (!image) return;
+
+    const poster = this.props.images[0];
+    const { groupId } = this.props;
     // Update poster
-    if (newImage && oldImage) {
-      const { groupId, watchingType } = this.props;
+    if (poster) {
       this.props
-        .updatePoster(oldImage, newImage, groupId, watchingType)
+        .updatePoster({ poster, image, groupId })
         .then(() => this.setLoading(false));
       return;
     }
 
     // Add poster
-    if (newImage && !oldImage) {
-      const { groupId, watchingType } = this.props;
+    if (!poster) {
       this.props
-        .addPoster(newImage, groupId, watchingType)
+        .createPoster({ image, groupId })
         .then(() => this.setLoading(false));
       return;
     }
   };
 
   deletePoster = () => {
-    const { images, groupId, watchingType } = this.props;
+    const { images, groupId } = this.props;
     const poster = images[0];
 
-    if (poster) this.props.deletePoster(poster.id, groupId, watchingType);
+    if (poster) this.props.deletePoster({ poster, groupId });
   };
 
   fileUploadRef = React.createRef();
@@ -147,4 +148,6 @@ export class Poster extends Component {
   }
 }
 
-export default connect(null, { addPoster, updatePoster, deletePoster })(Poster);
+export default connect(null, { createPoster, updatePoster, deletePoster })(
+  Poster
+);

@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { addVideo, updateVideo, deleteVideo } from '../../actions/videos';
-
 import SVGCheck from '../generic/svg/SVGCheck';
 import Number from '../generic/form/Number';
 import Date from '../generic/form/Date';
@@ -16,6 +14,11 @@ import Text from '../generic/form/Text';
 import Button from '../generic/buttons/Button';
 import TextAreaArray from '../generic/form/TextAreaArray';
 import { selectStatusTypes } from '../../features/watching/info/infoSlice';
+import {
+  createVideo,
+  deleteVideo,
+  updateVideo,
+} from '../../features/watching/groups/groupsSlice';
 
 export class VideoForm extends Component {
   static propTypes = {
@@ -25,7 +28,7 @@ export class VideoForm extends Component {
     groupId: PropTypes.number.isRequired,
     watchingType: PropTypes.string.isRequired,
     //
-    addVideo: PropTypes.func.isRequired,
+    createVideo: PropTypes.func.isRequired,
     updateVideo: PropTypes.func.isRequired,
     deleteVideo: PropTypes.func.isRequired,
     onSuccess: PropTypes.func,
@@ -40,12 +43,12 @@ export class VideoForm extends Component {
   setCurrentEpisodeMax = () =>
     this.setState({ current_episode: this.state.episodes });
 
-  addVideo = () => {
-    const { watchingType, validateForm, addVideo, onSuccess } = this.props;
+  createVideo = () => {
+    const { validateForm, createVideo, onSuccess } = this.props;
     const [video, isValid, equals] = validateForm();
     if (!isValid || equals) return;
 
-    addVideo(video, watchingType).then(onSuccess);
+    createVideo(video).then(onSuccess);
   };
 
   saveChanges = () => {
@@ -181,7 +184,7 @@ export class VideoForm extends Component {
 
         <div className='flex'>
           {!edit && (
-            <Button tooltip='Add Video' onClick={this.addVideo}>
+            <Button tooltip='Add Video' onClick={this.createVideo}>
               <SVGCheck className='w-6 transition-all duration-300' />
             </Button>
           )}
@@ -207,7 +210,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  addVideo,
+  createVideo,
   updateVideo,
   deleteVideo,
 };

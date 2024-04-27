@@ -5,9 +5,6 @@ import { connect } from 'react-redux';
 import { BLANK_VALUE } from '../../../util/constants';
 import { promptNumber } from '../../../util/functions';
 
-import { updateVideo, addVideo } from '../../../actions/videos';
-import { openVideoModal } from '../../../actions/modal';
-
 import SVGPencil from '../../generic/svg/SVGPencil';
 import SVGCheck from '../../generic/svg/SVGCheck';
 import SVGVerticalDots from '../../generic/svg/SVGVerticalDots';
@@ -17,13 +14,18 @@ import VideoItemPlaceholder from './VideoItemPlaceholder';
 import DragAndDrop from '../../generic/dnd/DragAndDrop';
 import { DRAG_VIDEO_ITEM } from '../../generic/dnd/dragConsts';
 import Links from './Links';
+import {
+  createVideo,
+  updateVideo,
+} from '../../../features/watching/groups/groupsSlice';
+import { openVideoModal } from '../../../redux/modalSlice';
 
 export class VideoItem extends Component {
   static propTypes = {
     video: PropTypes.object.isRequired,
     watchingType: PropTypes.string.isRequired,
+    createVideo: PropTypes.func.isRequired,
     updateVideo: PropTypes.func.isRequired,
-    addVideo: PropTypes.func.isRequired,
     lastItem: PropTypes.bool,
   };
 
@@ -83,8 +85,10 @@ export class VideoItem extends Component {
 
     const { order } = this.props.video;
     const video = { ...dndData.item, order };
-    const action = dndData.copy ? this.props.addVideo : this.props.updateVideo;
-    action(video, this.props.watchingType);
+    const action = dndData.copy
+      ? this.props.createVideo
+      : this.props.updateVideo;
+    action(video);
   };
 
   openEdit = () => {
@@ -109,7 +113,7 @@ export class VideoItem extends Component {
       ...VideoModel.setFinished(this.props.video),
       rating,
     };
-    this.props.updateVideo(video, this.props.watchingType);
+    this.props.updateVideo(video);
   };
 
   render() {
@@ -229,6 +233,8 @@ export class VideoItem extends Component {
   }
 }
 
-export default connect(null, { updateVideo, addVideo, openVideoModal })(
-  VideoItem
-);
+export default connect(null, {
+  createVideo,
+  updateVideo,
+  openVideoModal,
+})(VideoItem);

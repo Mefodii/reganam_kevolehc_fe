@@ -2,27 +2,30 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { getGroups } from '../../../actions/groups';
-
 import GroupList from '../watching_components/GroupList';
 import { SERIALS_BACKGROUND } from '../../../util/frontend-urls';
 import { selectSerialType } from '../../../features/watching/info/infoSlice';
+import {
+  fetchGroups,
+  selectGroupsByWatchingType,
+} from '../../../features/watching/groups/groupsSlice';
 
 export class Serials extends Component {
   static propTypes = {
+    watchingType: PropTypes.string.isRequired,
     groups: PropTypes.array.isRequired,
-    getGroups: PropTypes.func.isRequired,
+    fetchGroups: PropTypes.func.isRequired,
   };
 
   componentDidMount() {
-    this.props.getGroups(this.props.serialType);
+    this.props.fetchGroups(this.props.watchingType);
   }
 
   render() {
-    const { serialType, groups } = this.props;
+    const { watchingType, groups } = this.props;
     return (
       <GroupList
-        watchingType={serialType}
+        watchingType={watchingType}
         groups={groups}
         backgroundPicture={SERIALS_BACKGROUND}
       ></GroupList>
@@ -30,11 +33,14 @@ export class Serials extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  groups: state.serials.groups,
-  serialType: selectSerialType(state),
-});
+const mapStateToProps = (state) => {
+  const watchingType = selectSerialType(state);
+  return {
+    groups: selectGroupsByWatchingType(state, watchingType),
+    watchingType,
+  };
+};
 
 export default connect(mapStateToProps, {
-  getGroups,
+  fetchGroups,
 })(Serials);

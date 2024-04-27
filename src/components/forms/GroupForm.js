@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { addGroup, updateGroup, deleteGroup } from '../../actions/groups';
 import { BLANK_VALUE } from '../../util/constants';
 import Number from '../generic/form/Number';
 import Date from '../generic/form/Date';
@@ -20,8 +19,13 @@ import {
   selectAirStatusTypes,
   selectStatusTypes,
 } from '../../features/watching/info/infoSlice';
+import {
+  createGroup,
+  updateGroup,
+  deleteGroup,
+} from '../../features/watching/groups/groupsSlice';
 
-export class GroupForm extends Component {
+class GroupForm extends Component {
   static propTypes = {
     group: PropTypes.object,
     edit: PropTypes.bool.isRequired,
@@ -32,7 +36,7 @@ export class GroupForm extends Component {
     airStatusTypes: PropTypes.array.isRequired,
     //
     onSuccess: PropTypes.func,
-    addGroup: PropTypes.func.isRequired,
+    createGroup: PropTypes.func.isRequired,
     updateGroup: PropTypes.func.isRequired,
     deleteGroup: PropTypes.func.isRequired,
     ...withFormExtraPropTypes,
@@ -48,14 +52,15 @@ export class GroupForm extends Component {
     this.props.updateFormState({ single: !this.props.formState.single });
   };
 
-  addGroup = () => {
-    const { validateForm, addGroup, onSuccess } = this.props;
+  createGroup = () => {
+    const { validateForm, onSuccess, createGroup } = this.props;
     const [group, isValid, equals] = validateForm();
     if (!isValid || equals) return;
 
-    addGroup(group, this.props.watchingType).then((resGroup) =>
-      onSuccess(true, resGroup)
-    );
+    createGroup(group).then((res) => {
+      const newGroup = res.payload;
+      onSuccess(true, newGroup);
+    });
   };
 
   saveChanges = () => {
@@ -63,12 +68,12 @@ export class GroupForm extends Component {
     const [group, isValid, equals] = validateForm();
     if (!isValid || equals) return;
 
-    updateGroup(group, this.props.watchingType).then(onSuccess);
+    updateGroup(group).then(() => onSuccess());
   };
 
   deleteGroup = () => {
-    const { deleteGroup, onSuccess, group, watchingType } = this.props;
-    deleteGroup(group.id, watchingType).then(onSuccess);
+    const { deleteGroup, onSuccess, group } = this.props;
+    deleteGroup(group).then(() => onSuccess());
   };
 
   renderSingle = () => {
@@ -179,7 +184,7 @@ export class GroupForm extends Component {
         <div className='flex justify-between'>
           <div className='flex'>
             {!edit && (
-              <Button tooltip='Add Group' onClick={this.addGroup}>
+              <Button tooltip='Add Group' onClick={this.createGroup}>
                 <SVGCheck className='w-6 transition-all duration-300' />
               </Button>
             )}
@@ -220,7 +225,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  addGroup,
+  createGroup,
   updateGroup,
   deleteGroup,
 };

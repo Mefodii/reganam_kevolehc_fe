@@ -41,28 +41,28 @@ const slice = createSlice({
         state.error = action.error.message;
       });
   },
+  selectors: {
+    selectContentItemPartStatusTypes: (state) =>
+      state.contentItemPartStatusTypes,
+    selectDownloadStatusTypes: (state) => state.downloadStatusTypes,
+    selectContentItemTypes: (state) => state.contentItemTypes,
+    selectFileExtensionTypes: (state) => state.fileExtensionTypes,
+    selectContentWatcherSourceTypes: (state) => state.contentWatcherSourceTypes,
+    selectContentWatcherStatusTypes: (state) => state.contentWatcherStatusTypes,
+    selectStatus: (state) => state.status,
+  },
 });
 
-const getSliceState = (state) => state[parentName][name];
+const selectSlice = (state) => state[parentName][name];
 
-export const selectContentItemPartStatusTypes = (state) =>
-  getSliceState(state).contentItemPartStatusTypes;
-
-export const selectDownloadStatusTypes = (state) =>
-  getSliceState(state).downloadStatusTypes;
-
-export const selectContentItemTypes = (state) =>
-  getSliceState(state).contentItemTypes;
-
-export const selecctFileExtensionTypes = (state) =>
-  getSliceState(state).fileExtensionTypes;
-
-export const selectContentWatcherSourceTypes = (state) =>
-  getSliceState(state).contentWatcherSourceTypes;
-
-export const selectContentWatcherStatusTypes = (state) =>
-  getSliceState(state).contentWatcherStatusTypes;
-
-export const selectStatus = (state) => getSliceState(state).status;
-
+export const {
+  selectContentItemPartStatusTypes,
+  selectDownloadStatusTypes,
+  selectContentItemTypes,
+  selectFileExtensionTypes,
+  selectContentWatcherSourceTypes,
+  selectContentWatcherStatusTypes,
+  selectStatus,
+} = slice.getSelectors(selectSlice);
+export const reducer = slice.reducer;
 export default slice;

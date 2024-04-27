@@ -1,6 +1,7 @@
-import PropTypes from "prop-types";
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { selectDndData } from '../../../redux/dragAndDropSlice';
 
 export const publicPropTypes = {
   droppable: PropTypes.bool,
@@ -90,7 +91,7 @@ export class Drop extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  dndData: state.dndData,
+  dndData: selectDndData(state),
 });
 
 const mapDispatchToProps = {};

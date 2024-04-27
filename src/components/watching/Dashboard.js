@@ -1,8 +1,8 @@
-import React, { Component, Fragment } from "react";
+import React, { Component, Fragment } from 'react';
 
-import Movies from "./movies/Movies";
-import Serials from "./serials/Serials";
-import Anime from "./anime/Anime";
+import Movies from './movies/Movies';
+import Serials from './serials/Serials';
+import Anime from './anime/Anime';
 
 class Dashboard extends Component {
   render() {

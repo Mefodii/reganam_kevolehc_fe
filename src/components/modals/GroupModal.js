@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 
 import Modal from './Modal';
 import GroupForm from '../forms/GroupForm';
-
-import { closeModal, openVideoModal } from '../../actions/modal';
+import { closeModal, openVideoModal } from '../../redux/modalSlice';
 
 export class GroupModal extends Component {
   static propTypes = {

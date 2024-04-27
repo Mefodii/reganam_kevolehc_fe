@@ -2,17 +2,19 @@ import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  CREATE_CONTENT_WATCHER_MODAL,
-  GROUP_MODAL,
-  VIDEO_MODAL,
-  WATCHING_FILTER_MODAL,
-} from '../../actions/modal';
 import ContentWatcherModal from './ContentWatcherModal';
 import Modal from './Modal';
 import GroupModal from './GroupModal';
 import VideoModal from './VideoModal';
 import WatchingFilterModal from './WatchingFilterModal';
+import {
+  CREATE_CONTENT_WATCHER_MODAL,
+  GROUP_MODAL,
+  VIDEO_MODAL,
+  WATCHING_FILTER_MODAL,
+  selectData,
+  selectModalType,
+} from '../../redux/modalSlice';
 
 export class ModalSwitcher extends Component {
   static propTypes = {
@@ -42,8 +44,8 @@ export class ModalSwitcher extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  modalType: state.modal.modalType,
-  data: state.modal.data,
+  modalType: selectModalType(state),
+  data: selectData(state),
 });
 
 export default connect(mapStateToProps, null)(ModalSwitcher);

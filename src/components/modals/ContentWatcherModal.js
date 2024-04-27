@@ -1,10 +1,10 @@
-import { connect } from "react-redux";
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import { connect } from 'react-redux';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import { closeModal } from "../../actions/modal";
-import Modal from "./Modal";
-import ContentWatcherForm from "../forms/ContentWatcherForm";
+import Modal from './Modal';
+import ContentWatcherForm from '../forms/ContentWatcherForm';
+import { closeModal, selectData } from '../../redux/modalSlice';
 
 export class ContentWatcherModal extends Component {
   static propTypes = {
@@ -29,7 +29,7 @@ export class ContentWatcherModal extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  data: state.modal.data,
+  data: selectData(state),
 });
 
 export default connect(mapStateToProps, { closeModal })(ContentWatcherModal);

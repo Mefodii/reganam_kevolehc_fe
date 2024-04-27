@@ -4,7 +4,7 @@ import { APIStatus } from '../../../util/constants';
 import { name as parentName } from '../constants';
 
 export const name = 'info';
-const sliceName = `${parentName}/${name}`;
+const fullName = `${parentName}/${name}`;
 
 const initialState = {
   status: APIStatus.None,
@@ -14,16 +14,13 @@ const initialState = {
   airStatusTypes: [],
 };
 
-export const fetchInfo = createAsyncThunk(
-  `${parentName}/${name}/fetchInfo`,
-  async () => {
-    const response = await getWatchingInfo();
-    return response.data;
-  }
-);
+export const fetchInfo = createAsyncThunk(`${fullName}/fetchInfo`, async () => {
+  const response = await getWatchingInfo();
+  return response.data;
+});
 
 const slice = createSlice({
-  name: sliceName,
+  name: fullName,
   initialState,
   extraReducers: (builder) => {
     builder
@@ -42,21 +39,26 @@ const slice = createSlice({
         state.error = action.error.message;
       });
   },
+  selectors: {
+    selectWatchingTypes: (state) => state.watchingTypes,
+    selectAnimeType: (state) => state.watchingTypes.anime,
+    selectMovieType: (state) => state.watchingTypes.movie,
+    selectSerialType: (state) => state.watchingTypes.serial,
+    selectStatusTypes: (state) => state.statusTypes,
+    selectAirStatusTypes: (state) => state.airStatusTypes,
+    selectStatus: (state) => state.status,
+  },
 });
 
-const getSliceState = (state) => state[parentName][name];
-
-export const selectWatchingTypes = (state) =>
-  getSliceState(state).watchingTypes;
-export const selectAnimeType = (state) => selectWatchingTypes(state).anime;
-export const selectMovieType = (state) => selectWatchingTypes(state).movie;
-export const selectSerialType = (state) => selectWatchingTypes(state).serial;
-
-export const selectStatusTypes = (state) => getSliceState(state).statusTypes;
-
-export const selectAirStatusTypes = (state) =>
-  getSliceState(state).airStatusTypes;
-
-export const selectStatus = (state) => getSliceState(state).status;
-
+export const selectSlice = (state) => state[parentName][name];
+export const {
+  selectWatchingTypes,
+  selectAnimeType,
+  selectMovieType,
+  selectSerialType,
+  selectStatusTypes,
+  selectAirStatusTypes,
+  selectStatus,
+} = slice.getSelectors(selectSlice);
+export const reducer = slice.reducer;
 export default slice;

@@ -1,9 +1,9 @@
-import PropTypes from "prop-types";
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { setDrag, removeDrag } from "../../../actions/dragAndDrop";
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import { DRAG_DEFAULT_ITEM } from "./dragConsts";
+import { DRAG_DEFAULT_ITEM } from './dragConsts';
+import { removeDrag, setDrag } from '../../../redux/dragAndDropSlice';
 
 export const publicPropTypes = {
   draggable: PropTypes.bool.isRequired,
@@ -20,12 +20,11 @@ export const publicDefaultProps = {
   onDragEnd: () => {},
 };
 
-export class Drag extends Component {
+class Drag extends Component {
   static propTypes = {
     ...publicPropTypes,
     setDrag: PropTypes.func.isRequired,
     removeDrag: PropTypes.func.isRequired,
-    dndData: PropTypes.object.isRequired,
   };
 
   static defaultProps = {
@@ -34,9 +33,9 @@ export class Drag extends Component {
 
   onDragStart = (e) => {
     const { item, type } = this.props;
-    const copy = e.ctrlKey;
-    this.props.setDrag(this.props.item, this.props.type, e.ctrlKey);
-    this.props.onDragStart(e, { item, type, copy });
+    const dndData = { item, type, copy: e.ctrlKey };
+    this.props.setDrag(dndData);
+    this.props.onDragStart(e, dndData);
   };
 
   onDragEnd = (e) => {
@@ -57,9 +56,7 @@ export class Drag extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  dndData: state.dndData,
-});
+const mapStateToProps = (state) => ({});
 
 const mapDispatchToProps = { setDrag, removeDrag };
 

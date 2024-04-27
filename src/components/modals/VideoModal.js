@@ -1,11 +1,10 @@
-import { connect } from "react-redux";
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import { connect } from 'react-redux';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import Modal from "./Modal";
-import VideoForm from "../forms/VideoForm";
-
-import { closeModal } from "../../actions/modal";
+import Modal from './Modal';
+import VideoForm from '../forms/VideoForm';
+import { closeModal } from '../../redux/modalSlice';
 
 export class VideoModal extends Component {
   static propTypes = {

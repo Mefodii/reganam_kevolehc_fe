@@ -2,11 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import {
-  addContentWatcher,
-  updateContentWatcher,
-  deleteContentWatcher,
-} from '../../actions/contentWatchers';
 import { BLANK_VALUE } from '../../util/constants';
 import Number from '../generic/form/Number';
 import Date from '../generic/form/Date';
@@ -18,10 +13,15 @@ import SVGCheck from '../generic/svg/SVGCheck';
 import SVGTrash from '../generic/svg/SVGTrash';
 import Text from '../generic/form/Text';
 import {
-  selecctFileExtensionTypes,
+  selectFileExtensionTypes,
   selectContentWatcherSourceTypes,
   selectContentWatcherStatusTypes,
 } from '../../features/contenting/info/infoSlice';
+import {
+  createContentWatcher,
+  updateContentWatcher,
+  deleteContentWatcher,
+} from '../../features/contenting/contentWatchers/contentWatchersSlice';
 
 export class ContentWatcherForm extends Component {
   static propTypes = {
@@ -32,7 +32,7 @@ export class ContentWatcherForm extends Component {
     extensionTypes: PropTypes.array.isRequired,
     //
     onSuccess: PropTypes.func,
-    addContentWatcher: PropTypes.func.isRequired,
+    createContentWatcher: PropTypes.func.isRequired,
     updateContentWatcher: PropTypes.func.isRequired,
     deleteContentWatcher: PropTypes.func.isRequired,
     ...withFormExtraPropTypes,
@@ -43,12 +43,12 @@ export class ContentWatcherForm extends Component {
     onSuccess: () => {},
   };
 
-  addContentWatcher = () => {
-    const { validateForm, addContentWatcher, onSuccess } = this.props;
+  createContentWatcher = () => {
+    const { validateForm, createContentWatcher, onSuccess } = this.props;
     const [contentWatcher, isValid, equals] = validateForm();
     if (!isValid || equals) return;
 
-    addContentWatcher(contentWatcher).then(onSuccess);
+    createContentWatcher(contentWatcher).then(onSuccess);
   };
 
   saveChanges = () => {
@@ -141,7 +141,7 @@ export class ContentWatcherForm extends Component {
 
         <div className='flex'>
           {!edit && (
-            <Button tooltip='Add Group' onClick={this.addContentWatcher}>
+            <Button tooltip='Add Group' onClick={this.createContentWatcher}>
               <SVGCheck className='w-6 transition-all duration-300' />
             </Button>
           )}
@@ -168,11 +168,11 @@ export class ContentWatcherForm extends Component {
 const mapStateToProps = (state) => ({
   sourceTypes: selectContentWatcherSourceTypes(state),
   statusTypes: selectContentWatcherStatusTypes(state),
-  extensionTypes: selecctFileExtensionTypes(state),
+  extensionTypes: selectFileExtensionTypes(state),
 });
 
 const mapDispatchToProps = {
-  addContentWatcher,
+  createContentWatcher,
   updateContentWatcher,
   deleteContentWatcher,
 };

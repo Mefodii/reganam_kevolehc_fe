@@ -1,10 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-  openGroupModal,
-  openWatchingFilterModal,
-} from '../../../actions/modal';
 import CompactButton from '../../generic/buttons/CompactButton';
 import SVGFilter from '../../generic/svg/SVGFilter';
 import SVGPlusCircle from '../../generic/svg/SVGPlusCircle';
@@ -12,6 +8,10 @@ import {
   selectAnimeType,
   selectMovieType,
 } from '../../../features/watching/info/infoSlice';
+import {
+  openGroupModal,
+  openWatchingFilterModal,
+} from '../../../redux/modalSlice';
 
 export class Sidepanel extends Component {
   static propTypes = {

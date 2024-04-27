@@ -2,8 +2,6 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { updateWatchingFilter } from '../../actions/itemsFilters';
-
 import MultiSelect from '../generic/form/MultiSelect';
 import Date from '../generic/form/Date';
 import SingleSelect from '../generic/form/SingleSelect';
@@ -13,6 +11,10 @@ import { withForm, withFormExtraPropTypes } from './withFormHOC';
 import Button from '../generic/buttons/Button';
 import SVGCheck from '../generic/svg/SVGCheck';
 import { selectStatusTypes } from '../../features/watching/info/infoSlice';
+import {
+  selectWatchingFilter,
+  updateWatchingFilter,
+} from '../../features/watching/filters/filtersSlice';
 
 export class FilterForm extends Component {
   static propTypes = {
@@ -31,12 +33,14 @@ export class FilterForm extends Component {
     const [watchingFilter, isValid, equals] = validateForm();
     if (!isValid || equals) return;
 
-    updateWatchingFilter(watchingFilter).then(onSuccess);
+    updateWatchingFilter(watchingFilter);
+    onSuccess();
   };
 
   resetWatchingFilter = () => {
     const { updateWatchingFilter, onSuccess } = this.props;
-    updateWatchingFilter(this.props.model.getInitialState()).then(onSuccess);
+    updateWatchingFilter(this.props.model.getInitialState());
+    onSuccess();
   };
 
   render() {
@@ -105,7 +109,7 @@ export class FilterForm extends Component {
 
 const mapStateToProps = (state) => ({
   statusTypes: selectStatusTypes(state),
-  watchingFilter: state.itemsFilters.watchingFilter,
+  watchingFilter: selectWatchingFilter(state),
 });
 
 const mapDispatchToProps = {

@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 
-import { themeUpdated } from '../../features/page/pageSlice';
 import { getThemeForUrl } from '../../util/colors';
+import { themeUpdated } from '../../redux/pageSlice';
 
 class ThemeChanger extends Component {
   state = {};

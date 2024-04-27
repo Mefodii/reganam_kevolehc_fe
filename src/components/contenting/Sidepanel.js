@@ -2,16 +2,20 @@ import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { openContentWatcherModal } from '../../actions/modal';
-import { setWatchers, setLists } from '../../actions/navigation/contenting';
 import SVGPlus from '../generic/svg/SVGPlus';
 import SideButton from '../generic/buttons/SideButton';
 import SidepanelElement from '../generic/sidepanel/SidepanelElement';
 import { selectContentWatcherSourceTypes } from '../../features/contenting/info/infoSlice';
+import { openContentWatcherModal } from '../../redux/modalSlice';
+import {
+  selectContentingFilters,
+  setLists,
+  setWatchers,
+} from '../../features/contenting/filters/filtersSlice';
 
 class Sidepanel extends Component {
   static propTypes = {
-    contenting: PropTypes.object.isRequired,
+    filters: PropTypes.object.isRequired,
     contentWatcherSourceTypes: PropTypes.array.isRequired,
     openContentWatcherModal: PropTypes.func.isRequired,
     setWatchers: PropTypes.func.isRequired,
@@ -34,7 +38,7 @@ class Sidepanel extends Component {
 
   render() {
     const { contentWatcherSourceTypes } = this.props;
-    const { showWatchers, showLists, watcherType } = this.props.contenting;
+    const { showWatchers, showLists, watcherType } = this.props.filters;
 
     return (
       <div className='side-panel'>
@@ -81,7 +85,7 @@ class Sidepanel extends Component {
 
 const mapStateToProps = (state) => ({
   contentWatcherSourceTypes: selectContentWatcherSourceTypes(state),
-  contenting: state.navigation.contenting,
+  filters: selectContentingFilters(state),
 });
 
 const mapDispatchToProps = {

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import VideoItem from './VideoItem';
 import LoadingOverlay from '../../generic/LoadingOverlay';
+import { isGroupLoading } from '../../../redux/loadingsSlice';
 
 export class VideoList extends Component {
   static propTypes = {
@@ -31,8 +32,8 @@ export class VideoList extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-  const groupId = props.videos[0]?.group ?? -1;
-  const isLoading = state.loadings.groups.includes(groupId);
+  const groupId = props.videos[0]?.group;
+  const isLoading = isGroupLoading(state, groupId);
 
   return {
     isLoading,

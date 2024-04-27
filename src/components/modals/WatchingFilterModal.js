@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 
 import Modal from './Modal';
 
-import { closeModal } from '../../actions/modal';
 import FilterForm from '../forms/FilterForm';
+import { closeModal } from '../../redux/modalSlice';
 
 export class WatchingFilterModal extends Component {
   static propTypes = {
