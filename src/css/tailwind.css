@@ -211,7 +211,7 @@
 }
 
 .nav-link {
-  @apply hover:bg-theme-3 ease-in duration-150;
+  @apply p-2 hover:bg-theme-3 ease-in duration-150;
 }
 
 /* TODO: group-hover + opacity should be other class */

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 
 import Header from './layout/Header';
 import ThemeChanger from './layout/ThemeChanger';
-import ModalSwitcher from './modals/ModalSwitcher';
 import Routes from './Routes';
+import ModalSwitcher from '../features/modals/ModalSwitcher';
+
 import { selectTheme } from '../redux/pageSlice';
 
 class Content extends Component {

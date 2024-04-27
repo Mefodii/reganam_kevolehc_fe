@@ -1,9 +1,9 @@
-import { connect } from 'react-redux';
-
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import { getThemeForUrl } from '../../util/colors';
+
 import { themeUpdated } from '../../redux/pageSlice';
 
 class ThemeChanger extends Component {

@@ -1,11 +1,12 @@
-import React from "react";
-import PropTypes from "prop-types";
-import SVGLoading from "./svg/SVGLoading";
+import React from 'react';
+import PropTypes from 'prop-types';
+
+import { SVGLoading } from '../svg';
 
 const Loading = (props) => {
   return (
     <SVGLoading
-      className={`w-5 animate-spin ${props.loading ? "" : "hidden"}`}
+      className={`w-5 animate-spin ${props.loading ? '' : 'hidden'}`}
     ></SVGLoading>
   );
 };

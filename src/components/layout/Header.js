@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
+
 import {
   ANIME_URL,
   AUDIO_URL,
@@ -11,7 +12,7 @@ import {
   SERIALS_URL,
 } from '../../util/frontend-urls';
 
-import SVGDownArrow from '../generic/svg/SVGDownArrow';
+import { SVGDownArrow } from '../svg';
 
 class Header extends Component {
   state = {
@@ -36,11 +37,11 @@ class Header extends Component {
       >
         <div className='flex p-2 items-center text-lg justify-between'>
           <div className='flex'>
-            <NavLink className='font-bold m-2 hover:underline' to='/'>
+            <NavLink className='font-bold p-2 hover:underline' to='/'>
               :Kevolehc:
             </NavLink>
             <div
-              className='flex relative m-2 group'
+              className='flex relative group nav-link'
               onMouseEnter={this.showDropDown}
               onMouseLeave={this.hideDropDown}
             >
@@ -49,32 +50,32 @@ class Header extends Component {
               <div
                 className={`absolute ${dropDownVisibility} flex flex-col top-full bg-theme-1 border border-theme-3 shadow-md z-10`}
               >
-                <NavLink className='p-2 nav-link' to={MOVIES_URL}>
+                <NavLink className='nav-link' to={MOVIES_URL}>
                   Movies
                 </NavLink>
-                <NavLink className='p-2 nav-link' to={SERIALS_URL}>
+                <NavLink className='nav-link' to={SERIALS_URL}>
                   Serials
                 </NavLink>
-                <NavLink className='p-2 nav-link' to={ANIME_URL}>
+                <NavLink className='nav-link' to={ANIME_URL}>
                   Anime
                 </NavLink>
               </div>
             </div>
-            <NavLink className='p-2 nav-link' to={GAMING_URL}>
+            <NavLink className='nav-link' to={GAMING_URL}>
               GameIO
             </NavLink>
-            <NavLink className='p-2 nav-link' to={READING_URL}>
+            <NavLink className='nav-link' to={READING_URL}>
               ReadIO
             </NavLink>
-            <NavLink className='p-2 nav-link' to={CONTENTING_URL}>
+            <NavLink className='nav-link' to={CONTENTING_URL}>
               ContentIO
             </NavLink>
-            <NavLink className='p-2 nav-link' to={AUDIO_URL}>
+            <NavLink className='nav-link' to={AUDIO_URL}>
               AudIO
             </NavLink>
           </div>
           <div className='flex'>
-            <NavLink className='p-2 nav-link text-xs' to={HELPERS_URL}>
+            <NavLink className='nav-link text-xs' to={HELPERS_URL}>
               Helpers (shhh)
             </NavLink>
           </div>

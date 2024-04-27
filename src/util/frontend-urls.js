@@ -16,6 +16,14 @@ export const MAL_LOGO = window.location.origin + '/static/icons/mal_logo.png';
 export const DEFAULT_CLIP_LOGO =
   window.location.origin + '/static/icons/default_clip_logo.png';
 
+export const getLogoFromLink = (link) => {
+  if (link.startsWith('https://9anime.to/')) return ANIME9_LOGO;
+  if (link.startsWith('https://www.imdb.com/')) return IMDB_LOGO;
+  if (link.startsWith('https://myanimelist.net/')) return MAL_LOGO;
+
+  return DEFAULT_CLIP_LOGO;
+};
+
 export const HELPERS_URL = '/helpers';
 export const WATCHING_URL = '/watchio';
 export const GAMING_URL = '/gameio';
