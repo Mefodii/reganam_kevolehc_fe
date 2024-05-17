@@ -23,7 +23,7 @@ import { useForm } from '../../../hooks/useForm';
 
 type GroupFormProps = {
   formProps: Model.GroupProps;
-  onSuccess: (isGroupCreated?: boolean, group?: Model.GroupDM) => void; // TODO - is this too generic?
+  onSuccess: (group?: Model.GroupDM) => void; // TODO - is this too generic?
 };
 
 const GroupForm: React.FC<GroupFormProps> = ({ formProps, onSuccess }) => {
@@ -48,7 +48,7 @@ const GroupForm: React.FC<GroupFormProps> = ({ formProps, onSuccess }) => {
     }
 
     dispatch(createGroup(newGroup)).then((res) => {
-      onSuccess(true, res.payload);
+      onSuccess(res.payload);
     });
   };
 

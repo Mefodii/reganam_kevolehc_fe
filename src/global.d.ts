@@ -8,36 +8,6 @@ declare global {
     headers?: AxiosConfigHeaders;
   };
 
-  declare namespace Modal {
-    type Group = {
-      modalType: 'GROUP_MODAL';
-      props: Model.GroupProps;
-    };
-    type Video = {
-      modalType: 'VIDEO_MODAL';
-      props: Model.VideoProps;
-    };
-    type ContentWatcher = {
-      modalType: 'CONTENT_WATCHER_MODAL';
-      props: Model.ContentWatcherProps;
-    };
-
-    type WatchingFilter = {
-      modalType: 'WATCHING_FILTER_MODAL';
-    };
-
-    type ClosedModal = {
-      modalType: 'CLOSED_MODAL';
-    };
-
-    type Data =
-      | Modal.Group
-      | Modal.Video
-      | Modal.ContentWatcher
-      | WatchingFilter
-      | ClosedModal;
-  }
-
   declare namespace DragAndDrop {
     type Type = 'VIDEO_ITEM';
     type Item = Model.VideoDJM;

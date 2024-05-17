@@ -3,13 +3,14 @@ import { SideButton } from '../../../components/buttons';
 import { SidepanelElement } from '../../../components/layout';
 
 import { selectContentWatcherSourceTypes } from '../info/infoSlice';
-import { openContentWatcherModal } from '../../../redux/modalSlice';
 import {
   selectContentingFilters,
   setLists,
   setWatchers,
 } from '../filters/filtersSlice';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { useModal } from '../../../hooks/useModal';
+import ContentWatcherForm from '../contentWatchers/ContentWatcherForm';
 
 type SidepanelProps = {};
 
@@ -19,9 +20,15 @@ const Sidepanel: React.FC<SidepanelProps> = (props) => {
     selectContentWatcherSourceTypes
   );
   const filters = useAppSelector(selectContentingFilters);
+  const { openModal, closeModal } = useModal();
 
   const handleOpenContentWatcherModal = () => {
-    dispatch(openContentWatcherModal({ formMode: 'CREATE' }));
+    openModal(
+      <ContentWatcherForm
+        formProps={{ formMode: 'CREATE' }}
+        onSuccess={closeModal}
+      />
+    );
   };
 
   const hangleOpenContentListModal = () => {};

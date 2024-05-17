@@ -4,22 +4,23 @@ import { CompactButton } from '../../../components/buttons';
 import { SVGFilter, SVGPlusCircle } from '../../../components/svg';
 
 import { selectAnimeType, selectMovieType } from '../info/infoSlice';
-import {
-  openGroupModal,
-  openWatchingFilterModal,
-} from '../../../redux/modalSlice';
-import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { useAppSelector } from '../../../hooks';
+import { useModal } from '../../../hooks/useModal';
+import FilterForm from '../filters/FilterForm';
+import GroupForm from '../groups/GroupForm';
+import VideoForm from '../videos/VideoForm';
 
 type SidepanelProps = {
   watchingType: string;
 };
 
 const Sidepanel: React.FC<SidepanelProps> = ({ watchingType }) => {
-  const dispatch = useAppDispatch();
   const movieType = useAppSelector(selectMovieType);
   const animeType = useAppSelector(selectAnimeType);
 
   const [mouseIn, setMouseIn] = useState(false);
+
+  const { openModal, closeModal } = useModal();
 
   const handleMouseEvent = (isMouseIn: boolean) => () => setMouseIn(isMouseIn);
 
@@ -28,18 +29,38 @@ const Sidepanel: React.FC<SidepanelProps> = ({ watchingType }) => {
     const edit = false;
     const withToggleSingle = !edit && watchingType === animeType;
 
-    dispatch(
-      openGroupModal({
-        watchingType,
-        single,
-        formMode: 'CREATE',
-        withToggleSingle,
-      })
+    openModal(
+      <GroupForm
+        formProps={{
+          watchingType,
+          single,
+          formMode: 'CREATE',
+          withToggleSingle,
+        }}
+        onSuccess={handleCreateGroupSuccess}
+      />
     );
   };
 
+  const handleCreateGroupSuccess = (group?: Model.GroupDM) => {
+    closeModal();
+    if (group && !group.single) {
+      openModal(
+        <VideoForm
+          formProps={{
+            watchingType: group.type,
+            groupId: group.id,
+            defaultOrder: 1,
+            formMode: 'CREATE',
+          }}
+          onSuccess={() => closeModal()}
+        />
+      );
+    }
+  };
+
   const handleOpenWatchingFilterModal = () => {
-    dispatch(openWatchingFilterModal());
+    openModal(<FilterForm onSuccess={closeModal} />);
   };
 
   return (

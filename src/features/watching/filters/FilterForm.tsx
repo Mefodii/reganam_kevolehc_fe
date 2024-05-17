@@ -11,21 +11,18 @@ import { SVGCheck, SVGTrash } from '../../../components/svg';
 
 import { watchingFilter as model } from '../../../models';
 import { selectStatusTypes } from '../info/infoSlice';
-import { updateWatchingFilter } from './filtersSlice';
+import { selectWatchingFilter, updateWatchingFilter } from './filtersSlice';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { useForm } from '../../../hooks/useForm';
 
 type FilterFormProps = {
-  watchingFilter: Model.WatchingFilter;
   onSuccess: () => void; // TODO - is this too generic?
 };
 
-const FilterForm: React.FC<FilterFormProps> = ({
-  watchingFilter,
-  onSuccess,
-}) => {
+const FilterForm: React.FC<FilterFormProps> = ({ onSuccess }) => {
   const dispatch = useAppDispatch();
   const statusTypes = useAppSelector(selectStatusTypes);
+  const watchingFilter = useAppSelector(selectWatchingFilter);
 
   const { modelState, onFieldChange, setFormErrors } = useForm(watchingFilter);
 

@@ -14,13 +14,11 @@ import {
   name as dragAndDropName,
   reducer as dragAndDrop,
 } from './redux/dragAndDropSlice';
-import { name as modalName, reducer as modal } from './redux/modalSlice';
 
 import { fetchInfo as fetchWatchingInfo } from './features/watching/info/infoSlice';
 import { fetchInfo as fetchContentingInfo } from './features/contenting/info/infoSlice';
 
 const rootReducer = combineReducers({
-  [modalName]: modal,
   [dragAndDropName]: dragAndDrop,
   [loadingsName]: loadings,
   [pageName]: page,

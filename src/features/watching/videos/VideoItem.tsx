@@ -9,9 +9,10 @@ import { DragAndDrop } from '../../../components/dragAndDrop';
 import LinkList from '../links/LinkList';
 
 import { createVideo, updateVideo } from '../groups/groupsSlice';
-import { openVideoModal } from '../../../redux/modalSlice';
 import { useAppDispatch } from '../../../hooks';
 import { video as videoModel } from '../../../models';
+import VideoForm from './VideoForm';
+import { useModal } from '../../../hooks/useModal';
 type VideoItemProps = {
   video: Model.VideoDM;
   watchingType: string;
@@ -33,6 +34,8 @@ const VideoItem: React.FC<VideoItemProps> = ({
     dragOver: false,
     dragOverCopy: false,
   });
+
+  const { openModal, closeModal } = useModal();
 
   // TODO - probably all these drag events can be generic into a hook. Investigate later
   const onDragStart = (
@@ -80,11 +83,14 @@ const VideoItem: React.FC<VideoItemProps> = ({
   };
 
   const openEdit = () => {
-    dispatch(
-      openVideoModal({
-        video,
-        formMode: 'UPDATE',
-      })
+    openModal(
+      <VideoForm
+        formProps={{
+          video,
+          formMode: 'UPDATE',
+        }}
+        onSuccess={() => closeModal()}
+      />
     );
   };
 

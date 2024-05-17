@@ -8,10 +8,12 @@ import VideoList from '../videos/VideoList';
 import LinkList from '../links/LinkList';
 
 import { updateGroup } from './groupsSlice';
-import { openGroupModal, openVideoModal } from '../../../redux/modalSlice';
 import { isGroupLoading } from '../../../redux/loadingsSlice';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { group as groupModel } from '../../../models';
+import { useModal } from '../../../hooks/useModal';
+import GroupForm from './GroupForm';
+import VideoForm from '../videos/VideoForm';
 
 type GroupItemProps = {
   group: Model.GroupDM;
@@ -26,15 +28,19 @@ const GroupItem: React.FC<GroupItemProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector((state) => isGroupLoading(state, group.id));
+  const { openModal, closeModal } = useModal();
 
   const handleOpenEdit = () => {
-    dispatch(
-      openGroupModal({
-        watchingType,
-        single: group.single,
-        group,
-        formMode: 'UPDATE',
-      })
+    openModal(
+      <GroupForm
+        formProps={{
+          watchingType,
+          single: group.single,
+          group,
+          formMode: 'UPDATE',
+        }}
+        onSuccess={closeModal}
+      />
     );
   };
 
@@ -43,13 +49,17 @@ const GroupItem: React.FC<GroupItemProps> = ({
 
     const defaultOrder =
       videos.length > 0 ? videos[videos.length - 1].order + 1 : 1;
-    dispatch(
-      openVideoModal({
-        watchingType,
-        groupId,
-        defaultOrder,
-        formMode: 'CREATE',
-      })
+
+    openModal(
+      <VideoForm
+        formProps={{
+          watchingType,
+          groupId,
+          defaultOrder,
+          formMode: 'CREATE',
+        }}
+        onSuccess={() => closeModal()}
+      />
     );
   };
 
