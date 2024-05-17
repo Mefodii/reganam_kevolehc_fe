@@ -22,6 +22,8 @@
   --active-1RGB: 216, 180, 254;
   --active-2: #6ee7b7;
   --active-2RGB: 110, 231, 183;
+  --warning-1: #dfeb41;
+  --warning-1RGB: 223, 235, 65;
   --error-1: #be123d;
   --error-1RGB: 190, 18, 60;
   --text-1: #f3f4f6;
@@ -167,8 +169,12 @@
   @apply border-active-1 text-active-1 hover:text-active-1;
 }
 
+.option-selected-disabled {
+  @apply cursor-default bg-white/15 hover:bg-white/15 hover:text-active-1;
+}
+
 .option-disabled {
-  @apply cursor-default hover:bg-transparent;
+  @apply cursor-default bg-white/15 hover:bg-white/15 hover:text-text-1/80;
 }
 
 .option-dropdown-container {

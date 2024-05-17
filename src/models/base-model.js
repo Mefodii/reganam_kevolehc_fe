@@ -1,7 +1,7 @@
 class BaseModel {
-  static CREATE_MODE = "CREATE_MODE";
-  static UPDATE_MODE = "UPDATE_MODE";
-  static DELETE_MODE = "DELETE_MODE";
+  static CREATE_MODE = 'CREATE_MODE';
+  static UPDATE_MODE = 'UPDATE_MODE';
+  static DELETE_MODE = 'DELETE_MODE';
 
   constructor(mode) {
     this.mode = mode;

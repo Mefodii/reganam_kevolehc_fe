@@ -566,6 +566,8 @@ video {
   --active-1RGB: 216, 180, 254;
   --active-2: #6ee7b7;
   --active-2RGB: 110, 231, 183;
+  --warning-1: #dfeb41;
+  --warning-1RGB: 223, 235, 65;
   --error-1: #be123d;
   --error-1RGB: 190, 18, 60;
   --text-1: #f3f4f6;
@@ -899,12 +901,25 @@ video {
   color: rgba(var(--active-1RGB), var(--tw-text-opacity));
 }
 
+.option-selected-disabled {
+  cursor: default;
+  background-color: rgb(255 255 255 / 0.15);
+}
+
+.option-selected-disabled:hover {
+  background-color: rgb(255 255 255 / 0.15);
+  --tw-text-opacity: 1;
+  color: rgba(var(--active-1RGB), var(--tw-text-opacity));
+}
+
 .option-disabled {
   cursor: default;
+  background-color: rgb(255 255 255 / 0.15);
 }
 
 .option-disabled:hover {
-  background-color: transparent;
+  background-color: rgb(255 255 255 / 0.15);
+  color: rgba(var(--text-1RGB), 0.8);
 }
 
 .option-dropdown-container {
@@ -1878,6 +1893,11 @@ video {
 
 .text-text-1\/20 {
   color: rgba(var(--text-1RGB), 0.2);
+}
+
+.text-warning-1 {
+  --tw-text-opacity: 1;
+  color: rgba(var(--warning-1RGB), var(--tw-text-opacity));
 }
 
 .opacity-0 {
