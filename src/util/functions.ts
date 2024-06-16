@@ -1,10 +1,4 @@
-import {
-  APIStatus,
-  WATCHING_STATUS_FINISHED,
-  WATCHING_STATUS_PLANNED,
-  WATCHING_STATUS_PREMIERE,
-  WATCHING_STATUS_WATCHING,
-} from './constants';
+import { APIStatus } from './constants';
 
 /**
  * Compare 2 objects by given key
@@ -12,7 +6,7 @@ import {
  * @param  {Object} options  { caseSensitive : boolean (defeault: true)}
  */
 export const compareByKey =
-  (key: string, options: { caseSensitive?: boolean }) =>
+  (key: string, options?: { caseSensitive?: boolean }) =>
   <T, V>(a: T, b: V) => {
     const { caseSensitive = true } = options || {};
     var valueA: any = a[key as keyof T];
@@ -26,14 +20,6 @@ export const compareByKey =
     return valueA > valueB ? 1 : -1;
   };
 
-export const getToday = () => {
-  var today = new Date();
-  const year = today.getFullYear();
-  const month = (today.getMonth() + 1).toString().padStart(2, '0');
-  const day = today.getDate().toString().padStart(2, '0');
-  return `${year}-${month}-${day}`;
-};
-
 export const newArray = (length: number, defaultValue = null) =>
   [...Array(length).keys()].map((_) => defaultValue);
 
@@ -45,13 +31,6 @@ export const promptNumber = (text: string) => {
   }
   return parseInt(result);
 };
-
-export const isWatchingFinished = (status?: string) =>
-  status === WATCHING_STATUS_FINISHED;
-export const isWatchingQueue = (status?: string) =>
-  status === WATCHING_STATUS_PLANNED || status === WATCHING_STATUS_WATCHING;
-export const isWatchingPremiere = (status?: string) =>
-  status === WATCHING_STATUS_PREMIERE;
 
 export const splitByNewline = (value: string) => value.split(/\r?\n/);
 export const joinByNewline = (lines: string[], linebreak = '\n') =>
@@ -79,3 +58,6 @@ export const validateMandatoryFields = <T>(
 
   return [isValid, error];
 };
+
+export const filterSelectedItems = <T>(items: T[], indexes: number[]): T[] =>
+  items.filter((_, i) => indexes.includes(i));

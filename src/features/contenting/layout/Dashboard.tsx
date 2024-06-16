@@ -11,6 +11,7 @@ import {
   selectAllContentLists,
 } from '../contentLists/contentListsSlice';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
+import ContentWatcherList from '../contentWatchers/ContentWatcherList';
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
@@ -27,9 +28,7 @@ const Dashboard = () => {
     <div className='flex grow'>
       <Sidepanel />
       <div className='py-5 px-10 bg-theme-2 w-full'>
-        {contentWatchers.map((_, i) => (
-          <div key={i}>{JSON.stringify(_)}</div>
-        ))}
+        <ContentWatcherList contentWatchers={contentWatchers} />
         {contentLists.map((_, i) => (
           <div key={i}>{JSON.stringify(_)}</div>
         ))}

@@ -1,5 +1,5 @@
+import React, { PropsWithChildren } from 'react';
 import { isEmpty } from 'lodash';
-import { PropsWithChildren } from 'react';
 
 export type InputContainerProps = {
   label?: string;
@@ -30,4 +30,4 @@ const InputContainer: React.FC<PropsWithChildren<InputContainerProps>> = ({
   );
 };
 
-export default InputContainer;
+export default React.memo(InputContainer);

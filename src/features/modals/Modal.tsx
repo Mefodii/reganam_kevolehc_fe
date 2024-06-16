@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import { SVGXCircle } from '../../components/svg';
+import ConfirmationModal, { ConfirmationModalProps } from './ConfirmationModal';
 
 type ModalProps = {
   isOpen: boolean;
   Content?: JSX.Element;
   open: (Content: JSX.Element) => void;
+  openConfirmation: (props: ConfirmationModalProps) => void;
   close: () => void;
 };
 
 export const ModalContext = React.createContext<ModalProps>({
   isOpen: false,
   open: () => {},
+  openConfirmation: () => {},
   close: () => {},
 });
 ModalContext.displayName = 'ModalContext';
@@ -23,9 +26,26 @@ export const ModalProvider: React.FC<React.PropsWithChildren> = ({
   const close = () => {
     setIsOpen(false);
   };
-  const open = (C: JSX.Element) => {
+  const open = (Component: JSX.Element) => {
     setIsOpen(true);
-    setContent(C);
+    setContent(Component);
+  };
+
+  const openConfirmation = ({
+    title,
+    description,
+    onConfirm,
+    onDecline,
+  }: ConfirmationModalProps) => {
+    setIsOpen(true);
+    setContent(
+      <ConfirmationModal
+        title={title}
+        description={description}
+        onConfirm={onConfirm}
+        onDecline={onDecline}
+      ></ConfirmationModal>
+    );
   };
 
   const renderModal = () => {
@@ -48,7 +68,9 @@ export const ModalProvider: React.FC<React.PropsWithChildren> = ({
   };
 
   return (
-    <ModalContext.Provider value={{ isOpen, Content, close, open }}>
+    <ModalContext.Provider
+      value={{ isOpen, Content, close, open, openConfirmation }}
+    >
       {renderModal()}
       {children}
     </ModalContext.Provider>

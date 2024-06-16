@@ -1,22 +1,28 @@
-import { BLANK_VALUE } from '../../../util/constants';
-
-import { Date, Number, DropdownSelect, Text } from '../../../components/form';
+import {
+  Date,
+  Number as NumberInput,
+  DropdownSelect,
+  Text,
+  SingleSelect,
+} from '../../../components/form';
 import { Button } from '../../../components/buttons';
 import { SVGCheck, SVGTrash } from '../../../components/svg';
 
-import {
-  selectFileExtensionTypes,
-  selectContentWatcherSourceTypes,
-  selectContentWatcherStatusTypes,
-} from '../info/infoSlice';
 import {
   createContentWatcher,
   updateContentWatcher,
   deleteContentWatcher,
 } from './contentWatchersSlice';
-import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { useAppDispatch } from '../../../hooks';
 import { contentWatcher as model } from '../../../models';
-import { useForm } from '../../../hooks/useForm';
+import { useForm } from '../../../hooks';
+import {
+  ContentCategory,
+  ContentWatcherExtension,
+  ContentWatcherQuality,
+  ContentWatcherSource,
+  ContentWatcherStatus,
+} from '../../../api/api-utils';
 
 type ContentWatcherFormProps = {
   formProps: Model.ContentWatcherProps;
@@ -28,10 +34,6 @@ const ContentWatcherForm: React.FC<ContentWatcherFormProps> = ({
   onSuccess,
 }) => {
   const dispatch = useAppDispatch();
-
-  const sourceTypes = useAppSelector(selectContentWatcherSourceTypes);
-  const statusTypes = useAppSelector(selectContentWatcherStatusTypes);
-  const extensionTypes = useAppSelector(selectFileExtensionTypes);
 
   const isUpdate = formProps.formMode === 'UPDATE';
 
@@ -51,6 +53,8 @@ const ContentWatcherForm: React.FC<ContentWatcherFormProps> = ({
   };
 
   const handleUpdate = () => {
+    if (!isUpdate) return;
+
     const [updatedContentWatcher, equals, isValid, error] =
       model.validateUpdate(modelState, model.getDBState(formProps));
     if (!isValid) {
@@ -59,7 +63,12 @@ const ContentWatcherForm: React.FC<ContentWatcherFormProps> = ({
     }
     if (!isValid || equals) return;
 
-    dispatch(updateContentWatcher(updatedContentWatcher)).then(onSuccess);
+    dispatch(
+      updateContentWatcher({
+        contentWatcher: updatedContentWatcher,
+        scope: formProps.scope,
+      })
+    ).then(onSuccess);
   };
 
   const handleDelete = (contentWatcher: Model.ContentWatcherDM) => {
@@ -68,18 +77,21 @@ const ContentWatcherForm: React.FC<ContentWatcherFormProps> = ({
 
   const {
     name,
+    category,
     watcher_id,
     source_type,
     status,
+    download,
+    video_quality,
     check_date,
-    download_count,
+    items_count,
     file_extension,
   } = modelState;
 
   const title = isUpdate ? `Edit Watcher` : `Add Watcher`;
   return (
     // TODO -> to tailwind classname
-    <div className='simple-font p-4 justify-evenly bg-theme-2 border-2 border-theme-3 rounded-xl shadow-lg w-full'>
+    <div className='simple-font form-container'>
       <div className='title'>{title}</div>
 
       <div className='form-row'>
@@ -94,43 +106,70 @@ const ContentWatcherForm: React.FC<ContentWatcherFormProps> = ({
 
       <div className='form-row'>
         <Date
+          datetime
           label={`Check Date (UTC-0)`}
           name='check_date'
           value={check_date}
           onChange={onFieldChange}
         />
-        <Number
+        <NumberInput
           label='Count'
-          name='download_count'
-          value={download_count}
+          name='items_count'
+          value={items_count}
           onChange={onFieldChange}
         />
       </div>
 
       <div className='form-row'>
         <DropdownSelect
+          label='Category'
+          name='category'
+          value={category}
+          options={Object.values(ContentCategory)}
+          onChange={onFieldChange}
+        />
+        <DropdownSelect
           label='Watcher Type'
           name='source_type'
           value={source_type}
-          placeholder={BLANK_VALUE}
-          options={sourceTypes}
+          options={Object.values(ContentWatcherSource)}
           onChange={onFieldChange}
         />
+      </div>
+
+      <div className='form-row'>
         <DropdownSelect
           label='Status'
           name='status'
           value={status}
-          placeholder={BLANK_VALUE}
-          options={statusTypes}
+          options={Object.values(ContentWatcherStatus)}
           onChange={onFieldChange}
         />
         <DropdownSelect
           label='Extension'
           name='file_extension'
           value={file_extension}
-          placeholder={BLANK_VALUE}
-          options={extensionTypes}
+          options={Object.values(ContentWatcherExtension)}
           onChange={onFieldChange}
+        />
+      </div>
+
+      <div className='form-row'>
+        <SingleSelect
+          name='download'
+          text={'Download'}
+          value={download}
+          onChange={onFieldChange}
+        />
+        <DropdownSelect
+          label='Video Quality'
+          name='video_quality'
+          value={video_quality}
+          options={Object.values(ContentWatcherQuality).filter(
+            (val) => !isNaN(Number(val))
+          )}
+          onChange={onFieldChange}
+          deselect
         />
       </div>
 

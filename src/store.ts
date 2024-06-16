@@ -15,9 +15,6 @@ import {
   reducer as dragAndDrop,
 } from './redux/dragAndDropSlice';
 
-import { fetchInfo as fetchWatchingInfo } from './features/watching/info/infoSlice';
-import { fetchInfo as fetchContentingInfo } from './features/contenting/info/infoSlice';
-
 const rootReducer = combineReducers({
   [dragAndDropName]: dragAndDrop,
   [loadingsName]: loadings,
@@ -31,8 +28,6 @@ const store = configureStore({
 });
 
 // Actions on the page load
-store.dispatch(fetchWatchingInfo());
-store.dispatch(fetchContentingInfo());
 
 export default store;
 

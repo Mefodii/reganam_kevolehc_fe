@@ -1,50 +1,41 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { name as parentName } from '../constants';
 import { RootState } from '../../../store';
+import { contentFilter } from '../../../models';
+import { ContentCategory, ContentWatcherSource } from '../../../api/api-utils';
 
 export const name = 'filters';
 const sliceName = `${parentName}/${name}`;
 
-// TODO maybe save in LS as watchingFilter
-const initialState = {
-  showWatchers: true,
-  showLists: false,
-  watcherType: undefined,
-  watcher: undefined,
-  list: undefined,
-};
+const initialState = contentFilter.getInitialState();
 
 const slice = createSlice({
   name: sliceName,
   initialState,
   reducers: {
-    setWatcher: (state, action) => {
-      state.showWatchers = true;
-      state.showLists = false;
-      state.watcherType = undefined;
-      state.watcher = action.payload;
-      state.list = undefined;
-    },
-    setWatchers: (state, action) => {
+    setWatchers: (
+      state,
+      action: PayloadAction<ContentWatcherSource | undefined>
+    ) => {
       state.showWatchers = true;
       state.showLists = false;
       state.watcherType = action.payload;
-      state.watcher = undefined;
-      state.list = undefined;
+      state.category = undefined;
     },
-    setList: (state, action) => {
-      state.showWatchers = false;
-      state.showLists = false;
-      state.watcherType = undefined;
-      state.watcher = undefined;
-      state.list = action.payload;
-    },
-    setLists: (state, action) => {
+    setLists: (state, action: PayloadAction<undefined>) => {
       state.showWatchers = false;
       state.showLists = true;
       state.watcherType = undefined;
-      state.watcher = undefined;
-      state.list = undefined;
+      state.category = undefined;
+    },
+    setCategory: (
+      state,
+      action: PayloadAction<{ category?: ContentCategory; showAll: boolean }>
+    ) => {
+      state.showWatchers = action.payload.showAll;
+      state.showLists = true;
+      state.watcherType = undefined;
+      state.category = action.payload.category;
     },
   },
   selectors: {},
@@ -52,6 +43,6 @@ const slice = createSlice({
 
 export const selectSlice = (state: RootState) => state[parentName][name];
 export const selectContentingFilters = selectSlice;
-export const { setWatcher, setWatchers, setList, setLists } = slice.actions;
+export const { setWatchers, setLists, setCategory } = slice.actions;
 export const reducer = slice.reducer;
 export default slice;

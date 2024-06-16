@@ -3,7 +3,6 @@ import DropdownSelect from './DropdownSelect';
 import InputContainer from './InputContainer';
 import MultiSelect from './MultiSelect';
 import Number from './Number';
-import Options from './Options';
 import Radio from './Radio';
 import SingleSelect from './SingleSelect';
 import Text from './Text';
@@ -16,7 +15,6 @@ export {
   InputContainer,
   MultiSelect,
   Number,
-  Options,
   Radio,
   SingleSelect,
   Text,

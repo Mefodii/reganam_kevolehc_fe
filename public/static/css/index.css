@@ -8,7 +8,7 @@
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Mulish:wght@300&family=Oswald&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100..700&display=swap');
 
 html,
 body,
@@ -63,9 +63,20 @@ body,
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: var(--theme-3);
+  border: 2px solid var(--theme-1);
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: var(--theme-4);
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
 }

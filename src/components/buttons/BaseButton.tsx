@@ -1,6 +1,7 @@
-import { PropsWithChildren, useState } from 'react';
+import React, { PropsWithChildren } from 'react';
 
 import { Loading, Tooltip } from '../generic';
+import { useTooltip } from '../../hooks';
 
 export type BaseButtonProps = PropsWithChildren<{
   tooltip?: string;
@@ -14,38 +15,21 @@ const BaseButton: React.FC<BaseButtonProps> = ({
   tooltip,
   className = '',
   loading = false,
-  showTooltipDelay = 150,
+  showTooltipDelay,
   onClick,
   children,
 }) => {
-  const [showTooltip, setShowTooltip] = useState(false);
-  const [showTooltipTimeoutId, setShowTooltipTimeoutId] =
-    useState<NodeJS.Timeout | null>(null);
-
-  const onShowTooltip = () => {
-    if (!tooltip) return;
-    if (showTooltip) return;
-
-    const showTooltipTimeoutId = setTimeout(() => {
-      setShowTooltip(true);
-      setShowTooltipTimeoutId(null);
-    }, showTooltipDelay);
-    setShowTooltipTimeoutId(showTooltipTimeoutId);
-  };
-
-  const onHideTooltip = () => {
-    if (!tooltip) return;
-    if (showTooltipTimeoutId) clearTimeout(showTooltipTimeoutId);
-
-    setShowTooltip(false);
-  };
+  const { showTooltip, handleHideTooltip, handleShowTooltip } = useTooltip(
+    tooltip,
+    showTooltipDelay
+  );
 
   return (
     <div
       className={`btn-base ${className}`}
       onClick={onClick}
-      onMouseEnter={onShowTooltip}
-      onMouseLeave={onHideTooltip}
+      onMouseEnter={handleShowTooltip}
+      onMouseLeave={handleHideTooltip}
     >
       {children}
       <Loading loading={loading} />
@@ -54,4 +38,4 @@ const BaseButton: React.FC<BaseButtonProps> = ({
   );
 };
 
-export default BaseButton;
+export default React.memo(BaseButton);

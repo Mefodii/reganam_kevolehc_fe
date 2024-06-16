@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { FE_URL } from '../../util/frontend-urls';
@@ -62,4 +62,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default React.memo(Header);

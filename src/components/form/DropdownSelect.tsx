@@ -1,58 +1,55 @@
-import { forwardRef, useState } from 'react';
+import React, { useState } from 'react';
 
 import InputContainer, { InputContainerProps } from './InputContainer';
-import Options from './Options';
+import { BLANK_VALUE } from '../../util/constants';
 
-export type DropdownSelectProps = InputContainerProps & {
+export type DropdownSelectProps<T = string> = InputContainerProps & {
   name: string;
-  value?: string;
+  value?: Form.Option<T>;
   placeholder?: string;
+  allow_undefined?: boolean; // TODO - implement
   hideOnChange?: boolean;
   disabled?: boolean;
   deselect?: boolean;
   simple?: boolean;
-  options: Form.Option[];
-  optionDisplay?: (option: Form.Option, i?: number) => string;
+  options: Form.Option<T>[];
+  optionDisplay?: (option: Form.Option<T>, i?: number) => string;
   optionClassName?: string;
   optionContainerClassName?: string;
   containerClassName?: string;
   onChange: (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    payload: Form.Payload<Form.Option>
+    payload: Form.Payload<Form.Option<T>>
   ) => void;
 };
 
-const DropdownSelect = forwardRef<HTMLDivElement, DropdownSelectProps>(
-  (
-    {
-      label,
-      error,
-      className = '',
-      // ^ InputContainerProps
-      name,
-      value,
-      placeholder,
-      hideOnChange = true,
-      disabled,
-      deselect,
-      simple,
-      options,
-      optionDisplay = (option, i) => option,
-      optionClassName,
-      optionContainerClassName,
-      containerClassName,
-      onChange,
-    },
-    ref
-  ) => {
-    const [showOptions, setShowOptions] = useState(false);
+// Note: In case ref will be required: https://fettblog.eu/typescript-react-generic-forward-refs/
+const DropdownSelect = <T,>({
+  label,
+  error,
+  className = '',
+  // ^ InputContainerProps
+  name,
+  value,
+  placeholder = BLANK_VALUE,
+  hideOnChange = true,
+  disabled,
+  deselect,
+  simple,
+  options,
+  optionDisplay = (option, i) => option + '',
+  optionClassName,
+  optionContainerClassName,
+  containerClassName,
+  onChange,
+}: DropdownSelectProps<T>) => {
+  const [showOptions, setShowOptions] = useState(false);
 
-    const isSelected = () => options.includes(value || '');
+  const isSelected = () => value && options.includes(value);
 
-    const onOptionClick = (
-      e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-      option: Form.Option
-    ) => {
+  const onOptionClick =
+    (option: Form.Option<T>, i: number) =>
+    (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       if (option !== value) {
         onInputChange(e, { name, value: option });
       }
@@ -62,58 +59,61 @@ const DropdownSelect = forwardRef<HTMLDivElement, DropdownSelectProps>(
       }
     };
 
-    const onInputChange = (
-      e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-      payload: Form.Payload<Form.Option>
-    ) => {
-      onChange(e, payload);
-      if (hideOnChange) setShowOptions(false);
-    };
+  const onInputChange = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    payload: Form.Payload<Form.Option<T>>
+  ) => {
+    onChange(e, payload);
+    if (hideOnChange) setShowOptions(false);
+  };
 
-    const renderInput = () => {
-      const optionsHidden = disabled || !showOptions;
-      const shownValue = value ? optionDisplay(value) : placeholder;
+  const renderInput = () => {
+    const optionsHidden = disabled || !showOptions;
+    const shownValue = value ? optionDisplay(value) : placeholder;
 
-      return (
+    return (
+      <div
+        className='relative'
+        onMouseEnter={() => setShowOptions(true)}
+        onMouseLeave={() => setShowOptions(false)}
+      >
         <div
-          className='relative'
-          ref={ref}
-          onMouseEnter={() => setShowOptions(true)}
-          onMouseLeave={() => setShowOptions(false)}
-        >
-          <div
-            className={`option-single 
+          className={`option-single 
           ${isSelected() && 'option-selected'}
           ${disabled && 'option-disabled'}
           ${className}
           `}
-          >
-            {shownValue}
-          </div>
-          <Options
-            className={optionContainerClassName}
-            optionClassName={optionClassName}
-            options={options}
-            optionDisplay={optionDisplay}
-            onClick={onOptionClick}
-            show={!optionsHidden}
-          />
+        >
+          {shownValue}
         </div>
-      );
-    };
-
-    if (simple) return renderInput();
-
-    return (
-      <InputContainer
-        label={label}
-        error={error}
-        className={containerClassName}
-      >
-        {renderInput()}
-      </InputContainer>
+        <div
+          className={`option-dropdown-container ${
+            optionsHidden ? 'scale-0' : 'scale-100'
+          } ${optionContainerClassName}`}
+        >
+          {options.map((option, i) => {
+            return (
+              <div
+                className={`option-dropdown-item ${optionClassName}`}
+                key={i}
+                onClick={onOptionClick(option, i)}
+              >
+                {optionDisplay(option, i)}
+              </div>
+            );
+          })}
+        </div>
+      </div>
     );
-  }
-);
+  };
 
-export default DropdownSelect;
+  if (simple) return renderInput();
+
+  return (
+    <InputContainer label={label} error={error} className={containerClassName}>
+      {renderInput()}
+    </InputContainer>
+  );
+};
+
+export default React.memo(DropdownSelect);

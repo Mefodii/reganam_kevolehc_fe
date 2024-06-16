@@ -1,3 +1,4 @@
+import React from 'react';
 import BaseButton, { BaseButtonProps } from './BaseButton';
 
 type ButtonProps = BaseButtonProps;
@@ -23,4 +24,4 @@ const Button: React.FC<ButtonProps> = ({
   );
 };
 
-export default Button;
+export default React.memo(Button);

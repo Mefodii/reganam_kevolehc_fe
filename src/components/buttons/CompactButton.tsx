@@ -1,3 +1,4 @@
+import React from 'react';
 import BaseButton, { BaseButtonProps } from './BaseButton';
 
 type CompactButtonProps = BaseButtonProps & {
@@ -27,4 +28,4 @@ const CompactButton: React.FC<CompactButtonProps> = ({
   );
 };
 
-export default CompactButton;
+export default React.memo(CompactButton);

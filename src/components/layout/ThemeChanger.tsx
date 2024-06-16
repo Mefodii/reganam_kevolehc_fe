@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { getThemeForUrl } from '../../util/colors';
@@ -20,4 +20,4 @@ const ThemeChanger = () => {
   return <></>;
 };
 
-export default ThemeChanger;
+export default React.memo(ThemeChanger);

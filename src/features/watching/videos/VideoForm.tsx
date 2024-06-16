@@ -9,11 +9,11 @@ import {
 } from '../../../components/form';
 import { Button } from '../../../components/buttons';
 
-import { selectStatusTypes } from '../info/infoSlice';
 import { createVideo, deleteVideo, updateVideo } from '../groups/groupsSlice';
 import { video as model } from '../../../models';
-import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { useForm } from '../../../hooks/useForm';
+import { useAppDispatch } from '../../../hooks';
+import { useForm } from '../../../hooks';
+import { WatchingStatus } from '../../../api/api-utils';
 
 type VideoFormProps = {
   formProps: Model.VideoProps;
@@ -22,12 +22,15 @@ type VideoFormProps = {
 
 const VideoForm: React.FC<VideoFormProps> = ({ formProps, onSuccess }) => {
   const dispatch = useAppDispatch();
-  const statusTypes = useAppSelector(selectStatusTypes);
   const isUpdate = formProps.formMode === 'UPDATE';
 
-  const { modelState, onFieldChange, setFormErrors } = useForm(
+  const { modelState, setModelState, onFieldChange, setFormErrors } = useForm(
     model.buildState(formProps)
   );
+
+  const setCurrentEpisodeMax = () => {
+    setModelState({ ...modelState, current_episode: modelState.episodes });
+  };
 
   const handleCreate = () => {
     // TODO - looks pretty similar in each form, maybe can be inserted into useForm
@@ -75,7 +78,7 @@ const VideoForm: React.FC<VideoFormProps> = ({ formProps, onSuccess }) => {
   const title = isUpdate ? 'Edit Video' : 'Add Video';
 
   return (
-    <div className='simple-font p-4 justify-evenly bg-theme-2 border-2 border-theme-3 rounded-xl shadow-lg w-full'>
+    <div className='simple-font form-container'>
       <div className='title'>{title}</div>
 
       <div className='form-row'>
@@ -108,7 +111,7 @@ const VideoForm: React.FC<VideoFormProps> = ({ formProps, onSuccess }) => {
           name='status'
           placeholder='Select status'
           value={status}
-          options={statusTypes}
+          options={Object.values(WatchingStatus)}
           onChange={onFieldChange}
         />
         <Date
@@ -126,19 +129,20 @@ const VideoForm: React.FC<VideoFormProps> = ({ formProps, onSuccess }) => {
           value={year}
           onChange={onFieldChange}
         />
-        <Number
-          label='Current ep.'
-          name='current_episode'
-          value={current_episode}
-          onChange={onFieldChange}
-        />
-        {/* <div
-            className='absolute right-4 top-1'
+        <div className='w-full relative'>
+          <Number
+            label='Current ep.'
+            name='current_episode'
+            value={current_episode}
+            onChange={onFieldChange}
+          />
+          <div
+            className='absolute right-1 top-1'
             onClick={setCurrentEpisodeMax}
           >
-            <SVGCheck className='w-6 simple-clickable'></SVGCheck>
-          </div> 
-          TODO: Number has no children, need to decide how to impl */}
+            <SVGCheck className='w-5 simple-clickable'></SVGCheck>
+          </div>
+        </div>
         <Number
           label='Episodes'
           name='episodes'

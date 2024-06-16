@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import React, { PropsWithChildren } from 'react';
 import Drag, { DragProps } from './Drag';
 import Drop, { DropProps } from './Drop';
 
@@ -39,4 +39,4 @@ const DragAndDrop = ({
   );
 };
 
-export default DragAndDrop;
+export default React.memo(DragAndDrop);

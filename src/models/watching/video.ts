@@ -1,10 +1,9 @@
-import { WATCHING_STATUS_FINISHED } from '../../util/constants';
 import {
-  getToday,
-  isWatchingFinished,
-  isWatchingPremiere,
+  WatchingStatus,
+  WatchingType,
   isWatchingQueue,
-} from '../../util/functions';
+} from '../../api/api-utils';
+import { getToday } from '../../util/datetime';
 import { alias } from './alias';
 import { link } from './link';
 
@@ -14,12 +13,12 @@ declare global {
       id?: number;
       name: string;
       comment: string;
-      type: string;
+      type: WatchingType;
       group: number;
       aliases: Alias;
       links: Alias;
       year: number;
-      status?: string;
+      status?: WatchingStatus;
       order: number;
       current_episode: number;
       episodes: number;
@@ -27,7 +26,7 @@ declare global {
       watched_date: string;
     };
     type VideoAM = VideoSM & {
-      status: string;
+      status: WatchingStatus;
     };
     type VideoDM = VideoAM & {
       id: number;
@@ -35,7 +34,7 @@ declare global {
     type VideoCreateProps = {
       formMode: 'CREATE';
       groupId: number;
-      watchingType: string;
+      watchingType: WatchingType;
       defaultOrder: number;
     };
     type VideoUpdateProps = {
@@ -50,8 +49,9 @@ declare global {
       deleteLink: (links: Alias) => Alias;
       isInQueue: <T extends VideoSM>(video: T) => boolean;
       isPremiere: <T extends VideoSM>(video: T) => boolean;
+      isDropped: <T extends VideoSM>(video: T) => boolean;
       isFinished: <T extends VideoSM>(video: T) => boolean;
-      setFinished: <T extends VideoSM>(video: T) => T;
+      setFinished: <T extends VideoSM>(video: T, rating: number) => T;
     };
   }
 }
@@ -182,12 +182,14 @@ export const video: Model.VideoModel = {
   addLink: (links) => link.addLink(links),
   deleteLink: (links) => link.deleteLink(links),
   isInQueue: (video) => isWatchingQueue(video.status),
-  isPremiere: (video) => isWatchingPremiere(video.status),
-  isFinished: (video) => isWatchingFinished(video.status),
-  setFinished: (video) => ({
+  isPremiere: (video) => video.status === WatchingStatus.PREMIERE,
+  isDropped: (video) => video.status === WatchingStatus.DROPPED,
+  isFinished: (video) => video.status === WatchingStatus.FINISHED,
+  setFinished: (video, rating) => ({
     ...video,
-    status: WATCHING_STATUS_FINISHED,
+    status: WatchingStatus.FINISHED,
     current_episode: video.episodes,
     watched_date: getToday(),
+    rating,
   }),
 };

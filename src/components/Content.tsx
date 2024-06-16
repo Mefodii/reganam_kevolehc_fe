@@ -17,7 +17,6 @@ const Content = () => {
         className={`${theme} text-text-1 bg-gradient-to-t from-theme-2 to-theme-3 flex flex-col min-h-full max-h-full overflow-y-auto`}
       >
         <ModalProvider>
-          {/* <ModalSwitcher /> */}
           <ThemeChanger />
           <Header />
           <Routes />

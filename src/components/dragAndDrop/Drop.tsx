@@ -1,4 +1,9 @@
-import { PropsWithChildren, useCallback, useEffect, useState } from 'react';
+import React, {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 
 import { selectDndDataIfGroup } from '../../redux/dragAndDropSlice';
 import { usePrevious, useAppSelector } from '../../hooks';
@@ -32,8 +37,8 @@ const Drop: React.FC<DropProps> = ({
     if (!prevState) return;
     if (!dndData) return;
 
-    if (state.dragOver && !prevState.dragOver) onDragEnter(dndData); // TODO
-    if (!state.dragOver && prevState.dragOver) onDragLeave(dndData); // TODO
+    if (state.dragOver && !prevState.dragOver) onDragEnter(dndData);
+    if (!state.dragOver && prevState.dragOver) onDragLeave(dndData);
   }, [state, prevState, onDragEnter, onDragLeave, dndData]);
 
   const onInnerDragOver: React.DragEventHandler<HTMLDivElement> = useCallback(
@@ -91,4 +96,4 @@ const Drop: React.FC<DropProps> = ({
   );
 };
 
-export default Drop;
+export default React.memo(Drop);

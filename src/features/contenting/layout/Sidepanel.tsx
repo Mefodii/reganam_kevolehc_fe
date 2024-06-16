@@ -2,23 +2,21 @@ import { SVGPlus } from '../../../components/svg';
 import { SideButton } from '../../../components/buttons';
 import { SidepanelElement } from '../../../components/layout';
 
-import { selectContentWatcherSourceTypes } from '../info/infoSlice';
 import {
   selectContentingFilters,
+  setCategory,
   setLists,
   setWatchers,
 } from '../filters/filtersSlice';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { useModal } from '../../../hooks/useModal';
+import { useModal } from '../../../hooks';
 import ContentWatcherForm from '../contentWatchers/ContentWatcherForm';
+import { ContentCategory, ContentWatcherSource } from '../../../api/api-utils';
 
 type SidepanelProps = {};
 
 const Sidepanel: React.FC<SidepanelProps> = (props) => {
   const dispatch = useAppDispatch();
-  const contentWatcherSourceTypes = useAppSelector(
-    selectContentWatcherSourceTypes
-  );
   const filters = useAppSelector(selectContentingFilters);
   const { openModal, closeModal } = useModal();
 
@@ -33,54 +31,110 @@ const Sidepanel: React.FC<SidepanelProps> = (props) => {
 
   const hangleOpenContentListModal = () => {};
 
-  const handleShowWatchers = (watcherType?: string) => {
+  const handleShowWatchers = (watcherType?: ContentWatcherSource) => {
     dispatch(setWatchers(watcherType));
   };
 
   const handleShowLists = () => {
-    dispatch(setLists('TODO'));
+    dispatch(setLists());
   };
 
-  const { showWatchers, showLists, watcherType } = filters;
+  const handleShowCategory = (showAll: boolean, category?: ContentCategory) => {
+    dispatch(setCategory({ showAll, category }));
+  };
+
+  const { showWatchers, showLists, watcherType, category } = filters;
+
+  const renderCategories = () => {
+    return (
+      <>
+        <SidepanelElement
+          isSelected={showLists && showWatchers && !category}
+          onClick={() => handleShowCategory(true)}
+        >
+          All Categories
+        </SidepanelElement>
+
+        {Object.values(ContentCategory).map((cat, i) => (
+          <SidepanelElement
+            className={`pl-4`}
+            isSelected={showLists && showWatchers && cat === category}
+            onClick={() => handleShowCategory(true, cat)}
+            key={i}
+          >
+            - {cat}
+          </SidepanelElement>
+        ))}
+        <div className='side-panel-sep'></div>
+      </>
+    );
+  };
+
+  const renderWatchers = () => {
+    return (
+      <>
+        <SideButton onClick={handleOpenContentWatcherModal}>
+          <SVGPlus className='w-5'></SVGPlus>
+          <div>Add Watcher</div>
+        </SideButton>
+        <div className='side-panel-sep'></div>
+
+        <SidepanelElement
+          isSelected={showWatchers && !showLists && !watcherType}
+          onClick={() => handleShowWatchers()}
+        >
+          All Watchers
+        </SidepanelElement>
+
+        {Object.values(ContentWatcherSource).map((type, i) => (
+          <SidepanelElement
+            className={`pl-4`}
+            isSelected={showWatchers && !showLists && watcherType === type}
+            onClick={() => handleShowWatchers(type)}
+            key={i}
+          >
+            - {type}
+          </SidepanelElement>
+        ))}
+        <div className='side-panel-sep'></div>
+      </>
+    );
+  };
+
+  const renderLists = () => {
+    return (
+      <>
+        <SideButton onClick={() => hangleOpenContentListModal()}>
+          <SVGPlus className='w-5'></SVGPlus>
+          <div>Add List</div>
+        </SideButton>
+        <div className='side-panel-sep'></div>
+        <SidepanelElement
+          isSelected={showLists && !showWatchers && !category}
+          onClick={() => handleShowLists()}
+        >
+          Pure Lists
+        </SidepanelElement>
+
+        {Object.values(ContentCategory).map((cat, i) => (
+          <SidepanelElement
+            className={`pl-4`}
+            isSelected={showLists && !showWatchers && cat === category}
+            onClick={() => handleShowCategory(false, cat)}
+            key={i}
+          >
+            - {cat}
+          </SidepanelElement>
+        ))}
+      </>
+    );
+  };
 
   return (
     <div className='side-panel'>
-      <SideButton onClick={handleOpenContentWatcherModal}>
-        <SVGPlus className='w-5'></SVGPlus>
-        <div>Add Watcher</div>
-      </SideButton>
-      <div className='side-panel-sep'></div>
-
-      <SidepanelElement
-        isSelected={showWatchers && !watcherType}
-        onClick={() => handleShowWatchers()}
-      >
-        All Watchers
-      </SidepanelElement>
-
-      {contentWatcherSourceTypes.map((type, i) => (
-        <SidepanelElement
-          className={`pl-4`}
-          isSelected={showWatchers && watcherType === type}
-          onClick={() => handleShowWatchers(type)}
-          key={i}
-        >
-          - {type}
-        </SidepanelElement>
-      ))}
-      <div className='side-panel-sep'></div>
-
-      <SideButton onClick={() => hangleOpenContentListModal()}>
-        <SVGPlus className='w-5'></SVGPlus>
-        <div>Add List</div>
-      </SideButton>
-      <div className='side-panel-sep'></div>
-      <SidepanelElement
-        isSelected={showLists}
-        onClick={() => handleShowLists()}
-      >
-        Other Lists
-      </SidepanelElement>
+      {renderCategories()}
+      {renderWatchers()}
+      {renderLists()}
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
+  getGroup as apiGetGroup,
   addVideo as apiAddVideo,
   updateVideo as apiUpdateVideo,
   deleteVideo as apiDeleteVideo,
@@ -12,27 +13,29 @@ export const createVideosActions = (sliceName: string) => {
     `${sliceName}/createVideo`,
     async (video: Model.VideoAM) => {
       const response = await apiAddVideo(video);
-      return response.data;
+
+      const { data } = await apiGetGroup(response.data.group);
+      return data;
     }
   );
 
   const updateVideo = createAsyncThunk(
     `${sliceName}/updateVideo`,
     async (video: Model.VideoDM) => {
-      const response = await apiUpdateVideo(video);
-      return response.data;
+      await apiUpdateVideo(video);
+
+      const { data } = await apiGetGroup(video.group);
+      return data;
     }
   );
 
   const deleteVideo = createAsyncThunk(
     `${sliceName}/deleteVideo`,
     async (video: Model.VideoDM) => {
-      if (!video.id) {
-        throw Error(`Cannot delete video without id. Video: ${video}`);
-      }
+      await apiDeleteVideo(video.id);
 
-      const response = await apiDeleteVideo(video.id);
-      return response.data;
+      const { data } = await apiGetGroup(video.group);
+      return data;
     }
   );
 

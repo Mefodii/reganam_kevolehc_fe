@@ -1,3 +1,4 @@
+import React from 'react';
 import { SVGLoading } from '../svg';
 
 type LoadingOverlayProps = {
@@ -22,4 +23,4 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
   );
 };
 
-export default LoadingOverlay;
+export default React.memo(LoadingOverlay);

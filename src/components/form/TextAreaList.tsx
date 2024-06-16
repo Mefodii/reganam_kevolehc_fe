@@ -1,3 +1,4 @@
+import React from 'react';
 import { Button } from '../buttons';
 import { SVGPlus, SVGMinus } from '../svg';
 import TextArea from './TextArea';
@@ -96,4 +97,4 @@ const TextAreaList: React.FC<TextAreaListProps> = ({
   );
 };
 
-export default TextAreaList;
+export default React.memo(TextAreaList);

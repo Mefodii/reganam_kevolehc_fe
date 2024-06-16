@@ -4,20 +4,21 @@ import { SERIALS_BACKGROUND } from '../../../util/frontend-urls';
 
 import GroupList from '../groups/GroupList';
 
-import { selectSerialType } from '../info/infoSlice';
 import { fetchGroups, selectGroupsByWatchingType } from '../groups/groupsSlice';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { WatchingType } from '../../../api/api-utils';
+
+const watchingType = WatchingType.SERIAL;
 
 const Serials = () => {
   const dispatch = useAppDispatch();
 
-  const watchingType = useAppSelector(selectSerialType);
   const groups = useAppSelector((state) =>
     selectGroupsByWatchingType(state, watchingType)
   );
   useEffect(() => {
-    if (watchingType) dispatch(fetchGroups(watchingType));
-  }, [dispatch, watchingType]);
+    dispatch(fetchGroups(watchingType));
+  }, [dispatch]);
 
   if (!watchingType) return <></>;
 

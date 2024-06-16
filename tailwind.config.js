@@ -14,6 +14,10 @@ module.exports = {
   content: ['./src/**/*.{html,js,jsx,ts,tsx}'],
   theme: {
     extend: {
+      flex: {
+        2: '2 2 0%',
+        3: '3 3 0%',
+      },
       colors: {
         'theme-1': wrapColor('theme-1RGB'),
         'theme-2': wrapColor('theme-2RGB'),
@@ -51,6 +55,9 @@ module.exports = {
       transitionProperty: {
         height: 'height',
         width: 'width',
+      },
+      boxShadow: {
+        glow: '0 0 .35em .1em, 0 0 .5em .1em',
       },
     },
   },

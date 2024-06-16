@@ -112,6 +112,10 @@
 /* ___________________________________________ */
 
 /* FORM */
+.form-container {
+  @apply p-4 justify-evenly bg-theme-2 border-2 border-theme-3 rounded-xl shadow-lg w-full;
+}
+
 .form-row {
   @apply w-full flex flex-col 2xl:flex-row justify-between 2xl:space-x-1;
 }
@@ -192,6 +196,18 @@
 }
 /* ___________________________________________ */
 
+/* Contenting Tables */
+
+.row-icons-container {
+  @apply flex space-x-2 divide-x divide-active-1/20 justify-end mr-2;
+}
+
+.row-icon {
+  @apply w-4 ml-2 text-text-1/30 hover:text-text-1;
+}
+
+/* ___________________________________________ */
+
 /* UNCATEGORIZED */
 .btn-base {
   @apply relative flex focus:outline-none items-center space-x-2 py-2 px-3 font-bold 
@@ -222,7 +238,7 @@
 
 /* TODO: group-hover + opacity should be other class */
 .wiggling-clickable {
-  @apply transform opacity-10 group-hover:opacity-100 hover:animate-wiggle cursor-pointer 
+  @apply transform opacity-10 group-hover:opacity-80 hover:animate-wiggle cursor-pointer 
   hover:text-active-1 transition ease-in duration-150;
 }
 
@@ -230,8 +246,8 @@
   @apply transform opacity-40 hover:opacity-100 cursor-pointer hover:text-active-1 transition ease-in duration-150;
 }
 
-.watching-container {
-  @apply p-5 bg-theme-1 border border-theme-3 rounded-lg;
+.content-container {
+  @apply rounded-xl shadow-md space-y-5 w-10/12 mb-28 p-5 bg-theme-1 border border-theme-3;
 }
 
 .watching-element {
@@ -263,8 +279,24 @@
 }
 
 .tooltip {
-  @apply absolute z-30 text-text-1 text-sm font-light top-full left-1/2 -translate-x-1/2 w-max  mt-4
-  bg-theme-2 border border-text-1 px-2 py-1 cursor-default transition origin-top ease-in duration-100;
+  @apply absolute z-30 text-text-1 text-sm font-light top-full left-1/2 -translate-x-1/2 w-max mt-4
+  bg-theme-2 border border-text-1 px-2 py-1 cursor-default transition origin-top ease-in duration-75;
+}
+
+.led {
+  @apply w-2 h-2 rounded-full;
+}
+
+.led-off {
+  @apply border border-active-1/50;
+}
+
+.led-on-green {
+  @apply shadow-glow shadow-active-2/30 bg-active-2/70;
+}
+
+.led-on-red {
+  @apply shadow-glow shadow-error-1/30 bg-error-1/70;
 }
 /* ___________________________________________ */
 

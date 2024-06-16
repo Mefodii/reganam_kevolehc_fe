@@ -1,18 +1,20 @@
+import { WatchingStatus } from '../../api/api-utils';
+
 declare global {
   namespace Model {
     type WatchingFilter = {
       title: string;
       showPosters: boolean;
-      statuses: string[];
+      statuses: WatchingStatus[];
       fromDate: string;
       toDate: string;
     };
     type WatchingFilterModel = SimpleWorker<WatchingFilter> & {
-      filterByTitle: (title: string, groups: GroupDM[]) => GroupDM[];
-      filterByFromDate: (fromData: string, groups: GroupDM[]) => GroupDM[];
-      filterByToDate: (toDate: string, groups: GroupDM[]) => GroupDM[];
-      filterByStatuses: (statuses: string[], groups: GroupDM[]) => GroupDM[];
-      filterGroups: (filter: WatchingFilter, groups: GroupDM[]) => GroupDM[];
+      filterByTitle: (groups: GroupDM[], title: string) => GroupDM[];
+      filterByFromDate: (groups: GroupDM[], fromData: string) => GroupDM[];
+      filterByToDate: (groups: GroupDM[], toDate: string) => GroupDM[];
+      filterByStatuses: (groups: GroupDM[], statuses: string[]) => GroupDM[];
+      filterGroups: (groups: GroupDM[], filter: WatchingFilter) => GroupDM[];
     };
   }
 }
@@ -49,7 +51,7 @@ export const filter: Model.WatchingFilterModel = {
 
     return true;
   },
-  filterByTitle(title, groups) {
+  filterByTitle(groups, title) {
     if (title.length === 0) return groups;
 
     return groups.filter((group) => {
@@ -63,7 +65,7 @@ export const filter: Model.WatchingFilterModel = {
       return inName || inAlias;
     });
   },
-  filterByFromDate(fromDate, groups) {
+  filterByFromDate(groups, fromDate) {
     if (!fromDate || fromDate.length === 0) return groups;
 
     return groups.filter((g) => {
@@ -77,7 +79,7 @@ export const filter: Model.WatchingFilterModel = {
       return inVideos !== undefined;
     });
   },
-  filterByToDate(toDate, groups) {
+  filterByToDate(groups, toDate) {
     if (!toDate || toDate.length === 0) return groups;
 
     return groups.filter((g) => {
@@ -91,7 +93,7 @@ export const filter: Model.WatchingFilterModel = {
       return inVideos !== undefined;
     });
   },
-  filterByStatuses(statuses, groups) {
+  filterByStatuses(groups, statuses) {
     if (statuses.length === 0) return groups;
 
     return groups.filter((g) => {
@@ -105,12 +107,12 @@ export const filter: Model.WatchingFilterModel = {
       return inVideos !== undefined;
     });
   },
-  filterGroups(filter, groups) {
+  filterGroups(groups, filter) {
     const { title, fromDate, toDate, statuses } = filter;
-    let newGroups = this.filterByTitle(title, groups);
-    newGroups = this.filterByFromDate(fromDate, newGroups);
-    newGroups = this.filterByToDate(toDate, newGroups);
-    newGroups = this.filterByStatuses(statuses, newGroups);
+    let newGroups = this.filterByTitle(groups, title);
+    newGroups = this.filterByFromDate(newGroups, fromDate);
+    newGroups = this.filterByToDate(newGroups, toDate);
+    newGroups = this.filterByStatuses(newGroups, statuses);
     return newGroups;
   },
 };

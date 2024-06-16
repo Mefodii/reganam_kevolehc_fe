@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { SVGArrow } from '../svg';
 
@@ -47,4 +47,4 @@ const Toggler: React.FC<TogglerProps> = ({
   );
 };
 
-export default Toggler;
+export default React.memo(Toggler);

@@ -3,21 +3,17 @@ import React, { useState } from 'react';
 import { CompactButton } from '../../../components/buttons';
 import { SVGFilter, SVGPlusCircle } from '../../../components/svg';
 
-import { selectAnimeType, selectMovieType } from '../info/infoSlice';
-import { useAppSelector } from '../../../hooks';
-import { useModal } from '../../../hooks/useModal';
+import { useModal } from '../../../hooks';
 import FilterForm from '../filters/FilterForm';
 import GroupForm from '../groups/GroupForm';
 import VideoForm from '../videos/VideoForm';
+import { WatchingType } from '../../../api/api-utils';
 
 type SidepanelProps = {
-  watchingType: string;
+  watchingType: WatchingType;
 };
 
 const Sidepanel: React.FC<SidepanelProps> = ({ watchingType }) => {
-  const movieType = useAppSelector(selectMovieType);
-  const animeType = useAppSelector(selectAnimeType);
-
   const [mouseIn, setMouseIn] = useState(false);
 
   const { openModal, closeModal } = useModal();
@@ -25,9 +21,9 @@ const Sidepanel: React.FC<SidepanelProps> = ({ watchingType }) => {
   const handleMouseEvent = (isMouseIn: boolean) => () => setMouseIn(isMouseIn);
 
   const handleOpenGroupModal = () => {
-    const single = watchingType === movieType;
+    const single = watchingType === WatchingType.MOVIE;
     const edit = false;
-    const withToggleSingle = !edit && watchingType === animeType;
+    const withToggleSingle = !edit && watchingType === WatchingType.ANIME;
 
     openModal(
       <GroupForm

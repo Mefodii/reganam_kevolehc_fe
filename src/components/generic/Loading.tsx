@@ -1,15 +1,13 @@
+import React from 'react';
 import { SVGLoading } from '../svg';
 
 type LoadingProps = {
   loading: boolean;
 };
 
-const Loading: React.FC<LoadingProps> = (props) => {
-  return (
-    <SVGLoading
-      className={`w-5 animate-spin ${props.loading ? '' : 'hidden'}`}
-    ></SVGLoading>
-  );
+const Loading: React.FC<LoadingProps> = ({ loading }) => {
+  if (!loading) return <></>;
+  return <SVGLoading className={`w-5 animate-spin`}></SVGLoading>;
 };
 
-export default Loading;
+export default React.memo(Loading);

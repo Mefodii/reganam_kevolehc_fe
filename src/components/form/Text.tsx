@@ -1,5 +1,4 @@
-import { forwardRef } from 'react';
-
+import React from 'react';
 import { getTextFromClipboard, saveToClipboard } from '../../util/functions';
 
 import InputContainer, { InputContainerProps } from './InputContainer';
@@ -28,10 +27,11 @@ export type TextProps = InputContainerProps & {
       | React.MouseEvent<HTMLDivElement, MouseEvent>,
     payload: Form.Payload<string>
   ) => void;
+  onBlur?: React.FocusEventHandler<HTMLInputElement>;
   onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
 };
 
-const Text = forwardRef<HTMLInputElement, TextProps>(
+const Text = React.forwardRef(
   (
     {
       label,
@@ -50,8 +50,9 @@ const Text = forwardRef<HTMLInputElement, TextProps>(
       containerClassName,
       onChange,
       onKeyDown,
-    },
-    ref
+      onBlur,
+    }: TextProps,
+    ref: React.ForwardedRef<HTMLInputElement>
   ) => {
     const onInputChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
       const { name, value } = e.target;
@@ -72,6 +73,7 @@ const Text = forwardRef<HTMLInputElement, TextProps>(
       return (
         <>
           <input
+            ref={ref}
             className={`input-text input-border-placeholder ${className}`}
             type={type}
             name={name}
@@ -79,9 +81,9 @@ const Text = forwardRef<HTMLInputElement, TextProps>(
             maxLength={maxLength}
             onChange={onInputChange}
             onKeyDown={onKeyDown}
+            onBlur={onBlur}
             disabled={disabled}
             autoComplete={autoComplete}
-            ref={ref}
           />
           <div
             className={`absolute right-2 top-2 flex space-x-1 ${
@@ -117,4 +119,4 @@ const Text = forwardRef<HTMLInputElement, TextProps>(
   }
 );
 
-export default Text;
+export default React.memo(Text);

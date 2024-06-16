@@ -1,4 +1,4 @@
-import { forwardRef, useState } from 'react';
+import React, { useState } from 'react';
 
 import { SVGArrow } from '../svg';
 import InputContainer, { InputContainerProps } from './InputContainer';
@@ -6,7 +6,8 @@ import InputContainer, { InputContainerProps } from './InputContainer';
 export type NumberProps = InputContainerProps & {
   name: string;
   value?: number;
-  minmax?: [number, number];
+  min?: number;
+  max?: number;
   disabled?: boolean;
   autoComplete?: 'on' | 'off';
   hideArrows?: boolean;
@@ -21,7 +22,7 @@ export type NumberProps = InputContainerProps & {
   onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
 };
 
-const Number = forwardRef<HTMLInputElement, NumberProps>(
+const Number = React.forwardRef(
   (
     {
       label,
@@ -30,7 +31,8 @@ const Number = forwardRef<HTMLInputElement, NumberProps>(
       // ^ InputContainerProps
       name,
       value,
-      minmax = [undefined, undefined],
+      min = undefined,
+      max = undefined,
       disabled,
       autoComplete = 'off',
       hideArrows,
@@ -38,16 +40,23 @@ const Number = forwardRef<HTMLInputElement, NumberProps>(
       containerClassName,
       onChange,
       onKeyDown,
-    },
-    ref
+    }: NumberProps,
+    ref: React.ForwardedRef<HTMLInputElement>
   ) => {
     const [focus, setFocus] = useState(false);
 
+    const isInBounds = (value: number): boolean => {
+      return (
+        (min === undefined || value >= min) &&
+        (max === undefined || value <= max)
+      );
+    };
+
     const onArrowClick = (
       e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-      i: number
+      mod: number
     ) => {
-      const newValue = value || 0;
+      const newValue = (value || 0) + mod;
       if (isInBounds(newValue)) onChange(e, { name, value: newValue });
     };
 
@@ -57,20 +66,12 @@ const Number = forwardRef<HTMLInputElement, NumberProps>(
         value === '' ||
         (!isNaN(valueAsNumber) && isInBounds(valueAsNumber))
       ) {
-        onChange(e, { name, value: valueAsNumber || undefined });
+        onChange(e, {
+          name,
+          value: value === '' ? undefined : valueAsNumber,
+        });
       }
     };
-
-    const isInBounds = (value: number): boolean => {
-      const [min, max] = minmax;
-      return (
-        (min === undefined || value >= min) &&
-        (max === undefined || value <= max)
-      );
-    };
-
-    const onFocus = () => setFocus(true);
-    const onBlur = () => setFocus(false);
 
     const renderArrows = () => {
       return (
@@ -91,17 +92,21 @@ const Number = forwardRef<HTMLInputElement, NumberProps>(
 
     const renderInput = () => {
       return (
-        <div className='group' onFocus={onFocus} onBlur={onBlur}>
+        <div
+          className='group'
+          onFocus={() => setFocus(true)}
+          onBlur={() => setFocus(false)}
+        >
           <input
+            ref={ref}
             className={`input-text text-center input-border-placeholder ${className}`}
             type='number'
             name={name}
             onChange={onInputChange}
             onKeyDown={onKeyDown}
-            value={value || ''}
+            value={value ?? ''}
             disabled={disabled}
             autoComplete={autoComplete}
-            ref={ref}
           />
           {!hideArrows && !disabled && renderArrows()}
         </div>
@@ -122,4 +127,4 @@ const Number = forwardRef<HTMLInputElement, NumberProps>(
   }
 );
 
-export default Number;
+export default React.memo(Number);

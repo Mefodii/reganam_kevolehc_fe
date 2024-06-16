@@ -1,24 +1,34 @@
-type SVGPlusProps = {
-  className?: string;
-};
+import React from 'react';
+import SVGContainer from './SVGContainer';
 
-const SVGPlus: React.FC<SVGPlusProps> = ({ className }) => {
+const SVGPlus: React.FC<SVGProps> = ({
+  className,
+  tooltip,
+  tooltipDelay,
+  onClick,
+}) => {
   return (
-    <svg
-      className={className}
-      xmlns='http://www.w3.org/2000/svg'
-      fill='none'
-      viewBox='0 0 24 24'
-      stroke='currentColor'
+    <SVGContainer
+      tooltip={tooltip}
+      tooltipDelay={tooltipDelay}
+      onClick={onClick}
     >
-      <path
-        strokeLinecap='round'
-        strokeLinejoin='round'
-        strokeWidth='2'
-        d='M12 4v16m8-8H4'
-      />
-    </svg>
+      <svg
+        className={className}
+        xmlns='http://www.w3.org/2000/svg'
+        fill='none'
+        viewBox='0 0 24 24'
+        stroke='currentColor'
+      >
+        <path
+          strokeLinecap='round'
+          strokeLinejoin='round'
+          strokeWidth='2'
+          d='M12 4v16m8-8H4'
+        />
+      </svg>
+    </SVGContainer>
   );
 };
 
-export default SVGPlus;
+export default React.memo(SVGPlus);

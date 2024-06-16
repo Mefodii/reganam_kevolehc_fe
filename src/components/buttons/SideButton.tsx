@@ -1,3 +1,4 @@
+import React from 'react';
 import BaseButton, { BaseButtonProps } from './BaseButton';
 
 type SideButtonProps = BaseButtonProps;
@@ -23,4 +24,4 @@ const SideButton: React.FC<SideButtonProps> = ({
   );
 };
 
-export default SideButton;
+export default React.memo(SideButton);

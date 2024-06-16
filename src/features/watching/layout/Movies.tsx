@@ -5,19 +5,20 @@ import { MOVIES_BACKGROUND } from '../../../util/frontend-urls';
 
 import GroupList from '../groups/GroupList';
 
-import { selectMovieType } from '../info/infoSlice';
 import { fetchGroups, selectGroupsByWatchingType } from '../groups/groupsSlice';
+import { WatchingType } from '../../../api/api-utils';
+
+const watchingType = WatchingType.MOVIE;
 
 const Movies = () => {
   const dispatch = useAppDispatch();
 
-  const watchingType = useAppSelector(selectMovieType);
   const groups = useAppSelector((state) =>
     selectGroupsByWatchingType(state, watchingType)
   );
   useEffect(() => {
-    if (watchingType) dispatch(fetchGroups(watchingType));
-  }, [dispatch, watchingType]);
+    dispatch(fetchGroups(watchingType));
+  }, [dispatch]);
 
   if (!watchingType) return <></>;
 

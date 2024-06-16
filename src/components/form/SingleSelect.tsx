@@ -1,5 +1,4 @@
-import { forwardRef } from 'react';
-
+import React from 'react';
 import InputContainer, { InputContainerProps } from './InputContainer';
 
 export type SingleSelectProps<T = boolean> = InputContainerProps & {
@@ -17,60 +16,50 @@ export type SingleSelectProps<T = boolean> = InputContainerProps & {
   ) => void;
 };
 
-const SingleSelect = forwardRef<HTMLDivElement, SingleSelectProps>(
-  (
-    {
-      label,
-      error,
-      className = '',
-      // ^ InputContainerProps
-      name,
-      value,
-      text,
-      disabled,
-      simple,
-      optionSelected = true,
-      optionDeselected = false,
-      containerClassName,
-      onChange,
-    },
-    ref
-  ) => {
-    const onClick: React.MouseEventHandler<HTMLDivElement> = (e) => {
-      const newValue =
-        value === optionSelected ? optionDeselected : optionSelected;
-      onChange(e, { name, value: newValue });
-    };
+const SingleSelect = ({
+  label,
+  error,
+  className = '',
+  // ^ InputContainerProps
+  name,
+  value,
+  text,
+  disabled,
+  simple,
+  optionSelected = true,
+  optionDeselected = false,
+  containerClassName,
+  onChange,
+}: SingleSelectProps) => {
+  const onClick: React.MouseEventHandler<HTMLDivElement> = (e) => {
+    const newValue =
+      value === optionSelected ? optionDeselected : optionSelected;
+    onChange(e, { name, value: newValue });
+  };
 
-    const renderInput = () => {
-      const isSelected = value === optionSelected;
-      return (
-        <div
-          className={`option-single  ${isSelected && 'option-selected'} ${
-            disabled && !isSelected && 'option-disabled'
-          } ${disabled && isSelected && 'option-selected-disabled'} 
+  const renderInput = () => {
+    const isSelected = value === optionSelected;
+    return (
+      <div
+        className={`option-single  ${isSelected && 'option-selected'} ${
+          disabled && !isSelected && 'option-disabled'
+        } ${disabled && isSelected && 'option-selected-disabled'} 
           ${className}
           `}
-          onClick={onClick}
-          ref={ref}
-        >
-          {text}
-        </div>
-      );
-    };
-
-    if (simple) return renderInput();
-
-    return (
-      <InputContainer
-        label={label}
-        error={error}
-        className={containerClassName}
+        onClick={onClick}
       >
-        {renderInput()}
-      </InputContainer>
+        {text}
+      </div>
     );
-  }
-);
+  };
 
-export default SingleSelect;
+  if (simple) return renderInput();
+
+  return (
+    <InputContainer label={label} error={error} className={containerClassName}>
+      {renderInput()}
+    </InputContainer>
+  );
+};
+
+export default React.memo(SingleSelect);

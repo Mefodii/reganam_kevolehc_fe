@@ -5,7 +5,7 @@ import {
   isAnyOf,
 } from '@reduxjs/toolkit';
 import {
-  getContentLists as apiGetContentLists,
+  getContentListsPure as apiGetContentLists,
   addContentList as apiAddContentList,
   updateContentList as apiUpdateContentList,
   deleteContentList as apiDeleteContentList,
@@ -18,7 +18,7 @@ export const name = 'contentLists';
 const sliceName = `${parentName}/${name}`;
 
 const contentListsAdapter = createEntityAdapter({
-  selectId: (contetList: Model.ContentListDM) => contetList.id,
+  selectId: (contetList: Model.ContentListPureDM) => contetList.id,
 });
 const stateFragment: {
   status: APIStatus;
@@ -48,7 +48,7 @@ export const createContentList = createAsyncThunk(
 
 export const updateContentList = createAsyncThunk(
   `${sliceName}/updateContentList`,
-  async (contentList: Model.ContentListDM) => {
+  async (contentList: Model.ContentListPureDM) => {
     const { data } = await apiUpdateContentList(contentList);
     return data;
   }
@@ -56,7 +56,7 @@ export const updateContentList = createAsyncThunk(
 
 export const deleteContentList = createAsyncThunk(
   `${sliceName}/deleteContentList`,
-  async (contentList: Model.ContentListDM) => {
+  async (contentList: Model.ContentListPureDM) => {
     await apiDeleteContentList(contentList.id);
     return contentList;
   }

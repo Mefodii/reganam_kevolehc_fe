@@ -8,21 +8,35 @@ declare global {
     headers?: AxiosConfigHeaders;
   };
 
+  type SVGContainerProps = {
+    tooltip?: string;
+    tooltipDelay?: number;
+    onClick?: React.MouseEventHandler<HTMLDivElement>;
+  };
+
+  type SVGProps = {
+    className?: string;
+  } & SVGContainerProps;
+
+  declare namespace Redux {
+    type Scope = 'DETAILS' | 'LIST';
+  }
+
   declare namespace DragAndDrop {
-    type Type = 'VIDEO_ITEM';
-    type Item = Model.VideoDJM;
+    type Type = 'VIDEO_ITEM' | 'CONTENT_ITEM';
+    type Item = Model.VideoDJM | Model.ContentItemDM;
     type AccessGroup = number | string;
     type Data = {
-      item?: DragAndDrop.Item;
-      type?: Type; // TODO ??? enum
-      accessGroup?: DragAndDrop.AccessGroup;
+      item?: Item;
+      type?: Type;
+      accessGroup?: AccessGroup;
       copy: boolean;
     };
   }
 
   declare namespace Form {
     type Mode = 'CREATE' | 'UPDATE';
-    type Option<T = string> = T; // TODO
+    type Option<T = string> = T;
     type Payload<T> = { name: string; value?: T; error?: string };
     type ChangeEvent =
       | React.ChangeEvent<HTMLTextAreaElement>

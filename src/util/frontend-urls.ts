@@ -29,6 +29,7 @@ export enum FE_URL {
   GAMING = '/gameio',
   READING = '/readio',
   CONTENTING = '/contentio',
+  CONTENT_WATCHER = '/contentio/content_watcher',
   AUDIO = '/audio',
   //
   WATCHING = '/watchio',

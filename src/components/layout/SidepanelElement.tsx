@@ -1,3 +1,5 @@
+import React from 'react';
+
 type SidepanelElementProps = React.PropsWithChildren & {
   className?: string;
   isSelected?: boolean;
@@ -22,4 +24,4 @@ const SidepanelElement: React.FC<SidepanelElementProps> = ({
   );
 };
 
-export default SidepanelElement;
+export default React.memo(SidepanelElement);

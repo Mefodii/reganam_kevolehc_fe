@@ -15,11 +15,11 @@ import {
   SVGForward,
 } from '../../../components/svg';
 
-import { selectAirStatusTypes, selectStatusTypes } from '../info/infoSlice';
 import { createGroup, updateGroup, deleteGroup } from './groupsSlice';
 import { group as model } from '../../../models';
-import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { useForm } from '../../../hooks/useForm';
+import { useAppDispatch } from '../../../hooks';
+import { useForm } from '../../../hooks';
+import { WatchingAirStatus, WatchingStatus } from '../../../api/api-utils';
 
 type GroupFormProps = {
   formProps: Model.GroupProps;
@@ -28,8 +28,6 @@ type GroupFormProps = {
 
 const GroupForm: React.FC<GroupFormProps> = ({ formProps, onSuccess }) => {
   const dispatch = useAppDispatch();
-  const statusTypes = useAppSelector(selectStatusTypes);
-  const airStatusTypes = useAppSelector(selectAirStatusTypes);
   const isUpdate = formProps.formMode === 'UPDATE';
 
   const { modelState, onFieldChange, setFormErrors, setModelState } = useForm(
@@ -83,7 +81,7 @@ const GroupForm: React.FC<GroupFormProps> = ({ formProps, onSuccess }) => {
           name='status'
           placeholder={BLANK_VALUE}
           value={status}
-          options={statusTypes}
+          options={Object.values(WatchingStatus)}
           onChange={onFieldChange}
         />
         <Date
@@ -103,7 +101,8 @@ const GroupForm: React.FC<GroupFormProps> = ({ formProps, onSuccess }) => {
           name='rating'
           value={rating}
           onChange={onFieldChange}
-          minmax={[0, 10]}
+          min={0}
+          max={10}
         />
       </div>
     );
@@ -120,7 +119,7 @@ const GroupForm: React.FC<GroupFormProps> = ({ formProps, onSuccess }) => {
           name='airing_status'
           placeholder={BLANK_VALUE}
           value={airing_status}
-          options={airStatusTypes}
+          options={Object.values(WatchingAirStatus)}
           onChange={onFieldChange}
         />
         <Date
@@ -138,7 +137,7 @@ const GroupForm: React.FC<GroupFormProps> = ({ formProps, onSuccess }) => {
     ? `Edit ${formProps.watchingType}`
     : `Add ${formProps.watchingType}`;
   return (
-    <div className='simple-font p-4 justify-evenly bg-theme-2 border-2 border-theme-3 rounded-xl shadow-lg w-full'>
+    <div className='simple-font form-container'>
       <div className='title'>{title}</div>
 
       <div className='form-row'>

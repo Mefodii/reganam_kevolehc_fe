@@ -1,5 +1,4 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import { name as infoSliceName, reducer as info } from './info/infoSlice';
 import {
   name as filtersName,
   reducer as filters,
@@ -17,18 +16,24 @@ import {
   reducer as contentItems,
 } from './contentItems/contentItemsSlice';
 import {
-  name as contentItemPartsName,
-  reducer as contentItemParts,
-} from './contentItemParts/contentItemPartsSlice';
+  name as contentMusicItemsName,
+  reducer as contentMusicItems,
+} from './contentMusicItems/contentMusicItemsSlice';
+import {
+  name as contentTracksName,
+  reducer as contentTracks,
+} from './contentTracks/contentTracksSlice';
 import { name } from './constants';
 
 export { name };
 
 export const reducer = combineReducers({
-  [infoSliceName]: info,
   [filtersName]: filters,
   [contentWatchersName]: contentWatchers,
   [contentListsName]: contentLists,
   [contentItemsName]: contentItems,
-  [contentItemPartsName]: contentItemParts,
+  [contentMusicItemsName]: contentMusicItems,
+  [contentTracksName]: contentTracks,
 });
+
+// TODO - check on google if feateures/slices has to be singular or plural

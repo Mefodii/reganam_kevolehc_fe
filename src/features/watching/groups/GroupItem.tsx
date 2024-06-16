@@ -11,13 +11,14 @@ import { updateGroup } from './groupsSlice';
 import { isGroupLoading } from '../../../redux/loadingsSlice';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { group as groupModel } from '../../../models';
-import { useModal } from '../../../hooks/useModal';
+import { useModal } from '../../../hooks';
 import GroupForm from './GroupForm';
 import VideoForm from '../videos/VideoForm';
+import { WatchingType } from '../../../api/api-utils';
 
 type GroupItemProps = {
   group: Model.GroupDM;
-  watchingType: string;
+  watchingType: WatchingType;
   showPoster: boolean;
 };
 
@@ -68,12 +69,7 @@ const GroupItem: React.FC<GroupItemProps> = ({
     if (rating === undefined) {
       return;
     }
-
-    const newGroup = {
-      ...groupModel.setFinished(group),
-      rating,
-    };
-    dispatch(updateGroup(newGroup));
+    dispatch(updateGroup(groupModel.setFinished(group, rating)));
   };
 
   const { id, name, aliases, links, images, single } = group;
@@ -123,7 +119,9 @@ const GroupItem: React.FC<GroupItemProps> = ({
                     <div
                       className={`w-24 m-1 ${
                         groupModel.isInQueue(group) && 'text-active-2'
-                      } ${groupModel.isPremiere(group) && 'text-warning-1'}`}
+                      } ${groupModel.isPremiere(group) && 'text-warning-1'} ${
+                        groupModel.isDropped(group) && 'text-error-1'
+                      }`}
                     >
                       <div className='text-xs'>Status</div>
                       <div className='font-bold'>{group.status}</div>
@@ -180,13 +178,7 @@ const GroupItem: React.FC<GroupItemProps> = ({
             </div>
           </div>
 
-          {!single && (
-            <VideoList
-              videos={group.videos}
-              watchingType={watchingType}
-              isLoading={isLoading}
-            />
-          )}
+          {!single && <VideoList videos={group.videos} isLoading={isLoading} />}
         </div>
       </div>
     </div>

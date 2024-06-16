@@ -1,3 +1,5 @@
+import React from 'react';
+
 type TooltipProps = {
   text: string;
   hidden?: boolean;
@@ -10,6 +12,7 @@ const Tooltip: React.FC<TooltipProps> = ({
   className = '',
 }) => {
   if (!text) return <></>;
+  // TODO: maybe have tooltip as root child (similar to spotify)
 
   return (
     <div className={`tooltip ${hidden ? 'scale-0' : 'scale-100'} ${className}`}>
@@ -18,4 +21,4 @@ const Tooltip: React.FC<TooltipProps> = ({
   );
 };
 
-export default Tooltip;
+export default React.memo(Tooltip);

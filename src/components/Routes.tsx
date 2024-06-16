@@ -1,12 +1,7 @@
 import { Suspense, lazy } from 'react';
 import { Route, Routes as ReactRoutes } from 'react-router-dom';
-import { useAppSelector } from '../hooks';
 
 import { FE_URL } from '../util/frontend-urls';
-import { isAPIStatusRequestDone } from '../util/functions';
-
-import { selectStatus as selectWatchingStatus } from '../features/watching/info/infoSlice';
-import { selectStatus as selectContentingStatus } from '../features/contenting/info/infoSlice';
 
 const Home = lazy(() => import('../features/home/Home'));
 const GamingDashboard = lazy(
@@ -17,6 +12,9 @@ const ReadingDashboard = lazy(
 );
 const ContentingDashboard = lazy(
   () => import('../features/contenting/layout/Dashboard')
+);
+const ContentWatcherDashboard = lazy(
+  () => import('../features/contenting/layout/ContentWatcherDashboard')
 );
 const AudioDashboard = lazy(
   () => import('../features/listening/layout/Dashboard')
@@ -30,16 +28,7 @@ const Serials = lazy(() => import('../features/watching/layout/Serials'));
 const Anime = lazy(() => import('../features/watching/layout/Anime'));
 
 const Routes = () => {
-  const watchingInfoStatus = useAppSelector(selectWatchingStatus);
-  const contentingInfoStatus = useAppSelector(selectContentingStatus);
-
   const renderLoading = () => <div>Loading ... </div>;
-
-  const isLoading = !(
-    isAPIStatusRequestDone(watchingInfoStatus) &&
-    isAPIStatusRequestDone(contentingInfoStatus)
-  );
-  if (isLoading) return renderLoading();
 
   return (
     <Suspense fallback={renderLoading()}>
@@ -51,7 +40,13 @@ const Routes = () => {
         <Route path={FE_URL.ANIME} element={<Anime />} />
         <Route path={FE_URL.GAMING} element={<GamingDashboard />} />
         <Route path={FE_URL.READING} element={<ReadingDashboard />} />
-        <Route path={FE_URL.CONTENTING} element={<ContentingDashboard />} />
+        <Route path={FE_URL.CONTENTING}>
+          <Route index={true} element={<ContentingDashboard />} />
+          <Route
+            path={`content_watcher/:id`}
+            element={<ContentWatcherDashboard />}
+          />
+        </Route>
         <Route path={FE_URL.AUDIO} element={<AudioDashboard />} />
         <Route path={FE_URL.HELPERS} element={<HelpersDashboard />} />
       </ReactRoutes>

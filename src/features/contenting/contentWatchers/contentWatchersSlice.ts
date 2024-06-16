@@ -6,10 +6,10 @@ import {
 } from '@reduxjs/toolkit';
 import {
   getContentWatchers as apiGetContentWatchers,
+  getContentWatcher as apiGetContentWatcher,
   addContentWatcher as apiAddContentWatcher,
   updateContentWatcher as apiUpdateContentWatcher,
   deleteContentWatcher as apiDeleteContentWatcher,
-  addContentList as apiAddContentList,
 } from '../../../api/api';
 import { APIStatus } from '../../../util/constants';
 import { name as parentName } from '../constants';
@@ -25,9 +25,11 @@ const contentWatchersAdapter = createEntityAdapter({
 const stateFragment: {
   status: APIStatus;
   error?: string;
+  details?: Model.ContentWatcherDM;
 } = {
   status: APIStatus.NONE,
   error: '',
+  details: undefined,
 };
 
 const initialState = contentWatchersAdapter.getInitialState(stateFragment);
@@ -40,34 +42,34 @@ export const fetchContentWatchers = createAsyncThunk(
   }
 );
 
+export const fetchContentWatcher = createAsyncThunk(
+  `${sliceName}/fetchContentWatcher`,
+  async (id: number) => {
+    const { data } = await apiGetContentWatcher(id);
+    return data;
+  }
+);
+
 export const createContentWatcher = createAsyncThunk(
   `${sliceName}/createContentWatcher`,
   async (contentWatcher: Model.ContentWatcherAM) => {
     // Note: each content watcher is linked with a content list.
-
-    // TODO: maybe its more correct to create this from django in 1 API call
-    const { data: contentList } = await apiAddContentList({
-      name: contentWatcher.name,
-    });
-
-    const { data } = await apiAddContentWatcher({
-      ...contentWatcher,
-      content_list: contentList.id,
-    });
-
-    // TODO: add also in content list
-    return {
-      contentWatcher: data,
-      contentList: { ...contentList, content_watcher: data.id },
-    };
+    const { data } = await apiAddContentWatcher(contentWatcher);
+    return data;
   }
 );
 
 export const updateContentWatcher = createAsyncThunk(
   `${sliceName}/updateContentWatcher`,
-  async (contentWatcher: Model.ContentWatcherDM) => {
+  async ({
+    contentWatcher,
+    scope,
+  }: {
+    contentWatcher: Model.ContentWatcherDM;
+    scope: Redux.Scope;
+  }) => {
     const { data } = await apiUpdateContentWatcher(contentWatcher);
-    return data;
+    return { data, scope };
   }
 );
 
@@ -88,13 +90,23 @@ const slice = createSlice({
       state.status = APIStatus.OK;
       contentWatchersAdapter.upsertMany(state, action.payload);
     });
+    builder.addCase(fetchContentWatcher.fulfilled, (state, action) => {
+      state.status = APIStatus.OK;
+      state.details = action.payload;
+    });
     builder.addCase(createContentWatcher.fulfilled, (state, action) => {
       state.status = APIStatus.OK;
-      contentWatchersAdapter.addOne(state, action.payload.contentWatcher);
+      contentWatchersAdapter.addOne(state, action.payload);
     });
     builder.addCase(updateContentWatcher.fulfilled, (state, action) => {
       state.status = APIStatus.OK;
-      contentWatchersAdapter.setOne(state, action.payload);
+      const { data, scope } = action.payload;
+      if (scope === 'LIST') {
+        contentWatchersAdapter.setOne(state, data);
+      }
+      if (scope === 'DETAILS') {
+        state.details = data;
+      }
     });
     builder.addCase(deleteContentWatcher.fulfilled, (state, action) => {
       state.status = APIStatus.OK;
@@ -103,6 +115,7 @@ const slice = createSlice({
     builder.addMatcher(
       isAnyOf(
         fetchContentWatchers.pending,
+        fetchContentWatcher.pending,
         createContentWatcher.pending,
         updateContentWatcher.pending,
         deleteContentWatcher.pending
@@ -114,6 +127,7 @@ const slice = createSlice({
     builder.addMatcher(
       isAnyOf(
         fetchContentWatchers.rejected,
+        fetchContentWatcher.rejected,
         createContentWatcher.rejected,
         updateContentWatcher.rejected,
         deleteContentWatcher.rejected
@@ -124,6 +138,10 @@ const slice = createSlice({
       }
     );
   },
+  selectors: {
+    selectDetails: (state) => state.details,
+    selectStatus: (state) => state.status,
+  },
 });
 
 export const selectSlice = (state: RootState) => state[parentName][name];
@@ -132,5 +150,6 @@ export const {
   selectById: selectContentWatcherById,
   selectIds: selectContentWatcherIds,
 } = contentWatchersAdapter.getSelectors(selectSlice);
+export const { selectDetails, selectStatus } = slice.getSelectors(selectSlice);
 export const reducer = slice.reducer;
 export default slice;

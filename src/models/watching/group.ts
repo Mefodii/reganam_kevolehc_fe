@@ -1,10 +1,10 @@
-import { WATCHING_STATUS_FINISHED } from '../../util/constants';
 import {
-  getToday,
-  isWatchingFinished,
-  isWatchingPremiere,
+  WatchingAirStatus,
+  WatchingStatus,
+  WatchingType,
   isWatchingQueue,
-} from '../../util/functions';
+} from '../../api/api-utils';
+import { getToday } from '../../util/datetime';
 import { alias } from './alias';
 import { link } from './link';
 
@@ -13,29 +13,29 @@ declare global {
     type GroupBaseProps = {
       id?: number;
       name: string;
-      type: string;
+      type: WatchingType;
       aliases: Alias;
       links: Alias;
     };
     type GroupSingleSM = GroupBaseProps & {
       single: true;
-      status?: string;
+      status?: WatchingStatus;
       watched_date: string;
       rating: number;
       year: number;
     };
     type GroupNotSingleSM = GroupBaseProps & {
-      airing_status?: string;
+      airing_status?: WatchingAirStatus;
       single: false;
       check_date: string;
     };
     type GroupSM = GroupSingleSM | GroupNotSingleSM;
 
     type GroupSingleAM = GroupSingleSM & {
-      status: string;
+      status: WatchingStatus;
     };
     type GroupNotSingleAM = GroupNotSingleSM & {
-      airing_status: string;
+      airing_status: WatchingAirStatus;
     };
     type GroupAM = GroupSingleAM | GroupNotSingleAM;
 
@@ -51,13 +51,13 @@ declare global {
     type GroupDM = GroupSingleDM | GroupNotSingleDM;
     type GroupCreateProps = {
       withToggleSingle: boolean;
-      watchingType: string;
+      watchingType: WatchingType;
       single: boolean;
       formMode: 'CREATE';
     };
     type GroupUpdateProps = {
       group: GroupDM;
-      watchingType: string;
+      watchingType: WatchingType;
       single: boolean;
       formMode: 'UPDATE';
     };
@@ -70,8 +70,9 @@ declare global {
       deleteLink: (links: Alias) => Alias;
       isInQueue: <T extends GroupSingleSM>(group: T) => boolean;
       isPremiere: <T extends GroupSingleSM>(group: T) => boolean;
+      isDropped: <T extends GroupSingleSM>(group: T) => boolean;
       isFinished: <T extends GroupSingleSM>(group: T) => boolean;
-      setFinished: <T extends GroupSingleSM>(group: T) => T;
+      setFinished: <T extends GroupSingleSM>(group: T, rating: number) => T;
     };
   }
 }
@@ -278,11 +279,13 @@ export const group: Model.GroupModel = {
   addLink: (links) => link.addLink(links),
   deleteLink: (links) => link.deleteLink(links),
   isInQueue: (group) => isWatchingQueue(group.status),
-  isPremiere: (video) => isWatchingPremiere(video.status),
-  isFinished: (group) => isWatchingFinished(group.status),
-  setFinished: (group) => ({
+  isPremiere: (group) => group.status === WatchingStatus.PREMIERE,
+  isDropped: (group) => group.status === WatchingStatus.DROPPED,
+  isFinished: (group) => group.status === WatchingStatus.FINISHED,
+  setFinished: (group, rating) => ({
     ...group,
-    status: WATCHING_STATUS_FINISHED,
+    status: WatchingStatus.FINISHED,
     watched_date: getToday(),
+    rating,
   }),
 };

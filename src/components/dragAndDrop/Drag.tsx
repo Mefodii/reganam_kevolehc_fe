@@ -1,4 +1,4 @@
-import { PropsWithChildren, useCallback } from 'react';
+import React, { PropsWithChildren, useCallback } from 'react';
 import { removeDrag, setDrag } from '../../redux/dragAndDropSlice';
 import { useAppDispatch } from '../../hooks';
 
@@ -53,4 +53,4 @@ const Drag = ({
   );
 };
 
-export default Drag;
+export default React.memo(Drag);

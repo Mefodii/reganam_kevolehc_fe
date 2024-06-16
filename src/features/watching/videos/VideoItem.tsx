@@ -3,86 +3,70 @@ import { useState } from 'react';
 import { BLANK_VALUE } from '../../../util/constants';
 import { promptNumber } from '../../../util/functions';
 
-import { SVGPencil, SVGCheck, SVGVerticalDots } from '../../../components/svg';
-import VideoItemPlaceholder from './VideoItemPlaceholder';
+import { SVGPencil, SVGCheck } from '../../../components/svg';
 import { DragAndDrop } from '../../../components/dragAndDrop';
 import LinkList from '../links/LinkList';
 
 import { createVideo, updateVideo } from '../groups/groupsSlice';
-import { useAppDispatch } from '../../../hooks';
+import { useAppDispatch, useDragAndDrop } from '../../../hooks';
 import { video as videoModel } from '../../../models';
 import VideoForm from './VideoForm';
-import { useModal } from '../../../hooks/useModal';
+import { useModal } from '../../../hooks';
+import { DragDots, ItemPlaceholder } from '../../../components/generic';
+
 type VideoItemProps = {
   video: Model.VideoDM;
-  watchingType: string;
-  lastItem?: boolean;
 };
 
-const VideoItem: React.FC<VideoItemProps> = ({
-  video,
-  watchingType,
-  lastItem = false,
-}) => {
+const isValidDragOver = (dndData: DragAndDrop.Data, video: Model.VideoDM) => {
+  const { item, type, copy } = dndData;
+
+  if (type !== 'VIDEO_ITEM' || item?.group !== video.group) return false;
+  if (item !== video) return true;
+
+  return copy;
+};
+
+const VideoItem: React.FC<VideoItemProps> = ({ video }) => {
+  const [showDots, setShowDots] = useState(false);
+
   const dispatch = useAppDispatch();
 
   const [draggable, setDraggable] = useState(false);
+  const {
+    dragged,
+    dragCopy,
+    dragOver,
+    onDragStart,
+    onDragEnd,
+    onDragEnter,
+    onDragLeave,
+    onDragOver,
+    onDrop,
+  } = useDragAndDrop();
   const [insertBefore, setInsertBefore] = useState(false);
-  const [drag, setDrag] = useState({
-    dragged: false,
-    dragCopy: false,
-    dragOver: false,
-    dragOverCopy: false,
-  });
 
   const { openModal, closeModal } = useModal();
 
-  // TODO - probably all these drag events can be generic into a hook. Investigate later
-  const onDragStart = (
-    e: React.DragEvent<HTMLDivElement>,
-    dndData: DragAndDrop.Data
-  ) => {
-    setDrag({ ...drag, dragged: true, dragCopy: dndData.copy });
+  const handleDragEnter = (dndData: DragAndDrop.Data) => {
+    if (!isValidDragOver(dndData, video)) return;
+
+    onDragEnter(dndData);
+    setInsertBefore(dndData.item!.order > video.order);
   };
 
-  const onDragEnd = () => {
-    setDrag({ ...drag, dragged: false, dragCopy: false });
-  };
+  const handleDrop = (dndData: DragAndDrop.Data) => {
+    if (!dragOver) return;
+    onDrop();
 
-  const onDragEnter = (dndData: DragAndDrop.Data) => {
-    if (!isValidDragOver(dndData)) return;
-
-    const { item, copy } = dndData;
-    setDrag({ ...drag, dragOver: true, dragOverCopy: copy });
-    setInsertBefore(item!.order > video.order);
-  };
-
-  const onDragLeave = (dndData: DragAndDrop.Data) => {
-    setDrag({ ...drag, dragOver: false, dragOverCopy: false });
-  };
-
-  const onDragOver = (dndData: DragAndDrop.Data) => {};
-
-  const isValidDragOver = (dndData: DragAndDrop.Data) => {
-    const { item, type, copy } = dndData;
-
-    if (type !== 'VIDEO_ITEM' || item?.group !== video.group) return false;
-    if (item !== video) return true;
-
-    return copy;
-  };
-
-  const onDrop = (dndData: DragAndDrop.Data) => {
-    if (!drag.dragOver) return;
-    setDrag({ ...drag, dragOver: false });
-
-    const newVideo = { ...dndData.item!, order: video.order };
+    const order = dndData.copy && !insertBefore ? video.order + 1 : video.order;
+    const newVideo = { ...dndData.item!, order };
     const action = dndData.copy ? createVideo : updateVideo;
 
     dispatch(action(newVideo));
   };
 
-  const openEdit = () => {
+  const handleOpenEdit = () => {
     openModal(
       <VideoForm
         formProps={{
@@ -94,20 +78,14 @@ const VideoItem: React.FC<VideoItemProps> = ({
     );
   };
 
-  const setFinised = () => {
+  const handleSetFinished = () => {
     const rating = promptNumber('Set video rating');
     if (rating === undefined) {
       return;
     }
-
-    const newVideo = {
-      ...videoModel.setFinished(video),
-      rating,
-    };
-    dispatch(updateVideo(newVideo));
+    dispatch(updateVideo(videoModel.setFinished(video, rating)));
   };
 
-  const { dragOver, dragged, dragCopy } = drag;
   const {
     name,
     group,
@@ -130,19 +108,21 @@ const VideoItem: React.FC<VideoItemProps> = ({
       type={'VIDEO_ITEM'}
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
-      onDragEnter={onDragEnter}
+      onDragEnter={handleDragEnter}
       onDragLeave={onDragLeave}
       onDragOver={onDragOver}
-      onDrop={onDrop}
+      onDrop={handleDrop}
     >
       <div
         className={`flex my-2 ${
           insertBefore ? 'flex-col' : 'flex-col-reverse'
         }`}
       >
-        <VideoItemPlaceholder
-          className={`${insertBefore ? 'mb-2' : 'mt-2'}`}
+        <ItemPlaceholder
           show={dragOver}
+          className={`h-14 p-2 border-2 shadow-2xl rounded-xl bg-theme-2 border-theme-5 ${
+            insertBefore ? 'mb-2' : 'mt-2'
+          }`}
         />
         <div
           className={`flex w-full group 2xl:flex-row p-2 border-2 shadow-2xl rounded-xl bg-theme-2 border-theme-3 ${
@@ -150,14 +130,14 @@ const VideoItem: React.FC<VideoItemProps> = ({
           } ${dragged && dragCopy && 'brightness-125'} ${
             dragged && !dragCopy && 'opacity-30'
           }`}
+          onMouseEnter={() => setShowDots(true)}
+          onMouseLeave={() => setShowDots(false)}
         >
-          <div
-            className='my-auto cursor-pointer w-3 pr-2 text-text-1/20'
+          <DragDots
+            show={showDots}
             onMouseEnter={() => setDraggable(true)}
             onMouseLeave={() => setDraggable(false)}
-          >
-            <SVGVerticalDots className='w-1' />
-          </div>
+          />
           <div className='simple-font w-full break-all'>
             <div className='text-xl font-bold'>
               {name}
@@ -183,7 +163,9 @@ const VideoItem: React.FC<VideoItemProps> = ({
             <div
               className={`w-24 m-1 ${
                 videoModel.isInQueue(video) && 'text-active-2'
-              } ${videoModel.isPremiere(video) && 'text-warning-1'}`}
+              } ${videoModel.isPremiere(video) && 'text-warning-1'} ${
+                videoModel.isDropped(video) && 'text-error-1'
+              }`}
             >
               <div className='text-xs'>Status</div>
               <div className='font-bold'>{status}</div>
@@ -208,11 +190,11 @@ const VideoItem: React.FC<VideoItemProps> = ({
             </div>
           </div>
           <div>
-            <div onClick={openEdit}>
+            <div onClick={handleOpenEdit}>
               <SVGPencil className='w-6 wiggling-clickable'></SVGPencil>
             </div>
             {!videoModel.isFinished(video) && (
-              <div onClick={setFinised}>
+              <div onClick={handleSetFinished}>
                 <SVGCheck className='w-6 wiggling-clickable'></SVGCheck>
               </div>
             )}

@@ -1,24 +1,34 @@
-type SVGMinusProps = {
-  className?: string;
-};
+import React from 'react';
+import SVGContainer from './SVGContainer';
 
-const SVGMinus: React.FC<SVGMinusProps> = ({ className }) => {
+const SVGMinus: React.FC<SVGProps> = ({
+  className,
+  tooltip,
+  tooltipDelay,
+  onClick,
+}) => {
   return (
-    <svg
-      className={className}
-      xmlns='http://www.w3.org/2000/svg'
-      fill='none'
-      viewBox='0 0 24 24'
-      stroke='currentColor'
+    <SVGContainer
+      tooltip={tooltip}
+      tooltipDelay={tooltipDelay}
+      onClick={onClick}
     >
-      <path
-        strokeLinecap='round'
-        strokeLinejoin='round'
-        strokeWidth='2'
-        d='M20 12H4'
-      />
-    </svg>
+      <svg
+        className={className}
+        xmlns='http://www.w3.org/2000/svg'
+        fill='none'
+        viewBox='0 0 24 24'
+        stroke='currentColor'
+      >
+        <path
+          strokeLinecap='round'
+          strokeLinejoin='round'
+          strokeWidth='2'
+          d='M20 12H4'
+        />
+      </svg>
+    </SVGContainer>
   );
 };
 
-export default SVGMinus;
+export default React.memo(SVGMinus);

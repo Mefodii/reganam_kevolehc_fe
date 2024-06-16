@@ -10,10 +10,10 @@ import { Button } from '../../../components/buttons';
 import { SVGCheck, SVGTrash } from '../../../components/svg';
 
 import { watchingFilter as model } from '../../../models';
-import { selectStatusTypes } from '../info/infoSlice';
 import { selectWatchingFilter, updateWatchingFilter } from './filtersSlice';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { useForm } from '../../../hooks/useForm';
+import { useForm } from '../../../hooks';
+import { WatchingStatus } from '../../../api/api-utils';
 
 type FilterFormProps = {
   onSuccess: () => void; // TODO - is this too generic?
@@ -21,7 +21,6 @@ type FilterFormProps = {
 
 const FilterForm: React.FC<FilterFormProps> = ({ onSuccess }) => {
   const dispatch = useAppDispatch();
-  const statusTypes = useAppSelector(selectStatusTypes);
   const watchingFilter = useAppSelector(selectWatchingFilter);
 
   const { modelState, onFieldChange, setFormErrors } = useForm(watchingFilter);
@@ -46,7 +45,7 @@ const FilterForm: React.FC<FilterFormProps> = ({ onSuccess }) => {
 
   return (
     <Fragment>
-      <div className='simple-font p-4 justify-evenly bg-theme-2 border-2 border-theme-3 rounded-xl shadow-lg w-full'>
+      <div className='simple-font form-container'>
         <div className='title'>WatchIO Filters</div>
 
         <div className='form-row'>
@@ -87,7 +86,7 @@ const FilterForm: React.FC<FilterFormProps> = ({ onSuccess }) => {
             label='Statuses'
             name='statuses'
             value={statuses}
-            options={statusTypes}
+            options={Object.values(WatchingStatus)}
             onChange={onFieldChange}
           />
         </div>

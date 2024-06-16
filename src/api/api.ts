@@ -4,12 +4,11 @@ import {
   API_GROUPS,
   API_VIDEOS,
   API_POSTERS,
-  API_WATCHING_INFO,
   API_CONTENT_LISTS,
   API_CONTENT_ITEMS,
-  API_CONTENT_ITEM_PARTS,
+  API_CONTENT_TRACKS,
   API_CONTENT_WATCHERS,
-  API_CONTENTING_INFO,
+  API_CONTENT_MUSIC_ITEMS,
 } from './backend-urls';
 
 import {
@@ -19,8 +18,14 @@ import {
 } from './config';
 
 // GROUPS API
-export const getGroups = async (videoType: string) =>
-  await axios.get<Model.GroupDM[]>(API_GROUPS, paramsConf({ videoType }));
+export const getGroups = async (watchingType: string) =>
+  await axios.get<Model.GroupDM[]>(
+    API_GROUPS,
+    paramsConf({ videoType: watchingType })
+  );
+
+export const getGroup = async (id: number) =>
+  await axios.get<Model.GroupDM>(`${API_GROUPS}${id}/`, json());
 
 export const addGroup = async (group: Model.GroupAM) =>
   await axios.post<Model.GroupDM>(API_GROUPS, group, json());
@@ -33,17 +38,17 @@ export const deleteGroup = async (id: number) =>
 // ----------------------------- //
 
 // VIDEOS API
-export const getVideos = async () =>
-  await axios.get<Model.VideoDM[]>(API_VIDEOS, json());
+export const getVideos = async (group: number) =>
+  await axios.get<Model.VideoDM[]>(API_VIDEOS, paramsConf({ group }));
 
 export const addVideo = async (video: Model.VideoAM) =>
-  await axios.post<Model.GroupDM>(API_VIDEOS, video, json());
+  await axios.post<Model.VideoDM>(API_VIDEOS, video, json());
 
 export const updateVideo = async (video: Model.VideoDM) =>
-  await axios.put<Model.GroupDM>(`${API_VIDEOS}${video.id}/`, video, json());
+  await axios.put<Model.VideoDM>(`${API_VIDEOS}${video.id}/`, video, json());
 
 export const deleteVideo = async (id: number) =>
-  await axios.delete<Model.GroupDM>(`${API_VIDEOS}${id}/`, json());
+  await axios.delete<Model.VideoDM>(`${API_VIDEOS}${id}/`, json());
 // ----------------------------- //
 
 // POSTERS API
@@ -68,6 +73,12 @@ export const deletePoster = async (id: number) =>
 export const getContentLists = async () =>
   await axios.get<Model.ContentListDM[]>(API_CONTENT_LISTS, json());
 
+export const getContentListsPure = async () =>
+  await axios.get<Model.ContentListPureDM[]>(
+    API_CONTENT_LISTS,
+    paramsConf({ getCLP: true })
+  );
+
 export const addContentList = async (contentList: Model.ContentListAM) =>
   await axios.post<Model.ContentListDM>(API_CONTENT_LISTS, contentList, json());
 
@@ -83,8 +94,11 @@ export const deleteContentList = async (id: number) =>
 // ----------------------------- //
 
 // CONTENT ITEMS API
-export const getContentItems = async () =>
-  await axios.get<Model.ContentItemDM[]>(API_CONTENT_ITEMS, json());
+export const getContentItems = async (contentList: number) =>
+  await axios.get<Model.ContentItemDM[]>(
+    API_CONTENT_ITEMS,
+    paramsConf({ contentList })
+  );
 
 export const addContentItem = async (contentItem: Model.ContentItemAM) =>
   await axios.post<Model.ContentItemDM>(API_CONTENT_ITEMS, contentItem, json());
@@ -96,39 +110,80 @@ export const updateContentItem = async (contentItem: Model.ContentItemDM) =>
     json()
   );
 
+export const updateContentItems = async (contentItems: Model.ContentItemDM[]) =>
+  await axios.put<Model.ContentItemDM[]>(
+    API_CONTENT_ITEMS,
+    contentItems,
+    json()
+  );
+
 export const deleteContentItem = async (id: number) =>
   await axios.delete<void>(`${API_CONTENT_ITEMS}${id}/`, json());
+
+export const deleteContentItems = async (ids: number[]) =>
+  await axios<void>({ method: 'delete', url: API_CONTENT_ITEMS, data: ids });
+// ----------------------------- //
+
+// CONTENT MUSIC ITEMS API
+export const getContentMusicItems = async (contentList: number) =>
+  await axios.get<Model.ContentMusicItemDM[]>(
+    API_CONTENT_MUSIC_ITEMS,
+    paramsConf({ contentList })
+  );
+
+export const addContentMusicItem = async (
+  contentMusicItem: Model.ContentMusicItemAM
+) =>
+  await axios.post<Model.ContentMusicItemDM>(
+    API_CONTENT_MUSIC_ITEMS,
+    contentMusicItem,
+    json()
+  );
+
+export const updateContentMusicItem = async (
+  contentMusicItem: Model.ContentMusicItemDM
+) =>
+  await axios.put<Model.ContentMusicItemDM>(
+    `${API_CONTENT_MUSIC_ITEMS}${contentMusicItem.id}/`,
+    contentMusicItem,
+    json()
+  );
+
+export const deleteContentMusicItem = async (id: number) =>
+  await axios.delete<void>(`${API_CONTENT_MUSIC_ITEMS}${id}/`, json());
 // ----------------------------- //
 
 // CONTENT ITEM PARTS API
-export const getContentItemParts = async () =>
-  await axios.get<Model.ContentItemPartDM[]>(API_CONTENT_ITEM_PARTS, json());
+export const getContentTracks = async () =>
+  await axios.get<Model.ContentTrackDM[]>(API_CONTENT_TRACKS, json());
 
-export const addContentItemPart = async (
-  contentItemPart: Model.ContentItemPartAM
-) =>
-  await axios.post<Model.ContentItemPartDM>(
-    API_CONTENT_ITEM_PARTS,
-    contentItemPart,
+export const addContentTrack = async (contentTrack: Model.ContentTrackAM) =>
+  await axios.post<Model.ContentTrackDM>(
+    API_CONTENT_TRACKS,
+    contentTrack,
     json()
   );
 
-export const updateContentItemPart = async (
-  contentItemPart: Model.ContentItemPartDM
-) =>
-  await axios.put<Model.ContentItemPartDM>(
-    `${API_CONTENT_ITEM_PARTS}${contentItemPart.id}/`,
-    contentItemPart,
+export const updateContentTrack = async (contentTrack: Model.ContentTrackDM) =>
+  await axios.put<Model.ContentTrackDM>(
+    `${API_CONTENT_TRACKS}${contentTrack.id}/`,
+    contentTrack,
     json()
   );
 
-export const deleteContentItemPart = async (id: number) =>
-  await axios.delete<void>(`${API_CONTENT_ITEM_PARTS}${id}/`, json());
+export const deleteContentTrack = async (id: number) =>
+  await axios.delete<void>(`${API_CONTENT_TRACKS}${id}/`, json());
 // ----------------------------- //
 
 // CONTENT LISTS API
 export const getContentWatchers = async () =>
   await axios.get<Model.ContentWatcherDM[]>(API_CONTENT_WATCHERS, json());
+
+export const getContentWatcher = async (id: number) =>
+  await axios.get<Model.ContentWatcherDM>(
+    `${API_CONTENT_WATCHERS}${id}/`,
+    json()
+  );
 
 export const addContentWatcher = async (
   contentWatcher: Model.ContentWatcherAM
@@ -150,12 +205,4 @@ export const updateContentWatcher = async (
 
 export const deleteContentWatcher = async (id: number) =>
   await axios.delete<void>(`${API_CONTENT_WATCHERS}${id}/`, json());
-// ----------------------------- //
-
-// OTHER API
-export const getWatchingInfo = async () =>
-  await axios.get<Model.WatchingInfo>(API_WATCHING_INFO, json());
-
-export const getContentingInfo = async () =>
-  await axios.get<Model.ContentingInfo>(API_CONTENTING_INFO, json());
 // ----------------------------- //
