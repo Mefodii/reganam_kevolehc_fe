@@ -4,4 +4,4 @@ Basically, just an overglorified journal which helps to keep track of different 
 
 Movies, Series, Anime, Books, Games, Music
 
-TODO: add more specific info (when not so lazy)
+TODO: (L) add more specific info (when not so lazy)

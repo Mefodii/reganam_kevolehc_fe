@@ -236,7 +236,7 @@
   @apply p-2 hover:bg-theme-3 ease-in duration-150;
 }
 
-/* TODO: group-hover + opacity should be other class */
+/* TODO: (L) group-hover + opacity should be other class */
 .wiggling-clickable {
   @apply transform opacity-10 group-hover:opacity-80 hover:animate-wiggle cursor-pointer 
   hover:text-active-1 transition ease-in duration-150;
@@ -279,7 +279,7 @@
 }
 
 .tooltip {
-  @apply absolute z-30 text-text-1 text-sm font-light top-full left-1/2 -translate-x-1/2 w-max mt-4
+  @apply absolute z-50 text-text-1 text-sm font-light top-full left-1/2 -translate-x-1/2 w-max mt-4
   bg-theme-2 border border-text-1 px-2 py-1 cursor-default transition origin-top ease-in duration-75;
 }
 

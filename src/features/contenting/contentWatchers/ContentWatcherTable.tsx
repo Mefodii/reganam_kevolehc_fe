@@ -11,7 +11,7 @@ const renderTableHeader = () => {
       <div className='flex-3'>Name</div>
       <div className='flex-1'>Category</div>
       <div className='flex-1'>Type</div>
-      <div className='flex-1'>Count</div>
+      <div className='flex-1 text-center'>Count</div>
       <div className='flex-1 text-center'>Download</div>
       <div className='flex-1 text-center'>Qual.</div>
       <div className='flex-1'>Ext.</div>
@@ -37,4 +37,4 @@ const ContentWatcherTable: React.FC<ContentWatcherTableProps> = ({
   );
 };
 
-export default ContentWatcherTable;
+export default React.memo(ContentWatcherTable);

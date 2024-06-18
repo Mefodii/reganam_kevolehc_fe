@@ -128,7 +128,7 @@ export const {
   selectIds: selectContentMusicItemIds,
 } = contentMusicItemsAdapter.getSelectors(selectSlice);
 export const { selectStatus } = slice.getSelectors(selectSlice);
-export const isAPIPending = (state: RootState) =>
+export const selectIsAPIPending = (state: RootState) =>
   selectStatus(state) === APIStatus.PENDING;
 export const reducer = slice.reducer;
 export default slice;

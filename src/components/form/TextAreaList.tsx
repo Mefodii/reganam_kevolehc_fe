@@ -68,7 +68,7 @@ const TextAreaList: React.FC<TextAreaListProps> = ({
             onChange={onItemChange(item, i)}
             copy={copy}
             paste={paste}
-            error={''} // TODO - handle error in all form components (probable in payload)
+            error={''} // TODO: (L) - handle error in all form components (probable in payload)
           />
         );
 

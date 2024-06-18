@@ -37,8 +37,6 @@ export const filter: Model.WatchingFilterModel = {
     let isValid = true;
     let error: Partial<Model.WatchingFilter> = {};
 
-    // TODO - do validations
-
     const newState = this.toState(watchingFilter);
     return [newState, isValid, error];
   },
@@ -60,7 +58,7 @@ export const filter: Model.WatchingFilterModel = {
         alias.toLowerCase().includes(title.toLowerCase())
       );
 
-      // TODO - check in videos as well
+      // TODO: (L) - check in videos as well
 
       return inName || inAlias;
     });

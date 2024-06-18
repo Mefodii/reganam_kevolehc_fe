@@ -16,7 +16,7 @@ import { useForm } from '../../../hooks';
 import { WatchingStatus } from '../../../api/api-utils';
 
 type FilterFormProps = {
-  onSuccess: () => void; // TODO - is this too generic?
+  onSuccess: () => void;
 };
 
 const FilterForm: React.FC<FilterFormProps> = ({ onSuccess }) => {

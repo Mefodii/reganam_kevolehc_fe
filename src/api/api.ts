@@ -94,10 +94,10 @@ export const deleteContentList = async (id: number) =>
 // ----------------------------- //
 
 // CONTENT ITEMS API
-export const getContentItems = async (contentList: number) =>
-  await axios.get<Model.ContentItemDM[]>(
+export const getContentItems = async (params: QParams.ContentItem) =>
+  await axios.get<AxiosPageResult<Model.ContentItemDM, QParams.ContentItem>>(
     API_CONTENT_ITEMS,
-    paramsConf({ contentList })
+    paramsConf(params)
   );
 
 export const addContentItem = async (contentItem: Model.ContentItemAM) =>

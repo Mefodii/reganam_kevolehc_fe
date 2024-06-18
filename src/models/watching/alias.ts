@@ -18,8 +18,6 @@ export const alias: Model.AliasModel = {
     let isValid = true;
     let error: Model.Alias = [];
 
-    // TODO - do validations
-
     const newState = this.toState(state);
     return [newState, isValid, error];
   },

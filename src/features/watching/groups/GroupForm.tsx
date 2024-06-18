@@ -23,7 +23,7 @@ import { WatchingAirStatus, WatchingStatus } from '../../../api/api-utils';
 
 type GroupFormProps = {
   formProps: Model.GroupProps;
-  onSuccess: (group?: Model.GroupDM) => void; // TODO - is this too generic?
+  onSuccess: (group?: Model.GroupDM) => void;
 };
 
 const GroupForm: React.FC<GroupFormProps> = ({ formProps, onSuccess }) => {

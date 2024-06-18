@@ -1,6 +1,5 @@
 import {
   Date,
-  Number as NumberInput,
   DropdownSelect,
   Text,
   SingleSelect,
@@ -23,12 +22,15 @@ import {
   ContentWatcherSource,
   ContentWatcherStatus,
 } from '../../../api/api-utils';
+import React from 'react';
 
 type ContentWatcherFormProps = {
   formProps: Model.ContentWatcherProps;
-  onSuccess: () => void; // TODO - is this too generic?
+  onSuccess: () => void;
 };
 
+// TODO: (M) disable file extension / video quality if download is false
+// TODO: (M) add fields which will extract YT channel id from a youtube video
 const ContentWatcherForm: React.FC<ContentWatcherFormProps> = ({
   formProps,
   onSuccess,
@@ -84,7 +86,6 @@ const ContentWatcherForm: React.FC<ContentWatcherFormProps> = ({
     download,
     video_quality,
     check_date,
-    items_count,
     file_extension,
   } = modelState;
 
@@ -96,26 +97,20 @@ const ContentWatcherForm: React.FC<ContentWatcherFormProps> = ({
 
       <div className='form-row'>
         <Text label='Name' name='name' value={name} onChange={onFieldChange} />
+      </div>
+
+      <div className='form-row'>
         <Text
           label='Watcher ID'
           name='watcher_id'
           value={watcher_id}
           onChange={onFieldChange}
         />
-      </div>
-
-      <div className='form-row'>
         <Date
           datetime
           label={`Check Date (UTC-0)`}
           name='check_date'
           value={check_date}
-          onChange={onFieldChange}
-        />
-        <NumberInput
-          label='Count'
-          name='items_count'
-          value={items_count}
           onChange={onFieldChange}
         />
       </div>
@@ -198,4 +193,4 @@ const ContentWatcherForm: React.FC<ContentWatcherFormProps> = ({
   );
 };
 
-export default ContentWatcherForm;
+export default React.memo(ContentWatcherForm);

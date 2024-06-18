@@ -12,7 +12,7 @@ const Tooltip: React.FC<TooltipProps> = ({
   className = '',
 }) => {
   if (!text) return <></>;
-  // TODO: maybe have tooltip as root child (similar to spotify)
+  // TODO: (L) maybe have tooltip as root child (similar to spotify)
 
   return (
     <div className={`tooltip ${hidden ? 'scale-0' : 'scale-100'} ${className}`}>

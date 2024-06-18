@@ -20,8 +20,6 @@ export const link: Model.LinkModel = {
     let isValid = true;
     let error: Model.Link = [];
 
-    // TODO - do validations
-
     const newState = this.toState(state);
     return [newState, isValid, error];
   },

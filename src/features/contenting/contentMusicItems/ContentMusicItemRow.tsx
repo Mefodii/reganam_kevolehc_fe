@@ -67,4 +67,4 @@ const ContentMusicItemRow: React.FC<ContentMusicItemRowProps> = ({
   );
 };
 
-export default ContentMusicItemRow;
+export default React.memo(ContentMusicItemRow);

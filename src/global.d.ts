@@ -8,6 +8,33 @@ declare global {
     headers?: AxiosConfigHeaders;
   };
 
+  declare namespace QParams {
+    type Base = {
+      page?: number;
+    };
+    type ContentItemBase = {
+      contentList: number;
+      hideConsumed?: boolean;
+    };
+    type ContentItem = Base & ContentItemBase;
+  }
+
+  type PageInfo<T extends QParams.Base> = {
+    count: number;
+    nextUrl: string | null;
+    previousUrl: string | null;
+    nextParams: T | null;
+    currentParams: T;
+    previousParams: T | null;
+    pages: number;
+    page: number;
+    page_size: number;
+  };
+
+  type AxiosPageResult<T, V> = PageInfo<V> & {
+    results: T[];
+  };
+
   type SVGContainerProps = {
     tooltip?: string;
     tooltipDelay?: number;

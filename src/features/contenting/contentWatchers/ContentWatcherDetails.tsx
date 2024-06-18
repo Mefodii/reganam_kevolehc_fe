@@ -73,6 +73,8 @@ const ContentWatcherDetails: React.FC<ContentWatcherDetailsProps> = ({
         </div>
         <div className='space-y-2 text-center w-20 border-b-2 border-active-1/30'>
           <div className='text-xs'>Count</div>
+          {/* TODO: (M) - update this fields after change in ContentItemTable.
+           Probably will need to refetch data when create / delete content item*/}
           <div className='font-bold'>{items_count}</div>
         </div>
         <div className='space-y-2 text-center w-20 border-b-2 border-active-1/30'>
@@ -103,4 +105,4 @@ const ContentWatcherDetails: React.FC<ContentWatcherDetailsProps> = ({
   );
 };
 
-export default ContentWatcherDetails;
+export default React.memo(ContentWatcherDetails);

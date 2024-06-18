@@ -7,7 +7,7 @@ export type DropdownSelectProps<T = string> = InputContainerProps & {
   name: string;
   value?: Form.Option<T>;
   placeholder?: string;
-  allow_undefined?: boolean; // TODO - implement
+  allow_undefined?: boolean; // TODO: (L) implement
   hideOnChange?: boolean;
   disabled?: boolean;
   deselect?: boolean;
@@ -116,4 +116,6 @@ const DropdownSelect = <T,>({
   );
 };
 
-export default React.memo(DropdownSelect);
+// NOTE: Component with generic & React.memo
+// https://github.com/DefinitelyTyped/DefinitelyTyped/issues/37087
+export default React.memo(DropdownSelect) as typeof DropdownSelect;

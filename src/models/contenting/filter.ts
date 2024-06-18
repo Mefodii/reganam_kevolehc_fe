@@ -23,7 +23,7 @@ declare global {
 }
 
 export const filter: Model.ContentingFilterModel = {
-  getInitialState: () => ({
+  getInitialState: (): Model.ContentingFilter => ({
     showWatchers: true,
     showLists: true,
     watcherType: undefined,

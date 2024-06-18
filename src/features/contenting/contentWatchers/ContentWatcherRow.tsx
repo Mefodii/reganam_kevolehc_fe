@@ -67,12 +67,13 @@ const ContentWatcherRow: React.FC<ContentWatcherRowProps> = ({
     );
   };
 
+  // TODO: Green LED if all items are consumed
   return (
     <div className='flex justify-between items-center py-3 hover:bg-theme-3/50'>
       <div className='flex-3'>{name}</div>
       <div className='flex-1'>{category}</div>
       <div className='flex-1'>{source_type}</div>
-      <div className='flex-1'>{items_count}</div>
+      <div className='flex-1 text-center'>{items_count}</div>
       <div className='flex-1 flex justify-center'>
         {download ? (
           <SVGCheck className='w-5 text-active-2' />
@@ -91,4 +92,4 @@ const ContentWatcherRow: React.FC<ContentWatcherRowProps> = ({
   );
 };
 
-export default ContentWatcherRow;
+export default React.memo(ContentWatcherRow);

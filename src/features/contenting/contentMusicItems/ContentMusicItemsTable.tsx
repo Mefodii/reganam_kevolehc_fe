@@ -31,4 +31,4 @@ const ContentMusicItemTable: React.FC<ContentMusicItemTableProps> = ({
   );
 };
 
-export default ContentMusicItemTable;
+export default React.memo(ContentMusicItemTable);

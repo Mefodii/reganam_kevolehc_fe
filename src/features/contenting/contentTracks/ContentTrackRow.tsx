@@ -21,4 +21,4 @@ const ContentTrackRow: React.FC<ContentTrackRowProps> = ({ contentTrack }) => {
   );
 };
 
-export default ContentTrackRow;
+export default React.memo(ContentTrackRow);

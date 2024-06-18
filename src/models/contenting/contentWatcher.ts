@@ -20,7 +20,6 @@ declare global {
       download: boolean;
       video_quality: ContentWatcherQuality | null;
       check_date: string;
-      items_count: number;
       file_extension?: ContentWatcherExtension;
       content_list?: number;
     };
@@ -34,6 +33,7 @@ declare global {
       id: number;
       content_list: number;
       migration_position: number;
+      items_count: number;
     };
     type ContentWatcherCreateProps = {
       formMode: 'CREATE';
@@ -70,7 +70,6 @@ export const contentWatcher: Model.ContentWatcherModel = {
     download: false,
     video_quality: null,
     check_date: getToday(),
-    items_count: 0,
     file_extension: undefined,
     content_list: undefined,
   }),
@@ -85,7 +84,6 @@ export const contentWatcher: Model.ContentWatcherModel = {
       download: contentWatcher.download,
       video_quality: contentWatcher.video_quality,
       check_date: contentWatcher.check_date,
-      items_count: contentWatcher.items_count,
       file_extension: contentWatcher.file_extension,
       content_list: contentWatcher.content_list,
     };
@@ -105,7 +103,6 @@ export const contentWatcher: Model.ContentWatcherModel = {
     video_quality:
       state.video_quality === undefined ? null : state.video_quality,
     check_date: state.check_date,
-    items_count: state.items_count,
     file_extension: state.file_extension!,
     content_list: state.content_list,
   }),
@@ -115,6 +112,7 @@ export const contentWatcher: Model.ContentWatcherModel = {
       id: dbState.id,
       content_list: dbState.content_list,
       migration_position: dbState.migration_position,
+      items_count: dbState.items_count,
     };
   },
   getDBState: (props) => {
@@ -147,7 +145,6 @@ export const contentWatcher: Model.ContentWatcherModel = {
     if (o1?.download !== o2?.download) return false;
     if (o1?.video_quality !== o2?.video_quality) return false;
     if (o1?.check_date !== o2?.check_date) return false;
-    if (o1?.items_count !== o2?.items_count) return false;
     if (o1?.file_extension !== o2?.file_extension) return false;
     if (o1?.content_list !== o2?.content_list) return false;
 

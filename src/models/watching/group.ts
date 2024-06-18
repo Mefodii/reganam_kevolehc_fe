@@ -239,16 +239,12 @@ export const group: Model.GroupModel = {
     let isValid = true;
     let error: Partial<Model.GroupSM> = {};
 
-    // TODO - do validations
-
     const apiState = this.toAPIState(state);
     return [apiState, isValid, error];
   },
   validateUpdate(state, dbState) {
     let isValid = true;
     let error: Partial<Model.GroupSM> = {};
-
-    // TODO - do validations
 
     const newState = this.toDBState(state, dbState);
     const equals = isValid && this.equals(newState, dbState);

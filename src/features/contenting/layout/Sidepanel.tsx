@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { useModal } from '../../../hooks';
 import ContentWatcherForm from '../contentWatchers/ContentWatcherForm';
 import { ContentCategory, ContentWatcherSource } from '../../../api/api-utils';
+import React from 'react';
 
 type SidepanelProps = {};
 
@@ -139,4 +140,4 @@ const Sidepanel: React.FC<SidepanelProps> = (props) => {
   );
 };
 
-export default Sidepanel;
+export default React.memo(Sidepanel);

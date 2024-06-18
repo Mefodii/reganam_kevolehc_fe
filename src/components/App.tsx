@@ -7,7 +7,7 @@ import store from '../store';
 
 const App = () => {
   return (
-    // TODO - cancel api requests if already called
+    // TODO: (M) - cancel api requests if already called
     <StrictMode>
       <Provider store={store}>
         <Content></Content>

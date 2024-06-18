@@ -40,7 +40,7 @@ declare global {
 }
 
 export const contentMusicItem: Model.ContentMusicItemModel = {
-  mandatoryFields: [], // TODO
+  mandatoryFields: [],
   getInitialState: (props) => {
     if (props?.formMode !== 'CREATE') {
       throw new Error(

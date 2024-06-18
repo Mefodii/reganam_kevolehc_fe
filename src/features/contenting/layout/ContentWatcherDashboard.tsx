@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import {
   fetchContentWatcher,
@@ -11,6 +11,7 @@ import { LoadingOverlay } from '../../../components/generic';
 import {
   fetchContentItems,
   selectAllContentItems,
+  selectPageInfo,
 } from '../contentItems/contentItemsSlice';
 import {
   fetchContentMusicItems,
@@ -24,10 +25,12 @@ import ContentItemsTable from '../contentItems/ContentItemsTable';
 const ContentWatcherDashboard = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
-  const [isMusic, setIsMusic] = useState(false);
 
   const contentWatcher = useAppSelector(selectDetails);
+
   const contentItems = useAppSelector(selectAllContentItems);
+  const contentItemsPageInfo = useAppSelector(selectPageInfo);
+
   const contentMusicItems = useAppSelector(selectAllContentMusicItems);
 
   useEffect(() => {
@@ -39,15 +42,17 @@ const ContentWatcherDashboard = () => {
     if (!contentWatcher) return;
 
     if (model.isMusic(contentWatcher)) {
-      setIsMusic(true);
       dispatch(fetchContentMusicItems(contentWatcher.content_list));
     } else {
-      setIsMusic(false);
-      dispatch(fetchContentItems(contentWatcher.content_list));
+      dispatch(
+        fetchContentItems({
+          contentList: contentWatcher.content_list,
+        })
+      );
     }
   }, [dispatch, contentWatcher]);
 
-  const isLoading = !contentWatcher;
+  const isLoading = !contentWatcher || !contentItemsPageInfo;
 
   if (isLoading)
     return (
@@ -56,21 +61,21 @@ const ContentWatcherDashboard = () => {
       </div>
     );
 
-  // TODO: probably on each update an item, everything will be rendered.
-  // Maybe it will be better to pass ids instead of whole objects
-
   return (
     <ContentContainer>
       <div className='content-container font-mono'>
         <ContentWatcherDetails contentWatcher={contentWatcher} />
-        {isMusic ? (
+        {model.isMusic(contentWatcher) ? (
           <ContentMusicItemTable contentMusicItems={contentMusicItems} />
         ) : (
-          <ContentItemsTable contentItems={contentItems} />
+          <ContentItemsTable
+            contentItems={contentItems}
+            pageInfo={contentItemsPageInfo}
+          />
         )}
       </div>
     </ContentContainer>
   );
 };
 
-export default ContentWatcherDashboard;
+export default React.memo(ContentWatcherDashboard);

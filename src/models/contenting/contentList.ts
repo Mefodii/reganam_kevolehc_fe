@@ -93,7 +93,7 @@ export const contentList: Model.ContentListModel = {
   },
   equals(o1, o2) {
     if (o1?.name !== o2?.name) return false;
-    // TODO
+    // TODO: (L) - proper implementation for the model
     return true;
   },
 };

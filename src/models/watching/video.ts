@@ -147,16 +147,12 @@ export const video: Model.VideoModel = {
     let isValid = true;
     let error: Partial<Model.VideoSM> = {};
 
-    // TODO - do validations
-
     const apiState = this.toAPIState(state);
     return [apiState, isValid, error];
   },
   validateUpdate(state, dbState) {
     let isValid = true;
     let error: Partial<Model.VideoSM> = {};
-
-    // TODO - do validations
 
     const newState = this.toDBState(state, dbState);
     const equals = isValid && this.equals(newState, dbState);

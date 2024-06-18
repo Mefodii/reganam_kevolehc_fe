@@ -17,7 +17,7 @@ import { WatchingStatus } from '../../../api/api-utils';
 
 type VideoFormProps = {
   formProps: Model.VideoProps;
-  onSuccess: () => void; // TODO - is this too generic?
+  onSuccess: () => void;
 };
 
 const VideoForm: React.FC<VideoFormProps> = ({ formProps, onSuccess }) => {

@@ -65,4 +65,4 @@ const ContentWatcherList: React.FC<ContentWatcherListProps> = ({
   );
 };
 
-export default ContentWatcherList;
+export default React.memo(ContentWatcherList);

@@ -16,6 +16,7 @@ import { useAppDispatch } from '../../../hooks';
 import { contentItem as model } from '../../../models';
 import { useForm } from '../../../hooks';
 import { DownloadStatus } from '../../../api/api-utils';
+import React from 'react';
 
 type ContentItemFormProps = {
   formProps: Model.ContentItemProps;
@@ -168,4 +169,4 @@ const ContentItemForm: React.FC<ContentItemFormProps> = ({
   );
 };
 
-export default ContentItemForm;
+export default React.memo(ContentItemForm);

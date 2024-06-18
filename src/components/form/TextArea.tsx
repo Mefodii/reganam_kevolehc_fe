@@ -4,7 +4,6 @@ import { getTextFromClipboard, saveToClipboard } from '../../util/functions';
 
 import InputContainer, { InputContainerProps } from './InputContainer';
 import { SVGClipboardDocEmpty, SVGClipboardDoc } from '../svg';
-import { useAutosizeTextArea } from '../../hooks';
 
 export type TextAreaProps = InputContainerProps & {
   name: string;
@@ -54,8 +53,6 @@ const TextArea = React.forwardRef(
   ) => {
     const innerRef = useRef<HTMLTextAreaElement>(null);
     useImperativeHandle(ref, () => innerRef.current!, []);
-
-    useAutosizeTextArea(innerRef.current, value, autoSize);
 
     const onInputChange: React.ChangeEventHandler<HTMLTextAreaElement> = (
       e

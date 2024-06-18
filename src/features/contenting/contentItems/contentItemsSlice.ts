@@ -28,96 +28,109 @@ const contentItemsAdapter = createEntityAdapter({
 const stateFragment: {
   status: APIStatus;
   error?: string;
+  pageInfo?: PageInfo<QParams.ContentItem>;
 } = {
   status: APIStatus.NONE,
   error: '',
+  pageInfo: undefined,
 };
 
 const initialState = contentItemsAdapter.getInitialState(stateFragment);
 
-export const fetchContentItems = createAsyncThunk(
-  `${sliceName}/fetchContentItems`,
-  async (contentList: number) => {
-    const { data } = await apiGetContentItems(contentList);
-    return data;
+export const fetchContentItems = createAsyncThunk<
+  AxiosPageResult<Model.ContentItemDM, QParams.ContentItem>,
+  QParams.ContentItem,
+  { state: RootState }
+>(`${sliceName}/fetchContentItems`, async (params) => {
+  const { data } = await apiGetContentItems(params);
+  return data;
+});
+
+export const refetchContentItems = createAsyncThunk<
+  AxiosPageResult<Model.ContentItemDM, QParams.ContentItem>,
+  void,
+  { state: RootState }
+>(`${sliceName}/refetchContentItems`, async (_, { getState }) => {
+  const params = selectCurrentParams(getState());
+  if (!params) {
+    throw new Error(`params missing on refetchContentItems`);
   }
-);
+  console.log(params);
+  const { data } = await apiGetContentItems(params);
+  return data;
+});
 
-export const createContentItem = createAsyncThunk(
-  `${sliceName}/createContentItem`,
-  async (contentItem: Model.ContentItemAM) => {
-    const res = await apiAddContentItem(contentItem);
+export const createContentItem = createAsyncThunk<
+  void,
+  Model.ContentItemAM,
+  { state: RootState }
+>(`${sliceName}/createContentItem`, async (contentItem, { dispatch }) => {
+  await apiAddContentItem(contentItem);
+  dispatch(refetchContentItems());
+});
 
-    const { data } = await apiGetContentItems(res.data.content_list);
-    return data;
-  }
-);
+export const updateContentItem = createAsyncThunk<
+  void,
+  Model.ContentItemDM,
+  { state: RootState }
+>(`${sliceName}/updateContentItem`, async (contentItem, { dispatch }) => {
+  await apiUpdateContentItem(contentItem);
+  dispatch(refetchContentItems());
+});
 
-export const updateContentItem = createAsyncThunk(
-  `${sliceName}/updateContentItem`,
-  async (contentItem: Model.ContentItemDM) => {
-    await apiUpdateContentItem(contentItem);
+export const updateContentItems = createAsyncThunk<
+  void,
+  Model.ContentItemDM[],
+  { state: RootState }
+>(`${sliceName}/updateContentItems`, async (contentItems, { dispatch }) => {
+  await apiUpdateContentItems(contentItems);
+  dispatch(refetchContentItems());
+});
 
-    const { data } = await apiGetContentItems(contentItem.content_list);
-    return data;
-  }
-);
+export const deleteContentItem = createAsyncThunk<
+  void,
+  Model.ContentItemDM,
+  { state: RootState }
+>(`${sliceName}/deleteContentItem`, async (contentItem, { dispatch }) => {
+  await apiDeleteContentItem(contentItem.id);
+  dispatch(refetchContentItems());
+});
 
-export const updateContentItems = createAsyncThunk(
-  `${sliceName}/updateContentItems`,
-  async (contentItems: Model.ContentItemDM[]) => {
-    await apiUpdateContentItems(contentItems);
-
-    const { data } = await apiGetContentItems(contentItems[0].content_list);
-    return data;
-  }
-);
-
-export const deleteContentItem = createAsyncThunk(
-  `${sliceName}/deleteContentItem`,
-  async (contentItem: Model.ContentItemDM) => {
-    await apiDeleteContentItem(contentItem.id);
-
-    const { data } = await apiGetContentItems(contentItem.content_list);
-    return data;
-  }
-);
-
-export const deleteContentItems = createAsyncThunk(
-  `${sliceName}/deleteContentItems`,
-  async (contentItems: Model.ContentItemDM[]) => {
-    await apiDeleteContentItems(
-      contentItems.map((contentItem) => contentItem.id)
-    );
-
-    const { data } = await apiGetContentItems(contentItems[0].content_list);
-    return data;
-  }
-);
+export const deleteContentItems = createAsyncThunk<
+  void,
+  Model.ContentItemDM[],
+  { state: RootState }
+>(`${sliceName}/deleteContentItems`, async (contentItems, { dispatch }) => {
+  await apiDeleteContentItems(
+    contentItems.map((contentItem) => contentItem.id)
+  );
+  dispatch(refetchContentItems());
+});
 
 const slice = createSlice({
   name: sliceName,
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addMatcher(
-      isAnyOf(
-        fetchContentItems.fulfilled,
-        createContentItem.fulfilled,
-        updateContentItem.fulfilled,
-        updateContentItems.fulfilled,
-        deleteContentItem.fulfilled,
-        deleteContentItems.fulfilled
-      ),
-      (state, action) => {
-        state.status = APIStatus.OK;
-        contentItemsAdapter.removeAll(state);
-        contentItemsAdapter.upsertMany(state, action.payload);
-      }
-    );
+    builder.addCase(fetchContentItems.fulfilled, (state, action) => {
+      state.status = APIStatus.OK;
+      const { results, ...pageInfo } = action.payload;
+
+      state.pageInfo = pageInfo;
+      contentItemsAdapter.removeAll(state);
+      contentItemsAdapter.upsertMany(state, results);
+    });
+    builder.addCase(refetchContentItems.fulfilled, (state, action) => {
+      state.status = APIStatus.OK;
+      const { results } = action.payload;
+
+      contentItemsAdapter.removeAll(state);
+      contentItemsAdapter.upsertMany(state, results);
+    });
     builder.addMatcher(
       isAnyOf(
         fetchContentItems.pending,
+        refetchContentItems.pending,
         createContentItem.pending,
         updateContentItem.pending,
         updateContentItems.pending,
@@ -131,6 +144,7 @@ const slice = createSlice({
     builder.addMatcher(
       isAnyOf(
         fetchContentItems.rejected,
+        refetchContentItems.rejected,
         createContentItem.rejected,
         updateContentItem.rejected,
         updateContentItems.rejected,
@@ -145,6 +159,9 @@ const slice = createSlice({
   },
   selectors: {
     selectStatus: (state) => state.status,
+    selectPageInfo: (state) => state.pageInfo,
+    selectPage: (state) => state.pageInfo?.page,
+    selectCurrentParams: (state) => state.pageInfo?.currentParams,
   },
 });
 
@@ -154,8 +171,9 @@ export const {
   selectById: selectContentItemById,
   selectIds: selectContentItemIds,
 } = contentItemsAdapter.getSelectors(selectSlice);
-export const { selectStatus } = slice.getSelectors(selectSlice);
-export const isAPIPending = (state: RootState) =>
+export const { selectStatus, selectPageInfo, selectPage, selectCurrentParams } =
+  slice.getSelectors(selectSlice);
+export const selectIsAPIPending = (state: RootState) =>
   selectStatus(state) === APIStatus.PENDING;
 
 export const reducer = slice.reducer;

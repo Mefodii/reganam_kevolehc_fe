@@ -38,7 +38,7 @@ const isValidDragOver = (
 
   return copy;
 };
-
+// TODO: (H) check if it is possible to embed youtube player
 const ContentItemRow: React.FC<ContentItemRowProps> = ({
   contentItem,
   selected = false,
@@ -48,7 +48,7 @@ const ContentItemRow: React.FC<ContentItemRowProps> = ({
   const titleRef = useRef<HTMLInputElement>(null);
   const { openModal, openConfirmationModal, closeModal } = useModal();
 
-  // TODO: probably can be extract in a custom hook (field, error and related functions from below)
+  // TODO: (H) probably can be extract in a custom hook (field, error and related functions from below)
   const [isEditTitle, setIsEditTitle] = useState(false);
   const [isTitleError, setIsTitleError] = useState(false);
 
@@ -78,7 +78,7 @@ const ContentItemRow: React.FC<ContentItemRowProps> = ({
     if (!isValidDragOver(dndData, contentItem)) return;
 
     onDragEnter(dndData);
-    // TODO: probably item and type should be one TS Type to be able to properly read object attrs
+    // TODO: (H) probably item and type should be one TS Type to be able to properly read object attrs
     setInsertBefore(dndData.item!.position > contentItem.position);
   };
 
@@ -278,4 +278,4 @@ const ContentItemRow: React.FC<ContentItemRowProps> = ({
   );
 };
 
-export default ContentItemRow;
+export default React.memo(ContentItemRow);
