@@ -53,9 +53,7 @@ const ContentItemRow: React.FC<ContentItemRowProps> = ({
   const [isTitleError, setIsTitleError] = useState(false);
 
   const [isMouseOver, setIsMouseOver] = useState(false);
-  const [titleForm, setTitleForm] = useState<string | undefined>(
-    contentItem.title
-  );
+  const [titleForm, setTitleForm] = useState(contentItem.title);
 
   const [draggable, setDraggable] = useState(false);
   const {
@@ -171,7 +169,7 @@ const ContentItemRow: React.FC<ContentItemRowProps> = ({
           tooltip='Edit'
           onClick={handleOpenContentItemModal}
         />
-        {/* TODO: create a confirmation dialog generic component */}
+        {/* // TODO: (H) - create a confirmation dialog generic component */}
         <SVGCross
           className='row-icon cursor-pointer hover:text-error-1'
           tooltip='Delete'
@@ -209,7 +207,7 @@ const ContentItemRow: React.FC<ContentItemRowProps> = ({
     );
   };
 
-  // TODO: https://blog.logrocket.com/creating-react-context-menu/
+  // TODO: (M) - Context menu: https://blog.logrocket.com/creating-react-context-menu/
   return (
     <DragAndDrop
       draggable={draggable}

@@ -1,3 +1,4 @@
+import { ContentCategory } from '../../api/api-utils';
 import { validateMandatoryFields } from '../../util/functions';
 
 declare global {
@@ -5,12 +6,10 @@ declare global {
     type ContentListSM = {
       id?: number;
       name: string;
-      category?: string;
+      category: ContentCategory;
       migration_position: number;
     };
-    type ContentListAM = ContentListSM & {
-      category: string;
-    };
+    type ContentListAM = ContentListSM;
     type ContentListPureDM = ContentListAM & {
       id: number;
       content_watcher: null;
@@ -42,7 +41,7 @@ export const contentList: Model.ContentListModel = {
   getInitialState: () => ({
     id: undefined,
     name: '',
-    category: undefined,
+    category: ContentCategory.OTHER,
     migration_position: 0,
   }),
   toState: (contentList) => {
@@ -60,13 +59,13 @@ export const contentList: Model.ContentListModel = {
   toAPIState: (state) => ({
     id: state.id,
     name: state.name,
-    category: state.category!,
+    category: state.category,
     migration_position: state.migration_position,
   }),
   toDBState: (state, dbState) => ({
     id: dbState.id,
     name: state.name,
-    category: state.category!,
+    category: state.category,
     content_watcher: dbState.content_watcher,
     migration_position: state.migration_position,
   }),

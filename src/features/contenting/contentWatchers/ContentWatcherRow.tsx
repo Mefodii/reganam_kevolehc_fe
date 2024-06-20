@@ -11,6 +11,7 @@ import { useModal } from '../../../hooks';
 import { toLocalDatetime } from '../../../util/datetime';
 import { NavLink } from 'react-router-dom';
 import { FE_URL } from '../../../util/frontend-urls';
+import { ContentWatcherQuality } from '../../../api/api-utils';
 
 type ContentWatcherRowProps = {
   contentWatcher: Model.ContentWatcherDM;
@@ -82,7 +83,11 @@ const ContentWatcherRow: React.FC<ContentWatcherRowProps> = ({
         )}
       </div>
       <div className='flex-1 text-center'>
-        {download ? (video_quality ? video_quality : 'Any') : '-'}
+        {download
+          ? video_quality === ContentWatcherQuality.DEFAULT
+            ? 'Any'
+            : video_quality
+          : '-'}
       </div>
       <div className='flex-1'>{file_extension}</div>
       <div className='flex-2'>{status}</div>

@@ -104,6 +104,7 @@ const VideoForm: React.FC<VideoFormProps> = ({ formProps, onSuccess }) => {
           name='order'
           value={order}
           onChange={onFieldChange}
+          min={1}
         />
         <DropdownSelect
           className='text-center'

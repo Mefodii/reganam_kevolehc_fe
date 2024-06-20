@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 import {
   Date,
   MultiSelect,
-  SingleSelect,
+  Checkbox,
   TextArea,
 } from '../../../components/form';
 import { Button } from '../../../components/buttons';
@@ -58,11 +58,11 @@ const FilterForm: React.FC<FilterFormProps> = ({ onSuccess }) => {
         </div>
 
         <div className='form-row'>
-          <SingleSelect
+          <Checkbox
             className='text-center'
             name='showPosters'
             text='Show Posters'
-            value={showPosters}
+            checked={showPosters}
             onChange={onFieldChange}
           />
           <Date

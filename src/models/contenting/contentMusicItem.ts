@@ -1,15 +1,13 @@
-import { ContentMusic } from '../../api/api-utils';
+import { ContentMusic, DownloadStatus } from '../../api/api-utils';
 import { validateMandatoryFields } from '../../util/functions';
 
 declare global {
   namespace Model {
     type ContentMusicItemSM = ContentItemBase & {
-      type?: ContentMusic;
+      type: ContentMusic;
       content_list: number;
     };
-    type ContentMusicItemAM = ContentMusicItemSM & {
-      type: ContentMusic;
-    };
+    type ContentMusicItemAM = ContentMusicItemSM;
     type ContentMusicItemDM = ContentMusicItemAM & {
       id: number;
       tracks: ContentTrackDM[];
@@ -54,9 +52,9 @@ export const contentMusicItem: Model.ContentMusicItemModel = {
       title: '',
       file_name: '',
       position: 0,
-      download_status: undefined,
-      published_at: undefined,
-      type: undefined,
+      download_status: DownloadStatus.NONE,
+      published_at: '',
+      type: ContentMusic.NOT_MUSIC,
       content_list: props.content_list,
     };
   },
@@ -88,7 +86,7 @@ export const contentMusicItem: Model.ContentMusicItemModel = {
     position: state.position,
     download_status: state.download_status,
     published_at: state.published_at,
-    type: state.type!,
+    type: state.type,
     content_list: state.content_list,
   }),
   toDBState: (state, dbState) => ({
@@ -100,7 +98,7 @@ export const contentMusicItem: Model.ContentMusicItemModel = {
     position: state.position,
     download_status: state.download_status,
     published_at: state.published_at,
-    type: state.type!,
+    type: state.type,
     content_list: state.content_list,
     tracks: dbState.tracks,
   }),

@@ -1,23 +1,23 @@
 import React from 'react';
 import InputContainer, { InputContainerProps } from './InputContainer';
 
-export type RadioProps = InputContainerProps & {
+export type RadioProps<T> = InputContainerProps & {
   name: string;
-  value: Form.Option;
+  value: Form.Option<T>;
   disabled?: boolean;
   simple?: boolean;
   deselect?: boolean;
-  options: Form.Option[];
-  optionDisplay?: (option: Form.Option, i?: number) => string;
+  options: Form.Option<T>[];
+  optionDisplay?: (option: Form.Option<T>, i?: number) => string;
   optionClassName?: string;
   containerClassName?: string;
   onChange: (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    payload: Form.Payload<Form.Option>
+    payload: Form.Payload<Form.Option<T>>
   ) => void;
 };
 
-const Radio = ({
+const Radio = <T,>({
   label,
   error,
   className = '',
@@ -28,29 +28,29 @@ const Radio = ({
   simple,
   deselect,
   options,
-  optionDisplay = (option: Form.Option) => option,
+  optionDisplay = (option, i) => option + '',
   optionClassName,
   containerClassName,
   onChange,
-}: RadioProps) => {
+}: RadioProps<T>) => {
   const selectOption =
-    (option: Form.Option): React.MouseEventHandler<HTMLDivElement> =>
+    (option: Form.Option<T>): React.MouseEventHandler<HTMLDivElement> =>
     (e) => {
       onInputChange(e, option);
     };
 
   const deselectOption = (): React.MouseEventHandler<HTMLDivElement> => (e) => {
-    onInputChange(e, undefined);
+    onInputChange(e, null);
   };
 
   const onInputChange = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    value: Form.Option | undefined
+    value: Form.Option<T>
   ) => {
     onChange(e, { name, value });
   };
 
-  const isOptionSelected = (option: Form.Option) => value === option;
+  const isOptionSelected = (option: Form.Option<T>) => value === option;
 
   const renderInput = () => {
     return (

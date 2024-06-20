@@ -5,7 +5,7 @@ import InputContainer, { InputContainerProps } from './InputContainer';
 
 export type NumberProps = InputContainerProps & {
   name: string;
-  value?: number;
+  value: number | null;
   min?: number;
   max?: number;
   disabled?: boolean;
@@ -17,7 +17,7 @@ export type NumberProps = InputContainerProps & {
     e:
       | React.ChangeEvent<HTMLInputElement>
       | React.MouseEvent<HTMLDivElement, MouseEvent>,
-    payload: Form.Payload<number>
+    payload: Form.Payload<number | null>
   ) => void;
   onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
 };
@@ -68,7 +68,7 @@ const Number = React.forwardRef(
       ) {
         onChange(e, {
           name,
-          value: value === '' ? undefined : valueAsNumber,
+          value: value === '' ? null : valueAsNumber,
         });
       }
     };
@@ -127,4 +127,4 @@ const Number = React.forwardRef(
   }
 );
 
-export default React.memo(Number);
+export default React.memo(Number) as typeof Number;

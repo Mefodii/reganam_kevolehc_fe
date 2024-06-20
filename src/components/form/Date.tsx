@@ -6,7 +6,7 @@ import InputContainer, { InputContainerProps } from './InputContainer';
 
 export type DateProps = InputContainerProps & {
   name: string;
-  value?: string;
+  value: string;
   datetime?: boolean;
   disabled?: boolean;
   autoComplete?: 'on' | 'off';
@@ -16,7 +16,7 @@ export type DateProps = InputContainerProps & {
     e:
       | React.ChangeEvent<HTMLInputElement>
       | React.MouseEvent<HTMLDivElement, MouseEvent>,
-    payload: { name: string; value?: string }
+    payload: Form.Payload<string>
   ) => void;
   onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
 };
@@ -59,7 +59,7 @@ const Date = React.forwardRef(
             className={`input-text input-border-placeholder ${className}`}
             type='text'
             name={name}
-            value={value || ''}
+            value={value}
             maxLength={maxLength}
             onChange={onInputChange}
             onKeyDown={onKeyDown}
@@ -93,4 +93,4 @@ const Date = React.forwardRef(
   }
 );
 
-export default React.memo(Date);
+export default React.memo(Date) as typeof Date;

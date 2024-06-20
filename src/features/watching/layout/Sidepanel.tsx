@@ -44,7 +44,6 @@ const Sidepanel: React.FC<SidepanelProps> = ({ watchingType }) => {
       openModal(
         <VideoForm
           formProps={{
-            watchingType: group.type,
             groupId: group.id,
             defaultOrder: 1,
             formMode: 'CREATE',

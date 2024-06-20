@@ -14,7 +14,7 @@ import {
   useListSelect,
   useModal,
 } from '../../../hooks';
-import { SingleSelect } from '../../../components/form';
+import { Checkbox } from '../../../components/form';
 import {
   SVGClipboardDocEmpty,
   SVGCross,
@@ -43,7 +43,7 @@ const ContentItemsTable: React.FC<ContentItemsTableProps> = ({
   const hideConsumed: boolean = Boolean(pageInfo.currentParams?.hideConsumed);
   const dispatch = useAppDispatch();
 
-  // TODO: (H) - seems like a hacky overkill, maybe it is possible to get same result with using TW CSS
+  // TODO: (L) - seems like a hacky overkill, maybe it is possible to get same result with using TW CSS
   // TODO: (M) - check maybe it will work if autofit is located directly on body
   const tableRef = useAutofitScreen<HTMLDivElement>(null);
 
@@ -98,11 +98,11 @@ const ContentItemsTable: React.FC<ContentItemsTableProps> = ({
       <div className='sticky top-0 bg-inherit z-10'>
         <div className='mx-5 mb-2 pb-3 pt-5 flex items-center justify-between text-lg font-bold border-b-2 border-active-1/80 select-none'>
           <div className='flex w-1/3 items-center'>
-            <SingleSelect
+            <Checkbox
               className='rounded-none px-2 border-opacity-70'
               name='showPosters'
               text='Select Mode'
-              value={isSelectMode}
+              checked={isSelectMode}
               onChange={() => setIsSelectMode(!isSelectMode)}
               simple
             />

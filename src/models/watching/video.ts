@@ -1,8 +1,4 @@
-import {
-  WatchingStatus,
-  WatchingType,
-  isWatchingQueue,
-} from '../../api/api-utils';
+import { WatchingStatus, isWatchingQueue } from '../../api/api-utils';
 import { getToday } from '../../util/datetime';
 import { alias } from './alias';
 import { link } from './link';
@@ -13,28 +9,24 @@ declare global {
       id?: number;
       name: string;
       comment: string;
-      type: WatchingType;
       group: number;
       aliases: Alias;
       links: Alias;
       year: number;
-      status?: WatchingStatus;
+      status: WatchingStatus;
       order: number;
       current_episode: number;
       episodes: number;
-      rating: number;
+      rating: number | null;
       watched_date: string;
     };
-    type VideoAM = VideoSM & {
-      status: WatchingStatus;
-    };
+    type VideoAM = VideoSM;
     type VideoDM = VideoAM & {
       id: number;
     };
     type VideoCreateProps = {
       formMode: 'CREATE';
       groupId: number;
-      watchingType: WatchingType;
       defaultOrder: number;
     };
     type VideoUpdateProps = {
@@ -57,7 +49,7 @@ declare global {
 }
 
 export const video: Model.VideoModel = {
-  getInitialState: (props) => {
+  getInitialState(props) {
     if (props?.formMode !== 'CREATE') {
       throw new Error(
         'props required in formMode = "CREATE" for `getInitialState` of the video.'
@@ -68,25 +60,23 @@ export const video: Model.VideoModel = {
       id: undefined,
       name: '',
       comment: '',
-      type: props.watchingType,
       group: props.groupId,
       aliases: alias.getInitialState(),
       links: link.getInitialState(),
-      status: undefined,
+      status: WatchingStatus.PLANNED,
       watched_date: getToday(),
       year: 0,
       order: props.defaultOrder ? props.defaultOrder : 1,
       current_episode: 0,
       episodes: 1,
-      rating: 0,
+      rating: null,
     };
   },
-  toState: (video) => {
+  toState(video) {
     return {
       id: video.id,
       name: video.name,
       comment: video.comment,
-      type: video.type,
       group: video.group,
       aliases: alias.toState(video.aliases),
       links: link.toState(video.links),
@@ -100,20 +90,19 @@ export const video: Model.VideoModel = {
     };
   },
   buildState(props) {
-    if (props.formMode === 'UPDATE') return this.toState(props.video!);
+    if (props.formMode === 'UPDATE') return this.toState(props.video);
     return this.getInitialState(props);
   },
-  toAPIState: (state) => {
+  toAPIState(state) {
     return {
       id: state.id,
-      type: state.type,
       group: state.group,
       name: state.name,
       comment: state.comment,
       aliases: alias.toState(state.aliases),
       links: link.toState(state.links),
       year: state.year,
-      status: state.status!,
+      status: state.status,
       watched_date: state.watched_date,
       order: state.order,
       current_episode: state.current_episode,
@@ -121,17 +110,16 @@ export const video: Model.VideoModel = {
       rating: state.rating,
     };
   },
-  toDBState: (state, dbState) => {
+  toDBState(state, dbState) {
     return {
       id: dbState.id,
-      type: state.type,
       group: state.group,
       name: state.name,
       comment: state.comment,
       aliases: alias.toState(state.aliases),
       links: link.toState(state.links),
       year: state.year,
-      status: state.status!,
+      status: state.status,
       watched_date: state.watched_date,
       order: state.order,
       current_episode: state.current_episode,
@@ -139,7 +127,7 @@ export const video: Model.VideoModel = {
       rating: state.rating,
     };
   },
-  getDBState: (props) => {
+  getDBState(props) {
     if (props.formMode === 'UPDATE') return props.video;
     throw new Error(`getDBState not available for ${props.formMode}`);
   },
@@ -181,11 +169,13 @@ export const video: Model.VideoModel = {
   isPremiere: (video) => video.status === WatchingStatus.PREMIERE,
   isDropped: (video) => video.status === WatchingStatus.DROPPED,
   isFinished: (video) => video.status === WatchingStatus.FINISHED,
-  setFinished: (video, rating) => ({
-    ...video,
-    status: WatchingStatus.FINISHED,
-    current_episode: video.episodes,
-    watched_date: getToday(),
-    rating,
-  }),
+  setFinished(video, rating) {
+    return {
+      ...video,
+      status: WatchingStatus.FINISHED,
+      current_episode: video.episodes,
+      watched_date: getToday(),
+      rating,
+    };
+  },
 };

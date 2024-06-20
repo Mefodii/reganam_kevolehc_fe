@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { BLANK_VALUE } from '../../../util/constants';
+import { BLANK_VALUE, SHORT_BLANK_VALUE } from '../../../util/constants';
 import { promptNumber } from '../../../util/functions';
 
 import { SVGPencil, SVGCheck } from '../../../components/svg';
@@ -186,7 +186,9 @@ const VideoItem: React.FC<VideoItemProps> = ({ video }) => {
             </div>
             <div className='w-24 m-1'>
               <div className='text-xs'>Rating</div>
-              <div className='font-bold'>{`${rating} / 10`}</div>
+              <div className='font-bold'>{`${
+                rating ?? SHORT_BLANK_VALUE
+              } / 10`}</div>
             </div>
           </div>
           <div>

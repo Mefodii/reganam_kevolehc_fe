@@ -17,8 +17,9 @@ export const isWatchingQueue = (status?: string) =>
   status === WatchingStatus.PLANNED || status === WatchingStatus.WATCHING;
 
 export enum WatchingAirStatus {
-  ongoing = 'Ongoing',
-  completed = 'Completed',
+  UNKNOWN = 'Unknown',
+  ONGOING = 'Ongoing',
+  COMPLETED = 'Completed',
 }
 
 export enum ContentCategory {
@@ -68,6 +69,7 @@ export enum ContentWatcherExtension {
 }
 
 export enum ContentWatcherQuality {
+  DEFAULT = -1,
   Q720 = 720,
   Q1080 = 1080,
 }

@@ -3,14 +3,13 @@ import React, { useState } from 'react';
 import InputContainer, { InputContainerProps } from './InputContainer';
 import { BLANK_VALUE } from '../../util/constants';
 
-export type DropdownSelectProps<T = string> = InputContainerProps & {
+export type DropdownSelectProps<T> = InputContainerProps & {
   name: string;
-  value?: Form.Option<T>;
+  value: Form.Option<T>;
   placeholder?: string;
-  allow_undefined?: boolean; // TODO: (L) implement
+  nullable?: boolean; // TODO: (L) implement
   hideOnChange?: boolean;
   disabled?: boolean;
-  deselect?: boolean;
   simple?: boolean;
   options: Form.Option<T>[];
   optionDisplay?: (option: Form.Option<T>, i?: number) => string;
@@ -32,9 +31,9 @@ const DropdownSelect = <T,>({
   name,
   value,
   placeholder = BLANK_VALUE,
+  nullable = false,
   hideOnChange = true,
   disabled,
-  deselect,
   simple,
   options,
   optionDisplay = (option, i) => option + '',
@@ -45,7 +44,8 @@ const DropdownSelect = <T,>({
 }: DropdownSelectProps<T>) => {
   const [showOptions, setShowOptions] = useState(false);
 
-  const isSelected = () => value && options.includes(value);
+  const isSelected = () =>
+    (value && options.includes(value)) || (nullable && value === null);
 
   const onOptionClick =
     (option: Form.Option<T>, i: number) =>
@@ -54,8 +54,8 @@ const DropdownSelect = <T,>({
         onInputChange(e, { name, value: option });
       }
 
-      if (option === value && deselect) {
-        onInputChange(e, { name, value: undefined });
+      if (option === value && nullable) {
+        onInputChange(e, { name, value: null });
       }
     };
 
@@ -78,7 +78,7 @@ const DropdownSelect = <T,>({
         onMouseLeave={() => setShowOptions(false)}
       >
         <div
-          className={`option-single 
+          className={`option-single
           ${isSelected() && 'option-selected'}
           ${disabled && 'option-disabled'}
           ${className}
@@ -91,6 +91,14 @@ const DropdownSelect = <T,>({
             optionsHidden ? 'scale-0' : 'scale-100'
           } ${optionContainerClassName}`}
         >
+          {nullable && (
+            <div
+              className={`option-dropdown-item ${optionClassName}`}
+              onClick={onOptionClick(null, -1)}
+            >
+              {BLANK_VALUE}
+            </div>
+          )}
           {options.map((option, i) => {
             return (
               <div

@@ -1,6 +1,6 @@
 import { promptNumber } from '../../../util/functions';
 
-import { BLANK_VALUE } from '../../../util/constants';
+import { BLANK_VALUE, SHORT_BLANK_VALUE } from '../../../util/constants';
 
 import Poster from '../posters/Poster';
 import { SVGPencil, SVGCheck, SVGPlus } from '../../../components/svg';
@@ -54,7 +54,6 @@ const GroupItem: React.FC<GroupItemProps> = ({
     openModal(
       <VideoForm
         formProps={{
-          watchingType,
           groupId,
           defaultOrder,
           formMode: 'CREATE',
@@ -140,7 +139,9 @@ const GroupItem: React.FC<GroupItemProps> = ({
                     </div>
                     <div className='w-24 m-1'>
                       <div className='text-xs'>Rating</div>
-                      <div className='font-bold'>{group.rating} / 10</div>
+                      <div className='font-bold'>
+                        {group.rating ?? SHORT_BLANK_VALUE} / 10
+                      </div>
                     </div>
                   </>
                 )}

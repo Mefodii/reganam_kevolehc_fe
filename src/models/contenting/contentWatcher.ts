@@ -13,22 +13,17 @@ declare global {
     type ContentWatcherSM = {
       id?: number;
       name: string;
-      category?: ContentCategory;
-      watcher_id: string;
-      source_type?: ContentWatcherSource;
-      status?: ContentWatcherStatus;
-      download: boolean;
-      video_quality: ContentWatcherQuality | null;
-      check_date: string;
-      file_extension?: ContentWatcherExtension;
-      content_list?: number;
-    };
-    type ContentWatcherAM = ContentWatcherSM & {
       category: ContentCategory;
+      watcher_id: string;
       source_type: ContentWatcherSource;
       status: ContentWatcherStatus;
-      file_extension: ContentWatcherExtension;
+      download: boolean;
+      video_quality: ContentWatcherQuality;
+      check_date: string;
+      file_extension: ContentWatcherExtension | '';
+      content_list?: number;
     };
+    type ContentWatcherAM = ContentWatcherSM;
     type ContentWatcherDM = ContentWatcherAM & {
       id: number;
       content_list: number;
@@ -63,14 +58,14 @@ export const contentWatcher: Model.ContentWatcherModel = {
   getInitialState: () => ({
     id: undefined,
     name: '',
-    category: undefined,
+    category: ContentCategory.OTHER,
     watcher_id: '',
-    source_type: undefined,
-    status: undefined,
+    source_type: ContentWatcherSource.OTHER,
+    status: ContentWatcherStatus.NONE,
     download: false,
-    video_quality: null,
+    video_quality: ContentWatcherQuality.DEFAULT,
     check_date: getToday(),
-    file_extension: undefined,
+    file_extension: '',
     content_list: undefined,
   }),
   toState: (contentWatcher) => {
@@ -95,15 +90,14 @@ export const contentWatcher: Model.ContentWatcherModel = {
   toAPIState: (state) => ({
     id: state.id,
     name: state.name,
-    category: state.category!,
+    category: state.category,
     watcher_id: state.watcher_id,
-    source_type: state.source_type!,
-    status: state.status!,
+    source_type: state.source_type,
+    status: state.status,
     download: state.download,
-    video_quality:
-      state.video_quality === undefined ? null : state.video_quality,
+    video_quality: state.video_quality,
     check_date: state.check_date,
-    file_extension: state.file_extension!,
+    file_extension: state.file_extension,
     content_list: state.content_list,
   }),
   toDBState(state, dbState) {

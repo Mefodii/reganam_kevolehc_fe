@@ -1,9 +1,4 @@
-import {
-  Date,
-  DropdownSelect,
-  Text,
-  SingleSelect,
-} from '../../../components/form';
+import { Date, DropdownSelect, Text, Checkbox } from '../../../components/form';
 import { Button } from '../../../components/buttons';
 import { SVGCheck, SVGTrash } from '../../../components/svg';
 
@@ -146,14 +141,15 @@ const ContentWatcherForm: React.FC<ContentWatcherFormProps> = ({
           value={file_extension}
           options={Object.values(ContentWatcherExtension)}
           onChange={onFieldChange}
+          nullable
         />
       </div>
 
       <div className='form-row'>
-        <SingleSelect
+        <Checkbox
           name='download'
           text={'Download'}
-          value={download}
+          checked={download}
           onChange={onFieldChange}
         />
         <DropdownSelect
@@ -164,7 +160,6 @@ const ContentWatcherForm: React.FC<ContentWatcherFormProps> = ({
             (val) => !isNaN(Number(val))
           )}
           onChange={onFieldChange}
-          deselect
         />
       </div>
 

@@ -2,7 +2,7 @@ import {
   Number,
   DropdownSelect,
   Text,
-  SingleSelect,
+  Checkbox,
 } from '../../../components/form';
 import { Button } from '../../../components/buttons';
 import { SVGCheck, SVGTrash } from '../../../components/svg';
@@ -128,6 +128,7 @@ const ContentItemForm: React.FC<ContentItemFormProps> = ({
           name='position'
           value={position}
           onChange={onFieldChange}
+          min={1}
         />
         <DropdownSelect
           label='Download Status'
@@ -136,10 +137,10 @@ const ContentItemForm: React.FC<ContentItemFormProps> = ({
           options={Object.values(DownloadStatus)}
           onChange={onFieldChange}
         />
-        <SingleSelect
+        <Checkbox
           name='consumed'
           text='Consumed'
-          value={consumed}
+          checked={consumed}
           onChange={onFieldChange}
         />
       </div>

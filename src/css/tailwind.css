@@ -154,11 +154,19 @@
 }
 
 .option {
-  @apply cursor-pointer text-text-1/80 border-2 border-active-1/20 hover:bg-active-1/10 hover:text-text-1 rounded-lg transition duration-300 ease-in-out;
+  @apply flex cursor-pointer text-text-1/80 border-2 border-active-1/20 hover:bg-active-1/10 hover:text-text-1 rounded-lg transition duration-300 ease-in-out;
 }
 
 .option-single {
-  @apply option px-1;
+  @apply option px-1 justify-center;
+}
+
+.option-checkbox {
+  @apply flex items-center border-r-2 rounded-l-lg border-active-1/20 transition duration-200 ease-in-out;
+}
+
+.option-checkbox-selected {
+  @apply text-active-1 border-active-1;
 }
 
 .option-radio {

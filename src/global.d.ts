@@ -63,8 +63,8 @@ declare global {
 
   declare namespace Form {
     type Mode = 'CREATE' | 'UPDATE';
-    type Option<T = string> = T;
-    type Payload<T> = { name: string; value?: T; error?: string };
+    type Option<T> = T | null;
+    type Payload<T> = { name: string; value: T; error?: string };
     type ChangeEvent =
       | React.ChangeEvent<HTMLTextAreaElement>
       | React.ChangeEvent<HTMLInputElement>
@@ -78,17 +78,6 @@ declare global {
     // A: API Model - Name Convention <ModelNameAM>
     // P: Props (contains extra data to help convert models) - Name Convention <ModelNameProps>
     // D: DB Model - Name Convention <ModelNameDM>
-
-    // type ModelWorker<S, A, P> = {
-    //   getInitialState: (props?: P) => S;
-    //   toState: (props: P) => S;
-    //   buildState: (props: P) => S;
-    //   toModel: (state: S, props?: P) => A;
-    //   validate: (state: S, props: P) => [A, boolean, Partial<S>];
-    //   // update?: TODO -
-    //   // TODO: maybe it will be better to have validateCreate / validateUpdate (to have proper return type AM / DJM)
-    //   equals: (state: S, props: P) => boolean;
-    // };
 
     type SimpleWorker<S, D = S> = {
       getInitialState: () => S;

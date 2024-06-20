@@ -21,9 +21,9 @@ const TBody: React.FC<React.PropsWithChildren> = ({ children }) => {
 };
 
 const Table = {
-  TContainer: React.memo(TContainer),
-  THead: React.memo(THead),
-  TBody: React.memo(TBody),
+  TContainer: React.memo(TContainer) as typeof TContainer,
+  THead: React.memo(THead) as typeof THead,
+  TBody: React.memo(TBody) as typeof TBody,
 };
 
 export default Table;

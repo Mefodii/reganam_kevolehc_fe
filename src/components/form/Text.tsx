@@ -12,7 +12,7 @@ export enum TEXT_INPUT_TYPE {
 
 export type TextProps = InputContainerProps & {
   name: string;
-  value?: string;
+  value: string;
   type?: TEXT_INPUT_TYPE;
   maxLength?: number;
   disabled?: boolean;
@@ -77,7 +77,7 @@ const Text = React.forwardRef(
             className={`input-text input-border-placeholder ${className}`}
             type={type}
             name={name}
-            value={value || ''}
+            value={value}
             maxLength={maxLength}
             onChange={onInputChange}
             onKeyDown={onKeyDown}
@@ -119,4 +119,4 @@ const Text = React.forwardRef(
   }
 );
 
-export default React.memo(Text);
+export default React.memo(Text) as typeof Text;

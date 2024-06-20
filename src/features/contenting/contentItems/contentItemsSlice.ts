@@ -55,7 +55,6 @@ export const refetchContentItems = createAsyncThunk<
   if (!params) {
     throw new Error(`params missing on refetchContentItems`);
   }
-  console.log(params);
   const { data } = await apiGetContentItems(params);
   return data;
 });

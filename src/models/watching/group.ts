@@ -19,24 +19,20 @@ declare global {
     };
     type GroupSingleSM = GroupBaseProps & {
       single: true;
-      status?: WatchingStatus;
+      status: WatchingStatus;
       watched_date: string;
-      rating: number;
+      rating: number | null;
       year: number;
     };
     type GroupNotSingleSM = GroupBaseProps & {
-      airing_status?: WatchingAirStatus;
+      airing_status: WatchingAirStatus;
       single: false;
       check_date: string;
     };
     type GroupSM = GroupSingleSM | GroupNotSingleSM;
 
-    type GroupSingleAM = GroupSingleSM & {
-      status: WatchingStatus;
-    };
-    type GroupNotSingleAM = GroupNotSingleSM & {
-      airing_status: WatchingAirStatus;
-    };
+    type GroupSingleAM = GroupSingleSM;
+    type GroupNotSingleAM = GroupNotSingleSM;
     type GroupAM = GroupSingleAM | GroupNotSingleAM;
 
     type GroupSingleDM = GroupSingleSM & {
@@ -78,7 +74,7 @@ declare global {
 }
 
 export const group: Model.GroupModel = {
-  getInitialState: (props) => {
+  getInitialState(props) {
     if (props?.formMode !== 'CREATE') {
       throw new Error(
         'props required in formMode = "CREATE" for `getInitialState` of the group.'
@@ -97,16 +93,16 @@ export const group: Model.GroupModel = {
       return {
         ...baseProps,
         single: true,
-        status: undefined,
+        status: WatchingStatus.PLANNED,
         watched_date: getToday(),
-        rating: 0,
+        rating: null,
         year: 0,
       };
     } else {
       return {
         ...baseProps,
         single: false,
-        airing_status: undefined,
+        airing_status: WatchingAirStatus.UNKNOWN,
         check_date: getToday(),
       };
     }
@@ -153,16 +149,16 @@ export const group: Model.GroupModel = {
       return {
         ...baseProps,
         single: false,
-        airing_status: undefined,
+        airing_status: WatchingAirStatus.UNKNOWN,
         check_date: getToday(),
       };
     } else {
       return {
         ...baseProps,
         single: true,
-        status: undefined,
+        status: WatchingStatus.PLANNED,
         watched_date: getToday(),
-        rating: 0,
+        rating: null,
         year: 0,
       };
     }
@@ -184,7 +180,7 @@ export const group: Model.GroupModel = {
       return {
         ...baseProps,
         single: true,
-        status: state.status!,
+        status: state.status,
         watched_date: state.watched_date,
         year: state.year,
         rating: state.rating,
@@ -194,7 +190,7 @@ export const group: Model.GroupModel = {
         ...baseProps,
         single: false,
         check_date: state.check_date,
-        airing_status: state.airing_status!,
+        airing_status: state.airing_status,
       };
     }
   },
@@ -212,7 +208,7 @@ export const group: Model.GroupModel = {
         ...baseProps,
         images: dbState.images,
         single: true,
-        status: state.status!,
+        status: state.status,
         watched_date: state.watched_date,
         year: state.year,
         rating: state.rating,
@@ -225,7 +221,7 @@ export const group: Model.GroupModel = {
         videos: dbState.videos,
         single: false,
         check_date: state.check_date,
-        airing_status: state.airing_status!,
+        airing_status: state.airing_status,
       };
     }
 

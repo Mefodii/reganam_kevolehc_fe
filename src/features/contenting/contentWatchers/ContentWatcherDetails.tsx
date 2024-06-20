@@ -7,6 +7,7 @@ import {
 import ContentWatcherForm from './ContentWatcherForm';
 import { useModal } from '../../../hooks';
 import { toLocalDatetime } from '../../../util/datetime';
+import { ContentWatcherQuality } from '../../../api/api-utils';
 
 type ContentWatcherDetailsProps = {
   contentWatcher: Model.ContentWatcherDM;
@@ -87,7 +88,9 @@ const ContentWatcherDetails: React.FC<ContentWatcherDetailsProps> = ({
             />
             {download && (
               <div className='border-l border-active-1/30 ml-2 pl-2 text-sm'>
-                {video_quality ? video_quality : 'Any'}
+                {video_quality === ContentWatcherQuality.DEFAULT
+                  ? 'Any'
+                  : video_quality}
               </div>
             )}
           </div>

@@ -1,3 +1,4 @@
+import { DownloadStatus } from '../../api/api-utils';
 import { validateMandatoryFields } from '../../util/functions';
 
 declare global {
@@ -5,12 +6,12 @@ declare global {
     type ContentItemBase = {
       id?: number;
       item_id: string;
-      url?: string;
+      url: string;
       title: string;
-      file_name?: string;
+      file_name: string;
       position: number;
-      download_status?: string;
-      published_at?: string;
+      download_status: DownloadStatus;
+      published_at: string;
     };
     type ContentItemSM = ContentItemBase & {
       consumed: boolean;
@@ -44,12 +45,12 @@ export const contentItem: Model.ContentItemModel = {
   getInitialState: () => ({
     id: undefined,
     item_id: '',
-    url: undefined,
+    url: '',
     title: '',
-    file_name: undefined,
+    file_name: '',
     position: 0,
-    download_status: undefined,
-    published_at: undefined,
+    download_status: DownloadStatus.NONE,
+    published_at: '',
     consumed: false,
   }),
   toState: (contentWatcher) => {
