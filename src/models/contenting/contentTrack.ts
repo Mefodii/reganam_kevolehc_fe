@@ -7,6 +7,7 @@ declare global {
       start_time: number | null;
       duration: number | null;
       comment: string;
+      consumed: boolean;
       needs_edit: boolean;
       // TODO: (M) - create a Nullable Boolean SIngle Selector
       like: boolean | null;

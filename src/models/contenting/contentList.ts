@@ -13,6 +13,7 @@ declare global {
     type ContentListPureDM = ContentListAM & {
       id: number;
       content_watcher: null;
+      consumed: boolean;
     };
     type ContentListDM = ContentListPureDM & {
       content_watcher: number | null;
@@ -68,6 +69,7 @@ export const contentList: Model.ContentListModel = {
     category: state.category,
     content_watcher: dbState.content_watcher,
     migration_position: state.migration_position,
+    consumed: dbState.consumed,
   }),
   getDBState: (props) => {
     if (props.formMode === 'UPDATE') return props.contentList;

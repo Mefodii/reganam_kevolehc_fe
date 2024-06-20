@@ -29,6 +29,7 @@ declare global {
       content_list: number;
       migration_position: number;
       items_count: number;
+      consumed: boolean;
     };
     type ContentWatcherCreateProps = {
       formMode: 'CREATE';
@@ -107,6 +108,7 @@ export const contentWatcher: Model.ContentWatcherModel = {
       content_list: dbState.content_list,
       migration_position: dbState.migration_position,
       items_count: dbState.items_count,
+      consumed: dbState.consumed,
     };
   },
   getDBState: (props) => {

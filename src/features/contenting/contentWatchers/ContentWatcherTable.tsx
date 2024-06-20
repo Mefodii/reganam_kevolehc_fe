@@ -1,5 +1,6 @@
 import React from 'react';
 import ContentWatcherRow from './ContentWatcherRow';
+import { SVGInfoCircle } from '../../../components/svg';
 
 type ContentWatcherTableProps = {
   contentWatchers: Model.ContentWatcherDM[];
@@ -7,9 +8,12 @@ type ContentWatcherTableProps = {
 
 const renderTableHeader = () => {
   return (
-    <div className='flex text-lg font-bold border-b-2 border-active-1/80 mb-2 pb-1'>
+    <div className='flex items-center text-lg font-bold border-b-2 border-active-1/80 mb-2 pb-1'>
+      <div className='w-10 flex justify-center mr-2'>
+        <SVGInfoCircle className='w-5' />
+      </div>
       <div className='flex-3'>Name</div>
-      <div className='flex-1'>Category</div>
+      <div className='flex-1'>Cat.</div>
       <div className='flex-1'>Type</div>
       <div className='flex-1 text-center'>Count</div>
       <div className='flex-1 text-center'>Download</div>
@@ -21,7 +25,7 @@ const renderTableHeader = () => {
     </div>
   );
 };
-// TODO: Add a Select panel
+// TODO: (L) - Add a Select panel - run check updates for selected rows
 const ContentWatcherTable: React.FC<ContentWatcherTableProps> = ({
   contentWatchers,
 }) => {

@@ -12,6 +12,7 @@ import { toLocalDatetime } from '../../../util/datetime';
 import { NavLink } from 'react-router-dom';
 import { FE_URL } from '../../../util/frontend-urls';
 import { ContentWatcherQuality } from '../../../api/api-utils';
+import { LED } from '../../../components/generic';
 
 type ContentWatcherRowProps = {
   contentWatcher: Model.ContentWatcherDM;
@@ -31,6 +32,7 @@ const ContentWatcherRow: React.FC<ContentWatcherRowProps> = ({
     download,
     video_quality,
     check_date,
+    consumed,
   } = contentWatcher;
   const { openModal, closeModal } = useModal();
 
@@ -68,9 +70,11 @@ const ContentWatcherRow: React.FC<ContentWatcherRowProps> = ({
     );
   };
 
-  // TODO: Green LED if all items are consumed
   return (
     <div className='flex justify-between items-center py-3 hover:bg-theme-3/50'>
+      <div className='w-10 flex justify-center mr-2'>
+        <LED color='Green' on={consumed} />
+      </div>
       <div className='flex-3'>{name}</div>
       <div className='flex-1'>{category}</div>
       <div className='flex-1'>{source_type}</div>

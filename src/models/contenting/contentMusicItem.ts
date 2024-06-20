@@ -11,6 +11,7 @@ declare global {
     type ContentMusicItemDM = ContentMusicItemAM & {
       id: number;
       tracks: ContentTrackDM[];
+      consumed: boolean;
     };
     type ContentMusicItemCreateProps = {
       content_list: number;
@@ -101,6 +102,7 @@ export const contentMusicItem: Model.ContentMusicItemModel = {
     type: state.type,
     content_list: state.content_list,
     tracks: dbState.tracks,
+    consumed: dbState.consumed,
   }),
   getDBState: (props) => {
     if (props.formMode === 'UPDATE') return props.contentMusicItem;
