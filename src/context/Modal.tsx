@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { SVGXCircle } from '../../components/svg';
-import ConfirmationModal, { ConfirmationModalProps } from './ConfirmationModal';
+import { SVGXCircle } from '../components/svg';
+import { ConfirmationModal } from '../components/generic';
+import { ConfirmationModalProps } from '../components/generic/ConfirmationModal';
 
 type ModalProps = {
   isOpen: boolean;

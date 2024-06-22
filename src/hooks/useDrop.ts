@@ -1,31 +1,32 @@
 import { useCallback, useContext, useMemo, useState } from 'react';
-import { DnDContext } from '../components/dragAndDrop/Drag2';
+import { DnDContext } from '../context';
+import { DnDProps } from '../context/DnD';
 
-type UseDropProps = {
-  onDragOver?: (data: DragAndDrop.Data) => void;
-  onDragEnter?: (data: DragAndDrop.Data) => void;
-  onDragLeave?: (data: DragAndDrop.Data) => void;
-  onDrop?: (data: DragAndDrop.Data) => void;
+export type UseDropProps<T> = {
+  onDragOver?: (data: DragAndDrop.Data<T>) => void;
+  onDragEnter?: (data: DragAndDrop.Data<T>) => void;
+  onDragLeave?: (data: DragAndDrop.Data<T>) => void;
+  onDrop?: (data: DragAndDrop.Data<T>) => void;
 };
 
-export const useDrop = ({
+export const useDrop = <T extends DragAndDrop.Details>({
   onDragOver,
   onDragEnter,
   onDragLeave,
   onDrop,
-}: UseDropProps) => {
-  const { data } = useContext(DnDContext);
+}: UseDropProps<T>) => {
+  const { data } = useContext<DnDProps<T>>(DnDContext);
   const [, setDragCounter] = useState(0);
 
   const handleDragEnter = useCallback(
-    (data: DragAndDrop.Data) => {
+    (data: DragAndDrop.Data<T>) => {
       onDragEnter && onDragEnter(data);
     },
     [onDragEnter]
   );
 
   const handleDragLeave = useCallback(
-    (data: DragAndDrop.Data) => {
+    (data: DragAndDrop.Data<T>) => {
       onDragLeave && onDragLeave(data);
     },
     [onDragLeave]
@@ -77,5 +78,5 @@ export const useDrop = ({
     [handleDragPass, handleDragOver, handleDrop]
   );
 
-  return dropEvents;
+  return { dropEvents };
 };

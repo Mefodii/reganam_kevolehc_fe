@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button } from '../../components/buttons';
-import { SVGCheck, SVGCross } from '../../components/svg';
+import { Button } from '../buttons';
+import { SVGCheck, SVGCross } from '../svg';
 
 export type ConfirmationModalProps = {
   title?: string;
@@ -34,4 +34,4 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   );
 };
 
-export default ConfirmationModal;
+export default React.memo(ConfirmationModal) as typeof ConfirmationModal;

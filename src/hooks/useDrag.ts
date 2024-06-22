@@ -1,8 +1,9 @@
 import { useCallback, useContext, useMemo, useState } from 'react';
-import { DnDContext } from '../components/dragAndDrop/Drag2';
+import { DnDContext } from '../context';
+import { DnDProps } from '../context/DnD';
 
-export const useDrag = <T extends DragAndDrop.Details>(details: T) => {
-  const { setDrag, removeDrag } = useContext(DnDContext);
+export const useDrag = <T>(details: T) => {
+  const { setDrag, removeDrag } = useContext<DnDProps<T>>(DnDContext);
   const [dragState, setDragState] = useState({
     isDragged: false,
     isCopying: false,

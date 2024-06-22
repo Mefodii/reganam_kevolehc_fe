@@ -1,3 +1,4 @@
+import ConfirmationModal from './ConfirmationModal';
 import DragDots from './DragDots';
 import ItemPlaceholder from './ItemPlaceholder';
 import LED from './LED';
@@ -9,6 +10,7 @@ import Toggler from './Toggler';
 import Tooltip from './Tooltip';
 
 export {
+  ConfirmationModal,
   DragDots,
   ItemPlaceholder,
   LED,

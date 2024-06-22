@@ -10,13 +10,8 @@ import {
   name as loadingsName,
   reducer as loadings,
 } from './redux/loadingsSlice';
-import {
-  name as dragAndDropName,
-  reducer as dragAndDrop,
-} from './redux/dragAndDropSlice';
 
 const rootReducer = combineReducers({
-  [dragAndDropName]: dragAndDrop,
   [loadingsName]: loadings,
   [pageName]: page,
   [watchingName]: watching,

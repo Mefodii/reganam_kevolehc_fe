@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import { ModalContext } from '../features/modals/Modal';
-import { ConfirmationModalProps } from '../features/modals/ConfirmationModal';
+import { ModalContext } from '../context';
+import { ConfirmationModalProps } from '../components/generic/ConfirmationModal';
 
 export const useModal = () => {
   const { open, openConfirmation, close } = useContext(ModalContext);

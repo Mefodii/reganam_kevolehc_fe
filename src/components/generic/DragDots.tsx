@@ -26,4 +26,4 @@ const DragDots: React.FC<VideoItemPlaceholderProps> = ({
   );
 };
 
-export default React.memo(DragDots);
+export default React.memo(DragDots) as typeof DragDots;

@@ -179,11 +179,10 @@ export const video: Model.VideoModel = {
       rating,
     };
   },
-  asDnDDetails(item) {
+  asDnDDetails(item): DragAndDrop.VideoDetails {
     return {
       type: 'VIDEO_ITEM',
       item,
-      accessGroup: item.group,
     };
   },
 };

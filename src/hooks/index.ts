@@ -1,7 +1,6 @@
 import { useAutosizeTextArea } from './useAutosizeTextArea';
 import { usePrevious } from './usePrevious';
 import { useTooltip } from './useTooltip';
-import { useDragAndDrop } from './useDragAndDrop';
 import { useModal } from './useModal';
 import { useForm } from './useForm';
 import { useListSelect } from './useListSelect';
@@ -14,7 +13,6 @@ export {
   useAppSelector,
   useTooltip,
   useModal,
-  useDragAndDrop,
   useForm,
   useListSelect,
 };

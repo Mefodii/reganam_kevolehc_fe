@@ -6,8 +6,7 @@ import ThemeChanger from './layout/ThemeChanger';
 import Routes from './Routes';
 
 import { selectTheme } from '../redux/pageSlice';
-import { ModalProvider } from '../features/modals/Modal';
-import { DnDProvider } from './dragAndDrop/Drag2';
+import { ModalProvider, DnDProvider } from '../context';
 
 const Content = () => {
   const theme = useAppSelector(selectTheme);

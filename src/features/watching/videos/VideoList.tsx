@@ -6,6 +6,7 @@ type VideoListProps = {
   isLoading: boolean;
 };
 
+// TODO: (M) - display with Table components
 const VideoList: React.FC<VideoListProps> = ({ videos, isLoading }) => {
   return (
     <div className='relative max-h-200 overflow-y-auto mt-4 border-t-2 border-theme-3'>

@@ -128,11 +128,10 @@ export const contentItem: Model.ContentItemModel = {
 
     return true;
   },
-  asDnDDetails(item) {
+  asDnDDetails(item): DragAndDrop.ContentItemDetails {
     return {
       type: 'CONTENT_ITEM',
       item,
-      accessGroup: item.content_list,
     };
   },
 };

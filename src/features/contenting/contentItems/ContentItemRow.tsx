@@ -35,7 +35,7 @@ type ContentItemRowProps = {
 };
 
 const validateDragOver = (
-  dndData: DragAndDrop.Data,
+  dndData: DragAndDrop.Data<DragAndDrop.ContentItemDetails>,
   contentItem: Model.ContentItemDM
 ): Model.ContentItemDM | undefined => {
   const { details, copy } = dndData;
@@ -66,19 +66,22 @@ const ContentItemRow: React.FC<ContentItemRowProps> = ({
   const [isMouseOver, setIsMouseOver] = useState(false);
   const [titleForm, setTitleForm] = useState(contentItem.title);
 
+  const [insertBefore, setInsertBefore] = useState(false);
   const [draggable, setDraggable] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
+
   const { isDragged, isCopying, dragEvents } = useDrag(
     model.asDnDDetails(contentItem)
   );
-  const [isDragOver, setIsDragOver] = useState(false);
-
-  const dropEvents = useDrop({
+  const { dropEvents } = useDrop({
     onDragEnter: handleDragEnter,
     onDragLeave: () => setIsDragOver(false),
     onDrop: handleDrop,
   });
 
-  function handleDragEnter(dndData: DragAndDrop.Data) {
+  function handleDragEnter(
+    dndData: DragAndDrop.Data<DragAndDrop.ContentItemDetails>
+  ) {
     const draggedItem = validateDragOver(dndData, contentItem);
     if (!draggedItem) return;
 
@@ -86,7 +89,9 @@ const ContentItemRow: React.FC<ContentItemRowProps> = ({
     setInsertBefore(draggedItem.position > contentItem.position);
   }
 
-  function handleDrop(dndData: DragAndDrop.Data) {
+  function handleDrop(
+    dndData: DragAndDrop.Data<DragAndDrop.ContentItemDetails>
+  ) {
     const draggedItem = validateDragOver(dndData, contentItem);
     if (!draggedItem) return;
 
@@ -100,8 +105,6 @@ const ContentItemRow: React.FC<ContentItemRowProps> = ({
     dispatch(action(newContentItem));
     setIsDragOver(false);
   }
-
-  const [insertBefore, setInsertBefore] = useState(false);
 
   const dispatch = useAppDispatch();
   const { title, position, published_at, consumed, url, item_id } = contentItem;
