@@ -1,40 +1,45 @@
 import React from 'react';
 
-const TContainer: React.FC<
-  React.PropsWithChildren & {
-    className?: string;
-  }
-> = ({ children, className = '' }) => {
+type TProps = React.PropsWithChildren &
+  React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
+
+const TContainer: React.FC<TProps> = ({
+  children,
+  className = '',
+  ...rest
+}) => {
   return (
     <div
       className={`bg-theme-1 border border-theme-3 rounded-lg shadow-2xl shadow-active-1/5 mono-font overflow-y-auto overflow-x-hidden ${className}`}
+      {...rest}
     >
       {children}
     </div>
   );
 };
 
-const THead: React.FC<React.PropsWithChildren> = ({ children }) => {
+const THead: React.FC<TProps> = ({ children, className = '', ...rest }) => {
   return (
     <div className='sticky top-0 bg-inherit z-10'>
-      <div className='mx-5 mb-2 pb-3 pt-5 flex items-center justify-between text-lg font-bold border-b-2 border-active-1/80 select-none'>
+      <div
+        className={`mx-5 mb-2 pb-3 pt-5 flex items-center justify-between text-lg font-bold border-b-2 border-active-1/80 select-none ${className}`}
+        {...rest}
+      >
         {children}
       </div>
     </div>
   );
 };
 
-const TBody: React.FC<React.PropsWithChildren> = ({ children }) => {
-  return <div className='divide-y divide-active-1/10'>{children}</div>;
+const TBody: React.FC<TProps> = ({ children, className = '', ...rest }) => {
+  return (
+    <div className={`divide-y divide-active-1/10 ${className}`} {...rest}>
+      {children}
+    </div>
+  );
 };
 
-const TRow: React.FC<
-  React.PropsWithChildren &
-    React.DetailedHTMLProps<
-      React.HTMLAttributes<HTMLDivElement>,
-      HTMLDivElement
-    >
-> = ({ children, className, ...rest }) => {
+const TRow: React.FC<TProps> = ({ children, className, ...rest }) => {
   // TODO: (M) - Insert DragAndDrop / Itemplaceholder / Select box functionality (from ContentItemRow)
   return (
     <div

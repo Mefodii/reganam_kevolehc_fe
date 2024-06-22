@@ -246,20 +246,12 @@
 
 /* TODO: (L) opacity-10 group-hover:opacity-80 should be other class */
 .wiggling-clickable {
-  @apply transform opacity-10 group-hover:opacity-80 hover:animate-wiggle cursor-pointer 
+  @apply transform opacity-0 group-hover:opacity-75 hover:animate-wiggle cursor-pointer 
   hover:text-active-1 transition ease-in duration-150;
 }
 
 .simple-clickable {
   @apply transform opacity-40 hover:opacity-100 cursor-pointer hover:text-active-1 transition ease-in duration-150;
-}
-
-.content-body {
-  @apply flex flex-col rounded-xl shadow-md space-y-5 w-10/12 p-5 my-5 bg-theme-1 border-2 border-theme-3;
-}
-
-.watching-element {
-  @apply w-full p-2 border-2 shadow-2xl rounded-xl bg-theme-2 border-theme-3;
 }
 
 .title {

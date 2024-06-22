@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import {
   BLANK_VALUE,
@@ -15,7 +15,7 @@ import { useAppDispatch, useDnD } from '../../../hooks';
 import { video as videoModel } from '../../../models';
 import VideoForm from './VideoForm';
 import { useModal } from '../../../hooks';
-import { DragDots, ItemPlaceholder } from '../../../components/generic';
+import { DragDots, ItemPlaceholder, Table } from '../../../components/generic';
 
 type VideoItemProps = {
   video: Model.VideoDM;
@@ -102,12 +102,10 @@ const VideoItem: React.FC<VideoItemProps> = ({ video }) => {
           insertBefore ? 'mb-2' : 'mt-2'
         }`}
       />
-      <div
-        className={`flex w-full group 2xl:flex-row p-2 border-2 shadow-2xl rounded-xl bg-theme-2 border-theme-3 ${
-          isDragged && 'border-active-1/50'
-        } ${isDragged && isCopying && 'brightness-125'} ${
-          isDragged && !isCopying && 'opacity-30'
-        }`}
+      <Table.TRow
+        className={`base-font group ${isDragged && 'border-active-1/50'} ${
+          isDragged && isCopying && 'brightness-125'
+        } ${isDragged && !isCopying && 'opacity-30'}`}
         onMouseEnter={() => setShowDots(true)}
         onMouseLeave={() => setShowDots(false)}
       >
@@ -137,7 +135,7 @@ const VideoItem: React.FC<VideoItemProps> = ({ video }) => {
             </div>
           )}
         </div>
-        <div className='flex flex-wrap 2xl:flex-nowrap px-3 text-center'>
+        <div className='self-start flex flex-wrap 2xl:flex-nowrap px-3 text-center'>
           <div
             className={`w-24 m-1 ${
               videoModel.isInQueue(video) && 'text-active-2'
@@ -179,9 +177,9 @@ const VideoItem: React.FC<VideoItemProps> = ({ video }) => {
             </div>
           )}
         </div>
-      </div>
+      </Table.TRow>
     </div>
   );
 };
 
-export default VideoItem;
+export default React.memo(VideoItem) as typeof VideoItem;

@@ -58,7 +58,7 @@ const ContentWatcherDashboard = () => {
   // QUESTION: - is it mandatory to always have overflow-hidden on each child? any workarounds?
   return (
     <div className='flex flex-1 flex-col items-center mono-font'>
-      <div className='content-body overflow-hidden'>
+      <div className='flex flex-col rounded-xl shadow-md space-y-5 w-10/12 p-5 my-5 bg-theme-1 border-2 border-theme-3 overflow-hidden'>
         <ContentWatcherDetails contentWatcher={contentWatcher} />
         {model.isMusic(contentWatcher) ? (
           <ContentMusicItemTable contentMusicItems={contentMusicItems} />

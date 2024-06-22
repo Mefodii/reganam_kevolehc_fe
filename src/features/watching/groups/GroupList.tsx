@@ -40,12 +40,11 @@ const GroupList: React.FC<GroupListProps> = ({
         <h2 className='text-xl uppercase font-bold m-4'>{`Welcome to ${watchingType}, fellow watcher`}</h2>
         <Sidepanel watchingType={watchingType} />
 
-        <div className='content-body'>
+        <div className='flex flex-col rounded-xl shadow-md w-10/12 bg-theme-1 p-8'>
           {filteredGroups.map((group) => (
             <GroupItem
               group={group}
               key={group.id}
-              watchingType={watchingType}
               showPoster={showPosters}
             ></GroupItem>
           ))}

@@ -22,6 +22,10 @@ body,
   font-family: Quicksand, Oswald, Mulish;
 }
 
+.base-font {
+  font-family: Quicksand, Oswald, Mulish;
+}
+
 .simple-font {
   font-family: Oswald;
 }
