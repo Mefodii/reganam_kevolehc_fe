@@ -49,22 +49,11 @@ declare global {
     type Scope = 'DETAILS' | 'LIST';
   }
 
-  declare namespace DragAndDrop {
-    type VideoDetails = {
-      type: 'VIDEO_ITEM';
-      item: Model.VideoDJM;
-    };
-    type ContentItemDetails = {
-      type: 'CONTENT_ITEM';
-      item: Model.ContentItemDM;
-    };
-    type Details = VideoDetails | ContentItemDetails;
-
-    type Data<T> = {
-      details?: T;
-      copy: boolean;
-    };
-  }
+  type DnDData<T> = {
+    type: string;
+    item?: T;
+    copy: boolean;
+  };
 
   declare namespace Form {
     type Mode = 'CREATE' | 'UPDATE';

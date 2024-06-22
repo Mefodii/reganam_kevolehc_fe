@@ -2,7 +2,7 @@ import { useCallback, useContext, useMemo, useState } from 'react';
 import { DnDContext } from '../context';
 import { DnDProps } from '../context/DnD';
 
-export const useDrag = <T>(details: T) => {
+export const useDrag = <T>(type: string, item: T) => {
   const { setDrag, removeDrag } = useContext<DnDProps<T>>(DnDContext);
   const [dragState, setDragState] = useState({
     isDragged: false,
@@ -12,10 +12,10 @@ export const useDrag = <T>(details: T) => {
   const handleDragStart = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
       const copy = e.ctrlKey;
-      setDrag({ copy, details });
+      setDrag({ copy, type, item });
       setDragState({ isDragged: true, isCopying: copy });
     },
-    [details, setDrag]
+    [type, item, setDrag]
   );
 
   const handleDragEnd = useCallback(() => {

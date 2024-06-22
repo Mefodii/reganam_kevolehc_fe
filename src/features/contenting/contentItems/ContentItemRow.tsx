@@ -9,7 +9,7 @@ import {
   SVGLink,
   SVGPencil,
 } from '../../../components/svg';
-import { useAppDispatch, useModal } from '../../../hooks';
+import { useAppDispatch, useDnD, useModal } from '../../../hooks';
 import {
   createContentItem,
   deleteContentItem,
@@ -23,30 +23,13 @@ import {
 } from '../../../components/generic';
 import { Text } from '../../../components/form';
 import ContentItemForm from './ContentItemForm';
-import { contentItem as model } from '../../../models';
-import { useDrag } from '../../../hooks/useDrag';
-import { useDrop } from '../../../hooks/useDrop';
+import { DnDTypes } from '../../../util/constants';
 
 type ContentItemRowProps = {
   contentItem: Model.ContentItemDM;
   selected?: boolean;
   onSelect?: (shiftKey: boolean) => void;
   showSelectBox?: boolean;
-};
-
-const validateDragOver = (
-  dndData: DragAndDrop.Data<DragAndDrop.ContentItemDetails>,
-  contentItem: Model.ContentItemDM
-): Model.ContentItemDM | undefined => {
-  const { details, copy } = dndData;
-
-  if (!details) return undefined;
-  if (details.type !== 'CONTENT_ITEM') return undefined;
-  if (details.item.content_list !== contentItem.content_list) return undefined;
-  if (details.item !== contentItem) return details.item;
-  if (copy) return details.item;
-
-  return undefined;
 };
 
 // TODO: (H) check if it is possible to embed youtube player
@@ -59,7 +42,7 @@ const ContentItemRow: React.FC<ContentItemRowProps> = ({
   const titleRef = useRef<HTMLInputElement>(null);
   const { openModal, openConfirmationModal, closeModal } = useModal();
 
-  // TODO: (H) probably can be extract in a custom hook (field, error and related functions from below)
+  // TODO: (H) probably can be extract in a custom hook (isEditTitle field, error and related functions from below)
   const [isEditTitle, setIsEditTitle] = useState(false);
   const [isTitleError, setIsTitleError] = useState(false);
 
@@ -68,42 +51,35 @@ const ContentItemRow: React.FC<ContentItemRowProps> = ({
 
   const [insertBefore, setInsertBefore] = useState(false);
   const [draggable, setDraggable] = useState(false);
-  const [isDragOver, setIsDragOver] = useState(false);
 
-  const { isDragged, isCopying, dragEvents } = useDrag(
-    model.asDnDDetails(contentItem)
+  const { isDragged, isCopying, isDragOver, dropEvents, dragEvents } = useDnD(
+    DnDTypes.CONTENT_ITEM,
+    contentItem,
+    {
+      accepted: DnDTypes.CONTENT_ITEM,
+      extraValidation: (item, copy) => {
+        // Note: personal opinion, this way looks more readable
+        if (item.content_list !== contentItem.content_list) return false;
+        if (item !== contentItem) return true;
+        return copy;
+      },
+      onDragEnter: (item) =>
+        setInsertBefore(item.position > contentItem.position),
+      onDrop: handleDrop,
+    }
   );
-  const { dropEvents } = useDrop({
-    onDragEnter: handleDragEnter,
-    onDragLeave: () => setIsDragOver(false),
-    onDrop: handleDrop,
-  });
 
-  function handleDragEnter(
-    dndData: DragAndDrop.Data<DragAndDrop.ContentItemDetails>
-  ) {
-    const draggedItem = validateDragOver(dndData, contentItem);
-    if (!draggedItem) return;
-
-    setIsDragOver(true);
-    setInsertBefore(draggedItem.position > contentItem.position);
-  }
-
-  function handleDrop(
-    dndData: DragAndDrop.Data<DragAndDrop.ContentItemDetails>
-  ) {
-    const draggedItem = validateDragOver(dndData, contentItem);
-    if (!draggedItem) return;
-
-    const position =
-      dndData.copy && !insertBefore
-        ? contentItem.position + 1
-        : contentItem.position;
-    const newContentItem = { ...draggedItem, position };
-    const action = dndData.copy ? createContentItem : updateContentItem;
-
-    dispatch(action(newContentItem));
-    setIsDragOver(false);
+  function handleDrop(item: Model.ContentItemDM, copy: boolean) {
+    const action = copy ? createContentItem : updateContentItem;
+    dispatch(
+      action({
+        ...item,
+        position:
+          copy && !insertBefore
+            ? contentItem.position + 1
+            : contentItem.position,
+      })
+    );
   }
 
   const dispatch = useAppDispatch();

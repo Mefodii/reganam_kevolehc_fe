@@ -1,13 +1,14 @@
 import React, { useState, createContext, PropsWithChildren } from 'react';
 
 export type DnDProps<T> = {
-  data: DragAndDrop.Data<T>;
-  setDrag: (data: DragAndDrop.Data<T>) => void;
+  data: DnDData<T>;
+  setDrag: (data: DnDData<T>) => void;
   removeDrag: () => void;
 };
 
-const initialState: DragAndDrop.Data<any> = {
-  details: undefined,
+const initialState: DnDData<any> = {
+  item: undefined,
+  type: '',
   copy: false,
 };
 
@@ -18,10 +19,8 @@ export const DnDContext = createContext<DnDProps<any>>({
 });
 DnDContext.displayName = 'DnDContext';
 
-export const DnDProvider = <T extends DragAndDrop.Details>({
-  children,
-}: PropsWithChildren) => {
-  const [state, setState] = useState<DragAndDrop.Data<T>>(initialState);
+export const DnDProvider = <T,>({ children }: PropsWithChildren) => {
+  const [state, setState] = useState<DnDData<T>>(initialState);
 
   return (
     <DnDContext.Provider

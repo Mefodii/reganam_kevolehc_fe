@@ -7,3 +7,8 @@ export enum APIStatus {
   OK = 'ok',
   NOT_OK = 'not_ok',
 }
+
+export enum DnDTypes {
+  CONTENT_ITEM = 'CONTENT_ITEM',
+  VIDEO = 'VIDEO',
+}

@@ -44,7 +44,6 @@ declare global {
       isDropped: <T extends VideoSM>(video: T) => boolean;
       isFinished: <T extends VideoSM>(video: T) => boolean;
       setFinished: <T extends VideoSM>(video: T, rating: number) => T;
-      asDnDDetails: (item: VideoDM) => DragAndDrop.VideoDetails;
     };
   }
 }
@@ -177,12 +176,6 @@ export const video: Model.VideoModel = {
       current_episode: video.episodes,
       watched_date: getToday(),
       rating,
-    };
-  },
-  asDnDDetails(item): DragAndDrop.VideoDetails {
-    return {
-      type: 'VIDEO_ITEM',
-      item,
     };
   },
 };

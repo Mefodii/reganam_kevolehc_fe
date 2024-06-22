@@ -1,38 +1,24 @@
 import { useState } from 'react';
 
-import { BLANK_VALUE, SHORT_BLANK_VALUE } from '../../../util/constants';
+import {
+  BLANK_VALUE,
+  DnDTypes,
+  SHORT_BLANK_VALUE,
+} from '../../../util/constants';
 import { promptNumber } from '../../../util/functions';
 
 import { SVGPencil, SVGCheck } from '../../../components/svg';
 import LinkList from '../links/LinkList';
 
 import { createVideo, updateVideo } from '../groups/groupsSlice';
-import { useAppDispatch } from '../../../hooks';
+import { useAppDispatch, useDnD } from '../../../hooks';
 import { video as videoModel } from '../../../models';
 import VideoForm from './VideoForm';
 import { useModal } from '../../../hooks';
 import { DragDots, ItemPlaceholder } from '../../../components/generic';
-import { useDrag } from '../../../hooks/useDrag';
-import { useDrop } from '../../../hooks/useDrop';
 
 type VideoItemProps = {
   video: Model.VideoDM;
-};
-
-const validateDragOver = (
-  dndData: DragAndDrop.Data<DragAndDrop.VideoDetails>,
-  video: Model.VideoDM
-): Model.VideoDM | undefined => {
-  const { details, copy } = dndData;
-
-  if (!details) return undefined;
-  if (details.type !== 'VIDEO_ITEM' || details.item?.group !== video.group)
-    return undefined;
-  if (details.item.group !== video.group) return undefined;
-  if (details.item !== video) return details.item;
-  if (copy) return details.item;
-
-  return undefined;
 };
 
 const VideoItem: React.FC<VideoItemProps> = ({ video }) => {
@@ -42,39 +28,32 @@ const VideoItem: React.FC<VideoItemProps> = ({ video }) => {
 
   const [insertBefore, setInsertBefore] = useState(false);
   const [draggable, setDraggable] = useState(false);
-  const [isDragOver, setIsDragOver] = useState(false);
 
-  const { isDragged, isCopying, dragEvents } = useDrag(
-    videoModel.asDnDDetails(video)
+  const { isDragged, isCopying, isDragOver, dragEvents, dropEvents } = useDnD(
+    DnDTypes.VIDEO,
+    video,
+    {
+      accepted: DnDTypes.VIDEO,
+      extraValidation: (item, copy) => {
+        if (item.group !== video.group) return false;
+        if (item !== video) return true;
+        return copy;
+      },
+      onDragEnter: (item) => setInsertBefore(item.order > video.order),
+      onDrop: handleDrop,
+    }
   );
-  const { dropEvents } = useDrop({
-    onDragEnter: handleDragEnter,
-    onDragLeave: () => setIsDragOver(false),
-    onDrop: handleDrop,
-  });
 
   const { openModal, closeModal } = useModal();
 
-  function handleDragEnter(
-    dndData: DragAndDrop.Data<DragAndDrop.VideoDetails>
-  ) {
-    const draggedItem = validateDragOver(dndData, video);
-    if (!draggedItem) return;
-
-    setIsDragOver(true);
-    setInsertBefore(draggedItem.order > video.order);
-  }
-
-  function handleDrop(dndData: DragAndDrop.Data<DragAndDrop.VideoDetails>) {
-    const draggedItem = validateDragOver(dndData, video);
-    if (!draggedItem) return;
-
-    const order = dndData.copy && !insertBefore ? video.order + 1 : video.order;
-    const newVideo = { ...draggedItem!, order };
-    const action = dndData.copy ? createVideo : updateVideo;
-
-    dispatch(action(newVideo));
-    setIsDragOver(false);
+  function handleDrop(item: Model.VideoDM, copy: boolean) {
+    const action = copy ? createVideo : updateVideo;
+    dispatch(
+      action({
+        ...item,
+        order: copy && !insertBefore ? video.order + 1 : video.order,
+      })
+    );
   }
 
   const handleOpenEdit = () => {
