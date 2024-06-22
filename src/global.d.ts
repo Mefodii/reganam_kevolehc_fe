@@ -50,13 +50,23 @@ declare global {
   }
 
   declare namespace DragAndDrop {
-    type Type = 'VIDEO_ITEM' | 'CONTENT_ITEM';
-    type Item = Model.VideoDJM | Model.ContentItemDM;
+    // type Type = 'VIDEO_ITEM' | 'CONTENT_ITEM';
+    // type Item = Model.VideoDJM | Model.ContentItemDM;
     type AccessGroup = number | string;
+    type VideoDetails = {
+      type: 'VIDEO_ITEM';
+      item: Model.VideoDJM;
+      accessGroup: AccessGroup;
+    };
+    type ContentItemDetails = {
+      type: 'CONTENT_ITEM';
+      item: Model.ContentItemDM;
+      accessGroup: AccessGroup;
+    };
+    type Details = VideoDetails | ContentItemDetails;
+
     type Data = {
-      item?: Item;
-      type?: Type;
-      accessGroup?: AccessGroup;
+      details?: Details;
       copy: boolean;
     };
   }

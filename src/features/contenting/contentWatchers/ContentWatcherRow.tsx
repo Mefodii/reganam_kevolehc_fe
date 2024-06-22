@@ -12,7 +12,7 @@ import { toLocalDatetime } from '../../../util/datetime';
 import { NavLink } from 'react-router-dom';
 import { FE_URL } from '../../../util/frontend-urls';
 import { ContentWatcherQuality } from '../../../api/api-utils';
-import { LED } from '../../../components/generic';
+import { LED, Table } from '../../../components/generic';
 
 type ContentWatcherRowProps = {
   contentWatcher: Model.ContentWatcherDM;
@@ -71,9 +71,9 @@ const ContentWatcherRow: React.FC<ContentWatcherRowProps> = ({
   };
 
   return (
-    <div className='flex justify-between items-center py-3 hover:bg-theme-3/50'>
+    <Table.TRow>
       <div className='w-10 flex justify-center mr-2'>
-        <LED color='Green' on={consumed} />
+        <LED on={true} color={consumed ? 'Green' : 'Red'} />
       </div>
       <div className='flex-3'>{name}</div>
       <div className='flex-1'>{category}</div>
@@ -97,7 +97,7 @@ const ContentWatcherRow: React.FC<ContentWatcherRowProps> = ({
       <div className='flex-2'>{status}</div>
       <div className='flex-2 text-sm'>{toLocalDatetime(check_date)}</div>
       <div className='flex-1'>{renderActions()}</div>
-    </div>
+    </Table.TRow>
   );
 };
 

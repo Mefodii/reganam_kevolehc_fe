@@ -18,13 +18,19 @@ type VideoItemProps = {
   video: Model.VideoDM;
 };
 
-const isValidDragOver = (dndData: DragAndDrop.Data, video: Model.VideoDM) => {
-  const { item, type, copy } = dndData;
+const validateDragOver = (
+  dndData: DragAndDrop.Data,
+  video: Model.VideoDM
+): Model.VideoDM | undefined => {
+  const { details, copy } = dndData;
 
-  if (type !== 'VIDEO_ITEM' || item?.group !== video.group) return false;
-  if (item !== video) return true;
+  if (!details) return undefined;
+  if (details.type !== 'VIDEO_ITEM' || details.item?.group !== video.group)
+    return undefined;
+  if (details.item !== video) return details.item;
+  if (copy) return details.item;
 
-  return copy;
+  return undefined;
 };
 
 const VideoItem: React.FC<VideoItemProps> = ({ video }) => {
@@ -49,18 +55,22 @@ const VideoItem: React.FC<VideoItemProps> = ({ video }) => {
   const { openModal, closeModal } = useModal();
 
   const handleDragEnter = (dndData: DragAndDrop.Data) => {
-    if (!isValidDragOver(dndData, video)) return;
+    const draggedItem = validateDragOver(dndData, video);
+    if (!draggedItem) return;
 
     onDragEnter(dndData);
-    setInsertBefore(dndData.item!.order > video.order);
+    setInsertBefore(draggedItem.order > video.order);
   };
 
   const handleDrop = (dndData: DragAndDrop.Data) => {
     if (!dragOver) return;
     onDrop();
 
+    const draggedItem = validateDragOver(dndData, video);
+    if (!draggedItem) return;
+
     const order = dndData.copy && !insertBefore ? video.order + 1 : video.order;
-    const newVideo = { ...dndData.item!, order };
+    const newVideo = { ...draggedItem!, order };
     const action = dndData.copy ? createVideo : updateVideo;
 
     dispatch(action(newVideo));
@@ -88,7 +98,6 @@ const VideoItem: React.FC<VideoItemProps> = ({ video }) => {
 
   const {
     name,
-    group,
     comment,
     aliases,
     links,
@@ -103,9 +112,7 @@ const VideoItem: React.FC<VideoItemProps> = ({ video }) => {
   return (
     <DragAndDrop
       draggable={draggable}
-      accessGroup={group}
-      item={video}
-      type={'VIDEO_ITEM'}
+      details={videoModel.asDnDDetails(video)}
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
       onDragEnter={handleDragEnter}

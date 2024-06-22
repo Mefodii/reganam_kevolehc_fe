@@ -49,7 +49,6 @@ const ContentMusicItemRow: React.FC<ContentMusicItemRowProps> = ({
     );
   };
 
-  // https://blog.logrocket.com/creating-react-context-menu/
   return (
     <div className=''>
       <div className='p-5 flex justify-between items-center py-3 hover:bg-theme-3/50'>

@@ -4,21 +4,17 @@ import { useAppDispatch } from '../../hooks';
 
 export type DragProps = PropsWithChildren<{
   draggable: boolean;
-  accessGroup: DragAndDrop.AccessGroup;
+  details: DragAndDrop.Details;
   onDragStart?: (
     e: React.DragEvent<HTMLDivElement>,
     data: Required<DragAndDrop.Data>
   ) => void;
   onDragEnd?: (e: React.DragEvent<HTMLDivElement>) => void;
-  item: DragAndDrop.Item;
-  type: DragAndDrop.Type;
 }>;
 
 const Drag = ({
-  item,
-  type,
   draggable,
-  accessGroup,
+  details,
   children,
   onDragStart = () => {},
   onDragEnd = () => {},
@@ -27,11 +23,11 @@ const Drag = ({
 
   const onInnnerDragStart: React.DragEventHandler<HTMLDivElement> = useCallback(
     (e) => {
-      const dndData = { item, type, copy: e.ctrlKey, accessGroup };
+      const dndData = { copy: e.ctrlKey, details };
       dispatch(setDrag(dndData));
       onDragStart(e, dndData);
     },
-    [item, type, accessGroup, dispatch, onDragStart]
+    [details, dispatch, onDragStart]
   );
 
   const onInnerDragEnd: React.DragEventHandler<HTMLDivElement> = useCallback(

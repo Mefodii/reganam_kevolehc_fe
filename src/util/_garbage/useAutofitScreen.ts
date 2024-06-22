@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { usePrevious } from './usePrevious';
+import { usePrevious } from '../../hooks/';
 import { useWindowSize } from '@uidotdev/usehooks';
 
 export const useAutofitScreen = <T extends HTMLElement>(

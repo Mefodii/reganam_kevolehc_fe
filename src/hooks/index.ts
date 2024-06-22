@@ -1,4 +1,3 @@
-import { useAutofitScreen } from './useAutofitScreen';
 import { useAutosizeTextArea } from './useAutosizeTextArea';
 import { usePrevious } from './usePrevious';
 import { useTooltip } from './useTooltip';
@@ -9,7 +8,6 @@ import { useListSelect } from './useListSelect';
 import { useAppDispatch, useAppSelector } from './reduxHooks';
 
 export {
-  useAutofitScreen,
   usePrevious,
   useAutosizeTextArea,
   useAppDispatch,

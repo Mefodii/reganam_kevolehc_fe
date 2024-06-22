@@ -10,9 +10,7 @@ const Header = () => {
   const dropDownVisibility = showDropDown ? '' : 'hidden';
 
   return (
-    <nav
-      className={`shadow-md bg-theme-1 border-b-2 border-theme-3 sticky top-0 z-20`}
-    >
+    <nav className={`shadow-md bg-theme-1 border-b-2 border-theme-3`}>
       <div className='flex p-2 items-center text-lg justify-between'>
         <div className='flex'>
           <NavLink className='font-bold p-2 hover:underline' to='/'>

@@ -7,7 +7,7 @@ export type DropdownSelectProps<T> = InputContainerProps & {
   name: string;
   value: Form.Option<T>;
   placeholder?: string;
-  nullable?: boolean; // TODO: (L) implement
+  nullable?: boolean;
   hideOnChange?: boolean;
   disabled?: boolean;
   simple?: boolean;

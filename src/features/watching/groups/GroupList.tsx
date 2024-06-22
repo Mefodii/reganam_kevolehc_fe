@@ -4,7 +4,6 @@ import Sidepanel from '../layout/Sidepanel';
 
 import { selectWatchingFilter } from '../filters/filtersSlice';
 import { useAppSelector } from '../../../hooks';
-import { ContentContainer } from '../../../components/layout';
 import { WatchingType } from '../../../api/api-utils';
 
 type GroupListProps = {
@@ -27,23 +26,32 @@ const GroupList: React.FC<GroupListProps> = ({
   );
 
   return (
-    <ContentContainer
-      backgroundPicture={backgroundPicture}
-      title={`Welcome to ${watchingType}, fellow watcher`}
-    >
-      <Sidepanel watchingType={watchingType} />
-
-      <div className='content-container'>
-        {filteredGroups.map((group) => (
-          <GroupItem
-            group={group}
-            key={group.id}
-            watchingType={watchingType}
-            showPoster={showPosters}
-          ></GroupItem>
-        ))}
+    <div className={`w-full flex flex-1 relative`}>
+      <div className='w-full opacity-20 right-0 blur-sm fixed mr-4'>
+        <img
+          src={backgroundPicture}
+          alt='Placeholder'
+          className='w-full mr-4 rounded-lg'
+          draggable='false'
+        />
       </div>
-    </ContentContainer>
+
+      <div className='w-full flex flex-1 flex-col items-center relative overflow-auto'>
+        <h2 className='text-xl uppercase font-bold m-4'>{`Welcome to ${watchingType}, fellow watcher`}</h2>
+        <Sidepanel watchingType={watchingType} />
+
+        <div className='content-body'>
+          {filteredGroups.map((group) => (
+            <GroupItem
+              group={group}
+              key={group.id}
+              watchingType={watchingType}
+              showPoster={showPosters}
+            ></GroupItem>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };
 

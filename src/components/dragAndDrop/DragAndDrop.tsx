@@ -2,15 +2,13 @@ import React, { PropsWithChildren } from 'react';
 import Drag, { DragProps } from './Drag';
 import Drop, { DropProps } from './Drop';
 
-type DragAndDropProps = DragProps & DropProps;
+type DragAndDropProps = Omit<DragProps & DropProps, 'accessGroup'>;
 
 const DragAndDrop = ({
   draggable,
-  accessGroup,
+  details,
   onDragStart,
   onDragEnd,
-  item,
-  type,
   onDragOver,
   onDragEnter,
   onDragLeave,
@@ -20,14 +18,12 @@ const DragAndDrop = ({
   return (
     <Drag
       draggable={draggable}
-      accessGroup={accessGroup}
-      item={item}
-      type={type}
+      details={details}
       onDragEnd={onDragEnd}
       onDragStart={onDragStart}
     >
       <Drop
-        accessGroup={accessGroup}
+        accessGroup={details.accessGroup}
         onDragOver={onDragOver}
         onDragEnter={onDragEnter}
         onDragLeave={onDragLeave}

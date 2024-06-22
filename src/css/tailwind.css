@@ -244,7 +244,7 @@
   @apply p-2 hover:bg-theme-3 ease-in duration-150;
 }
 
-/* TODO: (L) group-hover + opacity should be other class */
+/* TODO: (L) opacity-10 group-hover:opacity-80 should be other class */
 .wiggling-clickable {
   @apply transform opacity-10 group-hover:opacity-80 hover:animate-wiggle cursor-pointer 
   hover:text-active-1 transition ease-in duration-150;
@@ -254,8 +254,8 @@
   @apply transform opacity-40 hover:opacity-100 cursor-pointer hover:text-active-1 transition ease-in duration-150;
 }
 
-.content-container {
-  @apply rounded-xl shadow-md space-y-5 w-10/12 mb-28 p-5 bg-theme-1 border border-theme-3;
+.content-body {
+  @apply flex flex-col rounded-xl shadow-md space-y-5 w-10/12 p-5 my-5 bg-theme-1 border-2 border-theme-3;
 }
 
 .watching-element {
@@ -267,7 +267,7 @@
 }
 
 .side-panel {
-  @apply sticky left-0 p-1 w-52 bg-theme-1 shadow-2xl;
+  @apply p-1 w-52 bg-theme-1 shadow-2xl;
 }
 
 .side-panel-el {

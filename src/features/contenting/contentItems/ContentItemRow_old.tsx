@@ -9,7 +9,7 @@ import {
   SVGLink,
   SVGPencil,
 } from '../../../components/svg';
-import { useAppDispatch, useModal } from '../../../hooks';
+import { useAppDispatch, useDragAndDrop, useModal } from '../../../hooks';
 import {
   createContentItem,
   deleteContentItem,
@@ -21,11 +21,10 @@ import {
   LED,
   Table,
 } from '../../../components/generic';
+import { DragAndDrop } from '../../../components/dragAndDrop';
 import { Text } from '../../../components/form';
 import ContentItemForm from './ContentItemForm';
 import { contentItem as model } from '../../../models';
-import { useDrag } from '../../../hooks/useDrag';
-import { useDrop } from '../../../hooks/useDrop';
 
 type ContentItemRowProps = {
   contentItem: Model.ContentItemDM;
@@ -42,13 +41,11 @@ const validateDragOver = (
 
   if (!details) return undefined;
   if (details.type !== 'CONTENT_ITEM') return undefined;
-  if (details.item.content_list !== contentItem.content_list) return undefined;
   if (details.item !== contentItem) return details.item;
   if (copy) return details.item;
 
   return undefined;
 };
-
 // TODO: (H) check if it is possible to embed youtube player
 const ContentItemRow: React.FC<ContentItemRowProps> = ({
   contentItem,
@@ -67,26 +64,34 @@ const ContentItemRow: React.FC<ContentItemRowProps> = ({
   const [titleForm, setTitleForm] = useState(contentItem.title);
 
   const [draggable, setDraggable] = useState(false);
-  const { isDragged, isCopying, dragEvents } = useDrag(
-    model.asDnDDetails(contentItem)
-  );
-  const [isDragOver, setIsDragOver] = useState(false);
+  const {
+    dragged,
+    dragCopy,
+    dragOver,
+    onDragStart,
+    onDragEnd,
+    onDragEnter,
+    onDragLeave,
+    onDragOver,
+    onDrop,
+  } = useDragAndDrop();
+  const [insertBefore, setInsertBefore] = useState(false);
 
-  const dropEvents = useDrop({
-    onDragEnter: handleDragEnter,
-    onDragLeave: () => setIsDragOver(false),
-    onDrop: handleDrop,
-  });
+  const dispatch = useAppDispatch();
+  const { title, position, published_at, consumed, url, item_id } = contentItem;
 
-  function handleDragEnter(dndData: DragAndDrop.Data) {
+  const handleDragEnter = (dndData: DragAndDrop.Data) => {
     const draggedItem = validateDragOver(dndData, contentItem);
     if (!draggedItem) return;
 
-    setIsDragOver(true);
+    onDragEnter(dndData);
     setInsertBefore(draggedItem.position > contentItem.position);
-  }
+  };
 
-  function handleDrop(dndData: DragAndDrop.Data) {
+  const handleDrop = (dndData: DragAndDrop.Data) => {
+    if (!dragOver) return;
+    onDrop();
+
     const draggedItem = validateDragOver(dndData, contentItem);
     if (!draggedItem) return;
 
@@ -98,13 +103,7 @@ const ContentItemRow: React.FC<ContentItemRowProps> = ({
     const action = dndData.copy ? createContentItem : updateContentItem;
 
     dispatch(action(newContentItem));
-    setIsDragOver(false);
-  }
-
-  const [insertBefore, setInsertBefore] = useState(false);
-
-  const dispatch = useAppDispatch();
-  const { title, position, published_at, consumed, url, item_id } = contentItem;
+  };
 
   const handleToggleConsumed = () => {
     dispatch(updateContentItem({ ...contentItem, consumed: !consumed }));
@@ -222,56 +221,66 @@ const ContentItemRow: React.FC<ContentItemRowProps> = ({
 
   // TODO: (M) - Context menu: https://blog.logrocket.com/creating-react-context-menu/
   return (
-    <div
-      className={`flex ${insertBefore ? 'flex-col' : 'flex-col-reverse'} ${
-        showSelectBox ? 'noselect' : ''
-      }`}
+    <DragAndDrop
       draggable={draggable}
-      {...dragEvents}
-      {...dropEvents}
+      details={model.asDnDDetails(contentItem)}
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+      onDragEnter={handleDragEnter}
+      onDragLeave={onDragLeave}
+      onDragOver={onDragOver}
+      onDrop={handleDrop}
     >
-      <ItemPlaceholder show={isDragOver} className='h-12 p-2 bg-active-1/5' />
-      <Table.TRow
-        className={`${isDragged && 'border border-active-1/50'} ${
-          isDragged && isCopying && 'brightness-125'
-        } ${isDragged && !isCopying && 'opacity-30'}`}
-        onMouseEnter={() => setIsMouseOver(true)}
-        onMouseLeave={() => setIsMouseOver(false)}
+      <div
+        className={`flex ${insertBefore ? 'flex-col' : 'flex-col-reverse'} ${
+          showSelectBox ? 'noselect' : ''
+        }`}
       >
-        {showSelectBox && selected && (
-          <SVGBoxChecked
-            className='w-4 mr-4 text-active-1/80'
-            onClick={(e) => onSelect(e.shiftKey)}
-          />
-        )}
-        {showSelectBox && !selected && (
-          <SVGBox
-            className='w-4 mr-4 text-active-1/80'
-            onClick={(e) => onSelect(e.shiftKey)}
-          />
-        )}
-        {!showSelectBox && (
-          <DragDots
-            show={isMouseOver}
-            onMouseEnter={() => setDraggable(true)}
-            onMouseLeave={() => setDraggable(false)}
-          />
-        )}
-        <div className={`w-10 cursor-pointer`} onClick={handleToggleConsumed}>
-          <LED on={true} color={consumed ? 'Green' : 'Red'} />
-        </div>
-        {/* TODO: (M) - a custom compomnent which can be in edit or view mode */}
-        {renderTitleEdit()}
-        <div
-          className={`flex-1 ${
-            isMouseOver || isEditTitle ? 'opacity-100' : 'opacity-0'
-          }`}
+        <ItemPlaceholder show={dragOver} className='h-12 p-2 bg-active-1/5' />
+        <Table.TRow
+          className={`${dragged && 'border border-active-1/50'} ${
+            dragged && dragCopy && 'brightness-125'
+          } ${dragged && !dragCopy && 'opacity-30'}`}
+          onMouseEnter={() => setIsMouseOver(true)}
+          onMouseLeave={() => setIsMouseOver(false)}
         >
-          {renderIcons()}
-        </div>
-        <div className='w-12 text-lg text-text-1/10 text-right'>{position}</div>
-      </Table.TRow>
-    </div>
+          {showSelectBox && selected && (
+            <SVGBoxChecked
+              className='w-4 mr-4 text-active-1/80'
+              onClick={(e) => onSelect(e.shiftKey)}
+            />
+          )}
+          {showSelectBox && !selected && (
+            <SVGBox
+              className='w-4 mr-4 text-active-1/80'
+              onClick={(e) => onSelect(e.shiftKey)}
+            />
+          )}
+          {!showSelectBox && (
+            <DragDots
+              show={isMouseOver}
+              onMouseEnter={() => setDraggable(true)}
+              onMouseLeave={() => setDraggable(false)}
+            />
+          )}
+          <div className={`w-10 cursor-pointer`} onClick={handleToggleConsumed}>
+            <LED on={true} color={consumed ? 'Green' : 'Red'} />
+          </div>
+          {/* TODO: (M) - a custom compomnent which can be in edit or view mode */}
+          {renderTitleEdit()}
+          <div
+            className={`flex-1 ${
+              isMouseOver || isEditTitle ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            {renderIcons()}
+          </div>
+          <div className='w-12 text-lg text-text-1/10 text-right'>
+            {position}
+          </div>
+        </Table.TRow>
+      </div>
+    </DragAndDrop>
   );
 };
 

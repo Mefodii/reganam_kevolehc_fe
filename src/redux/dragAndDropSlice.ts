@@ -6,9 +6,7 @@ export const name = 'dragAndDrop';
 export type DragAndDropSliceProps = DragAndDrop.Data;
 
 const initialState: DragAndDropSliceProps = {
-  item: undefined,
-  type: undefined,
-  accessGroup: undefined,
+  details: undefined,
   copy: false,
 };
 
@@ -16,21 +14,16 @@ const slice = createSlice({
   name,
   initialState,
   reducers: {
-    setDrag: (state, action: PayloadAction<DragAndDropSliceProps>) => {
+    setDrag(state, action: PayloadAction<DragAndDropSliceProps>) {
       return { ...state, ...action.payload };
     },
-    removeDrag: (state) => {
-      return {
-        ...state,
-        item: undefined,
-        type: undefined,
-        accessGroup: undefined,
-        copy: false,
-      };
+    removeDrag(state) {
+      state.copy = false;
+      state.details = undefined;
     },
   },
   selectors: {
-    selectAccessGroup: (state) => state.accessGroup,
+    selectAccessGroup: (state) => state.details?.accessGroup,
   },
 });
 

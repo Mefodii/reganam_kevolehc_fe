@@ -18,7 +18,6 @@ import {
   selectAllContentMusicItems,
 } from '../contentMusicItems/contentMusicItemsSlice';
 import { contentWatcher as model } from '../../../models';
-import { ContentContainer } from '../../../components/layout';
 import ContentMusicItemTable from '../contentMusicItems/ContentMusicItemsTable';
 import ContentItemsTable from '../contentItems/ContentItemsTable';
 
@@ -52,29 +51,27 @@ const ContentWatcherDashboard = () => {
     }
   }, [dispatch, contentWatcher]);
 
-  const isLoading = !contentWatcher || !contentItemsPageInfo;
+  const isLoading = !contentWatcher;
 
-  if (isLoading)
-    return (
-      <div>
-        <LoadingOverlay loading={true} />
-      </div>
-    );
+  if (isLoading) return <LoadingOverlay />;
 
+  // QUESTION: - is it mandatory to always have overflow-hidden on each child? any workarounds?
   return (
-    <ContentContainer>
-      <div className='content-container font-mono'>
+    <div className='flex flex-1 flex-col items-center mono-font'>
+      <div className='content-body overflow-hidden'>
         <ContentWatcherDetails contentWatcher={contentWatcher} />
         {model.isMusic(contentWatcher) ? (
           <ContentMusicItemTable contentMusicItems={contentMusicItems} />
-        ) : (
+        ) : contentItemsPageInfo ? (
           <ContentItemsTable
             contentItems={contentItems}
             pageInfo={contentItemsPageInfo}
           />
+        ) : (
+          <LoadingOverlay />
         )}
       </div>
-    </ContentContainer>
+    </div>
   );
 };
 

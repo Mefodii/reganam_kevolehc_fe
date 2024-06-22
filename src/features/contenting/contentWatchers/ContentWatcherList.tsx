@@ -8,35 +8,33 @@ type ContentWatcherListProps = {
   contentWatchers: Model.ContentWatcherDM[];
 };
 
-const filter = (
-  contentWatchers: Model.ContentWatcherDM[],
-  category?: string,
-  type?: string
-) => {
-  let filteredContentWatchers = filterModel.filterByCategory(
-    contentWatchers,
-    category
-  );
-  filteredContentWatchers = filterModel.filterBySourceType(
-    filteredContentWatchers,
-    type
-  );
-  return filteredContentWatchers;
-};
+// const filter = (
+//   contentWatchers: Model.ContentWatcherDM[],
+//   category?: string,
+//   type?: string
+// ) => {
+//   let filteredContentWatchers = filterModel.filterByCategory(
+//     contentWatchers,
+//     category
+//   );
+//   filteredContentWatchers = filterModel.filterBySourceType(
+//     filteredContentWatchers,
+//     type
+//   );
+//   return filteredContentWatchers;
+// };
 
 const ContentWatcherList: React.FC<ContentWatcherListProps> = ({
   contentWatchers,
 }) => {
-  const { showWatchers, category, watcherType } = useAppSelector(
-    selectContentingFilters
-  );
+  const filter = useAppSelector(selectContentingFilters);
+  const { showWatchers, category, watcherType } = filter;
 
   if (!showWatchers) return <></>;
 
-  const filteredContentWatchers = filter(
+  const filteredContentWatchers = filterModel.filterContentWatchers(
     contentWatchers,
-    category,
-    watcherType
+    filter
   );
   if (filteredContentWatchers.length === 0) return <></>;
 
@@ -51,13 +49,13 @@ const ContentWatcherList: React.FC<ContentWatcherListProps> = ({
   };
 
   return (
-    <div className='w-full'>
-      <div className='w-full flex flex-col items-center relative'>
+    <div className='flex w-full'>
+      <div className='w-full flex flex-col items-center'>
         <h2 className='text-xl uppercase font-bold m-4'>Content Watchers</h2>
         {renderH3('Category', category)}
         {renderH3('Type', watcherType)}
 
-        <div className='rounded-xl shadow-md w-10/12 space-y-10 mb-28'>
+        <div className='flex flex-col rounded-xl shadow-md w-10/12 space-y-10 mb-28'>
           <ContentWatcherTable contentWatchers={filteredContentWatchers} />
         </div>
       </div>

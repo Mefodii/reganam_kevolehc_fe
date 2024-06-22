@@ -25,9 +25,9 @@ const Dashboard = () => {
   }, [dispatch]);
 
   return (
-    <div className='flex grow'>
+    <div className='flex flex-1'>
       <Sidepanel />
-      <div className='py-5 px-10 bg-theme-2 w-full'>
+      <div className='flex flex-col py-5 px-10 bg-theme-2 w-full overflow-auto'>
         <ContentWatcherList contentWatchers={contentWatchers} />
         {contentLists.map((_, i) => (
           <div key={i}>{JSON.stringify(_)}</div>

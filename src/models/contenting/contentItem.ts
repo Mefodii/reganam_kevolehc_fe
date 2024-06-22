@@ -36,6 +36,7 @@ declare global {
       ContentItemDM
     > & {
       mandatoryFields: string[];
+      asDnDDetails: (item: ContentItemDM) => DragAndDrop.ContentItemDetails;
     };
   }
 }
@@ -126,5 +127,12 @@ export const contentItem: Model.ContentItemModel = {
     if (o1?.content_list !== o2?.content_list) return false;
 
     return true;
+  },
+  asDnDDetails(item) {
+    return {
+      type: 'CONTENT_ITEM',
+      item,
+      accessGroup: item.content_list,
+    };
   },
 };

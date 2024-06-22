@@ -10,6 +10,10 @@ declare global {
     };
     type ContentingFilterModel = {
       getInitialState: () => ContentingFilter;
+      filterContentWatchers: (
+        items: Model.ContentWatcherDM[],
+        filter: ContentingFilter
+      ) => Model.ContentWatcherDM[];
       filterByCategory: <T extends { category: string }>(
         items: T[],
         category?: string
@@ -29,6 +33,14 @@ export const filter: Model.ContentingFilterModel = {
     watcherType: undefined,
     category: undefined,
   }),
+  filterContentWatchers(items, { watcherType, category }) {
+    let filteredContentWatchers = this.filterByCategory(items, category);
+    filteredContentWatchers = this.filterBySourceType(
+      filteredContentWatchers,
+      watcherType
+    );
+    return filteredContentWatchers;
+  },
   filterByCategory(items, category) {
     if (!category || category.length === 0) return items;
     return items.filter((item) => item.category === category);

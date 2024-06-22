@@ -2,13 +2,13 @@ import React from 'react';
 import { SVGLoading } from '../svg';
 
 type LoadingOverlayProps = {
-  loading: boolean;
+  loading?: boolean;
   className?: string;
   svgSize?: string;
 };
 
 const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
-  loading,
+  loading = true,
   className = '',
   svgSize = 'w-16',
 }) => {

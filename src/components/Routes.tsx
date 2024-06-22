@@ -20,9 +20,6 @@ const AudioDashboard = lazy(
   () => import('../features/listening/layout/Dashboard')
 );
 const HelpersDashboard = lazy(() => import('../features/helpers/Dashboard'));
-const WatchingDashboard = lazy(
-  () => import('../features/watching/layout/Dashboard')
-);
 const Movies = lazy(() => import('../features/watching/layout/Movies'));
 const Serials = lazy(() => import('../features/watching/layout/Serials'));
 const Anime = lazy(() => import('../features/watching/layout/Anime'));
@@ -34,7 +31,6 @@ const Routes = () => {
     <Suspense fallback={renderLoading()}>
       <ReactRoutes>
         <Route path='/' element={<Home />} />
-        <Route path={FE_URL.WATCHING} element={<WatchingDashboard />} />
         <Route path={FE_URL.MOVIES} element={<Movies />} />
         <Route path={FE_URL.SERIALS} element={<Serials />} />
         <Route path={FE_URL.ANIME} element={<Anime />} />

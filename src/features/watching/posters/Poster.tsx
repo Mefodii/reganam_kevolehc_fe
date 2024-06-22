@@ -88,6 +88,7 @@ const Poster: React.FC<PosterProps> = ({ disabled, groupId, images }) => {
     fileUploadRef.current?.click();
   };
 
+  // TODO: (L) - better style when hover over with picture
   return (
     <div
       className={`relative group ${

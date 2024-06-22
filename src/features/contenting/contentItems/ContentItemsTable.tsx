@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ContentItemRow from './ContentItemRow';
-import { LoadingOverlay, Pagination } from '../../../components/generic';
+import { LoadingOverlay, Pagination, Table } from '../../../components/generic';
 import {
   selectIsAPIPending,
   updateContentItems,
@@ -10,7 +10,6 @@ import {
 import {
   useAppDispatch,
   useAppSelector,
-  useAutofitScreen,
   useListSelect,
   useModal,
 } from '../../../hooks';
@@ -43,10 +42,6 @@ const ContentItemsTable: React.FC<ContentItemsTableProps> = ({
   const hideConsumed: boolean = Boolean(pageInfo.currentParams?.hideConsumed);
   const dispatch = useAppDispatch();
 
-  // TODO: (L) - seems like a hacky overkill, maybe it is possible to get same result with using TW CSS
-  // TODO: (M) - check maybe it will work if autofit is located directly on body
-  const tableRef = useAutofitScreen<HTMLDivElement>(null);
-
   const isLoading = useAppSelector(selectIsAPIPending);
   const [isSelectMode, setIsSelectMode] = useState(false);
   const [selectedIndexes, handleSelect, resetSelection] = useListSelect();
@@ -64,7 +59,9 @@ const ContentItemsTable: React.FC<ContentItemsTableProps> = ({
       ...contentItem,
       consumed,
     }));
-    dispatch(updateContentItems(newItems));
+    dispatch(updateContentItems(newItems)).then(
+      () => hideConsumed && resetSelection()
+    );
   };
 
   const handleDelete = () => {
@@ -95,88 +92,83 @@ const ContentItemsTable: React.FC<ContentItemsTableProps> = ({
 
   const renderUtilityPanel = () => {
     return (
-      <div className='sticky top-0 bg-inherit z-10'>
-        <div className='mx-5 mb-2 pb-3 pt-5 flex items-center justify-between text-lg font-bold border-b-2 border-active-1/80 select-none'>
-          <div className='flex w-1/3 items-center'>
-            <Checkbox
-              className='rounded-none px-2 border-opacity-70'
-              name='showPosters'
-              text='Select Mode'
-              checked={isSelectMode}
-              onChange={() => setIsSelectMode(!isSelectMode)}
-              simple
-            />
-            <div className={`pl-5 ${isSelectMode ? '' : 'opacity-10'}`}>
-              <div className={`flex space-x-3`}>
-                <UtilityPanelIcon
-                  SVGComponent={SVGEye}
-                  isActive={isSelectMode}
-                  tooltip={'Set Consumed'}
-                  onClick={() => handleSetConsumed(true)}
-                />
-                <UtilityPanelIcon
-                  SVGComponent={SVGEyeSlash}
-                  isActive={isSelectMode}
-                  tooltip={'Set Not Consumed'}
-                  onClick={() => handleSetConsumed(false)}
-                />
-                <UtilityPanelIcon
-                  SVGComponent={SVGClipboardDocEmpty}
-                  isActive={isSelectMode}
-                  tooltip={'Copy items as text'}
-                />
-                <UtilityPanelIcon
-                  SVGComponent={SVGYoutube}
-                  isActive={isSelectMode}
-                  tooltip={'Copy as YT Playlist'}
-                  onClick={handleCopyAsYTPlaylist}
-                />
-                <UtilityPanelIcon
-                  SVGComponent={SVGCross}
-                  isActive={isSelectMode}
-                  tooltip={'Delete'}
-                  onClick={handleDelete}
-                />
-              </div>
-              <div className='pt-2 text-sm text-active-1/70'>{`${selectedIndexes.length}: Selected`}</div>
+      <Table.THead>
+        <div className='flex w-1/3 items-center'>
+          <Checkbox
+            className='rounded-none px-2 border-opacity-70'
+            name='showPosters'
+            text='Select Mode'
+            checked={isSelectMode}
+            onChange={() => setIsSelectMode(!isSelectMode)}
+            simple
+          />
+          <div className={`pl-5 ${isSelectMode ? '' : 'opacity-10'}`}>
+            <div className={`flex space-x-3`}>
+              <UtilityPanelIcon
+                SVGComponent={SVGEye}
+                isActive={isSelectMode}
+                tooltip={'Set Consumed'}
+                onClick={() => handleSetConsumed(true)}
+              />
+              <UtilityPanelIcon
+                SVGComponent={SVGEyeSlash}
+                isActive={isSelectMode}
+                tooltip={'Set Not Consumed'}
+                onClick={() => handleSetConsumed(false)}
+              />
+              <UtilityPanelIcon
+                SVGComponent={SVGClipboardDocEmpty}
+                isActive={isSelectMode}
+                tooltip={'Copy items as text'}
+              />
+              <UtilityPanelIcon
+                SVGComponent={SVGYoutube}
+                isActive={isSelectMode}
+                tooltip={'Copy as YT Playlist'}
+                onClick={handleCopyAsYTPlaylist}
+              />
+              <UtilityPanelIcon
+                SVGComponent={SVGCross}
+                isActive={isSelectMode}
+                tooltip={'Delete'}
+                onClick={handleDelete}
+              />
             </div>
-          </div>
-          <div className='flex w-1/3'>
-            <Pagination pageInfo={pageInfo} action={fetchContentItems} />
-          </div>
-          <div className={`flex w-1/3 justify-end`}>
-            <div
-              className={`cursor-pointer ${
-                hideConsumed ? 'text-active-2' : 'text-text-1'
-              }`}
-              onClick={() =>
-                dispatch(
-                  fetchContentItems({
-                    ...pageInfo.currentParams,
-                    hideConsumed: !hideConsumed,
-                  })
-                )
-              }
-            >
-              {hideConsumed ? (
-                <SVGEyeClosed className={`w-5`} tooltip='Show Consumed' />
-              ) : (
-                <SVGEye className={`w-5`} tooltip='Hide Consumed' />
-              )}
-            </div>
+            <div className='pt-2 text-sm text-active-1/70'>{`${selectedIndexes.length}: Selected`}</div>
           </div>
         </div>
-      </div>
+        <div className='flex w-1/3'>
+          <Pagination pageInfo={pageInfo} action={fetchContentItems} />
+        </div>
+        <div className={`flex w-1/3 justify-end`}>
+          <div
+            className={`cursor-pointer ${
+              hideConsumed ? 'text-active-2' : 'text-text-1'
+            }`}
+            onClick={() =>
+              dispatch(
+                fetchContentItems({
+                  ...pageInfo.currentParams,
+                  hideConsumed: !hideConsumed,
+                })
+              )
+            }
+          >
+            {hideConsumed ? (
+              <SVGEyeClosed className={`w-5`} tooltip='Show Consumed' />
+            ) : (
+              <SVGEye className={`w-5`} tooltip='Hide Consumed' />
+            )}
+          </div>
+        </div>
+      </Table.THead>
     );
   };
 
   return (
-    <div
-      ref={tableRef}
-      className='bg-theme-1 border border-theme-3 rounded-lg shadow-2xl shadow-active-1/5 overflow-y-auto overflow-x-hidden'
-    >
+    <Table.TContainer>
       {renderUtilityPanel()}
-      <div className='relative divide-y divide-active-1/10'>
+      <Table.TBody>
         <LoadingOverlay loading={isLoading} />
         {contentItems.map((contentItem, i) => (
           <ContentItemRow
@@ -187,8 +179,8 @@ const ContentItemsTable: React.FC<ContentItemsTableProps> = ({
             showSelectBox={isSelectMode}
           />
         ))}
-      </div>
-    </div>
+      </Table.TBody>
+    </Table.TContainer>
   );
 };
 

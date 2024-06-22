@@ -7,6 +7,7 @@ import Routes from './Routes';
 
 import { selectTheme } from '../redux/pageSlice';
 import { ModalProvider } from '../features/modals/Modal';
+import { DnDProvider } from './dragAndDrop/Drag2';
 
 const Content = () => {
   const theme = useAppSelector(selectTheme);
@@ -14,12 +15,16 @@ const Content = () => {
   return (
     <Router>
       <div
-        className={`${theme} text-text-1 bg-gradient-to-t from-theme-2 to-theme-3 flex flex-col min-h-full max-h-full overflow-y-auto`}
+        className={`${theme} flex flex-col text-text-1 bg-gradient-to-t from-theme-2 to-theme-3 min-h-screen max-h-screen`}
       >
         <ModalProvider>
-          <ThemeChanger />
-          <Header />
-          <Routes />
+          <DnDProvider>
+            <ThemeChanger />
+            <Header />
+            <div className='flex flex-1 overflow-hidden'>
+              <Routes />
+            </div>
+          </DnDProvider>
         </ModalProvider>
       </div>
     </Router>
