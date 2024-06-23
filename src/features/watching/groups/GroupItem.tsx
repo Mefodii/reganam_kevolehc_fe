@@ -196,7 +196,7 @@ const GroupItem: React.FC<GroupItemProps> = ({
             <Poster images={group.images} groupId={group.id}></Poster>
           </div>
         )}
-        <Table.TContainer className='w-full font-sans max-h-160 shadow-none'>
+        <Table.TContainer className='w-full font-sans max-h-160'>
           {renderHeader}
 
           {!group.single && (

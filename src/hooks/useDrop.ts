@@ -1,8 +1,25 @@
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { DnDContext } from '../context';
-import { DnDProps } from '../context/DnD';
+import { DnDData, DnDProps } from '../context/DnD';
 
-const isAccepted = (accepted: string[] | string | undefined, type: string) => {
+type Accepted = string[] | string | undefined;
+type ExtraValidation<E extends HTMLElement, T> = (
+  e: React.DragEvent<E>,
+  item: T,
+  copy: boolean
+) => boolean;
+type ValidationData<E extends HTMLElement, T> = {
+  e: React.DragEvent<E>;
+  data: DnDData<T>;
+  accepted: Accepted;
+  extraValidation?: ExtraValidation<E, T>;
+  dataTransfer: boolean;
+};
+
+const validateAccepted = (
+  accepted: string[] | string | undefined,
+  type: string
+) => {
   return (
     accepted === undefined ||
     accepted === type ||
@@ -10,87 +27,114 @@ const isAccepted = (accepted: string[] | string | undefined, type: string) => {
   );
 };
 
-export type UseDropProps<T> = {
-  accepted?: string[] | string;
-  extraValidation?: (item: T, copy: boolean) => boolean; // Validation applied to both onDragEnter and onDrop
-  onDragOver?: (data: DnDData<T>) => void;
-  onDragEnter?: (item: T) => void;
-  onDragLeave?: (data: DnDData<T>) => void;
-  onDrop?: (item: T, copy: boolean) => void;
+const isValid = <E extends HTMLElement, T>({
+  e,
+  data,
+  accepted,
+  extraValidation,
+  dataTransfer,
+}: ValidationData<E, T>): boolean => {
+  if (!validateAccepted(accepted, data.type)) return false;
+  if (dataTransfer) {
+    if (extraValidation) {
+      throw new Error('extraValidation not supported yet for dataTransfer');
+    }
+    return true;
+  }
+
+  if (!data.item) return false;
+  if (extraValidation && !extraValidation(e, data.item, data.copy))
+    return false;
+
+  return true;
 };
 
-export const useDrop = <T>({
+export type UseDropProps<E extends HTMLElement, T> = {
+  accepted?: Accepted;
+  dataTransfer?: boolean;
+  extraValidation?: ExtraValidation<E, T>; // NOTE: Validation applied to all drag/drop events
+  // TODO: (L) - Not needed yet: onDragOver?: (e: React.DragEvent<E>, item: T, copy: boolean) => void;
+  onDragEnter?: (e: React.DragEvent<E>, item: T, copy: boolean) => void;
+  onDragLeave?: (e: React.DragEvent<E>, item: T, copy: boolean) => void;
+  onDrop?: (e: React.DragEvent<E>, item: T, copy: boolean) => void;
+};
+
+export type DropState = {
+  isDragOver: boolean;
+};
+export type DropEvents<E extends HTMLElement> = {
+  onDragEnter: React.DragEventHandler<E>;
+  onDragLeave: React.DragEventHandler<E>;
+  onDragOver: React.DragEventHandler<E>;
+  onDrop: React.DragEventHandler<E>;
+};
+export type UseDropReturn<E extends HTMLElement> = DropState & {
+  dropEvents: DropEvents<E>;
+};
+
+// TODO: (L) - check if it is reasonable to memoize received functions
+export const useDrop = <E extends HTMLElement, T = unknown>({
   accepted,
-  extraValidation = () => true,
-  onDragOver,
-  onDragEnter,
-  onDragLeave,
-  onDrop,
-}: UseDropProps<T>) => {
-  const { data } = useContext<DnDProps<T>>(DnDContext);
+  dataTransfer = false,
+  extraValidation,
+  onDragEnter = () => {},
+  onDragLeave = () => {},
+  onDrop = () => {},
+}: UseDropProps<E, T>): UseDropReturn<E> => {
+  const { data, getItem } = useContext<DnDProps<T, E>>(DnDContext);
   const [, setDragCounter] = useState(0);
   const [isDragOver, setIsDragOver] = useState(false);
 
   const handleDragEnter = useCallback(
-    (data: DnDData<T>) => {
-      if (!onDragEnter || !data.item) return;
+    (e: React.DragEvent<E>, data: DnDData<T>) => {
+      if (!isValid({ e, data, accepted, extraValidation, dataTransfer }))
+        return;
 
-      if (
-        isAccepted(accepted, data.type) &&
-        extraValidation(data.item, data.copy)
-      ) {
-        setIsDragOver(true);
-        onDragEnter(data.item);
-      }
+      onDragEnter(e, getItem(e, dataTransfer), data.copy);
+      setIsDragOver(true);
     },
-    [onDragEnter, extraValidation, accepted]
+    [onDragEnter, extraValidation, getItem, accepted, dataTransfer]
   );
 
   const handleDragLeave = useCallback(
-    (data: DnDData<T>) => {
+    (e: React.DragEvent<E>, data: DnDData<T>) => {
+      if (!isValid({ e, data, accepted, extraValidation, dataTransfer }))
+        return;
+
+      onDragLeave(e, getItem(e, dataTransfer), data.copy);
       setIsDragOver(false);
-      onDragLeave && onDragLeave(data);
     },
-    [onDragLeave]
+    [onDragLeave, extraValidation, getItem, accepted, dataTransfer]
   );
 
-  const handleDragOver = useCallback(
-    (e: React.DragEvent<HTMLDivElement>) => {
-      e.preventDefault();
-      if (!data) return;
-      onDragOver && onDragOver(data);
-    },
-    [onDragOver, data]
-  );
+  const handleDragOver = useCallback((e: React.DragEvent<E>) => {
+    e.preventDefault();
+  }, []);
 
   const handleDrop = useCallback(
-    (e: React.DragEvent<HTMLDivElement>) => {
+    (e: React.DragEvent<E>) => {
       e.preventDefault();
       setDragCounter(0);
       setIsDragOver(false);
 
-      if (
-        onDrop &&
-        isAccepted(accepted, data.type) &&
-        data.item &&
-        extraValidation(data.item, data.copy)
-      ) {
-        onDrop(data.item, data.copy);
-      }
+      if (!isValid({ e, data, accepted, extraValidation, dataTransfer }))
+        return;
+
+      onDrop(e, getItem(e, dataTransfer), data.copy);
     },
-    [data, onDrop, extraValidation, accepted]
+    [onDrop, data, extraValidation, getItem, accepted, dataTransfer]
   );
 
   const handleDragPass = useCallback(
-    (mod: number) => {
+    (e: React.DragEvent<E>, mod: number) => {
       setDragCounter((prevCounter) => {
         const newCounter = prevCounter + mod;
 
         if (prevCounter === 0 && newCounter === 1) {
-          handleDragEnter(data);
+          handleDragEnter(e, data);
         }
         if (prevCounter === 1 && newCounter === 0) {
-          handleDragLeave(data);
+          handleDragLeave(e, data);
         }
 
         return newCounter;
@@ -99,10 +143,10 @@ export const useDrop = <T>({
     [handleDragEnter, handleDragLeave, data]
   );
 
-  const dropEvents = useMemo(
+  const dropEvents: DropEvents<E> = useMemo(
     () => ({
-      onDragEnter: () => handleDragPass(1),
-      onDragLeave: () => handleDragPass(-1),
+      onDragEnter: (e: React.DragEvent<E>) => handleDragPass(e, 1),
+      onDragLeave: (e: React.DragEvent<E>) => handleDragPass(e, -1),
       onDragOver: handleDragOver,
       onDrop: handleDrop,
     }),

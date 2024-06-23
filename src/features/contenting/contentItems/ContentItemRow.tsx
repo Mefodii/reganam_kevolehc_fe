@@ -52,24 +52,27 @@ const ContentItemRow: React.FC<ContentItemRowProps> = ({
   const [insertBefore, setInsertBefore] = useState(false);
   const [draggable, setDraggable] = useState(false);
 
-  const { isDragged, isCopying, isDragOver, dropEvents, dragEvents } = useDnD(
-    DnDTypes.CONTENT_ITEM,
-    contentItem,
-    {
-      accepted: DnDTypes.CONTENT_ITEM,
-      extraValidation: (item, copy) => {
-        // Note: personal opinion, this way looks more readable
-        if (item.content_list !== contentItem.content_list) return false;
-        if (item !== contentItem) return true;
-        return copy;
-      },
-      onDragEnter: (item) =>
-        setInsertBefore(item.position > contentItem.position),
-      onDrop: handleDrop,
-    }
-  );
+  const { isDragged, isCopying, isDragOver, dndEvents } = useDnD<
+    HTMLDivElement,
+    Model.ContentItemDM
+  >(DnDTypes.CONTENT_ITEM, contentItem, {
+    accepted: DnDTypes.CONTENT_ITEM,
+    extraValidation: (e, item, copy) => {
+      // Note: personal opinion, this way looks more readable
+      if (item.content_list !== contentItem.content_list) return false;
+      if (item !== contentItem) return true;
+      return copy;
+    },
+    onDragEnter: (e, item) =>
+      setInsertBefore(item.position > contentItem.position),
+    onDrop: handleDrop,
+  });
 
-  function handleDrop(item: Model.ContentItemDM, copy: boolean) {
+  function handleDrop(
+    e: React.DragEvent<HTMLDivElement>,
+    item: Model.ContentItemDM,
+    copy: boolean
+  ) {
     const action = copy ? createContentItem : updateContentItem;
     dispatch(
       action({
@@ -206,8 +209,7 @@ const ContentItemRow: React.FC<ContentItemRowProps> = ({
         showSelectBox ? 'noselect' : ''
       }`}
       draggable={draggable}
-      {...dragEvents}
-      {...dropEvents}
+      {...dndEvents}
     >
       <ItemPlaceholder show={isDragOver} className='h-12 p-2 bg-active-1/5' />
       <Table.TRow

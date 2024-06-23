@@ -29,24 +29,27 @@ const VideoItem: React.FC<VideoItemProps> = ({ video }) => {
   const [insertBefore, setInsertBefore] = useState(false);
   const [draggable, setDraggable] = useState(false);
 
-  const { isDragged, isCopying, isDragOver, dragEvents, dropEvents } = useDnD(
-    DnDTypes.VIDEO,
-    video,
-    {
-      accepted: DnDTypes.VIDEO,
-      extraValidation: (item, copy) => {
-        if (item.group !== video.group) return false;
-        if (item !== video) return true;
-        return copy;
-      },
-      onDragEnter: (item) => setInsertBefore(item.order > video.order),
-      onDrop: handleDrop,
-    }
-  );
+  const { isDragged, isCopying, isDragOver, dndEvents } = useDnD<
+    HTMLDivElement,
+    Model.VideoDM
+  >(DnDTypes.VIDEO, video, {
+    accepted: DnDTypes.VIDEO,
+    extraValidation: (e, item, copy) => {
+      if (item.group !== video.group) return false;
+      if (item !== video) return true;
+      return copy;
+    },
+    onDragEnter: (e, item) => setInsertBefore(item.order > video.order),
+    onDrop: handleDrop,
+  });
 
   const { openModal, closeModal } = useModal();
 
-  function handleDrop(item: Model.VideoDM, copy: boolean) {
+  function handleDrop(
+    e: React.DragEvent<HTMLDivElement>,
+    item: Model.VideoDM,
+    copy: boolean
+  ) {
     const action = copy ? createVideo : updateVideo;
     dispatch(
       action({
@@ -91,10 +94,9 @@ const VideoItem: React.FC<VideoItemProps> = ({ video }) => {
 
   return (
     <div
-      className={`flex my-2 ${insertBefore ? 'flex-col' : 'flex-col-reverse'}`}
+      className={`flex ${insertBefore ? 'flex-col' : 'flex-col-reverse'}`}
       draggable={draggable}
-      {...dragEvents}
-      {...dropEvents}
+      {...dndEvents}
     >
       <ItemPlaceholder
         show={isDragOver}

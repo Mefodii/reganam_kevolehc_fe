@@ -49,12 +49,6 @@ declare global {
     type Scope = 'DETAILS' | 'LIST';
   }
 
-  type DnDData<T> = {
-    type: string;
-    item?: T;
-    copy: boolean;
-  };
-
   declare namespace Form {
     type Mode = 'CREATE' | 'UPDATE';
     type Option<T> = T | null;

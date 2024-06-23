@@ -11,7 +11,7 @@ import {
   updatePoster,
   deletePoster,
 } from '../groups/groupsSlice';
-import { useAppDispatch } from '../../../hooks';
+import { useAppDispatch, useDrop } from '../../../hooks';
 
 type PosterProps = {
   disabled?: boolean;
@@ -23,35 +23,17 @@ const Poster: React.FC<PosterProps> = ({ disabled, groupId, images }) => {
   const dispatch = useAppDispatch();
 
   const [loading, setLoading] = useState(false);
-  const [dragOver, setDragOver] = useState(false);
 
   const fileUploadRef = useRef<HTMLInputElement>(null);
 
   const poster = images[0];
 
-  const onDragEnter = () => {
-    setDragOver(true);
-  };
+  const { isDragOver, dropEvents } = useDrop<HTMLDivElement, DataTransfer>({
+    dataTransfer: true,
+    onDrop: (e, dataTransfer) => changePoster(dataTransfer.files[0]),
+  });
 
-  const onDragLeave = () => {
-    setDragOver(false);
-  };
-
-  const onDrop: React.DragEventHandler<HTMLDivElement> = (e) => {
-    e.preventDefault();
-    const image = e.dataTransfer.files[0];
-
-    if (!image.type.startsWith('image/')) {
-      console.error('Unacceptable file type: ', image); // TODO - alert instead of console
-      return;
-    }
-
-    setLoading(true);
-    setDragOver(false);
-    changePoster(image);
-  };
-
-  const onFileSelect: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+  const handleFileSelect: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     if (!e.target.files) return;
 
     const image = e.target.files[0];
@@ -60,6 +42,12 @@ const Poster: React.FC<PosterProps> = ({ disabled, groupId, images }) => {
 
   const changePoster = (image: File) => {
     if (!image) return;
+    setLoading(true);
+
+    if (!image.type.startsWith('image/')) {
+      alert(`Unacceptable file type: ${image.type}`);
+      return;
+    }
 
     const poster = images[0];
     // Update poster
@@ -79,7 +67,7 @@ const Poster: React.FC<PosterProps> = ({ disabled, groupId, images }) => {
     }
   };
 
-  const deletePoster2 = () => {
+  const handleDeletePoster = () => {
     const poster = images[0];
     if (poster) dispatch(deletePoster(poster));
   };
@@ -88,16 +76,14 @@ const Poster: React.FC<PosterProps> = ({ disabled, groupId, images }) => {
     fileUploadRef.current?.click();
   };
 
-  // TODO: (L) - better style when hover over with picture
   return (
     <div
       className={`relative group ${
-        dragOver ? 'border-2 border-active-1 shadow-inner' : ''
+        isDragOver
+          ? 'border-8 border-dashed border-active-1/30 shadow-inner'
+          : ''
       }`}
-      onDragOver={(e) => e.preventDefault()}
-      onDragEnter={onDragEnter}
-      onDragLeave={onDragLeave}
-      onDrop={onDrop}
+      {...dropEvents}
     >
       <LoadingOverlay loading={loading} />
       {!disabled && (
@@ -114,7 +100,7 @@ const Poster: React.FC<PosterProps> = ({ disabled, groupId, images }) => {
               icon={faTimes}
               size='lg'
               className='hover:text-active-1 cursor-pointer mx-2'
-              onClick={deletePoster2}
+              onClick={handleDeletePoster}
             />
           </div>
           <input
@@ -123,7 +109,7 @@ const Poster: React.FC<PosterProps> = ({ disabled, groupId, images }) => {
             id='poster'
             name='poster'
             accept='image/*'
-            onChange={onFileSelect}
+            onChange={handleFileSelect}
             ref={fileUploadRef}
           ></input>
         </div>

@@ -47,7 +47,7 @@ const ContentWatcherRow: React.FC<ContentWatcherRowProps> = ({
 
   const renderActions = () => {
     return (
-      <div className='flex space-x-2 divide-x divide-active-1/20 group'>
+      <div className='flex space-x-2 divide-x divide-active-1/0 group-hover:divide-active-1/20'>
         <div onClick={handleOpenContentWatcherModal}>
           <SVGPencil className='w-5 wiggling-clickable' tooltip='Edit' />
         </div>
@@ -71,7 +71,7 @@ const ContentWatcherRow: React.FC<ContentWatcherRowProps> = ({
   };
 
   return (
-    <Table.TRow>
+    <Table.TRow className='group'>
       <div className='w-10 flex justify-center mr-2'>
         <LED on={true} color={consumed ? 'Green' : 'Red'} />
       </div>

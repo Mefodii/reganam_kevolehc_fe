@@ -1353,10 +1353,6 @@ video {
   visibility: hidden;
 }
 
-.collapse {
-  visibility: collapse;
-}
-
 .fixed {
   position: fixed;
 }
@@ -1711,11 +1707,6 @@ video {
   cursor: pointer;
 }
 
-.select-none {
-  -webkit-user-select: none;
-          user-select: none;
-}
-
 .resize-none {
   resize: none;
 }
@@ -1836,6 +1827,10 @@ video {
   border-bottom-width: calc(2px * var(--tw-divide-y-reverse));
 }
 
+.divide-active-1\/0 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgba(var(--active-1RGB), 0);
+}
+
 .divide-active-1\/10 > :not([hidden]) ~ :not([hidden]) {
   border-color: rgba(var(--active-1RGB), 0.1);
 }
@@ -1905,6 +1900,14 @@ video {
   border-width: 2px;
 }
 
+.border-4 {
+  border-width: 4px;
+}
+
+.border-8 {
+  border-width: 8px;
+}
+
 .border-b-2 {
   border-bottom-width: 2px;
 }
@@ -1919,6 +1922,18 @@ video {
 
 .border-t-2 {
   border-top-width: 2px;
+}
+
+.border-dashed {
+  border-style: dashed;
+}
+
+.border-dotted {
+  border-style: dotted;
+}
+
+.border-double {
+  border-style: double;
 }
 
 .border-active-1 {
@@ -1973,6 +1988,23 @@ video {
 .border-theme-5 {
   --tw-border-opacity: 1;
   border-color: rgba(var(--theme-5RGB), var(--tw-border-opacity));
+}
+
+.border-active-2 {
+  --tw-border-opacity: 1;
+  border-color: rgba(var(--active-2RGB), var(--tw-border-opacity));
+}
+
+.border-active-2\/70 {
+  border-color: rgba(var(--active-2RGB), 0.7);
+}
+
+.border-active-1\/40 {
+  border-color: rgba(var(--active-1RGB), 0.4);
+}
+
+.border-active-1\/20 {
+  border-color: rgba(var(--active-1RGB), 0.2);
 }
 
 .border-opacity-70 {
@@ -2322,12 +2354,6 @@ video {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
-.shadow-none {
-  --tw-shadow: 0 0 #0000;
-  --tw-shadow-colored: 0 0 #0000;
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-}
-
 .shadow-sm {
   --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
@@ -2436,6 +2462,10 @@ input[type='number']::-webkit-inner-spin-button,
   --tw-scale-x: 1;
   --tw-scale-y: 1;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.group:hover .group-hover\:divide-active-1\/20 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgba(var(--active-1RGB), 0.2);
 }
 
 .group:hover .group-hover\:opacity-100 {
