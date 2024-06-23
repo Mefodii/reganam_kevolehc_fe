@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from './reduxHooks';
 import { useDrag } from './useDrag';
 import { useDrop } from './useDrop';
 import { useDnD } from './useDnD';
+import { useIsVisible } from './useIsVisible';
 
 export {
   usePrevious,
@@ -21,4 +22,5 @@ export {
   useDrag,
   useDrop,
   useDnD,
+  useIsVisible,
 };

@@ -8,24 +8,49 @@ import LinkList from '../links/LinkList';
 
 import { updateGroup } from './groupsSlice';
 import { isGroupLoading } from '../../../redux/loadingsSlice';
-import { useAppDispatch, useAppSelector } from '../../../hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useIsVisible,
+  usePrevious,
+} from '../../../hooks';
 import { group as groupModel } from '../../../models';
 import { useModal } from '../../../hooks';
 import GroupForm from './GroupForm';
 import VideoForm from '../videos/VideoForm';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { LoadingOverlay, Table } from '../../../components/generic';
 import VideoItem from '../videos/VideoItem';
 
 type GroupItemProps = {
   group: Model.GroupDM;
   showPoster: boolean;
+  hide?: boolean;
+  onViewportIn?: () => void;
+  onViewportOut?: () => void;
 };
 
-const GroupItem: React.FC<GroupItemProps> = ({ group, showPoster }) => {
+const GroupItem: React.FC<GroupItemProps> = ({
+  group,
+  showPoster,
+  hide = false,
+  onViewportIn = () => {},
+  onViewportOut = () => {},
+}) => {
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector((state) => isGroupLoading(state, group.id));
   const { openModal, closeModal } = useModal();
+
+  const ref = useRef<HTMLDivElement>(null);
+  const isIntersecting = useIsVisible(ref);
+  const isIntersectingPrev = usePrevious(isIntersecting);
+
+  useEffect(() => {
+    if (isIntersectingPrev === undefined) return;
+
+    if (isIntersecting && !isIntersectingPrev) onViewportIn();
+    if (!isIntersecting && isIntersectingPrev) onViewportOut();
+  }, [isIntersecting, isIntersectingPrev, onViewportOut, onViewportIn]);
 
   const handleOpenEdit = useCallback(
     (group: Model.GroupDM) => {
@@ -76,7 +101,6 @@ const GroupItem: React.FC<GroupItemProps> = ({ group, showPoster }) => {
   );
   const renderHeader = useMemo(() => {
     const { name, aliases, links, single } = group;
-    // TODO: (H) - play with fonts
     return (
       <Table.THead className='base-font group relative'>
         <div className='simple-font w-full break-all'>
@@ -162,7 +186,10 @@ const GroupItem: React.FC<GroupItemProps> = ({ group, showPoster }) => {
   }, [group, handleOpenEdit, handleOpenVideoModal, handleSetFinised]);
 
   return (
-    <div className='sticky top-6 pb-8 bg-theme-1'>
+    <div
+      className={`sticky top-6 pb-8 bg-theme-1 ${hide ? 'invisible' : ''}`}
+      ref={ref}
+    >
       <div className='flex bg-theme-1 border-b-2 border-active-1/30 pb-16'>
         {showPoster && (
           <div className={`min-w-60`}>

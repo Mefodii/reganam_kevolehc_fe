@@ -22,7 +22,7 @@ const THead: React.FC<TProps> = ({ children, className = '', ...rest }) => {
   return (
     <div className='sticky top-0 bg-inherit z-10'>
       <div
-        className={`mx-5 mb-2 pb-3 pt-5 flex items-center justify-between text-lg font-bold border-b-2 border-active-1/80 select-none ${className}`}
+        className={`mx-5 mb-2 pb-3 pt-5 flex items-center justify-between text-lg font-bold border-b-2 border-active-1/80 ${className}`}
         {...rest}
       >
         {children}

@@ -5,6 +5,7 @@ import Sidepanel from '../layout/Sidepanel';
 import { selectWatchingFilter } from '../filters/filtersSlice';
 import { useAppSelector } from '../../../hooks';
 import { WatchingType } from '../../../api/api-utils';
+import React, { useCallback, useState } from 'react';
 
 type GroupListProps = {
   groups: Model.GroupDM[];
@@ -25,6 +26,8 @@ const GroupList: React.FC<GroupListProps> = ({
     watchingFilter
   );
 
+  const [hideStartIndex, setHideStartIndex] = useState(-1);
+
   return (
     <div className={`w-full flex flex-1 relative`}>
       <div className='w-full opacity-20 right-0 blur-sm fixed mr-4'>
@@ -41,11 +44,14 @@ const GroupList: React.FC<GroupListProps> = ({
         <Sidepanel watchingType={watchingType} />
 
         <div className='flex flex-col rounded-xl shadow-md w-10/12 bg-theme-1 p-8'>
-          {filteredGroups.map((group) => (
+          {filteredGroups.map((group, i) => (
             <GroupItem
               group={group}
               key={group.id}
               showPoster={showPosters}
+              hide={i <= hideStartIndex}
+              onViewportIn={() => setHideStartIndex(i - 5)}
+              onViewportOut={() => setHideStartIndex(i - 5)}
             ></GroupItem>
           ))}
         </div>
@@ -54,4 +60,4 @@ const GroupList: React.FC<GroupListProps> = ({
   );
 };
 
-export default GroupList;
+export default React.memo(GroupList) as typeof GroupList;
