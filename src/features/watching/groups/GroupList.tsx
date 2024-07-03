@@ -5,7 +5,7 @@ import Sidepanel from '../layout/Sidepanel';
 import { selectWatchingFilter } from '../filters/filtersSlice';
 import { useAppSelector } from '../../../hooks';
 import { WatchingType } from '../../../api/api-utils';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 type GroupListProps = {
   groups: Model.GroupDM[];
@@ -21,12 +21,19 @@ const GroupList: React.FC<GroupListProps> = ({
   const watchingFilter = useAppSelector(selectWatchingFilter);
   const { showPosters } = watchingFilter;
 
-  const filteredGroups = watchingFilterModel.filterGroups(
-    groups,
-    watchingFilter
+  const filteredGroups = useMemo(
+    () => watchingFilterModel.filterGroups(groups, watchingFilter),
+    [groups, watchingFilter]
   );
 
   const [hideStartIndex, setHideStartIndex] = useState(-1);
+
+  const handleHideGroups = useCallback(
+    (group: Model.GroupDM) => {
+      setHideStartIndex(filteredGroups.indexOf(group) - 5);
+    },
+    [filteredGroups]
+  );
 
   return (
     <div className={`w-full flex flex-1 relative`}>
@@ -50,8 +57,8 @@ const GroupList: React.FC<GroupListProps> = ({
               key={group.id}
               showPoster={showPosters}
               hide={i <= hideStartIndex}
-              onViewportIn={() => setHideStartIndex(i - 5)}
-              onViewportOut={() => setHideStartIndex(i - 5)}
+              onViewportIn={handleHideGroups}
+              onViewportOut={handleHideGroups}
             ></GroupItem>
           ))}
         </div>

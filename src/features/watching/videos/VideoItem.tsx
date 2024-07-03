@@ -10,7 +10,11 @@ import { promptNumber } from '../../../util/functions';
 import { SVGPencil, SVGCheck } from '../../../components/svg';
 import LinkList from '../links/LinkList';
 
-import { createVideo, updateVideo } from '../groups/groupsSlice';
+import {
+  createVideo,
+  updateVideo,
+  updateVideoSimple,
+} from '../groups/groupsSlice';
 import { useAppDispatch, useDnD } from '../../../hooks';
 import { video as videoModel } from '../../../models';
 import VideoForm from './VideoForm';
@@ -63,7 +67,7 @@ const VideoItem: React.FC<VideoItemProps> = ({ video }) => {
     openModal(
       <VideoForm
         formProps={{
-          video,
+          item: video,
           formMode: 'UPDATE',
         }}
         onSuccess={() => closeModal()}
@@ -76,7 +80,7 @@ const VideoItem: React.FC<VideoItemProps> = ({ video }) => {
     if (rating === undefined) {
       return;
     }
-    dispatch(updateVideo(videoModel.setFinished(video, rating)));
+    dispatch(updateVideoSimple(videoModel.setFinished(video, rating)));
   };
 
   const {
@@ -170,13 +174,15 @@ const VideoItem: React.FC<VideoItemProps> = ({ video }) => {
           </div>
         </div>
         <div>
-          <div onClick={handleOpenEdit}>
-            <SVGPencil className='w-6 wiggling-clickable'></SVGPencil>
-          </div>
+          <SVGPencil
+            className='w-6 wiggling-clickable-group'
+            onClick={handleOpenEdit}
+          />
           {!videoModel.isFinished(video) && (
-            <div onClick={handleSetFinished}>
-              <SVGCheck className='w-6 wiggling-clickable'></SVGCheck>
-            </div>
+            <SVGCheck
+              className='w-6 wiggling-clickable-group'
+              onClick={handleSetFinished}
+            />
           )}
         </div>
       </Table.TRow>

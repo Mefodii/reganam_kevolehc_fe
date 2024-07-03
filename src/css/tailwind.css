@@ -202,21 +202,10 @@
 .ring-error {
   @apply ring-4 ring-error-1 ring-opacity-30;
 }
-/* ___________________________________________ */
-
-/* Contenting Tables */
-
-.row-icons-container {
-  @apply flex space-x-2 divide-x divide-active-1/20 justify-end mr-2;
-}
-
-.row-icon {
-  @apply w-4 ml-2 text-text-1/30 hover:text-text-1;
-}
 
 /* ___________________________________________ */
 
-/* UNCATEGORIZED */
+/* Buttons & Click interaction */
 .btn-base {
   @apply relative flex focus:outline-none items-center space-x-2 py-2 px-3 font-bold 
   transition ease-in duration-150;
@@ -244,15 +233,65 @@
   @apply p-2 hover:bg-theme-3 ease-in duration-150;
 }
 
-/* TODO: (L) opacity-10 group-hover:opacity-80 should be other class */
-.wiggling-clickable {
-  @apply transform opacity-0 group-hover:opacity-75 hover:animate-wiggle cursor-pointer 
-  hover:text-active-1 transition ease-in duration-150;
+.group-invisible {
+  @apply opacity-0 group-hover:opacity-75 hover:!opacity-100;
 }
 
-.simple-clickable {
-  @apply transform opacity-40 hover:opacity-100 cursor-pointer hover:text-active-1 transition ease-in duration-150;
+.wiggling-clickable-base {
+  @apply transform hover:animate-wiggle cursor-pointer hover:text-active-1 active:text-active-1/70 
+  transition ease-in duration-150;
 }
+
+.wiggling-clickable-group {
+  @apply group-invisible wiggling-clickable-base;
+}
+
+.wiggling-clickable {
+  @apply opacity-40 hover:opacity-100 wiggling-clickable-base;
+}
+
+.simple-clickable-base {
+  @apply transform opacity-40 hover:opacity-100 cursor-pointer transition ease-in duration-150;
+}
+
+.clickable-1 {
+  @apply hover:text-active-1 active:text-active-1/70;
+}
+
+.clickable-2 {
+  @apply hover:text-active-2 active:text-active-2/70;
+}
+
+.clickable-error {
+  @apply hover:text-error-1 active:text-error-1/70;
+}
+
+.simple-clickable-1 {
+  @apply simple-clickable-base clickable-1;
+}
+
+.simple-clickable-2 {
+  @apply simple-clickable-base clickable-2;
+}
+
+.simple-clickable-error {
+  @apply simple-clickable-base clickable-error;
+}
+/* ___________________________________________ */
+
+/* Tables Related */
+
+.row-icons-container {
+  @apply flex space-x-2 divide-x divide-active-1/20 justify-end mr-2;
+}
+
+.row-icon {
+  @apply w-4 ml-2 simple-clickable-1;
+}
+
+/* ___________________________________________ */
+
+/* UNCATEGORIZED */
 
 .title {
   @apply text-xl uppercase font-bold mb-4 text-center;
@@ -279,8 +318,8 @@
 }
 
 .tooltip {
-  @apply absolute z-50 text-text-1 text-sm font-light top-full left-1/2 -translate-x-1/2 w-max mt-4
-  bg-theme-2 border border-text-1 px-2 py-1 cursor-default transition origin-top ease-in duration-75;
+  @apply absolute z-50 font-mono text-text-1 text-sm font-light -translate-x-1/2 select-none
+  bg-theme-2 border border-text-1 px-2 py-1 cursor-default transition-all ease-in animate-fadein;
 }
 
 .led {
@@ -291,12 +330,20 @@
   @apply border border-active-1/50;
 }
 
+.led-on {
+  @apply transition-all ease-in duration-150;
+}
+
 .led-on-green {
-  @apply shadow-glow shadow-active-2/30 bg-active-2/70;
+  @apply led-on shadow-glow shadow-active-2/30 bg-active-2/70 active:bg-active-2/50;
 }
 
 .led-on-red {
-  @apply shadow-glow shadow-error-1/30 bg-error-1/70;
+  @apply led-on shadow-glow shadow-error-1/30 bg-error-1/70 active:bg-error-1/50;
+}
+
+.led-on-yellow {
+  @apply led-on shadow-glow shadow-warning-1/30 bg-warning-1/70 active:bg-warning-1/50;
 }
 /* ___________________________________________ */
 

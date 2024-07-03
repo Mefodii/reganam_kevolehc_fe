@@ -1,5 +1,6 @@
 import { WatchingStatus, isWatchingQueue } from '../../api/api-utils';
 import { getToday } from '../../util/datetime';
+import { BaseModel } from '../generic/model';
 import { alias } from './alias';
 import { link } from './link';
 
@@ -24,32 +25,21 @@ declare global {
     type VideoDM = VideoAM & {
       id: number;
     };
-    type VideoCreateProps = {
-      formMode: 'CREATE';
+    type VideoCreateProps = CreateProps & {
       groupId: number;
       defaultOrder: number;
     };
-    type VideoUpdateProps = {
-      formMode: 'UPDATE';
-      video: VideoDM;
-    };
-    type VideoProps = VideoCreateProps | VideoUpdateProps;
-    type VideoModel = Worker<VideoProps, VideoSM, VideoAM, VideoDM> & {
-      addAlias: (aliases: Alias) => Alias;
-      deleteAlias: (aliases: Alias) => Alias;
-      addLink: (links: Alias) => Alias;
-      deleteLink: (links: Alias) => Alias;
-      isInQueue: <T extends VideoSM>(video: T) => boolean;
-      isPremiere: <T extends VideoSM>(video: T) => boolean;
-      isDropped: <T extends VideoSM>(video: T) => boolean;
-      isFinished: <T extends VideoSM>(video: T) => boolean;
-      setFinished: <T extends VideoSM>(video: T, rating: number) => T;
-    };
+    type VideoProps = VideoCreateProps | UpdateProps<VideoDM>;
   }
 }
 
-export const video: Model.VideoModel = {
-  getInitialState(props) {
+class VideoModel extends BaseModel<
+  Model.VideoProps,
+  Model.VideoSM,
+  Model.VideoAM,
+  Model.VideoDM
+> {
+  getInitialState(props: Model.VideoProps): Model.VideoSM {
     if (props?.formMode !== 'CREATE') {
       throw new Error(
         'props required in formMode = "CREATE" for `getInitialState` of the video.'
@@ -71,29 +61,27 @@ export const video: Model.VideoModel = {
       episodes: 1,
       rating: null,
     };
-  },
-  toState(video) {
+  }
+
+  toState(dbState: Model.VideoDM): Model.VideoSM {
     return {
-      id: video.id,
-      name: video.name,
-      comment: video.comment,
-      group: video.group,
-      aliases: alias.toState(video.aliases),
-      links: link.toState(video.links),
-      year: video.year,
-      status: video.status,
-      order: video.order,
-      current_episode: video.current_episode,
-      episodes: video.episodes,
-      rating: video.rating,
-      watched_date: video.watched_date,
+      id: dbState.id,
+      name: dbState.name,
+      comment: dbState.comment,
+      group: dbState.group,
+      aliases: alias.toState(dbState.aliases),
+      links: link.toState(dbState.links),
+      year: dbState.year,
+      status: dbState.status,
+      order: dbState.order,
+      current_episode: dbState.current_episode,
+      episodes: dbState.episodes,
+      rating: dbState.rating,
+      watched_date: dbState.watched_date,
     };
-  },
-  buildState(props) {
-    if (props.formMode === 'UPDATE') return this.toState(props.video);
-    return this.getInitialState(props);
-  },
-  toAPIState(state) {
+  }
+
+  toAPIState(state: Model.VideoSM): Model.VideoSM {
     return {
       id: state.id,
       group: state.group,
@@ -109,44 +97,16 @@ export const video: Model.VideoModel = {
       episodes: state.episodes,
       rating: state.rating,
     };
-  },
-  toDBState(state, dbState) {
+  }
+
+  toDBState(state: Model.VideoSM, dbState: Model.VideoDM): Model.VideoDM {
     return {
+      ...this.toAPIState(state),
       id: dbState.id,
-      group: state.group,
-      name: state.name,
-      comment: state.comment,
-      aliases: alias.toState(state.aliases),
-      links: link.toState(state.links),
-      year: state.year,
-      status: state.status,
-      watched_date: state.watched_date,
-      order: state.order,
-      current_episode: state.current_episode,
-      episodes: state.episodes,
-      rating: state.rating,
     };
-  },
-  getDBState(props) {
-    if (props.formMode === 'UPDATE') return props.video;
-    throw new Error(`getDBState not available for ${props.formMode}`);
-  },
-  validateCreate(state) {
-    let isValid = true;
-    let error: Partial<Model.VideoSM> = {};
+  }
 
-    const apiState = this.toAPIState(state);
-    return [apiState, isValid, error];
-  },
-  validateUpdate(state, dbState) {
-    let isValid = true;
-    let error: Partial<Model.VideoSM> = {};
-
-    const newState = this.toDBState(state, dbState);
-    const equals = isValid && this.equals(newState, dbState);
-    return [newState, equals, isValid, error];
-  },
-  equals(o1, o2) {
+  equals(o1: Model.VideoDM, o2: Model.VideoDM): boolean {
     if (o1?.name !== o2?.name) return false;
     if (o1?.comment !== o2?.comment) return false;
     if (o1?.year !== o2?.year) return false;
@@ -160,16 +120,23 @@ export const video: Model.VideoModel = {
     if (!link.equals(o1.links, o2.links)) return false;
 
     return true;
-  },
-  addAlias: (aliases) => alias.addAlias(aliases),
-  deleteAlias: (aliases) => alias.deleteAlias(aliases),
-  addLink: (links) => link.addLink(links),
-  deleteLink: (links) => link.deleteLink(links),
-  isInQueue: (video) => isWatchingQueue(video.status),
-  isPremiere: (video) => video.status === WatchingStatus.PREMIERE,
-  isDropped: (video) => video.status === WatchingStatus.DROPPED,
-  isFinished: (video) => video.status === WatchingStatus.FINISHED,
-  setFinished(video, rating) {
+  }
+
+  addAlias = (aliases: Model.Alias): Model.Alias => alias.addAlias(aliases);
+
+  deleteAlias = (aliases: Model.Alias): Model.Alias =>
+    alias.deleteAlias(aliases);
+  addLink = (links: Model.Link): Model.Link => link.addLink(links);
+  deleteLink = (links: Model.Link): Model.Link => link.deleteLink(links);
+  isInQueue = <T extends Model.VideoSM>(video: T): boolean =>
+    isWatchingQueue(video.status);
+  isPremiere = <T extends Model.VideoSM>(video: T): boolean =>
+    video.status === WatchingStatus.PREMIERE;
+  isDropped = <T extends Model.VideoSM>(video: T): boolean =>
+    video.status === WatchingStatus.DROPPED;
+  isFinished = <T extends Model.VideoSM>(video: T): boolean =>
+    video.status === WatchingStatus.FINISHED;
+  setFinished<T extends Model.VideoSM>(video: T, rating: number) {
     return {
       ...video,
       status: WatchingStatus.FINISHED,
@@ -177,5 +144,7 @@ export const video: Model.VideoModel = {
       watched_date: getToday(),
       rating,
     };
-  },
-};
+  }
+}
+
+export const video = new VideoModel();

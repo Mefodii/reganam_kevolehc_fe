@@ -2,6 +2,7 @@ import { Suspense, lazy } from 'react';
 import { Route, Routes as ReactRoutes } from 'react-router-dom';
 
 import { FE_URL } from '../util/frontend-urls';
+import { WatchingType } from '../api/api-utils';
 
 const Home = lazy(() => import('../features/home/Home'));
 const GamingDashboard = lazy(
@@ -20,9 +21,9 @@ const AudioDashboard = lazy(
   () => import('../features/listening/layout/Dashboard')
 );
 const HelpersDashboard = lazy(() => import('../features/helpers/Dashboard'));
-const Movies = lazy(() => import('../features/watching/layout/Movies'));
-const Serials = lazy(() => import('../features/watching/layout/Serials'));
-const Anime = lazy(() => import('../features/watching/layout/Anime'));
+const WatchingDashboard = lazy(
+  () => import('../features/watching/layout/Dashboard')
+);
 
 const Routes = () => {
   const renderLoading = () => <div>Loading ... </div>;
@@ -31,9 +32,18 @@ const Routes = () => {
     <Suspense fallback={renderLoading()}>
       <ReactRoutes>
         <Route path='/' element={<Home />} />
-        <Route path={FE_URL.MOVIES} element={<Movies />} />
-        <Route path={FE_URL.SERIALS} element={<Serials />} />
-        <Route path={FE_URL.ANIME} element={<Anime />} />
+        <Route
+          path={FE_URL.MOVIES}
+          element={<WatchingDashboard watchingType={WatchingType.MOVIE} />}
+        />
+        <Route
+          path={FE_URL.SERIALS}
+          element={<WatchingDashboard watchingType={WatchingType.SERIAL} />}
+        />
+        <Route
+          path={FE_URL.ANIME}
+          element={<WatchingDashboard watchingType={WatchingType.ANIME} />}
+        />
         <Route path={FE_URL.GAMING} element={<GamingDashboard />} />
         <Route path={FE_URL.READING} element={<ReadingDashboard />} />
         <Route path={FE_URL.CONTENTING}>

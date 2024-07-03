@@ -39,7 +39,7 @@ const ContentWatcherRow: React.FC<ContentWatcherRowProps> = ({
   const handleOpenContentWatcherModal = () => {
     openModal(
       <ContentWatcherForm
-        formProps={{ formMode: 'UPDATE', contentWatcher, scope: 'LIST' }}
+        formProps={{ formMode: 'UPDATE', item: contentWatcher, scope: 'LIST' }}
         onSuccess={closeModal}
       />
     );
@@ -48,12 +48,14 @@ const ContentWatcherRow: React.FC<ContentWatcherRowProps> = ({
   const renderActions = () => {
     return (
       <div className='flex space-x-2 divide-x divide-active-1/0 group-hover:divide-active-1/20'>
-        <div onClick={handleOpenContentWatcherModal}>
-          <SVGPencil className='w-5 wiggling-clickable' tooltip='Edit' />
-        </div>
-        <div className='pl-2' onClick={() => {}}>
+        <SVGPencil
+          className='w-5 wiggling-clickable-group'
+          tooltip='Edit'
+          onClick={handleOpenContentWatcherModal}
+        />
+        <div className='pl-2'>
           <SVGArrowPath
-            className='w-5 wiggling-clickable'
+            className='w-5 wiggling-clickable-group'
             tooltip='Check for Updates'
           />
         </div>
@@ -62,7 +64,7 @@ const ContentWatcherRow: React.FC<ContentWatcherRowProps> = ({
           to={`${FE_URL.CONTENTING}/content_watcher/${id}`}
         >
           <SVGDocumentText
-            className='w-5 wiggling-clickable'
+            className='w-5 wiggling-clickable-group'
             tooltip='Display Content'
           />
         </NavLink>

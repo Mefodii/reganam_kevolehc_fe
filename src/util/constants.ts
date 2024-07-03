@@ -10,5 +10,6 @@ export enum APIStatus {
 
 export enum DnDTypes {
   CONTENT_ITEM = 'CONTENT_ITEM',
+  CONTENT_MUSIC_ITEM = 'CONTENT_MUSIC_ITEM',
   VIDEO = 'VIDEO',
 }

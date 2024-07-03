@@ -11,33 +11,41 @@ export const name = 'videos';
 export const createVideosActions = (sliceName: string) => {
   const createVideo = createAsyncThunk(
     `${sliceName}/createVideo`,
-    async (video: Model.VideoAM) => {
-      const response = await apiAddVideo(video);
+    async (video: Model.VideoAM, { signal }) => {
+      const response = await apiAddVideo(video, signal);
 
-      const { data } = await apiGetGroup(response.data.group);
+      const { data } = await apiGetGroup(response.data.group, signal);
       return data;
     }
   );
 
   const updateVideo = createAsyncThunk(
     `${sliceName}/updateVideo`,
-    async (video: Model.VideoDM) => {
-      await apiUpdateVideo(video);
+    async (video: Model.VideoDM, { signal }) => {
+      await apiUpdateVideo(video, signal);
 
-      const { data } = await apiGetGroup(video.group);
+      const { data } = await apiGetGroup(video.group, signal);
+      return data;
+    }
+  );
+
+  const updateVideoSimple = createAsyncThunk(
+    `${sliceName}/updateVideoSimple`,
+    async (video: Model.VideoDM, { signal }) => {
+      const { data } = await apiUpdateVideo(video, signal);
       return data;
     }
   );
 
   const deleteVideo = createAsyncThunk(
     `${sliceName}/deleteVideo`,
-    async (video: Model.VideoDM) => {
-      await apiDeleteVideo(video.id);
+    async (video: Model.VideoDM, { signal }) => {
+      await apiDeleteVideo(video.id, signal);
 
-      const { data } = await apiGetGroup(video.group);
+      const { data } = await apiGetGroup(video.group, signal);
       return data;
     }
   );
 
-  return { createVideo, updateVideo, deleteVideo };
+  return { createVideo, updateVideo, updateVideoSimple, deleteVideo };
 };

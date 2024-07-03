@@ -3,6 +3,7 @@ import {
   DropdownSelect,
   Text,
   Checkbox,
+  Date,
 } from '../../../components/form';
 import { Button } from '../../../components/buttons';
 import { SVGCheck, SVGTrash } from '../../../components/svg';
@@ -42,7 +43,7 @@ const ContentItemForm: React.FC<ContentItemFormProps> = ({
       return;
     }
 
-    dispatch(createContentItem(newContentItem)).then(onSuccess);
+    dispatch(createContentItem(newContentItem)).unwrap().then(onSuccess);
   };
 
   const handleUpdate = () => {
@@ -56,11 +57,11 @@ const ContentItemForm: React.FC<ContentItemFormProps> = ({
     }
     if (!isValid || equals) return;
 
-    dispatch(updateContentItem(updatedContentItem)).then(onSuccess);
+    dispatch(updateContentItem(updatedContentItem)).unwrap().then(onSuccess);
   };
 
   const handleDelete = (contentItem: Model.ContentItemDM) => {
-    dispatch(deleteContentItem(contentItem)).then(onSuccess);
+    dispatch(deleteContentItem(contentItem)).unwrap().then(onSuccess);
   };
 
   const {
@@ -113,7 +114,8 @@ const ContentItemForm: React.FC<ContentItemFormProps> = ({
           value={file_name}
           onChange={onFieldChange}
         />
-        <Text
+        <Date
+          datetime
           containerClassName='flex-1'
           label='Published At'
           name='published_at'
@@ -159,7 +161,7 @@ const ContentItemForm: React.FC<ContentItemFormProps> = ({
             </Button>
             <Button
               tooltip='Delete Group'
-              onClick={() => handleDelete(formProps.contentItem)}
+              onClick={() => handleDelete(formProps.item)}
             >
               <SVGTrash className='w-6 transition-all duration-300' />
             </Button>

@@ -7,7 +7,7 @@ type LoadingProps = {
 
 const Loading: React.FC<LoadingProps> = ({ loading }) => {
   if (!loading) return <></>;
-  return <SVGLoading className={`w-5 animate-spin`}></SVGLoading>;
+  return <SVGLoading className='w-5 animate-spin'></SVGLoading>;
 };
 
 export default React.memo(Loading);

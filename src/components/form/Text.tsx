@@ -91,14 +91,16 @@ const Text = React.forwardRef(
             }`}
           >
             {copy && (
-              <div onClick={copyToClipboard}>
-                <SVGClipboardDocEmpty className='w-4 simple-clickable' />
-              </div>
+              <SVGClipboardDocEmpty
+                className='w-4 simple-clickable-1'
+                onClick={copyToClipboard}
+              />
             )}
             {paste && (
-              <div onClick={pasteFromClipboard}>
-                <SVGClipboardDoc className='w-4 simple-clickable' />
-              </div>
+              <SVGClipboardDoc
+                className='w-4 simple-clickable-1'
+                onClick={pasteFromClipboard}
+              />
             )}
           </div>
         </>

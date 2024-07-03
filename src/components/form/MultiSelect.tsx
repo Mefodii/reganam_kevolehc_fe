@@ -67,12 +67,16 @@ const MultiSelect = <T,>({
       <div
         className={`flex flex-col justify-center absolute right-2 h-full top-0 space-y-1`}
       >
-        <div onClick={disabled ? undefined : selectAll}>
-          <SVGCheckCircle className='w-5 simple-clickable' />
-        </div>
-        <div onClick={disabled ? undefined : deselectAll}>
-          <SVGXCircle className='w-5 simple-clickable' />
-        </div>
+        <SVGCheckCircle
+          className='w-5 simple-clickable-1'
+          onClick={selectAll}
+          disabled={disabled}
+        />
+        <SVGXCircle
+          className='w-5 simple-clickable-1'
+          onClick={deselectAll}
+          disabled={disabled}
+        />
       </div>
     );
   };

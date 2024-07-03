@@ -20,8 +20,13 @@ const Dashboard = () => {
   const contentLists = useAppSelector(selectAllContentLists);
 
   useEffect(() => {
-    dispatch(fetchContentWatchers());
-    dispatch(fetchContentLists());
+    const req = dispatch(fetchContentWatchers());
+    const req2 = dispatch(fetchContentLists());
+
+    return () => {
+      req.abort();
+      req2.abort();
+    };
   }, [dispatch]);
 
   return (

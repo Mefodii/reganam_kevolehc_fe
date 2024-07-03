@@ -1,3 +1,5 @@
+import { BaseModel } from '../generic/model';
+
 declare global {
   namespace Model {
     type ContentTrackSM = {
@@ -7,12 +9,9 @@ declare global {
       start_time: number | null;
       duration: number | null;
       comment: string;
-      consumed: boolean;
       needs_edit: boolean;
-      // TODO: (M) - create a Nullable Boolean SIngle Selector
-      like: boolean | null;
-      is_duplicate: boolean;
       is_track: boolean;
+      // TODO: (M) - create a Nullable Boolean SIngle Selector
       // TODO: (L) probably track will be received as full json not just number
       track: number | null;
     };
@@ -21,23 +20,15 @@ declare global {
       id: number;
       content_item: number;
     };
-    type ContentTrackCreateProps = {
-      formMode: 'CREATE';
-    };
-    type ContentTrackUpdateProps = {
-      contentTrack: ContentTrackDM;
-      formMode: 'UPDATE';
-    };
-    type ContentTrackProps = ContentTrackCreateProps | ContentTrackUpdateProps;
-    type ContentTrackModel = Worker<
-      ContentTrackProps,
-      ContentTrackSM,
-      ContentTrackAM,
-      ContentTrackDM
-    > & {
-      mandatoryFields: string[];
-    };
+    type ContentTrackProps = CreateProps | UpdateProps<ContentTrackDM>;
   }
 }
 
-export const contentTrack = {};
+class ContentTrackModel extends BaseModel<
+  Model.ContentTrackProps,
+  Model.ContentTrackSM,
+  Model.ContentTrackAM,
+  Model.ContentTrackDM
+> {}
+
+export const contentTrack = new ContentTrackModel();

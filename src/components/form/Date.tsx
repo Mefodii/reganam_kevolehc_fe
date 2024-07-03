@@ -71,9 +71,10 @@ const Date = React.forwardRef(
               disabled ? 'hidden' : ''
             }`}
           >
-            <div onClick={setNow}>
-              <SVGCalendar className='w-5 simple-clickable'></SVGCalendar>
-            </div>
+            <SVGCalendar
+              className='w-5 simple-clickable-1'
+              onClick={setNow}
+            ></SVGCalendar>
           </div>
         </>
       );

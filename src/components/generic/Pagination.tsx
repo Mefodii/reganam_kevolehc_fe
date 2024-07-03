@@ -30,12 +30,12 @@ const Dots: React.FC = React.memo(() => {
   return <div className='text-[9px] tracking-tighter'>...</div>;
 });
 
-type PaginationProps<T extends QParams.Base> = {
+type PaginationProps<T extends QParams.Page> = {
   pageInfo: PageInfo<T>;
   action: (params: T) => AsyncThunkAction<any, T, AsyncThunkConfig>;
 };
 
-const Pagination = <T extends QParams.Base>({
+const Pagination = <T extends QParams.Page>({
   pageInfo: { page, pages, nextParams, previousParams },
   action,
 }: PaginationProps<T>) => {

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import {
   fetchContentWatcher,
@@ -16,6 +16,7 @@ import {
 import {
   fetchContentMusicItems,
   selectAllContentMusicItems,
+  selectPageInfo as selectMusicPageInfo,
 } from '../contentMusicItems/contentMusicItemsSlice';
 import { contentWatcher as model } from '../../../models';
 import ContentMusicItemTable from '../contentMusicItems/ContentMusicItemsTable';
@@ -31,27 +32,69 @@ const ContentWatcherDashboard = () => {
   const contentItemsPageInfo = useAppSelector(selectPageInfo);
 
   const contentMusicItems = useAppSelector(selectAllContentMusicItems);
+  const contentMusicItemsPageInfo = useAppSelector(selectMusicPageInfo);
 
   useEffect(() => {
     if (!id) return;
-    dispatch(fetchContentWatcher(parseInt(id)));
+    const req = dispatch(fetchContentWatcher(parseInt(id)));
+    return () => {
+      console.log(req);
+      req.abort();
+    };
   }, [dispatch, id]);
 
   useEffect(() => {
     if (!contentWatcher) return;
 
+    let req: any;
+    let req2: any;
     if (model.isMusic(contentWatcher)) {
-      dispatch(fetchContentMusicItems(contentWatcher.content_list));
+      req = dispatch(
+        fetchContentMusicItems({ contentList: contentWatcher.content_list })
+      );
     } else {
-      dispatch(
+      req2 = dispatch(
         fetchContentItems({
           contentList: contentWatcher.content_list,
         })
       );
     }
+
+    return () => {
+      req && req.abort();
+      req2 && req2.abort();
+    };
   }, [dispatch, contentWatcher]);
 
   const isLoading = !contentWatcher;
+
+  const renderContentMusicItemTable = useMemo(() => {
+    if (!contentMusicItemsPageInfo || isLoading) return <LoadingOverlay />;
+
+    return (
+      <ContentMusicItemTable
+        contentList={contentWatcher.content_list}
+        count={contentWatcher.items_count}
+        contentMusicItems={contentMusicItems}
+        source={contentWatcher.source_type}
+        pageInfo={contentMusicItemsPageInfo}
+      />
+    );
+  }, [isLoading, contentMusicItemsPageInfo, contentMusicItems, contentWatcher]);
+
+  const renderContentItemsTable = useMemo(() => {
+    if (!contentItemsPageInfo || isLoading) return <LoadingOverlay />;
+
+    return (
+      <ContentItemsTable
+        contentList={contentWatcher.content_list}
+        count={contentWatcher.items_count}
+        contentItems={contentItems}
+        source={contentWatcher.source_type}
+        pageInfo={contentItemsPageInfo}
+      />
+    );
+  }, [isLoading, contentItemsPageInfo, contentItems, contentWatcher]);
 
   if (isLoading) return <LoadingOverlay />;
 
@@ -60,16 +103,9 @@ const ContentWatcherDashboard = () => {
     <div className='flex flex-1 flex-col items-center mono-font'>
       <div className='flex flex-col rounded-xl shadow-md space-y-5 w-10/12 p-5 my-5 bg-theme-1 border-2 border-theme-3 overflow-hidden'>
         <ContentWatcherDetails contentWatcher={contentWatcher} />
-        {model.isMusic(contentWatcher) ? (
-          <ContentMusicItemTable contentMusicItems={contentMusicItems} />
-        ) : contentItemsPageInfo ? (
-          <ContentItemsTable
-            contentItems={contentItems}
-            pageInfo={contentItemsPageInfo}
-          />
-        ) : (
-          <LoadingOverlay />
-        )}
+        {model.isMusic(contentWatcher)
+          ? renderContentMusicItemTable
+          : renderContentItemsTable}
       </div>
     </div>
   );

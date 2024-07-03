@@ -5,6 +5,7 @@ import {
   isWatchingQueue,
 } from '../../api/api-utils';
 import { getToday } from '../../util/datetime';
+import { BaseModel } from '../generic/model';
 import { alias } from './alias';
 import { link } from './link';
 
@@ -45,36 +46,26 @@ declare global {
       videos: VideoDM[];
     };
     type GroupDM = GroupSingleDM | GroupNotSingleDM;
-    type GroupCreateProps = {
+    type GroupCreateProps = CreateProps & {
       withToggleSingle: boolean;
       watchingType: WatchingType;
       single: boolean;
-      formMode: 'CREATE';
     };
-    type GroupUpdateProps = {
-      group: GroupDM;
+    type GroupUpdateProps = UpdateProps<GroupDM> & {
       watchingType: WatchingType;
       single: boolean;
-      formMode: 'UPDATE';
     };
     type GroupProps = GroupCreateProps | GroupUpdateProps;
-    type GroupModel = Worker<GroupProps, GroupSM, GroupAM, GroupDM> & {
-      toggleSingle: (group: GroupSM) => GroupSM;
-      addAlias: (aliases: Alias) => Alias;
-      deleteAlias: (aliases: Alias) => Alias;
-      addLink: (links: Alias) => Alias;
-      deleteLink: (links: Alias) => Alias;
-      isInQueue: <T extends GroupSingleSM>(group: T) => boolean;
-      isPremiere: <T extends GroupSingleSM>(group: T) => boolean;
-      isDropped: <T extends GroupSingleSM>(group: T) => boolean;
-      isFinished: <T extends GroupSingleSM>(group: T) => boolean;
-      setFinished: <T extends GroupSingleSM>(group: T, rating: number) => T;
-    };
   }
 }
 
-export const group: Model.GroupModel = {
-  getInitialState(props) {
+class GroupModel extends BaseModel<
+  Model.GroupProps,
+  Model.GroupSM,
+  Model.GroupAM,
+  Model.GroupDM
+> {
+  getInitialState(props?: Model.GroupProps): Model.GroupSM {
     if (props?.formMode !== 'CREATE') {
       throw new Error(
         'props required in formMode = "CREATE" for `getInitialState` of the group.'
@@ -106,36 +97,37 @@ export const group: Model.GroupModel = {
         check_date: getToday(),
       };
     }
-  },
-  toState: (group) => {
+  }
+  toState(dbState: Model.GroupDM): Model.GroupSM {
     const baseProps = {
-      id: group.id,
-      name: group.name,
-      type: group.type,
-      aliases: alias.toState(group.aliases),
-      links: link.toState(group.links),
-      single: group.single,
+      id: dbState.id,
+      name: dbState.name,
+      type: dbState.type,
+      aliases: alias.toState(dbState.aliases),
+      links: link.toState(dbState.links),
+      single: dbState.single,
     };
 
-    if (group.single) {
+    if (dbState.single) {
       return {
         ...baseProps,
         single: true,
-        status: group.status,
-        watched_date: group.watched_date,
-        rating: group.rating,
-        year: group.year,
+        status: dbState.status,
+        watched_date: dbState.watched_date,
+        rating: dbState.rating,
+        year: dbState.year,
       };
     } else {
       return {
         ...baseProps,
         single: false,
-        airing_status: group.airing_status,
-        check_date: group.check_date,
+        airing_status: dbState.airing_status,
+        check_date: dbState.check_date,
       };
     }
-  },
-  toggleSingle: (group) => {
+  }
+
+  toggleSingle(group: Model.GroupSM): Model.GroupSM {
     const baseProps = {
       id: group.id,
       name: group.name,
@@ -162,12 +154,9 @@ export const group: Model.GroupModel = {
         year: 0,
       };
     }
-  },
-  buildState(props) {
-    if (props.formMode === 'UPDATE') return this.toState(props.group);
-    return this.getInitialState(props);
-  },
-  toAPIState: (state) => {
+  }
+
+  toAPIState(state: Model.GroupSM): Model.GroupAM {
     const baseProps = {
       id: state.id,
       type: state.type,
@@ -193,8 +182,9 @@ export const group: Model.GroupModel = {
         airing_status: state.airing_status,
       };
     }
-  },
-  toDBState: (state, dbState) => {
+  }
+
+  toDBState(state: Model.GroupSM, dbState: Model.GroupDM): Model.GroupDM {
     const baseProps = {
       id: dbState.id,
       type: state.type,
@@ -226,27 +216,9 @@ export const group: Model.GroupModel = {
     }
 
     throw new Error('Cannot convert states with object of opposite <single>');
-  },
-  getDBState(props) {
-    if (props.formMode === 'UPDATE') return props.group;
-    throw new Error(`getDBState not available for ${props.formMode}`);
-  },
-  validateCreate(state) {
-    let isValid = true;
-    let error: Partial<Model.GroupSM> = {};
+  }
 
-    const apiState = this.toAPIState(state);
-    return [apiState, isValid, error];
-  },
-  validateUpdate(state, dbState) {
-    let isValid = true;
-    let error: Partial<Model.GroupSM> = {};
-
-    const newState = this.toDBState(state, dbState);
-    const equals = isValid && this.equals(newState, dbState);
-    return [newState, equals, isValid, error];
-  },
-  equals(o1, o2) {
+  equals(o1: Model.GroupDM, o2: Model.GroupDM): boolean {
     if (o1?.name !== o2?.name) return false;
     if (o1?.single !== o2?.single) return false;
     if (!alias.equals(o1.aliases, o2.aliases)) return false;
@@ -265,19 +237,29 @@ export const group: Model.GroupModel = {
     }
 
     return true;
-  },
-  addAlias: (aliases) => alias.addAlias(aliases),
-  deleteAlias: (aliases) => alias.deleteAlias(aliases),
-  addLink: (links) => link.addLink(links),
-  deleteLink: (links) => link.deleteLink(links),
-  isInQueue: (group) => isWatchingQueue(group.status),
-  isPremiere: (group) => group.status === WatchingStatus.PREMIERE,
-  isDropped: (group) => group.status === WatchingStatus.DROPPED,
-  isFinished: (group) => group.status === WatchingStatus.FINISHED,
-  setFinished: (group, rating) => ({
-    ...group,
-    status: WatchingStatus.FINISHED,
-    watched_date: getToday(),
-    rating,
-  }),
-};
+  }
+
+  addAlias = (aliases: Model.Alias): Model.Alias => alias.addAlias(aliases);
+  deleteAlias = (aliases: Model.Alias): Model.Alias =>
+    alias.deleteAlias(aliases);
+  addLink = (links: Model.Link): Model.Link => link.addLink(links);
+  deleteLink = (links: Model.Link): Model.Link => link.deleteLink(links);
+  isInQueue = <T extends Model.GroupSingleSM>(group: T): boolean =>
+    isWatchingQueue(group.status);
+  isPremiere = <T extends Model.GroupSingleSM>(group: T): boolean =>
+    group.status === WatchingStatus.PREMIERE;
+  isDropped = <T extends Model.GroupSingleSM>(group: T): boolean =>
+    group.status === WatchingStatus.DROPPED;
+  isFinished = <T extends Model.GroupSingleSM>(group: T): boolean =>
+    group.status === WatchingStatus.FINISHED;
+  setFinished<T extends Model.GroupSingleSM>(group: T, rating: number) {
+    return {
+      ...group,
+      status: WatchingStatus.FINISHED,
+      watched_date: getToday(),
+      rating,
+    };
+  }
+}
+
+export const group = new GroupModel();

@@ -13,6 +13,7 @@ import {
 import { APIStatus } from '../../../util/constants';
 import { name as parentName } from '../constants';
 import { RootState } from '../../../store';
+import { isAbortError } from '../../../util/functions';
 
 export const name = 'contentTracks';
 const sliceName = `${parentName}/${name}`;
@@ -33,32 +34,32 @@ const initialState = contentTracksAdapter.getInitialState(stateFragment);
 
 export const fetchContentTracks = createAsyncThunk(
   `${sliceName}/fetchContentTracks`,
-  async () => {
-    const { data } = await apiGetContentTracks();
+  async (_, { signal }) => {
+    const { data } = await apiGetContentTracks(signal);
     return data;
   }
 );
 
 export const createContentTrack = createAsyncThunk(
   `${sliceName}/createContentTrack`,
-  async (contentTrack: Model.ContentTrackAM) => {
-    const { data } = await apiAddContentTrack(contentTrack);
+  async (contentTrack: Model.ContentTrackAM, { signal }) => {
+    const { data } = await apiAddContentTrack(contentTrack, signal);
     return data;
   }
 );
 
 export const updateContentTrack = createAsyncThunk(
   `${sliceName}/updateContentTrack`,
-  async (contentTrack: Model.ContentTrackDM) => {
-    const { data } = await apiUpdateContentTrack(contentTrack);
+  async (contentTrack: Model.ContentTrackDM, { signal }) => {
+    const { data } = await apiUpdateContentTrack(contentTrack, signal);
     return data;
   }
 );
 
 export const deleteContentTrack = createAsyncThunk(
   `${sliceName}/deleteContentTrack`,
-  async (contentTrack: Model.ContentTrackDM) => {
-    await apiDeleteContentTrack(contentTrack.id);
+  async (contentTrack: Model.ContentTrackDM, { signal }) => {
+    await apiDeleteContentTrack(contentTrack.id, signal);
     return contentTrack;
   }
 );
@@ -103,6 +104,10 @@ const slice = createSlice({
         deleteContentTrack.rejected
       ),
       (state, action) => {
+        if (isAbortError(action)) {
+          state.status = APIStatus.OK;
+          return;
+        }
         state.status = APIStatus.NOT_OK;
         state.error = action.error.message;
       }

@@ -46,7 +46,7 @@ const ContentWatcherForm: React.FC<ContentWatcherFormProps> = ({
       return;
     }
 
-    dispatch(createContentWatcher(newContentWatcher)).then(onSuccess);
+    dispatch(createContentWatcher(newContentWatcher)).unwrap().then(onSuccess);
   };
 
   const handleUpdate = () => {
@@ -65,11 +65,13 @@ const ContentWatcherForm: React.FC<ContentWatcherFormProps> = ({
         contentWatcher: updatedContentWatcher,
         scope: formProps.scope,
       })
-    ).then(onSuccess);
+    )
+      .unwrap()
+      .then(onSuccess);
   };
 
   const handleDelete = (contentWatcher: Model.ContentWatcherDM) => {
-    dispatch(deleteContentWatcher(contentWatcher)).then(onSuccess);
+    dispatch(deleteContentWatcher(contentWatcher)).unwrap().then(onSuccess);
   };
 
   const {
@@ -177,7 +179,7 @@ const ContentWatcherForm: React.FC<ContentWatcherFormProps> = ({
             </Button>
             <Button
               tooltip='Delete Group'
-              onClick={() => handleDelete(formProps.contentWatcher)}
+              onClick={() => handleDelete(formProps.item)}
             >
               <SVGTrash className='w-6 transition-all duration-300' />
             </Button>

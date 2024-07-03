@@ -38,9 +38,14 @@ module.exports = {
           '0%, 100%': { transform: 'rotate(-3deg)' },
           '50%': { transform: 'rotate(3deg)' },
         },
+        fadein: {
+          '0%': { opacity: 0 },
+          '100%': { opacity: 1 },
+        },
       },
       animation: {
         wiggle: 'wiggle 1.5s ease-in-out infinite',
+        fadein: 'fadein .1s ease-in-out',
       },
       spacing: {
         100: '25rem',

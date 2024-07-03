@@ -60,7 +60,7 @@ export const ModalProvider: React.FC<React.PropsWithChildren> = ({
             className='absolute bg-theme-1 rounded-full -right-3 -top-3'
             onClick={close}
           >
-            <SVGXCircle className='w-8 simple-clickable' />
+            <SVGXCircle className='w-8 simple-clickable-1' />
           </div>
           {Content}
         </div>

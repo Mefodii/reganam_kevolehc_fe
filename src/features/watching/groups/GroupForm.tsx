@@ -45,9 +45,11 @@ const GroupForm: React.FC<GroupFormProps> = ({ formProps, onSuccess }) => {
       return;
     }
 
-    dispatch(createGroup(newGroup)).then((res) => {
-      onSuccess(res.payload);
-    });
+    dispatch(createGroup(newGroup))
+      .unwrap()
+      .then((group) => {
+        onSuccess(group);
+      });
   };
 
   const handleUpdate = () => {
@@ -61,11 +63,15 @@ const GroupForm: React.FC<GroupFormProps> = ({ formProps, onSuccess }) => {
     }
     if (!isValid || equals) return;
 
-    dispatch(updateGroup(updatedGroup)).then(() => onSuccess());
+    dispatch(updateGroup(updatedGroup))
+      .unwrap()
+      .then(() => onSuccess());
   };
 
   const handleDelete = (group: Model.GroupDM) => {
-    dispatch(deleteGroup(group)).then(() => onSuccess());
+    dispatch(deleteGroup(group))
+      .unwrap()
+      .then(() => onSuccess());
   };
 
   const renderSingle = ({
@@ -190,7 +196,7 @@ const GroupForm: React.FC<GroupFormProps> = ({ formProps, onSuccess }) => {
               </Button>
               <Button
                 tooltip='Delete Group'
-                onClick={() => handleDelete(formProps.group)}
+                onClick={() => handleDelete(formProps.item)}
               >
                 <SVGTrash className='w-6 transition-all duration-300' />
               </Button>

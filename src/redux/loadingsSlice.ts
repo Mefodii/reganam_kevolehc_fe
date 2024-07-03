@@ -3,6 +3,7 @@ import {
   createVideo,
   deleteVideo,
   updateVideo,
+  updateVideoSimple,
 } from '../features/watching/groups/groupsSlice';
 import { RootState } from '../store';
 
@@ -22,7 +23,12 @@ const slice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addMatcher(
-      isAnyOf(createVideo.pending, updateVideo.pending, deleteVideo.pending),
+      isAnyOf(
+        createVideo.pending,
+        updateVideo.pending,
+        updateVideoSimple.pending,
+        deleteVideo.pending
+      ),
       (state, action) => {
         const { group } = action.meta.arg;
         state.groupIds.push(group);
@@ -32,6 +38,7 @@ const slice = createSlice({
       isAnyOf(
         createVideo.fulfilled,
         updateVideo.fulfilled,
+        updateVideoSimple.fulfilled,
         deleteVideo.fulfilled
       ),
       (state, action) => {

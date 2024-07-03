@@ -32,7 +32,11 @@ const ContentWatcherDetails: React.FC<ContentWatcherDetailsProps> = ({
   const handleOpenContentWatcherModal = () => {
     openModal(
       <ContentWatcherForm
-        formProps={{ formMode: 'UPDATE', contentWatcher, scope: 'DETAILS' }}
+        formProps={{
+          formMode: 'UPDATE',
+          item: contentWatcher,
+          scope: 'DETAILS',
+        }}
         onSuccess={closeModal}
       />
     );
@@ -40,14 +44,14 @@ const ContentWatcherDetails: React.FC<ContentWatcherDetailsProps> = ({
 
   const renderActions = () => {
     return (
-      <div className='flex space-x-2 divide-x divide-active-1/20'>
+      <div className='flex space-x-2 divide-x divide-active-1/0 group-hover:divide-active-1/20'>
         <SVGPencil
-          className='w-5 wiggling-clickable'
+          className='w-5 wiggling-clickable-group'
           tooltip='Edit'
           onClick={handleOpenContentWatcherModal}
         />
         <SVGArrowPath
-          className='ml-2 w-5 wiggling-clickable'
+          className='ml-2 w-5 wiggling-clickable-group'
           tooltip='Check for Updates'
         />
       </div>

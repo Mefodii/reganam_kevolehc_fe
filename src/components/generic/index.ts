@@ -1,4 +1,5 @@
 import ConfirmationModal from './ConfirmationModal';
+import ContextMenu from './ContextMenu';
 import DragDots from './DragDots';
 import ItemPlaceholder from './ItemPlaceholder';
 import LED from './LED';
@@ -7,6 +8,7 @@ import LoadingOverlay from './LoadingOverlay';
 import Pagination from './Pagination';
 import Table from './Table';
 import Tooltip from './Tooltip';
+import TooltipContainer from './TooltipContainer';
 
 export {
   ConfirmationModal,
@@ -18,4 +20,6 @@ export {
   Pagination,
   Table,
   Tooltip,
+  TooltipContainer,
+  ContextMenu,
 };

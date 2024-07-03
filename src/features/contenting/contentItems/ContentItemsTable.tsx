@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import ContentItemRow from './ContentItemRow';
 import { LoadingOverlay, Pagination, Table } from '../../../components/generic';
 import {
@@ -20,6 +20,7 @@ import {
   SVGEye,
   SVGEyeClosed,
   SVGEyeSlash,
+  SVGPlus,
   SVGYoutube,
 } from '../../../components/svg';
 import {
@@ -28,15 +29,23 @@ import {
   saveToClipboard,
 } from '../../../util/functions';
 import { toYTPlaylist } from '../../helpers/transformers/playlistToYoutubePlaylist';
-import { UtilityPanelIcon } from '../../../components/buttons';
+import { UtilityPanelSVG } from '../../../components/buttons';
+import { ContentWatcherSource } from '../../../api/api-utils';
+import ContentItemForm from './ContentItemForm';
 
 type ContentItemsTableProps = {
+  contentList: number;
+  count: number;
   contentItems: Model.ContentItemDM[];
+  source: ContentWatcherSource;
   pageInfo: PageInfo<QParams.ContentItem>;
 };
 
 const ContentItemsTable: React.FC<ContentItemsTableProps> = ({
+  contentList,
+  count,
   contentItems,
+  source,
   pageInfo,
 }) => {
   const hideConsumed: boolean = Boolean(pageInfo.currentParams?.hideConsumed);
@@ -46,7 +55,7 @@ const ContentItemsTable: React.FC<ContentItemsTableProps> = ({
   const [isSelectMode, setIsSelectMode] = useState(false);
   const [selectedIndexes, handleSelect, resetSelection] = useListSelect();
 
-  const { openConfirmationModal } = useModal();
+  const { openModal, closeModal, openConfirmationModal } = useModal();
 
   const handleSetConsumed = (consumed: boolean) => {
     const selectedItems = filterSelectedItems(contentItems, selectedIndexes);
@@ -59,22 +68,41 @@ const ContentItemsTable: React.FC<ContentItemsTableProps> = ({
       ...contentItem,
       consumed,
     }));
-    dispatch(updateContentItems(newItems)).then(
-      () => hideConsumed && resetSelection()
-    );
+    // TODO: (L) - a bug here. when hideConsumed == true and setting consumed all items on a page and on last page,
+    //  then it will refetch the same page which does not exist anymore
+    dispatch(updateContentItems(newItems))
+      .unwrap()
+      .then(() => hideConsumed && resetSelection());
   };
 
   const handleDelete = () => {
     const selectedItems = filterSelectedItems(contentItems, selectedIndexes);
+    if (selectedItems.length === 0) return;
+
     openConfirmationModal({
       title: `Delete ${selectedItems.length} items?`,
       onConfirm: () => {
-        dispatch(deleteContentItems(selectedItems)).then(() =>
-          resetSelection()
-        );
+        dispatch(deleteContentItems(selectedItems))
+          .unwrap()
+          .then(() => resetSelection());
       },
     });
   };
+
+  const handleOpenVideoModal = useCallback(() => {
+    const defaultPosition = contentItems.length > 0 ? count + 1 : 1;
+
+    openModal(
+      <ContentItemForm
+        formProps={{
+          content_list: contentList,
+          defaultPosition,
+          formMode: 'CREATE',
+        }}
+        onSuccess={() => closeModal()}
+      />
+    );
+  }, [openModal, closeModal, contentItems.length, count, contentList]);
 
   const handleCopyAsYTPlaylist = () => {
     const selectedItems = filterSelectedItems(contentItems, selectedIndexes);
@@ -104,33 +132,33 @@ const ContentItemsTable: React.FC<ContentItemsTableProps> = ({
           />
           <div className={`pl-5 ${isSelectMode ? '' : 'opacity-10'}`}>
             <div className={`flex space-x-3`}>
-              <UtilityPanelIcon
-                SVGComponent={SVGEye}
-                isActive={isSelectMode}
-                tooltip={'Set Consumed'}
+              <UtilityPanelSVG
+                SVG={SVGEye}
+                disabled={!isSelectMode}
+                tooltip='Set Consumed'
                 onClick={() => handleSetConsumed(true)}
               />
-              <UtilityPanelIcon
-                SVGComponent={SVGEyeSlash}
-                isActive={isSelectMode}
-                tooltip={'Set Not Consumed'}
+              <UtilityPanelSVG
+                SVG={SVGEyeSlash}
+                disabled={!isSelectMode}
+                tooltip='Set Not Consumed'
                 onClick={() => handleSetConsumed(false)}
               />
-              <UtilityPanelIcon
-                SVGComponent={SVGClipboardDocEmpty}
-                isActive={isSelectMode}
-                tooltip={'Copy items as text'}
+              <UtilityPanelSVG
+                SVG={SVGClipboardDocEmpty}
+                disabled={!isSelectMode}
+                tooltip='Copy items as text'
               />
-              <UtilityPanelIcon
-                SVGComponent={SVGYoutube}
-                isActive={isSelectMode}
-                tooltip={'Copy as YT Playlist'}
+              <UtilityPanelSVG
+                SVG={SVGYoutube}
+                disabled={!isSelectMode}
+                tooltip='Copy as YT Playlist'
                 onClick={handleCopyAsYTPlaylist}
               />
-              <UtilityPanelIcon
-                SVGComponent={SVGCross}
-                isActive={isSelectMode}
-                tooltip={'Delete'}
+              <UtilityPanelSVG
+                SVG={SVGCross}
+                disabled={!isSelectMode}
+                tooltip='Delete'
                 onClick={handleDelete}
               />
             </div>
@@ -140,15 +168,21 @@ const ContentItemsTable: React.FC<ContentItemsTableProps> = ({
         <div className='flex w-1/3'>
           <Pagination pageInfo={pageInfo} action={fetchContentItems} />
         </div>
-        <div className={`flex w-1/3 justify-end`}>
+        <div className={`flex w-1/3 justify-end space-x-3`}>
+          <SVGPlus
+            className={`w-5 simple-clickable-1`}
+            tooltip='Add Item'
+            onClick={handleOpenVideoModal}
+          />
           <div
-            className={`cursor-pointer ${
-              hideConsumed ? 'text-active-2' : 'text-text-1'
+            className={`cursor-pointer  ${
+              hideConsumed ? 'simple-clickable-2' : 'simple-clickable-1'
             }`}
             onClick={() =>
               dispatch(
                 fetchContentItems({
                   ...pageInfo.currentParams,
+                  page: 1,
                   hideConsumed: !hideConsumed,
                 })
               )
@@ -174,6 +208,7 @@ const ContentItemsTable: React.FC<ContentItemsTableProps> = ({
           <ContentItemRow
             key={contentItem.id}
             contentItem={contentItem}
+            source={source}
             selected={selectedIndexes.includes(i)}
             onSelect={(shiftKey: boolean) => handleSelect(i, shiftKey)}
             showSelectBox={isSelectMode}

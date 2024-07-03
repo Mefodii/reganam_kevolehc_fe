@@ -1,20 +1,10 @@
 import React from 'react';
 import SVGContainer from './SVGContainer';
 
-const SVGWarning: React.FC<SVGProps> = ({
-  className,
-  tooltip,
-  tooltipDelay,
-  onClick,
-}) => {
+const SVGWarning: React.FC<SVGProps> = (props) => {
   return (
-    <SVGContainer
-      tooltip={tooltip}
-      tooltipDelay={tooltipDelay}
-      onClick={onClick}
-    >
+    <SVGContainer {...props}>
       <svg
-        className={className}
         xmlns='http://www.w3.org/2000/svg'
         fill='none'
         viewBox='0 0 24 24'

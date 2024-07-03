@@ -25,6 +25,7 @@ const Content = () => {
             </div>
           </DnDProvider>
         </ModalProvider>
+        <div id='portal-root'></div>
       </div>
     </Router>
   );

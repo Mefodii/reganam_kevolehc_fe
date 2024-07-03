@@ -1,24 +1,24 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 type TooltipProps = {
-  text: string;
-  hidden?: boolean;
-  className?: string;
+  tooltip: string;
+  position: DOMRect;
 };
 
-const Tooltip: React.FC<TooltipProps> = ({
-  text,
-  hidden = true,
-  className = '',
-}) => {
-  if (!text) return <></>;
-  // TODO: (L) maybe have tooltip as root child (similar to spotify)
-
-  return (
-    <div className={`tooltip ${hidden ? 'scale-0' : 'scale-100'} ${className}`}>
-      {text}
-    </div>
+const Tooltip: React.FC<TooltipProps> = ({ tooltip, position }) => {
+  return ReactDOM.createPortal(
+    <div
+      className='tooltip'
+      style={{
+        top: position.top + position.height + 10 + 'px',
+        left: position.left + position.width / 2 + 'px',
+      }}
+    >
+      {tooltip}
+    </div>,
+    document.getElementById('portal-root')!
   );
 };
 
-export default React.memo(Tooltip);
+export default Tooltip;

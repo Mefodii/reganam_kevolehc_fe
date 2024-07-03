@@ -52,17 +52,21 @@ const Poster: React.FC<PosterProps> = ({ disabled, groupId, images }) => {
     const poster = images[0];
     // Update poster
     if (poster) {
-      dispatch(updatePoster({ poster, image })).then(() => {
-        setLoading(false);
-      });
+      dispatch(updatePoster({ poster, image }))
+        .unwrap()
+        .then(() => {
+          setLoading(false);
+        });
       return;
     }
 
     // Add poster
     if (!poster) {
-      dispatch(createPoster({ image, group: groupId })).then(() => {
-        setLoading(false);
-      });
+      dispatch(createPoster({ image, group: groupId }))
+        .unwrap()
+        .then(() => {
+          setLoading(false);
+        });
       return;
     }
   };

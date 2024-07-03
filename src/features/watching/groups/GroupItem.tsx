@@ -26,16 +26,16 @@ type GroupItemProps = {
   group: Model.GroupDM;
   showPoster: boolean;
   hide?: boolean;
-  onViewportIn?: () => void;
-  onViewportOut?: () => void;
+  onViewportIn: (group: Model.GroupDM) => void;
+  onViewportOut: (group: Model.GroupDM) => void;
 };
 
 const GroupItem: React.FC<GroupItemProps> = ({
   group,
   showPoster,
   hide = false,
-  onViewportIn = () => {},
-  onViewportOut = () => {},
+  onViewportIn,
+  onViewportOut,
 }) => {
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector((state) => isGroupLoading(state, group.id));
@@ -48,9 +48,9 @@ const GroupItem: React.FC<GroupItemProps> = ({
   useEffect(() => {
     if (isIntersectingPrev === undefined) return;
 
-    if (isIntersecting && !isIntersectingPrev) onViewportIn();
-    if (!isIntersecting && isIntersectingPrev) onViewportOut();
-  }, [isIntersecting, isIntersectingPrev, onViewportOut, onViewportIn]);
+    if (isIntersecting && !isIntersectingPrev) onViewportIn(group);
+    if (!isIntersecting && isIntersectingPrev) onViewportOut(group);
+  }, [isIntersecting, isIntersectingPrev, onViewportOut, onViewportIn, group]);
 
   const handleOpenEdit = useCallback(
     (group: Model.GroupDM) => {
@@ -59,7 +59,7 @@ const GroupItem: React.FC<GroupItemProps> = ({
           formProps={{
             watchingType: group.type,
             single: group.single,
-            group,
+            item: group,
             formMode: 'UPDATE',
           }}
           onSuccess={closeModal}
@@ -89,6 +89,7 @@ const GroupItem: React.FC<GroupItemProps> = ({
     },
     [openModal, closeModal]
   );
+
   const handleSetFinised = useCallback(
     (group: Model.GroupSingleDM) => {
       const rating = promptNumber('Set group rating');
@@ -167,18 +168,21 @@ const GroupItem: React.FC<GroupItemProps> = ({
           )}
         </div>
         <div>
-          <div onClick={() => handleOpenEdit(group)}>
-            <SVGPencil className='w-6 wiggling-clickable' />
-          </div>
+          <SVGPencil
+            className='w-6 wiggling-clickable-group'
+            onClick={() => handleOpenEdit(group)}
+          />
           {single && !groupModel.isFinished(group) && (
-            <div onClick={() => handleSetFinised(group)}>
-              <SVGCheck className='w-6 wiggling-clickable' />
-            </div>
+            <SVGCheck
+              className='w-6 wiggling-clickable-group'
+              onClick={() => handleSetFinised(group)}
+            />
           )}
           {!single && (
-            <div onClick={() => handleOpenVideoModal(group)}>
-              <SVGPlus className='w-6 wiggling-clickable' />
-            </div>
+            <SVGPlus
+              className='w-6 wiggling-clickable-group'
+              onClick={() => handleOpenVideoModal(group)}
+            />
           )}
         </div>
       </Table.THead>

@@ -13,7 +13,7 @@ import {
 } from '../../../api/api';
 import { APIStatus } from '../../../util/constants';
 import { name as parentName } from '../constants';
-import { compareByKey } from '../../../util/functions';
+import { compareByKey, isAbortError } from '../../../util/functions';
 import { createPostersSlice } from '../posters/postersSlice';
 import { createVideosActions } from '../videos/videosSlice';
 import { RootState } from '../../../store';
@@ -38,41 +38,37 @@ const initialState = groupsAdapter.getInitialState(stateFragment);
 
 export const fetchGroups = createAsyncThunk(
   `${sliceName}/fetchGroups`,
-  async (watchingType: string) => {
-    const response = await apiGetGroups(watchingType);
-    return { groups: response.data, watchingType };
+  async (watchingType: string, { signal }) => {
+    const response = await apiGetGroups(watchingType, signal);
+    return response.data;
   }
 );
 
-export const createGroup = createAsyncThunk<
-  Model.GroupDM,
-  Model.GroupAM,
-  {
-    rejectValue: Model.GroupDM;
+export const createGroup = createAsyncThunk(
+  `${sliceName}/createGroup`,
+  async (group: Model.GroupAM, { signal }) => {
+    const response = await apiAddGroup(group, signal);
+    return response.data;
   }
->(`${sliceName}/createGroup`, async (group) => {
-  const response = await apiAddGroup(group);
-  return response.data;
-  // TODO : reject value? https://stackoverflow.com/questions/67227015/how-to-use-createasyncthunk-with-typescript-how-to-set-types-for-the-pending
-});
+);
 
 export const updateGroup = createAsyncThunk(
   `${sliceName}/updateGroup`,
-  async (group: Model.GroupDM) => {
-    const response = await apiUpdateGroup(group);
+  async (group: Model.GroupDM, { signal }) => {
+    const response = await apiUpdateGroup(group, signal);
     return response.data;
   }
 );
 
 export const deleteGroup = createAsyncThunk(
   `${sliceName}/deleteGroup`,
-  async (group: Model.GroupDM) => {
-    await apiDeleteGroup(group.id);
+  async (group: Model.GroupDM, { signal }) => {
+    await apiDeleteGroup(group.id, signal);
     return group;
   }
 );
 
-export const { createVideo, updateVideo, deleteVideo } =
+export const { createVideo, updateVideo, updateVideoSimple, deleteVideo } =
   createVideosActions(sliceName);
 
 const { extraActions: postersExtraActions, reducer: postersReducer } =
@@ -87,14 +83,8 @@ const slice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchGroups.fulfilled, (state, action) => {
       state.status = APIStatus.OK;
-      const { groups, watchingType } = action.payload;
-      const ids = groupsAdapter
-        .getSelectors()
-        .selectAll(state)
-        .filter((group) => group.type === watchingType)
-        .map((group) => group.id);
-      groupsAdapter.removeMany(state, ids);
-      groupsAdapter.upsertMany(state, groups);
+      groupsAdapter.removeAll(state);
+      groupsAdapter.upsertMany(state, action.payload);
     });
     builder.addCase(createGroup.fulfilled, (state, action) => {
       state.status = APIStatus.OK;
@@ -104,6 +94,17 @@ const slice = createSlice({
       state.status = APIStatus.OK;
       groupsAdapter.removeOne(state, action.payload.id);
     });
+    builder.addCase(updateVideoSimple.fulfilled, (state, action) => {
+      state.status = APIStatus.OK;
+      const group = state.entities[action.payload.group];
+      if (group.single) {
+        return;
+      }
+
+      const i = group.videos.findIndex((v) => v.id === action.payload.id);
+      group.videos[i] = action.payload;
+      groupsAdapter.setOne(state, group);
+    });
     builder.addMatcher(
       isAnyOf(
         fetchGroups.pending,
@@ -112,6 +113,7 @@ const slice = createSlice({
         deleteGroup.pending,
         createVideo.pending,
         updateVideo.pending,
+        updateVideoSimple.pending,
         deleteVideo.pending,
         createPoster.pending,
         updatePoster.pending,
@@ -129,12 +131,17 @@ const slice = createSlice({
         deleteGroup.rejected,
         createVideo.rejected,
         updateVideo.rejected,
+        updateVideoSimple.rejected,
         deleteVideo.rejected,
         createPoster.rejected,
         updatePoster.rejected,
         deletePoster.rejected
       ),
       (state, action) => {
+        if (isAbortError(action)) {
+          state.status = APIStatus.OK;
+          return;
+        }
         state.status = APIStatus.NOT_OK;
         state.error = action.error.message;
       }
@@ -161,7 +168,7 @@ const slice = createSlice({
         state.status = APIStatus.OK;
         let group = groupsAdapter
           .getSelectors()
-          .selectById(state, action.payload.groupId);
+          .selectById(state, action.payload.group);
 
         group = { ...group, images: postersReducer(group.images, action) };
         groupsAdapter.setOne(state, group);

@@ -14,8 +14,8 @@ import {
 } from '../../../api/api';
 import { APIStatus } from '../../../util/constants';
 import { name as parentName } from '../constants';
-import { RootState } from '../../../store';
-import { compareByKey } from '../../../util/functions';
+import { AppThunkApiConfig, RootState } from '../../../store';
+import { compareByKey, isAbortError } from '../../../util/functions';
 
 export const name = 'contentItems';
 const sliceName = `${parentName}/${name}`;
@@ -38,73 +38,88 @@ const stateFragment: {
 const initialState = contentItemsAdapter.getInitialState(stateFragment);
 
 export const fetchContentItems = createAsyncThunk<
-  AxiosPageResult<Model.ContentItemDM, QParams.ContentItem>,
-  QParams.ContentItem,
-  { state: RootState }
->(`${sliceName}/fetchContentItems`, async (params) => {
-  const { data } = await apiGetContentItems(params);
+  Axios.PagedResult<Model.ContentItemDM, QParams.ContentItem>,
+  QParams.ContentItem
+>(`${sliceName}/fetchContentItems`, async (params, { signal }) => {
+  const { data } = await apiGetContentItems(params, signal);
   return data;
 });
 
 export const refetchContentItems = createAsyncThunk<
-  AxiosPageResult<Model.ContentItemDM, QParams.ContentItem>,
+  Axios.PagedResult<Model.ContentItemDM, QParams.ContentItem>,
   void,
-  { state: RootState }
->(`${sliceName}/refetchContentItems`, async (_, { getState }) => {
+  AppThunkApiConfig
+>(`${sliceName}/refetchContentItems`, async (_, { getState, signal }) => {
   const params = selectCurrentParams(getState());
   if (!params) {
     throw new Error(`params missing on refetchContentItems`);
   }
-  const { data } = await apiGetContentItems(params);
+  const { data } = await apiGetContentItems(params, signal);
   return data;
 });
 
 export const createContentItem = createAsyncThunk<
   void,
   Model.ContentItemAM,
-  { state: RootState }
->(`${sliceName}/createContentItem`, async (contentItem, { dispatch }) => {
-  await apiAddContentItem(contentItem);
-  dispatch(refetchContentItems());
-});
+  AppThunkApiConfig
+>(
+  `${sliceName}/createContentItem`,
+  async (contentItem, { dispatch, signal }) => {
+    await apiAddContentItem(contentItem, signal);
+    dispatch(refetchContentItems());
+  }
+);
 
 export const updateContentItem = createAsyncThunk<
   void,
   Model.ContentItemDM,
-  { state: RootState }
->(`${sliceName}/updateContentItem`, async (contentItem, { dispatch }) => {
-  await apiUpdateContentItem(contentItem);
-  dispatch(refetchContentItems());
-});
+  AppThunkApiConfig
+>(
+  `${sliceName}/updateContentItem`,
+  async (contentItem, { dispatch, signal }) => {
+    await apiUpdateContentItem(contentItem, signal);
+    dispatch(refetchContentItems());
+  }
+);
 
 export const updateContentItems = createAsyncThunk<
   void,
   Model.ContentItemDM[],
-  { state: RootState }
->(`${sliceName}/updateContentItems`, async (contentItems, { dispatch }) => {
-  await apiUpdateContentItems(contentItems);
-  dispatch(refetchContentItems());
-});
+  AppThunkApiConfig
+>(
+  `${sliceName}/updateContentItems`,
+  async (contentItems, { dispatch, signal }) => {
+    await apiUpdateContentItems(contentItems, signal);
+    dispatch(refetchContentItems());
+  }
+);
 
 export const deleteContentItem = createAsyncThunk<
   void,
   Model.ContentItemDM,
-  { state: RootState }
->(`${sliceName}/deleteContentItem`, async (contentItem, { dispatch }) => {
-  await apiDeleteContentItem(contentItem.id);
-  dispatch(refetchContentItems());
-});
+  AppThunkApiConfig
+>(
+  `${sliceName}/deleteContentItem`,
+  async (contentItem, { dispatch, signal }) => {
+    await apiDeleteContentItem(contentItem.id, signal);
+    dispatch(refetchContentItems());
+  }
+);
 
 export const deleteContentItems = createAsyncThunk<
   void,
   Model.ContentItemDM[],
-  { state: RootState }
->(`${sliceName}/deleteContentItems`, async (contentItems, { dispatch }) => {
-  await apiDeleteContentItems(
-    contentItems.map((contentItem) => contentItem.id)
-  );
-  dispatch(refetchContentItems());
-});
+  AppThunkApiConfig
+>(
+  `${sliceName}/deleteContentItems`,
+  async (contentItems, { dispatch, signal }) => {
+    await apiDeleteContentItems(
+      contentItems.map((contentItem) => contentItem.id),
+      signal
+    );
+    dispatch(refetchContentItems());
+  }
+);
 
 const slice = createSlice({
   name: sliceName,
@@ -151,6 +166,10 @@ const slice = createSlice({
         deleteContentItems.rejected
       ),
       (state, action) => {
+        if (isAbortError(action)) {
+          state.status = APIStatus.OK;
+          return;
+        }
         state.status = APIStatus.NOT_OK;
         state.error = action.error.message;
       }

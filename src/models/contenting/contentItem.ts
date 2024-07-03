@@ -1,5 +1,5 @@
 import { DownloadStatus } from '../../api/api-utils';
-import { validateMandatoryFields } from '../../util/functions';
+import { BaseModel } from '../generic/model';
 
 declare global {
   namespace Model {
@@ -12,6 +12,7 @@ declare global {
       position: number;
       download_status: DownloadStatus;
       published_at: string;
+      content_list: number;
     };
     type ContentItemSM = ContentItemBase & {
       consumed: boolean;
@@ -19,102 +20,90 @@ declare global {
     type ContentItemAM = ContentItemSM;
     type ContentItemDM = ContentItemAM & {
       id: number;
+    };
+    type ContentItemCreateProps = CreateProps & {
       content_list: number;
+      defaultPosition: number;
     };
-    type ContentItemCreateProps = {
-      formMode: 'CREATE';
-    };
-    type ContentItemUpdateProps = {
-      contentItem: ContentItemDM;
-      formMode: 'UPDATE';
-    };
-    type ContentItemProps = ContentItemCreateProps | ContentItemUpdateProps;
-    type ContentItemModel = Worker<
-      ContentItemProps,
-      ContentItemSM,
-      ContentItemAM,
-      ContentItemDM
-    > & {
-      mandatoryFields: string[];
-    };
+    type ContentItemProps = ContentItemCreateProps | UpdateProps<ContentItemDM>;
   }
 }
 
-export const contentItem: Model.ContentItemModel = {
-  mandatoryFields: [],
-  getInitialState: () => ({
-    id: undefined,
-    item_id: '',
-    url: '',
-    title: '',
-    file_name: '',
-    position: 0,
-    download_status: DownloadStatus.NONE,
-    published_at: '',
-    consumed: false,
-  }),
-  toState: (contentWatcher) => {
+class ContentItemModel extends BaseModel<
+  Model.ContentItemProps,
+  Model.ContentItemSM,
+  Model.ContentItemAM,
+  Model.ContentItemDM
+> {
+  mandatoryFields: (keyof Model.ContentItemSM)[] = ['title'];
+
+  getInitialState(props: Model.ContentItemProps): Model.ContentItemSM {
+    if (props?.formMode !== 'CREATE') {
+      throw new Error(
+        'props required in formMode = "CREATE" for `getInitialState` of the video.'
+      );
+    }
+
     return {
-      id: contentWatcher.id,
-      item_id: contentWatcher.item_id,
-      url: contentWatcher.url,
-      title: contentWatcher.title,
-      file_name: contentWatcher.file_name,
-      position: contentWatcher.position,
-      download_status: contentWatcher.download_status,
-      published_at: contentWatcher.published_at,
-      consumed: contentWatcher.consumed,
+      id: undefined,
+      item_id: '',
+      url: '',
+      title: '',
+      file_name: '',
+      position: props.defaultPosition,
+      download_status: DownloadStatus.NONE,
+      published_at: '',
+      consumed: false,
+      content_list: props.content_list,
     };
-  },
-  buildState(props) {
-    if (props.formMode === 'UPDATE') return this.toState(props.contentItem);
-    return this.getInitialState(props);
-  },
-  toAPIState: (state) => ({
-    id: state.id,
-    item_id: state.item_id,
-    url: state.url,
-    title: state.title,
-    file_name: state.file_name,
-    position: state.position,
-    download_status: state.download_status,
-    published_at: state.published_at,
-    consumed: state.consumed,
-  }),
-  toDBState: (state, dbState) => ({
-    id: dbState.id,
-    item_id: state.item_id,
-    url: state.url,
-    title: state.title,
-    file_name: state.file_name,
-    position: state.position,
-    download_status: state.download_status,
-    published_at: state.published_at,
-    consumed: state.consumed,
-    content_list: dbState.content_list,
-  }),
-  getDBState: (props) => {
-    if (props.formMode === 'UPDATE') return props.contentItem;
+  }
+
+  toState(dbState: Model.ContentItemDM): Model.ContentItemSM {
+    return {
+      id: dbState.id,
+      item_id: dbState.item_id,
+      url: dbState.url,
+      title: dbState.title,
+      file_name: dbState.file_name,
+      position: dbState.position,
+      download_status: dbState.download_status,
+      published_at: dbState.published_at,
+      consumed: dbState.consumed,
+      content_list: dbState.content_list,
+    };
+  }
+
+  toAPIState(state: Model.ContentItemSM): Model.ContentItemAM {
+    return {
+      id: state.id,
+      item_id: state.item_id,
+      url: state.url,
+      title: state.title,
+      file_name: state.file_name,
+      position: state.position,
+      download_status: state.download_status,
+      published_at: state.published_at,
+      consumed: state.consumed,
+      content_list: state.content_list,
+    };
+  }
+
+  toDBState(
+    state: Model.ContentItemSM,
+    dbState: Model.ContentItemDM
+  ): Model.ContentItemDM {
+    return {
+      ...this.toAPIState(state),
+      id: dbState.id,
+    };
+  }
+
+  getDBState(props: Model.ContentItemProps): Model.ContentItemDM {
+    if (props.formMode === 'UPDATE') return props.item;
     throw new Error(`getDBState not available for ${props.formMode}`);
-  },
-  validateCreate(state) {
-    let isValid = true;
-    let error: Partial<Model.ContentWatcherSM> = {};
-    [isValid, error] = validateMandatoryFields(state, this.mandatoryFields);
+  }
 
-    const apiState = this.toAPIState(state);
-    return [apiState, isValid, error];
-  },
-  validateUpdate(state, dbState) {
-    let isValid = true;
-    let error: Partial<Model.ContentWatcherSM> = {};
-    [isValid, error] = validateMandatoryFields(state, this.mandatoryFields);
-
-    const newState = this.toDBState(state, dbState);
-    const equals = isValid && this.equals(newState, dbState);
-    return [newState, equals, isValid, error];
-  },
-  equals(o1, o2) {
+  equals(o1: Model.ContentItemDM, o2: Model.ContentItemDM): boolean {
     if (o1?.item_id !== o2?.item_id) return false;
     if (o1?.url !== o2?.url) return false;
     if (o1?.title !== o2?.title) return false;
@@ -126,5 +115,7 @@ export const contentItem: Model.ContentItemModel = {
     if (o1?.content_list !== o2?.content_list) return false;
 
     return true;
-  },
-};
+  }
+}
+
+export const contentItem = new ContentItemModel();

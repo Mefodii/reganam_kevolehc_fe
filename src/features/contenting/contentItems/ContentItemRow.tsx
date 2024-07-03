@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { toLocalDatetime } from '../../../util/datetime';
 import {
   SVGBox,
@@ -8,6 +8,7 @@ import {
   SVGFingerprint,
   SVGLink,
   SVGPencil,
+  SVGYoutube,
 } from '../../../components/svg';
 import { useAppDispatch, useDnD, useModal } from '../../../hooks';
 import {
@@ -24,30 +25,36 @@ import {
 import { Text } from '../../../components/form';
 import ContentItemForm from './ContentItemForm';
 import { DnDTypes } from '../../../util/constants';
+import { ContentWatcherSource } from '../../../api/api-utils';
+import YouTubePlayer from '../../../components/generic/YouTubePlayer';
 
 type ContentItemRowProps = {
   contentItem: Model.ContentItemDM;
+  source: ContentWatcherSource;
   selected?: boolean;
   onSelect?: (shiftKey: boolean) => void;
   showSelectBox?: boolean;
 };
 
-// TODO: (H) check if it is possible to embed youtube player
 const ContentItemRow: React.FC<ContentItemRowProps> = ({
   contentItem,
+  source,
   selected = false,
   showSelectBox = false,
-  onSelect = () => {},
+  onSelect,
 }) => {
   const titleRef = useRef<HTMLInputElement>(null);
   const { openModal, openConfirmationModal, closeModal } = useModal();
 
   // TODO: (H) probably can be extract in a custom hook (isEditTitle field, error and related functions from below)
+  // TODO: (M) - in theory there is no need to update manually title if displaying from ContentWatcher
   const [isEditTitle, setIsEditTitle] = useState(false);
   const [isTitleError, setIsTitleError] = useState(false);
 
   const [isMouseOver, setIsMouseOver] = useState(false);
   const [titleForm, setTitleForm] = useState(contentItem.title);
+
+  const [showPlayer, setShowPlayer] = useState(false);
 
   const [insertBefore, setInsertBefore] = useState(false);
   const [draggable, setDraggable] = useState(false);
@@ -89,6 +96,8 @@ const ContentItemRow: React.FC<ContentItemRowProps> = ({
   const { title, position, published_at, consumed, url, item_id } = contentItem;
 
   const handleToggleConsumed = () => {
+    // TODO: (L) - a bug here. when hideConsumed == true and it is last item on the last page,
+    //  then it will refetch the same page which does not exist anymore
     dispatch(updateContentItem({ ...contentItem, consumed: !consumed }));
   };
 
@@ -124,7 +133,7 @@ const ContentItemRow: React.FC<ContentItemRowProps> = ({
   const handleOpenContentItemModal = () => {
     openModal(
       <ContentItemForm
-        formProps={{ formMode: 'UPDATE', contentItem }}
+        formProps={{ formMode: 'UPDATE', item: contentItem }}
         onSuccess={closeModal}
       />
     );
@@ -146,8 +155,16 @@ const ContentItemRow: React.FC<ContentItemRowProps> = ({
   const renderIcons = () => {
     if (showSelectBox) return;
 
+    // TODO: (L) - for SVGs add a prop "crossed" which will display a cross over it
     return (
       <div className='row-icons-container'>
+        {source === ContentWatcherSource.YOUTUBE && (
+          <SVGYoutube
+            className='row-icon'
+            tooltip='Open Player'
+            onClick={() => setShowPlayer(!showPlayer)}
+          />
+        )}
         {url && (
           <a href={url} target='_blank' rel='noreferrer'>
             <SVGLink className='row-icon' tooltip={url} />
@@ -159,12 +176,12 @@ const ContentItemRow: React.FC<ContentItemRowProps> = ({
         />
         <SVGFingerprint className='row-icon' tooltip={item_id} />
         <SVGPencil
-          className='row-icon cursor-pointer'
+          className='row-icon'
           tooltip='Edit'
           onClick={handleOpenContentItemModal}
         />
         <SVGCross
-          className='row-icon cursor-pointer hover:text-error-1'
+          className='row-icon hover:text-error-1'
           tooltip='Delete'
           onClick={handleDeleteContentItem}
         />
@@ -202,7 +219,12 @@ const ContentItemRow: React.FC<ContentItemRowProps> = ({
     );
   };
 
-  // TODO: (M) - Context menu: https://blog.logrocket.com/creating-react-context-menu/
+  const renderPlayer = useMemo(() => {
+    return (
+      <YouTubePlayer title={contentItem.title} videoId={contentItem.item_id} />
+    );
+  }, [contentItem.title, contentItem.item_id]);
+
   return (
     <div
       className={`flex ${insertBefore ? 'flex-col' : 'flex-col-reverse'} ${
@@ -212,46 +234,51 @@ const ContentItemRow: React.FC<ContentItemRowProps> = ({
       {...dndEvents}
     >
       <ItemPlaceholder show={isDragOver} className='h-12 p-2 bg-active-1/5' />
-      <Table.TRow
-        className={`${isDragged && 'border border-active-1/50'} ${
-          isDragged && isCopying && 'brightness-125'
-        } ${isDragged && !isCopying && 'opacity-30'}`}
-        onMouseEnter={() => setIsMouseOver(true)}
-        onMouseLeave={() => setIsMouseOver(false)}
-      >
-        {showSelectBox && selected && (
-          <SVGBoxChecked
-            className='w-4 mr-4 text-active-1/80'
-            onClick={(e) => onSelect(e.shiftKey)}
-          />
-        )}
-        {showSelectBox && !selected && (
-          <SVGBox
-            className='w-4 mr-4 text-active-1/80'
-            onClick={(e) => onSelect(e.shiftKey)}
-          />
-        )}
-        {!showSelectBox && (
-          <DragDots
-            show={isMouseOver}
-            onMouseEnter={() => setDraggable(true)}
-            onMouseLeave={() => setDraggable(false)}
-          />
-        )}
-        <div className={`w-10 cursor-pointer`} onClick={handleToggleConsumed}>
-          <LED on={true} color={consumed ? 'Green' : 'Red'} />
-        </div>
-        {/* TODO: (M) - a custom compomnent which can be in edit or view mode */}
-        {renderTitleEdit()}
-        <div
-          className={`flex-1 ${
-            isMouseOver || isEditTitle ? 'opacity-100' : 'opacity-0'
-          }`}
+      <div className='flex flex-col'>
+        <Table.TRow
+          className={`group ${isDragged && 'border border-active-1/50'} ${
+            isDragged && isCopying && 'brightness-125'
+          } ${isDragged && !isCopying && 'opacity-30'}`}
+          onMouseEnter={() => setIsMouseOver(true)}
+          onMouseLeave={() => setIsMouseOver(false)}
         >
-          {renderIcons()}
-        </div>
-        <div className='w-12 text-lg text-text-1/10 text-right'>{position}</div>
-      </Table.TRow>
+          {showSelectBox && onSelect && selected && (
+            <SVGBoxChecked
+              className='w-4 mr-4 text-active-1/80'
+              onClick={(e) => onSelect(e.shiftKey)}
+            />
+          )}
+          {showSelectBox && onSelect && !selected && (
+            <SVGBox
+              className='w-4 mr-4 text-active-1/80'
+              onClick={(e) => onSelect(e.shiftKey)}
+            />
+          )}
+          {!showSelectBox && (
+            <DragDots
+              show={isMouseOver}
+              onMouseEnter={() => setDraggable(true)}
+              onMouseLeave={() => setDraggable(false)}
+            />
+          )}
+          <div className={`w-10 cursor-pointer`} onClick={handleToggleConsumed}>
+            <LED on={true} color={consumed ? 'Green' : 'Red'} />
+          </div>
+          {/* TODO: (M) - a custom compomnent which can be in edit or view mode */}
+          {renderTitleEdit()}
+          <div
+            className={`flex-1 ${
+              isMouseOver || isEditTitle ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            {renderIcons()}
+          </div>
+          <div className='w-12 text-lg text-text-1/10 group-hover:text-text-1/70 text-right'>
+            {position}
+          </div>
+        </Table.TRow>
+        <div className='w-10/12 mx-auto'>{showPlayer && renderPlayer}</div>
+      </div>
     </div>
   );
 };

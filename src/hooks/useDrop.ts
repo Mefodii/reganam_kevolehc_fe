@@ -53,7 +53,6 @@ export type UseDropProps<E extends HTMLElement, T> = {
   accepted?: Accepted;
   dataTransfer?: boolean;
   extraValidation?: ExtraValidation<E, T>; // NOTE: Validation applied to all drag/drop events
-  // TODO: (L) - Not needed yet: onDragOver?: (e: React.DragEvent<E>, item: T, copy: boolean) => void;
   onDragEnter?: (e: React.DragEvent<E>, item: T, copy: boolean) => void;
   onDragLeave?: (e: React.DragEvent<E>, item: T, copy: boolean) => void;
   onDrop?: (e: React.DragEvent<E>, item: T, copy: boolean) => void;
@@ -77,9 +76,9 @@ export const useDrop = <E extends HTMLElement, T = unknown>({
   accepted,
   dataTransfer = false,
   extraValidation,
-  onDragEnter = () => {},
-  onDragLeave = () => {},
-  onDrop = () => {},
+  onDragEnter,
+  onDragLeave,
+  onDrop,
 }: UseDropProps<E, T>): UseDropReturn<E> => {
   const { data, getItem } = useContext<DnDProps<T, E>>(DnDContext);
   const [, setDragCounter] = useState(0);
@@ -90,7 +89,7 @@ export const useDrop = <E extends HTMLElement, T = unknown>({
       if (!isValid({ e, data, accepted, extraValidation, dataTransfer }))
         return;
 
-      onDragEnter(e, getItem(e, dataTransfer), data.copy);
+      onDragEnter && onDragEnter(e, getItem(e, dataTransfer), data.copy);
       setIsDragOver(true);
     },
     [onDragEnter, extraValidation, getItem, accepted, dataTransfer]
@@ -101,7 +100,7 @@ export const useDrop = <E extends HTMLElement, T = unknown>({
       if (!isValid({ e, data, accepted, extraValidation, dataTransfer }))
         return;
 
-      onDragLeave(e, getItem(e, dataTransfer), data.copy);
+      onDragLeave && onDragLeave(e, getItem(e, dataTransfer), data.copy);
       setIsDragOver(false);
     },
     [onDragLeave, extraValidation, getItem, accepted, dataTransfer]
@@ -120,7 +119,7 @@ export const useDrop = <E extends HTMLElement, T = unknown>({
       if (!isValid({ e, data, accepted, extraValidation, dataTransfer }))
         return;
 
-      onDrop(e, getItem(e, dataTransfer), data.copy);
+      onDrop && onDrop(e, getItem(e, dataTransfer), data.copy);
     },
     [onDrop, data, extraValidation, getItem, accepted, dataTransfer]
   );

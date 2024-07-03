@@ -1,8 +1,6 @@
 import { DropEvents, DropState, UseDropProps, useDrop } from './useDrop';
 import { DragEvents, DragState, useDrag } from './useDrag';
 
-// TODO: (H) - move TS to d.ts for this / Drag / Drop
-
 export type DnDEvents<E extends HTMLElement> = {
   onDragStart: React.DragEventHandler<E>;
   onDragEnd: React.DragEventHandler<E>;

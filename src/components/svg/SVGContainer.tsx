@@ -1,27 +1,23 @@
 import React from 'react';
-import { useTooltip } from '../../hooks';
-import { Tooltip } from '../generic';
+import { TooltipContainer } from '../generic';
 
 const SVGContainer: React.FC<React.PropsWithChildren & SVGContainerProps> = ({
+  disabled = false,
+  className,
   tooltip,
   tooltipDelay,
   children,
   onClick,
 }) => {
-  const { showTooltip, handleHideTooltip, handleShowTooltip } = useTooltip(
-    tooltip,
-    tooltipDelay
-  );
   return (
-    <div
-      className='relative'
-      onMouseEnter={handleShowTooltip}
-      onMouseLeave={handleHideTooltip}
-      onClick={onClick}
+    <TooltipContainer
+      className={`${className} ${!disabled && onClick ? 'cursor-pointer' : ''}`}
+      tooltip={disabled ? undefined : tooltip}
+      onClick={disabled ? undefined : onClick}
+      delay={tooltipDelay}
     >
       {children}
-      {tooltip && <Tooltip text={tooltip} hidden={!showTooltip} />}
-    </div>
+    </TooltipContainer>
   );
 };
 

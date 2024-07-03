@@ -40,7 +40,6 @@ const TBody: React.FC<TProps> = ({ children, className = '', ...rest }) => {
 };
 
 const TRow: React.FC<TProps> = ({ children, className, ...rest }) => {
-  // TODO: (M) - Insert DragAndDrop / Itemplaceholder / Select box functionality (from ContentItemRow)
   return (
     <div
       className={`flex justify-between items-center px-5 py-3 hover:bg-theme-3/50 ${className}`}

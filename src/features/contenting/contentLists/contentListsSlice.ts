@@ -13,6 +13,7 @@ import {
 import { APIStatus } from '../../../util/constants';
 import { name as parentName } from '../constants';
 import { RootState } from '../../../store';
+import { isAbortError } from '../../../util/functions';
 
 export const name = 'contentLists';
 const sliceName = `${parentName}/${name}`;
@@ -32,32 +33,32 @@ const initialState = contentListsAdapter.getInitialState(stateFragment);
 
 export const fetchContentLists = createAsyncThunk(
   `${sliceName}/fetchContentLists`,
-  async () => {
-    const { data } = await apiGetContentLists();
+  async (_, { signal }) => {
+    const { data } = await apiGetContentLists(signal);
     return data;
   }
 );
 
 export const createContentList = createAsyncThunk(
   `${sliceName}/createContentList`,
-  async (contentList: Model.ContentListAM) => {
-    const { data } = await apiAddContentList(contentList);
+  async (contentList: Model.ContentListAM, { signal }) => {
+    const { data } = await apiAddContentList(contentList, signal);
     return data;
   }
 );
 
 export const updateContentList = createAsyncThunk(
   `${sliceName}/updateContentList`,
-  async (contentList: Model.ContentListPureDM) => {
-    const { data } = await apiUpdateContentList(contentList);
+  async (contentList: Model.ContentListPureDM, { signal }) => {
+    const { data } = await apiUpdateContentList(contentList, signal);
     return data;
   }
 );
 
 export const deleteContentList = createAsyncThunk(
   `${sliceName}/deleteContentList`,
-  async (contentList: Model.ContentListPureDM) => {
-    await apiDeleteContentList(contentList.id);
+  async (contentList: Model.ContentListPureDM, { signal }) => {
+    await apiDeleteContentList(contentList.id, signal);
     return contentList;
   }
 );
@@ -102,6 +103,10 @@ const slice = createSlice({
         deleteContentList.rejected
       ),
       (state, action) => {
+        if (isAbortError(action)) {
+          state.status = APIStatus.OK;
+          return;
+        }
         state.status = APIStatus.NOT_OK;
         state.error = action.error.message;
       }

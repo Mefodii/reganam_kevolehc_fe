@@ -80,12 +80,14 @@ const Number = React.forwardRef(
             focus ? 'scale-100' : 'scale-0'
           } group-hover:scale-100 ease-in duration-100`}
         >
-          <div onClick={(e) => onArrowClick(e, 1)}>
-            <SVGArrow className='w-3 -rotate-90 simple-clickable'></SVGArrow>
-          </div>
-          <div onClick={(e) => onArrowClick(e, -1)}>
-            <SVGArrow className='w-3 rotate-90 simple-clickable'></SVGArrow>
-          </div>
+          <SVGArrow
+            className='w-3 -rotate-90 simple-clickable-1'
+            onClick={(e) => onArrowClick(e, 1)}
+          ></SVGArrow>
+          <SVGArrow
+            className='w-3 rotate-90 simple-clickable-1'
+            onClick={(e) => onArrowClick(e, -1)}
+          ></SVGArrow>
         </div>
       );
     };

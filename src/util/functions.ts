@@ -45,12 +45,13 @@ export const isAPIStatusRequestDone = (apiStatus: APIStatus) =>
 
 export const validateMandatoryFields = <T>(
   obj: T,
-  fields: string[]
+  fields: (keyof T)[]
 ): [boolean, Partial<T>] => {
   let error: Partial<T> = {};
   let isValid = true;
   fields.forEach((field) => {
-    if (obj[field as keyof typeof obj] === undefined) {
+    const value = obj[field as keyof typeof obj];
+    if (value === undefined || value === '') {
       error = { ...error, [field]: 'Value is mandatory' };
       isValid = false;
     }
@@ -61,3 +62,7 @@ export const validateMandatoryFields = <T>(
 
 export const filterSelectedItems = <T>(items: T[], indexes: number[]): T[] =>
   items.filter((_, i) => indexes.includes(i));
+
+export const isAbortError = <T extends { error: { name?: string } }>(
+  action: T
+): boolean => action.error.name === 'AbortError';

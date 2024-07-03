@@ -14,6 +14,7 @@ import {
 import { APIStatus } from '../../../util/constants';
 import { name as parentName } from '../constants';
 import { RootState } from '../../../store';
+import { isAbortError } from '../../../util/functions';
 
 export const name = 'contentWatchers';
 const sliceName = `${parentName}/${name}`;
@@ -36,47 +37,49 @@ const initialState = contentWatchersAdapter.getInitialState(stateFragment);
 
 export const fetchContentWatchers = createAsyncThunk(
   `${sliceName}/fetchContentWatchers`,
-  async () => {
-    const { data } = await apiGetContentWatchers();
+  async (_, { signal }) => {
+    const { data } = await apiGetContentWatchers(signal);
     return data;
   }
 );
 
 export const fetchContentWatcher = createAsyncThunk(
   `${sliceName}/fetchContentWatcher`,
-  async (id: number) => {
-    const { data } = await apiGetContentWatcher(id);
+  async (id: number, { signal }) => {
+    const { data } = await apiGetContentWatcher(id, signal);
     return data;
   }
 );
 
 export const createContentWatcher = createAsyncThunk(
   `${sliceName}/createContentWatcher`,
-  async (contentWatcher: Model.ContentWatcherAM) => {
-    // Note: each content watcher is linked with a content list.
-    const { data } = await apiAddContentWatcher(contentWatcher);
+  async (contentWatcher: Model.ContentWatcherAM, { signal }) => {
+    const { data } = await apiAddContentWatcher(contentWatcher, signal);
     return data;
   }
 );
 
 export const updateContentWatcher = createAsyncThunk(
   `${sliceName}/updateContentWatcher`,
-  async ({
-    contentWatcher,
-    scope,
-  }: {
-    contentWatcher: Model.ContentWatcherDM;
-    scope: Redux.Scope;
-  }) => {
-    const { data } = await apiUpdateContentWatcher(contentWatcher);
+  async (
+    {
+      contentWatcher,
+      scope,
+    }: {
+      contentWatcher: Model.ContentWatcherDM;
+      scope: Redux.Scope;
+    },
+    { signal }
+  ) => {
+    const { data } = await apiUpdateContentWatcher(contentWatcher, signal);
     return { data, scope };
   }
 );
 
 export const deleteContentWatcher = createAsyncThunk(
   `${sliceName}/deleteContentWatcher`,
-  async (contentWatcher: Model.ContentWatcherDM) => {
-    await apiDeleteContentWatcher(contentWatcher.id);
+  async (contentWatcher: Model.ContentWatcherDM, { signal }) => {
+    await apiDeleteContentWatcher(contentWatcher.id, signal);
     return contentWatcher;
   }
 );
@@ -133,6 +136,10 @@ const slice = createSlice({
         deleteContentWatcher.rejected
       ),
       (state, action) => {
+        if (isAbortError(action)) {
+          state.status = APIStatus.OK;
+          return;
+        }
         state.status = APIStatus.NOT_OK;
         state.error = action.error.message;
       }

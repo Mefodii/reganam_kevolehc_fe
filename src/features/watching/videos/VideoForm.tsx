@@ -9,7 +9,12 @@ import {
 } from '../../../components/form';
 import { Button } from '../../../components/buttons';
 
-import { createVideo, deleteVideo, updateVideo } from '../groups/groupsSlice';
+import {
+  createVideo,
+  deleteVideo,
+  updateVideo,
+  updateVideoSimple,
+} from '../groups/groupsSlice';
 import { video as model } from '../../../models';
 import { useAppDispatch } from '../../../hooks';
 import { useForm } from '../../../hooks';
@@ -33,17 +38,19 @@ const VideoForm: React.FC<VideoFormProps> = ({ formProps, onSuccess }) => {
   };
 
   const handleCreate = () => {
-    // TODO - looks pretty similar in each form, maybe can be inserted into useForm
+    // TODO: (L)  - looks pretty similar in each form, maybe can be inserted into useForm
     const [newVideo, isValid, error] = model.validateCreate(modelState);
     if (!isValid) {
       setFormErrors(error);
       return;
     }
 
-    dispatch(createVideo(newVideo)).then(onSuccess);
+    dispatch(createVideo(newVideo)).unwrap().then(onSuccess);
   };
 
   const handleUpdate = () => {
+    if (!isUpdate) return;
+
     const [updatedVideo, equals, isValid, error] = model.validateUpdate(
       modelState,
       model.getDBState(formProps)
@@ -54,11 +61,15 @@ const VideoForm: React.FC<VideoFormProps> = ({ formProps, onSuccess }) => {
     }
     if (!isValid || equals) return;
 
-    dispatch(updateVideo(updatedVideo)).then(onSuccess);
+    if (updatedVideo.order !== formProps.item.order) {
+      dispatch(updateVideoSimple(updatedVideo)).unwrap().then(onSuccess);
+    } else {
+      dispatch(updateVideo(updatedVideo)).unwrap().then(onSuccess);
+    }
   };
 
   const handleDelete = (video: Model.VideoDM) => {
-    dispatch(deleteVideo(video)).then(onSuccess);
+    dispatch(deleteVideo(video)).unwrap().then(onSuccess);
   };
 
   const {
@@ -141,7 +152,7 @@ const VideoForm: React.FC<VideoFormProps> = ({ formProps, onSuccess }) => {
             className='absolute right-1 top-1'
             onClick={setCurrentEpisodeMax}
           >
-            <SVGCheck className='w-5 simple-clickable'></SVGCheck>
+            <SVGCheck className='w-5 simple-clickable-1'></SVGCheck>
           </div>
         </div>
         <Number
@@ -194,7 +205,7 @@ const VideoForm: React.FC<VideoFormProps> = ({ formProps, onSuccess }) => {
             </Button>
             <Button
               tooltip='Delete Video'
-              onClick={() => handleDelete(formProps.video)}
+              onClick={() => handleDelete(formProps.item)}
             >
               <SVGTrash className='w-6 transition-all duration-300' />
             </Button>

@@ -1,25 +1,17 @@
 declare global {
-  type AxiosConfigParams = any;
-  type AxiosConfigHeaders = {
-    'Content-Type': string;
-  };
-  type AxiosConfig = {
-    params?: AxiosConfigParams;
-    headers?: AxiosConfigHeaders;
-  };
-
   declare namespace QParams {
-    type Base = {
+    type Page = {
       page?: number;
     };
-    type ContentItemBase = {
+    type Group = {};
+    type ContentItem = Page & {
       contentList: number;
       hideConsumed?: boolean;
     };
-    type ContentItem = Base & ContentItemBase;
+    type ContentMusicItem = ContentItem;
   }
 
-  type PageInfo<T extends QParams.Base> = {
+  type PageInfo<T extends QParams.Page> = {
     count: number;
     nextUrl: string | null;
     previousUrl: string | null;
@@ -31,19 +23,28 @@ declare global {
     page_size: number;
   };
 
-  type AxiosPageResult<T, V> = PageInfo<V> & {
-    results: T[];
-  };
+  declare namespace Axios {
+    type PagedResult<T, V> = PageInfo<V> & {
+      results: T[];
+    };
+  }
 
   type SVGContainerProps = {
+    disabled?: boolean;
     tooltip?: string;
     tooltipDelay?: number;
     onClick?: React.MouseEventHandler<HTMLDivElement>;
+    className?: string;
   };
 
   type SVGProps = {
     className?: string;
   } & SVGContainerProps;
+
+  type Coords = {
+    x: number;
+    y: number;
+  };
 
   declare namespace Redux {
     type Scope = 'DETAILS' | 'LIST';
@@ -67,34 +68,23 @@ declare global {
     // P: Props (contains extra data to help convert models) - Name Convention <ModelNameProps>
     // D: DB Model - Name Convention <ModelNameDM>
 
+    type CreateProps = {
+      formMode: 'CREATE';
+    };
+
+    type UpdateProps<D> = {
+      formMode: 'UPDATE';
+      item: D;
+    };
+
+    type ModelProps<D> = CreateProps | UpdateProps<D>;
+
     type SimpleWorker<S, D = S> = {
       getInitialState: () => S;
       toState: (originalState: D) => S;
       buildState: (originalState: D) => S;
       validate: (state: S) => [D, boolean, Partial<S>];
       equals: (state: S, originalState: S) => boolean;
-    };
-
-    type Worker<P, S = P, A = S, D = A> = {
-      getInitialState: (props?: P) => S;
-      toState: (dbState: D) => S;
-      buildState: (props: P) => S;
-      toAPIState: (state: S) => A;
-      toDBState: (state: S, dbState: D) => D;
-      getDBState: (props: P) => D;
-      validateCreate: (
-        state: S
-      ) => [A, boolean /* isValid */, Partial<S> /* errors */];
-      validateUpdate: (
-        state: S,
-        dbState: D
-      ) => [
-        D,
-        boolean /* equals */,
-        boolean /* isValid */,
-        Partial<S> /* errors */
-      ];
-      equals: (state: D, dbState: D) => boolean;
     };
   }
 

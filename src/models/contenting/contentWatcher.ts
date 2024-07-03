@@ -1,4 +1,3 @@
-import { validateMandatoryFields } from '../../util/functions';
 import { getToday } from '../../util/datetime';
 import {
   ContentCategory,
@@ -7,6 +6,7 @@ import {
   ContentWatcherSource,
   ContentWatcherStatus,
 } from '../../api/api-utils';
+import { BaseModel } from '../generic/model';
 
 declare global {
   namespace Model {
@@ -31,77 +31,77 @@ declare global {
       items_count: number;
       consumed: boolean;
     };
-    type ContentWatcherCreateProps = {
-      formMode: 'CREATE';
-    };
-    type ContentWatcherUpdateProps = {
-      contentWatcher: ContentWatcherDM;
-      formMode: 'UPDATE';
+    type ContentWatcherUpdateProps = UpdateProps<ContentWatcherDM> & {
       scope: Redux.Scope;
     };
-    type ContentWatcherProps =
-      | ContentWatcherCreateProps
-      | ContentWatcherUpdateProps;
-    type ContentWatcherModel = Worker<
-      ContentWatcherProps,
-      ContentWatcherSM,
-      ContentWatcherAM,
-      ContentWatcherDM
-    > & {
-      mandatoryFields: string[];
-      isMusic: <T extends ContentWatcherSM>(contentWatcher: T) => boolean;
-    };
+    type ContentWatcherProps = CreateProps | ContentWatcherUpdateProps;
   }
 }
 
-export const contentWatcher: Model.ContentWatcherModel = {
-  mandatoryFields: ['source_type', 'status', 'file_extension'],
-  getInitialState: () => ({
-    id: undefined,
-    name: '',
-    category: ContentCategory.OTHER,
-    watcher_id: '',
-    source_type: ContentWatcherSource.OTHER,
-    status: ContentWatcherStatus.NONE,
-    download: false,
-    video_quality: ContentWatcherQuality.DEFAULT,
-    check_date: getToday(),
-    file_extension: '',
-    content_list: undefined,
-  }),
-  toState: (contentWatcher) => {
+class ContentWatcherModel extends BaseModel<
+  Model.ContentWatcherProps,
+  Model.ContentWatcherSM,
+  Model.ContentWatcherAM,
+  Model.ContentWatcherDM
+> {
+  mandatoryFields: (keyof Model.ContentWatcherSM)[] = [
+    'source_type',
+    'status',
+    'file_extension',
+  ];
+
+  getInitialState(props: Model.ContentWatcherProps): Model.ContentWatcherSM {
     return {
-      id: contentWatcher.id,
-      name: contentWatcher.name,
-      category: contentWatcher.category,
-      watcher_id: contentWatcher.watcher_id,
-      source_type: contentWatcher.source_type,
-      status: contentWatcher.status,
-      download: contentWatcher.download,
-      video_quality: contentWatcher.video_quality,
-      check_date: contentWatcher.check_date,
-      file_extension: contentWatcher.file_extension,
-      content_list: contentWatcher.content_list,
+      id: undefined,
+      name: '',
+      category: ContentCategory.OTHER,
+      watcher_id: '',
+      source_type: ContentWatcherSource.OTHER,
+      status: ContentWatcherStatus.NONE,
+      download: false,
+      video_quality: ContentWatcherQuality.DEFAULT,
+      check_date: getToday(),
+      file_extension: '',
+      content_list: undefined,
     };
-  },
-  buildState(props) {
-    if (props.formMode === 'UPDATE') return this.toState(props.contentWatcher);
-    return this.getInitialState(props);
-  },
-  toAPIState: (state) => ({
-    id: state.id,
-    name: state.name,
-    category: state.category,
-    watcher_id: state.watcher_id,
-    source_type: state.source_type,
-    status: state.status,
-    download: state.download,
-    video_quality: state.video_quality,
-    check_date: state.check_date,
-    file_extension: state.file_extension,
-    content_list: state.content_list,
-  }),
-  toDBState(state, dbState) {
+  }
+
+  toState(dbState: Model.ContentWatcherDM): Model.ContentWatcherSM {
+    return {
+      id: dbState.id,
+      name: dbState.name,
+      category: dbState.category,
+      watcher_id: dbState.watcher_id,
+      source_type: dbState.source_type,
+      status: dbState.status,
+      download: dbState.download,
+      video_quality: dbState.video_quality,
+      check_date: dbState.check_date,
+      file_extension: dbState.file_extension,
+      content_list: dbState.content_list,
+    };
+  }
+
+  toAPIState(state: Model.ContentWatcherSM): Model.ContentWatcherSM {
+    return {
+      id: state.id,
+      name: state.name,
+      category: state.category,
+      watcher_id: state.watcher_id,
+      source_type: state.source_type,
+      status: state.status,
+      download: state.download,
+      video_quality: state.video_quality,
+      check_date: state.check_date,
+      file_extension: state.file_extension,
+      content_list: state.content_list,
+    };
+  }
+
+  toDBState(
+    state: Model.ContentWatcherSM,
+    dbState: Model.ContentWatcherDM
+  ): Model.ContentWatcherDM {
     return {
       ...this.toAPIState(state),
       id: dbState.id,
@@ -110,29 +110,9 @@ export const contentWatcher: Model.ContentWatcherModel = {
       items_count: dbState.items_count,
       consumed: dbState.consumed,
     };
-  },
-  getDBState: (props) => {
-    if (props.formMode === 'UPDATE') return props.contentWatcher;
-    throw new Error(`getDBState not available for ${props.formMode}`);
-  },
-  validateCreate(state) {
-    let isValid = true;
-    let error: Partial<Model.ContentWatcherSM> = {};
-    [isValid, error] = validateMandatoryFields(state, this.mandatoryFields);
+  }
 
-    const apiState = this.toAPIState(state);
-    return [apiState, isValid, error];
-  },
-  validateUpdate(state, dbState) {
-    let isValid = true;
-    let error: Partial<Model.ContentWatcherSM> = {};
-    [isValid, error] = validateMandatoryFields(state, this.mandatoryFields);
-
-    const newState = this.toDBState(state, dbState);
-    const equals = isValid && this.equals(newState, dbState);
-    return [newState, equals, isValid, error];
-  },
-  equals(o1, o2) {
+  equals(o1: Model.ContentWatcherDM, o2: Model.ContentWatcherDM): boolean {
     if (o1?.name !== o2?.name) return false;
     if (o1?.category !== o2?.category) return false;
     if (o1?.watcher_id !== o2?.watcher_id) return false;
@@ -145,8 +125,11 @@ export const contentWatcher: Model.ContentWatcherModel = {
     if (o1?.content_list !== o2?.content_list) return false;
 
     return true;
-  },
-  isMusic(contentWatcher) {
+  }
+
+  isMusic<T extends Model.ContentWatcherSM>(contentWatcher: T): boolean {
     return contentWatcher.category === ContentCategory.MUSIC;
-  },
-};
+  }
+}
+
+export const contentWatcher = new ContentWatcherModel();

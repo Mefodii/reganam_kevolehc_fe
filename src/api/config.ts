@@ -1,6 +1,8 @@
-export const addConfigJsonType: (config?: AxiosConfig) => AxiosConfig = (
-  config = {}
-) => ({
+import { AxiosRequestConfig } from 'axios';
+
+export const addConfigJsonType: (
+  config?: AxiosRequestConfig
+) => AxiosRequestConfig = (config = {}) => ({
   ...config,
   headers: {
     ...config.headers,
@@ -8,9 +10,9 @@ export const addConfigJsonType: (config?: AxiosConfig) => AxiosConfig = (
   },
 });
 
-export const addConfigFormDataType: (config?: AxiosConfig) => AxiosConfig = (
-  config = {}
-) => ({
+export const addConfigFormDataType: (
+  config?: AxiosRequestConfig
+) => AxiosRequestConfig = (config = {}) => ({
   ...config,
   headers: {
     ...config.headers,
@@ -19,9 +21,9 @@ export const addConfigFormDataType: (config?: AxiosConfig) => AxiosConfig = (
 });
 
 export const addConfigParams: (
-  params: AxiosConfigParams,
-  config?: AxiosConfig
-) => AxiosConfig = (params, config = {}) => ({
+  params: any,
+  config?: AxiosRequestConfig
+) => AxiosRequestConfig = (params, config = {}) => ({
   ...config,
   params: {
     ...config.params,
@@ -29,7 +31,11 @@ export const addConfigParams: (
   },
 });
 
-export const jsonConfig = (): AxiosConfig => addConfigJsonType();
-export const jsonWithParamsConfig = (params: AxiosConfigParams): AxiosConfig =>
-  addConfigParams(params, jsonConfig());
-export const formDataConfig = (): AxiosConfig => addConfigFormDataType();
+export const jsonConfig = (signal: AbortSignal): AxiosRequestConfig =>
+  addConfigJsonType({ signal });
+export const jsonWithParamsConfig = (
+  params: any,
+  signal: AbortSignal
+): AxiosRequestConfig => addConfigParams(params, jsonConfig(signal));
+export const formDataConfig = (signal: AbortSignal): AxiosRequestConfig =>
+  addConfigFormDataType({ signal });
