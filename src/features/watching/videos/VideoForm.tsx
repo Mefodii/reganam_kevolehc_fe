@@ -19,6 +19,7 @@ import { video as model } from '../../../models';
 import { useAppDispatch } from '../../../hooks';
 import { useForm } from '../../../hooks';
 import { WatchingStatus } from '../../../api/api-utils';
+import React, { useCallback } from 'react';
 
 type VideoFormProps = {
   formProps: Model.VideoProps;
@@ -29,47 +30,33 @@ const VideoForm: React.FC<VideoFormProps> = ({ formProps, onSuccess }) => {
   const dispatch = useAppDispatch();
   const isUpdate = formProps.formMode === 'UPDATE';
 
-  const { modelState, setModelState, onFieldChange, setFormErrors } = useForm(
-    model.buildState(formProps)
+  const handleCreate = useCallback(
+    (newVideo: Model.VideoSM) => {
+      dispatch(createVideo(newVideo)).unwrap().then(onSuccess);
+    },
+    [dispatch, onSuccess]
   );
 
-  const setCurrentEpisodeMax = () => {
-    setModelState({ ...modelState, current_episode: modelState.episodes });
-  };
-
-  const handleCreate = () => {
-    // TODO: (L)  - looks pretty similar in each form, maybe can be inserted into useForm
-    const [newVideo, isValid, error] = model.validateCreate(modelState);
-    if (!isValid) {
-      setFormErrors(error);
-      return;
-    }
-
-    dispatch(createVideo(newVideo)).unwrap().then(onSuccess);
-  };
-
-  const handleUpdate = () => {
-    if (!isUpdate) return;
-
-    const [updatedVideo, equals, isValid, error] = model.validateUpdate(
-      modelState,
-      model.getDBState(formProps)
-    );
-    if (!isValid) {
-      setFormErrors(error);
-      return;
-    }
-    if (!isValid || equals) return;
-
-    if (updatedVideo.order !== formProps.item.order) {
-      dispatch(updateVideoSimple(updatedVideo)).unwrap().then(onSuccess);
-    } else {
-      dispatch(updateVideo(updatedVideo)).unwrap().then(onSuccess);
-    }
-  };
+  const handleUpdate = useCallback(
+    (updatedVideo: Model.VideoDM, originalVideo: Model.VideoDM) => {
+      if (updatedVideo.order !== originalVideo.order) {
+        dispatch(updateVideoSimple(updatedVideo)).unwrap().then(onSuccess);
+      } else {
+        dispatch(updateVideo(updatedVideo)).unwrap().then(onSuccess);
+      }
+    },
+    [dispatch, onSuccess]
+  );
 
   const handleDelete = (video: Model.VideoDM) => {
     dispatch(deleteVideo(video)).unwrap().then(onSuccess);
+  };
+
+  const { modelState, setModelState, onFieldChange, onCreate, onUpdate } =
+    useForm(model, formProps, handleCreate, handleUpdate);
+
+  const setCurrentEpisodeMax = () => {
+    setModelState({ ...modelState, current_episode: modelState.episodes });
   };
 
   const {
@@ -193,14 +180,14 @@ const VideoForm: React.FC<VideoFormProps> = ({ formProps, onSuccess }) => {
 
       <div className='flex'>
         {!isUpdate && (
-          <Button tooltip='Add Video' onClick={handleCreate}>
+          <Button tooltip='Add Video' onClick={onCreate}>
             <SVGCheck className='w-6 transition-all duration-300' />
           </Button>
         )}
 
         {isUpdate && (
           <>
-            <Button tooltip='Save Changes' onClick={handleUpdate}>
+            <Button tooltip='Save Changes' onClick={onUpdate}>
               <SVGCheck className='w-6 transition-all duration-300' />
             </Button>
             <Button
@@ -216,4 +203,4 @@ const VideoForm: React.FC<VideoFormProps> = ({ formProps, onSuccess }) => {
   );
 };
 
-export default VideoForm;
+export default React.memo(VideoForm) as typeof VideoForm;

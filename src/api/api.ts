@@ -28,7 +28,7 @@ export async function getGroup(id: number, signal: AbortSignal) {
   return await axios.get<Model.GroupDM>(`${API_GROUPS}${id}/`, conf);
 }
 
-export async function addGroup(group: Model.GroupAM, signal: AbortSignal) {
+export async function addGroup(group: Model.GroupSM, signal: AbortSignal) {
   const conf = json(signal);
   return await axios.post<Model.GroupDM>(API_GROUPS, group, conf);
 }
@@ -54,7 +54,7 @@ export async function getVideos(group: number, signal: AbortSignal) {
   return await axios.get<Model.VideoDM[]>(API_VIDEOS, conf);
 }
 
-export async function addVideo(video: Model.VideoAM, signal: AbortSignal) {
+export async function addVideo(video: Model.VideoSM, signal: AbortSignal) {
   const conf = json(signal);
   return await axios.post<Model.VideoDM>(API_VIDEOS, video, conf);
 }
@@ -110,8 +110,16 @@ export async function getContentListsPure(signal: AbortSignal) {
   return await axios.get<Model.ContentListPureDM[]>(API_CONTENT_LISTS, conf);
 }
 
+export async function getContentList(id: number, signal: AbortSignal) {
+  const conf = json(signal);
+  return await axios.get<Model.ContentListDM>(
+    `${API_CONTENT_LISTS}${id}/`,
+    conf
+  );
+}
+
 export async function addContentList(
-  contentList: Model.ContentListAM,
+  contentList: Model.ContentListSM,
   signal: AbortSignal
 ) {
   const conf = json(signal);
@@ -152,7 +160,7 @@ export async function getContentItems(
 }
 
 export async function addContentItem(
-  contentItem: Model.ContentItemAM,
+  contentItem: Model.ContentItemSM,
   signal: AbortSignal
 ) {
   const conf = json(signal);
@@ -214,7 +222,7 @@ export async function getContentMusicItems(
 }
 
 export async function addContentMusicItem(
-  contentMusicItem: Model.ContentMusicItemAM,
+  contentMusicItem: Model.ContentMusicItemSM,
   signal: AbortSignal
 ) {
   const conf = json(signal);
@@ -274,7 +282,7 @@ export async function getContentTracks(signal: AbortSignal) {
 }
 
 export async function addContentTrack(
-  contentTrack: Model.ContentTrackAM,
+  contentTrack: Model.ContentTrackSM,
   signal: AbortSignal
 ) {
   const conf = json(signal);
@@ -318,7 +326,7 @@ export async function getContentWatcher(id: number, signal: AbortSignal) {
 }
 
 export async function addContentWatcher(
-  contentWatcher: Model.ContentWatcherAM,
+  contentWatcher: Model.ContentWatcherSM,
   signal: AbortSignal
 ) {
   const conf = json(signal);

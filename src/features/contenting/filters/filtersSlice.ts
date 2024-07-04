@@ -13,36 +13,27 @@ const slice = createSlice({
   name: sliceName,
   initialState,
   reducers: {
-    setWatchers: (
+    setSource: (
       state,
       action: PayloadAction<ContentWatcherSource | undefined>
     ) => {
-      state.showWatchers = true;
-      state.showLists = false;
-      state.watcherType = action.payload;
-      state.category = undefined;
-    },
-    setLists: (state, action: PayloadAction<undefined>) => {
-      state.showWatchers = false;
-      state.showLists = true;
-      state.watcherType = undefined;
-      state.category = undefined;
+      state.source = action.payload;
     },
     setCategory: (
       state,
-      action: PayloadAction<{ category?: ContentCategory; showAll: boolean }>
+      action: PayloadAction<ContentCategory | undefined>
     ) => {
-      state.showWatchers = action.payload.showAll;
-      state.showLists = true;
-      state.watcherType = undefined;
-      state.category = action.payload.category;
+      state.category = action.payload;
     },
   },
-  selectors: {},
+  selectors: {
+    selectSource: (state) => state.source,
+    selectCategory: (state) => state.category,
+  },
 });
 
 export const selectSlice = (state: RootState) => state[parentName][name];
-export const selectContentingFilters = selectSlice;
-export const { setWatchers, setLists, setCategory } = slice.actions;
+export const { selectCategory, selectSource } = slice.getSelectors(selectSlice);
+export const { setSource, setCategory } = slice.actions;
 export const reducer = slice.reducer;
 export default slice;

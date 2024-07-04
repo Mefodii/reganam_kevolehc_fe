@@ -1,6 +1,38 @@
 import { validateMandatoryFields } from '../../util/functions';
 
-export class BaseModel<P extends Model.ModelProps<D>, S, A, D> {
+export class SimpleModel<S> {
+  mandatoryFields: (keyof S)[] = [];
+
+  getInitialState(): S {
+    throw new Error('getInitialState not implemented');
+  }
+
+  toState(originalState: S): S {
+    throw new Error('toState not implemented');
+  }
+
+  buildState(originalState?: S): S {
+    if (originalState) return this.toState(originalState);
+    return this.getInitialState();
+  }
+
+  validate(state: S, originalState: S): [S, boolean, boolean, Partial<S>] {
+    const [isValid, error] = validateMandatoryFields(
+      state,
+      this.mandatoryFields
+    );
+    const newState: S | undefined = this.toState(state);
+    const equals = isValid && this.equals(newState, originalState);
+
+    return [newState, equals, isValid, error];
+  }
+
+  equals(o1: S, o2: S): boolean {
+    throw new Error('equals not implemented');
+  }
+}
+
+export class BaseModel<P extends Model.ModelProps<D>, S, D> {
   mandatoryFields: (keyof S)[] = [];
 
   getInitialState(props?: P): S {
@@ -18,10 +50,6 @@ export class BaseModel<P extends Model.ModelProps<D>, S, A, D> {
     return this.getInitialState(props);
   }
 
-  toAPIState(state: S): A {
-    throw new Error('toAPIState not implemented');
-  }
-
   toDBState(state: S, dbState: D): D {
     throw new Error('toDBState not implemented');
   }
@@ -33,13 +61,12 @@ export class BaseModel<P extends Model.ModelProps<D>, S, A, D> {
     throw new Error(`getDBState not available for ${props.formMode}`);
   }
 
-  validateCreate(state: S): [A, boolean, Partial<S>] {
+  validateCreate(state: S): [S, boolean, Partial<S>] {
     const [isValid, error] = validateMandatoryFields(
       state,
       this.mandatoryFields
     );
-    const apiState = this.toAPIState(state);
-    return [apiState, isValid, error];
+    return [state, isValid, error];
   }
 
   validateUpdate(state: S, dbState: D): [D, boolean, boolean, Partial<S>] {

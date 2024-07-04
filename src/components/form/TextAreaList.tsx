@@ -31,7 +31,7 @@ const TextAreaList: React.FC<TextAreaListProps> = ({
   paste,
   onChange,
 }) => {
-  const onItemChange =
+  const handleItemChange =
     (item: string, i: number) =>
     (
       e:
@@ -44,12 +44,12 @@ const TextAreaList: React.FC<TextAreaListProps> = ({
       onChange(e, { name, value: newItems });
     };
 
-  const onAddItem = () => {
+  const handleAddItem = () => {
     const newItems = addItem(items);
     onChange(undefined, { name, value: newItems });
   };
 
-  const onRemoveItem = () => {
+  const handleRemoveItem = () => {
     const newItems = removeItem(items);
     onChange(undefined, { name, value: newItems });
   };
@@ -65,7 +65,7 @@ const TextAreaList: React.FC<TextAreaListProps> = ({
             name={`${name} - ${i + 1}`}
             key={i}
             value={item}
-            onChange={onItemChange(item, i)}
+            onChange={handleItemChange(item, i)}
             copy={copy}
             paste={paste}
             error={''} // TODO: (L) - handle error in all form components (probable in payload)
@@ -83,10 +83,10 @@ const TextAreaList: React.FC<TextAreaListProps> = ({
           <div className={`${itemClassName} space-x-2 flex-row`} key={i}>
             {itemField}
             <div className='w-10 h-full flex flex-col space-y-1 items-center'>
-              <Button tooltip='Add Alias' onClick={onAddItem}>
+              <Button tooltip='Add Alias' onClick={handleAddItem}>
                 <SVGPlus className='w-3 transition-all duration-300' />
               </Button>
-              <Button tooltip='Remove Alias' onClick={onRemoveItem}>
+              <Button tooltip='Remove Alias' onClick={handleRemoveItem}>
                 <SVGMinus className='w-3 transition-all duration-300' />
               </Button>
             </div>
@@ -97,4 +97,4 @@ const TextAreaList: React.FC<TextAreaListProps> = ({
   );
 };
 
-export default React.memo(TextAreaList);
+export default React.memo(TextAreaList) as typeof TextAreaList;

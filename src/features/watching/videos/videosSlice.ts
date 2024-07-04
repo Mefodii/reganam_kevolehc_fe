@@ -11,7 +11,7 @@ export const name = 'videos';
 export const createVideosActions = (sliceName: string) => {
   const createVideo = createAsyncThunk(
     `${sliceName}/createVideo`,
-    async (video: Model.VideoAM, { signal }) => {
+    async (video: Model.VideoSM, { signal }) => {
       const response = await apiAddVideo(video, signal);
 
       const { data } = await apiGetGroup(response.data.group, signal);

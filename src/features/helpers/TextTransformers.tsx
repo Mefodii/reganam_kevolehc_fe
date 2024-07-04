@@ -21,13 +21,13 @@ const TextTransformers = () => {
     setInputValue(field.value!);
   const handleOutputValueChange: Form.ChangeEventHandler<string> = (e, field) =>
     setInputValue(field.value!);
-  const onKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
+  const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
     if (e.ctrlKey && e.key === 'Enter') {
       transform();
     }
   };
 
-  const onTransformerClick = (transformer: Helper.Transformer) =>
+  const handleTransformerClick = (transformer: Helper.Transformer) =>
     setTransformer(transformer);
 
   const transform = () => {
@@ -36,7 +36,7 @@ const TextTransformers = () => {
   };
 
   return (
-    <div onKeyDown={onKeyDown}>
+    <div onKeyDown={handleKeyDown}>
       <div className='border-b-2 border-theme-4 mb-4'>
         <div className='mb-4'>
           <div className='text-2xl mb-2'>
@@ -44,7 +44,7 @@ const TextTransformers = () => {
           </div>
           <div className='flex flex-wrap justify-start mb-1'>
             <Button
-              onClick={() => onTransformerClick(playlistSquareToCurly)}
+              onClick={() => handleTransformerClick(playlistSquareToCurly)}
               className={
                 transformer.name === playlistSquareToCurly.name
                   ? 'btn-selected'
@@ -55,7 +55,7 @@ const TextTransformers = () => {
               {'[] -> {}'}
             </Button>
             <Button
-              onClick={() => onTransformerClick(playlistItemNumbering)}
+              onClick={() => handleTransformerClick(playlistItemNumbering)}
               className={
                 transformer.name === playlistItemNumbering.name
                   ? 'btn-selected'
@@ -65,7 +65,7 @@ const TextTransformers = () => {
               Add playlist numbering
             </Button>
             <Button
-              onClick={() => onTransformerClick(playlistAddCarret)}
+              onClick={() => handleTransformerClick(playlistAddCarret)}
               className={
                 transformer.name === playlistAddCarret.name
                   ? 'btn-selected'
@@ -80,7 +80,7 @@ const TextTransformers = () => {
           <div className='text-2xl mb-2'>Other scripts:</div>
           <div className='flex flex-wrap justify-start mb-1'>
             <Button
-              onClick={() => onTransformerClick(playlistToYoutubePlaylist)}
+              onClick={() => handleTransformerClick(playlistToYoutubePlaylist)}
               className={
                 transformer.name === playlistToYoutubePlaylist.name
                   ? 'btn-selected'

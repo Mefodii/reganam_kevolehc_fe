@@ -47,25 +47,23 @@ const ContentWatcherRow: React.FC<ContentWatcherRowProps> = ({
 
   const renderActions = () => {
     return (
-      <div className='flex space-x-2 divide-x divide-active-1/0 group-hover:divide-active-1/20'>
+      <div className='flex justify-center divide-x divide-active-1/0 group-hover:divide-active-1/20'>
         <SVGPencil
-          className='w-5 wiggling-clickable-group'
+          className='px-2 wiggling-clickable-group'
+          svgClassName='w-5'
           tooltip='Edit'
           onClick={handleOpenContentWatcherModal}
         />
-        <div className='pl-2'>
-          <SVGArrowPath
-            className='w-5 wiggling-clickable-group'
-            tooltip='Check for Updates'
-          />
-        </div>
-        <NavLink
-          className='pl-2'
-          to={`${FE_URL.CONTENTING}/content_watcher/${id}`}
-        >
+        <SVGArrowPath
+          className='px-2 wiggling-clickable-group'
+          svgClassName='w-5'
+          tooltip='Check for Updates'
+        />
+        <NavLink to={`${FE_URL.CONTENTING}/content_watcher/${id}`}>
           <SVGDocumentText
-            className='w-5 wiggling-clickable-group'
-            tooltip='Display Content'
+            className='px-2 wiggling-clickable-group'
+            svgClassName='w-5'
+            tooltip='Show Items'
           />
         </NavLink>
       </div>
@@ -103,4 +101,4 @@ const ContentWatcherRow: React.FC<ContentWatcherRowProps> = ({
   );
 };
 
-export default React.memo(ContentWatcherRow);
+export default React.memo(ContentWatcherRow) as typeof ContentWatcherRow;

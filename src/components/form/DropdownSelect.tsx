@@ -47,19 +47,19 @@ const DropdownSelect = <T,>({
   const isSelected = () =>
     (value && options.includes(value)) || (nullable && value === null);
 
-  const onOptionClick =
+  const handleOptionClick =
     (option: Form.Option<T>, i: number) =>
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       if (option !== value) {
-        onInputChange(e, { name, value: option });
+        handleChange(e, { name, value: option });
       }
 
       if (option === value && nullable) {
-        onInputChange(e, { name, value: null });
+        handleChange(e, { name, value: null });
       }
     };
 
-  const onInputChange = (
+  const handleChange = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
     payload: Form.Payload<Form.Option<T>>
   ) => {
@@ -94,7 +94,7 @@ const DropdownSelect = <T,>({
           {nullable && (
             <div
               className={`option-dropdown-item ${optionClassName}`}
-              onClick={onOptionClick(null, -1)}
+              onClick={handleOptionClick(null, -1)}
             >
               {BLANK_VALUE}
             </div>
@@ -104,7 +104,7 @@ const DropdownSelect = <T,>({
               <div
                 className={`option-dropdown-item ${optionClassName}`}
                 key={i}
-                onClick={onOptionClick(option, i)}
+                onClick={handleOptionClick(option, i)}
               >
                 {optionDisplay(option, i)}
               </div>

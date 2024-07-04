@@ -38,7 +38,7 @@ declare global {
   };
 
   type SVGProps = {
-    className?: string;
+    svgClassName?: string;
   } & SVGContainerProps;
 
   type Coords = {
@@ -51,7 +51,6 @@ declare global {
   }
 
   declare namespace Form {
-    type Mode = 'CREATE' | 'UPDATE';
     type Option<T> = T | null;
     type Payload<T> = { name: string; value: T; error?: string };
     type ChangeEvent =
@@ -64,17 +63,18 @@ declare global {
 
   declare namespace Model {
     // S: State Model - Name Convention <ModelNameSM>
-    // A: API Model - Name Convention <ModelNameAM>
     // P: Props (contains extra data to help convert models) - Name Convention <ModelNameProps>
     // D: DB Model - Name Convention <ModelNameDM>
 
     type CreateProps = {
       formMode: 'CREATE';
+      scope?: Redux.Scope;
     };
 
     type UpdateProps<D> = {
       formMode: 'UPDATE';
       item: D;
+      scope?: Redux.Scope;
     };
 
     type ModelProps<D> = CreateProps | UpdateProps<D>;

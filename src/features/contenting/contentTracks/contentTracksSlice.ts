@@ -42,7 +42,7 @@ export const fetchContentTracks = createAsyncThunk(
 
 export const createContentTrack = createAsyncThunk(
   `${sliceName}/createContentTrack`,
-  async (contentTrack: Model.ContentTrackAM, { signal }) => {
+  async (contentTrack: Model.ContentTrackSM, { signal }) => {
     const { data } = await apiAddContentTrack(contentTrack, signal);
     return data;
   }

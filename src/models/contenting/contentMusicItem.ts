@@ -8,8 +8,7 @@ declare global {
       comment: string;
       parsed: boolean;
     };
-    type ContentMusicItemAM = ContentMusicItemSM;
-    type ContentMusicItemDM = ContentMusicItemAM & {
+    type ContentMusicItemDM = ContentMusicItemSM & {
       id: number;
       tracks: ContentTrackDM[];
     };
@@ -26,7 +25,6 @@ declare global {
 class ContentMusicItemModel extends BaseModel<
   Model.ContentMusicItemProps,
   Model.ContentMusicItemSM,
-  Model.ContentMusicItemAM,
   Model.ContentMusicItemDM
 > {
   getInitialState(
@@ -70,29 +68,12 @@ class ContentMusicItemModel extends BaseModel<
     };
   }
 
-  toAPIState(state: Model.ContentMusicItemSM): Model.ContentMusicItemSM {
-    return {
-      id: state.id,
-      item_id: state.item_id,
-      url: state.url,
-      title: state.title,
-      file_name: state.file_name,
-      position: state.position,
-      download_status: state.download_status,
-      published_at: state.published_at,
-      type: state.type,
-      content_list: state.content_list,
-      comment: state.comment,
-      parsed: state.parsed,
-    };
-  }
-
   toDBState(
     state: Model.ContentMusicItemSM,
     dbState: Model.ContentMusicItemDM
   ): Model.ContentMusicItemDM {
     return {
-      ...this.toAPIState(state),
+      ...state,
       id: dbState.id,
       tracks: dbState.tracks,
     };

@@ -5,6 +5,7 @@ const SVGArrow: React.FC<SVGProps> = (props) => {
   return (
     <SVGContainer {...props}>
       <svg
+        className={props.svgClassName}
         xmlns='http://www.w3.org/2000/svg'
         fill='currentColor'
         viewBox='0 0 24 24'
@@ -16,4 +17,4 @@ const SVGArrow: React.FC<SVGProps> = (props) => {
   );
 };
 
-export default React.memo(SVGArrow);
+export default React.memo(SVGArrow) as typeof SVGArrow;

@@ -1,28 +1,25 @@
 import React from 'react';
-import { selectCategory, selectSource } from '../filters/filtersSlice';
+import { selectCategory } from '../filters/filtersSlice';
 import { useAppSelector } from '../../../hooks';
 import { contentFilter as filterModel } from '../../../models';
-import ContentWatcherTable from './ContentWatcherTable';
+import ContentListTable from './ContentListTable';
 
-type ContentWatcherListProps = {
-  contentWatchers: Model.ContentWatcherDM[];
+type ContentListListProps = {
+  contentLists: Model.ContentListPureDM[];
 };
 
-const ContentWatcherList: React.FC<ContentWatcherListProps> = ({
-  contentWatchers,
-}) => {
+const ContentListList: React.FC<ContentListListProps> = ({ contentLists }) => {
   const category = useAppSelector(selectCategory);
-  const source = useAppSelector(selectSource);
 
-  const filteredContentWatchers = filterModel.filterContentWatchers(
-    contentWatchers,
-    { category, source }
+  const filteredContentLists = filterModel.filterByCategory(
+    contentLists,
+    category
   );
 
-  if (filteredContentWatchers.length === 0)
+  if (filteredContentLists.length === 0)
     return (
       <h2 className='w-full text-center text-xl uppercase font-bold m-4'>
-        No Watchers for current filter
+        No List for current category
       </h2>
     );
 
@@ -39,16 +36,15 @@ const ContentWatcherList: React.FC<ContentWatcherListProps> = ({
   return (
     <div className='flex w-full'>
       <div className='w-full flex flex-col items-center'>
-        <h2 className='text-xl uppercase font-bold m-4'>Content Watchers</h2>
+        <h2 className='text-xl uppercase font-bold m-4'>Content Lists</h2>
         {renderH3('Category', category)}
-        {renderH3('Source', source)}
 
         <div className='flex flex-col rounded-xl shadow-md w-10/12 space-y-10 mb-28'>
-          <ContentWatcherTable contentWatchers={filteredContentWatchers} />
+          <ContentListTable contentLists={filteredContentLists} />
         </div>
       </div>
     </div>
   );
 };
 
-export default React.memo(ContentWatcherList) as typeof ContentWatcherList;
+export default React.memo(ContentListList) as typeof ContentListList;

@@ -54,7 +54,7 @@ const Text = React.forwardRef(
     }: TextProps,
     ref: React.ForwardedRef<HTMLInputElement>
   ) => {
-    const onInputChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
       const { name, value } = e.target;
       onChange(e, { name, value });
     };
@@ -79,7 +79,7 @@ const Text = React.forwardRef(
             name={name}
             value={value}
             maxLength={maxLength}
-            onChange={onInputChange}
+            onChange={handleChange}
             onKeyDown={onKeyDown}
             onBlur={onBlur}
             disabled={disabled}

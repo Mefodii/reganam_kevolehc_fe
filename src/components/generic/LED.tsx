@@ -19,4 +19,4 @@ const LED: React.FC<LEDProps> = ({ on, color }) => {
   );
 };
 
-export default React.memo(LED);
+export default React.memo(LED) as typeof LED;

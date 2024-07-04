@@ -36,14 +36,14 @@ const Radio = <T,>({
   const selectOption =
     (option: Form.Option<T>): React.MouseEventHandler<HTMLDivElement> =>
     (e) => {
-      onInputChange(e, option);
+      handleChange(e, option);
     };
 
   const deselectOption = (): React.MouseEventHandler<HTMLDivElement> => (e) => {
-    onInputChange(e, null);
+    handleChange(e, null);
   };
 
-  const onInputChange = (
+  const handleChange = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
     value: Form.Option<T>
   ) => {
@@ -57,7 +57,7 @@ const Radio = <T,>({
       <div className={`${className}`}>
         {options.map((option, i) => {
           const isSelected = isOptionSelected(option);
-          const onClick = disabled
+          const handleClick = disabled
             ? undefined
             : isSelected
             ? deselect
@@ -74,7 +74,7 @@ const Radio = <T,>({
                 disabled && isSelected && 'option-selected-disabled'
               } ${optionClassName}
                 `}
-              onClick={onClick}
+              onClick={handleClick}
             >
               {optionDisplay(option)}
             </div>
@@ -93,4 +93,4 @@ const Radio = <T,>({
   );
 };
 
-export default React.memo(Radio);
+export default React.memo(Radio) as typeof Radio;

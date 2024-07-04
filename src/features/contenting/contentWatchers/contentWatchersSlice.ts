@@ -53,7 +53,7 @@ export const fetchContentWatcher = createAsyncThunk(
 
 export const createContentWatcher = createAsyncThunk(
   `${sliceName}/createContentWatcher`,
-  async (contentWatcher: Model.ContentWatcherAM, { signal }) => {
+  async (contentWatcher: Model.ContentWatcherSM, { signal }) => {
     const { data } = await apiAddContentWatcher(contentWatcher, signal);
     return data;
   }

@@ -5,7 +5,7 @@ import { FE_URL } from '../../util/frontend-urls';
 
 import { SVGDownArrow } from '../svg';
 
-const Header = () => {
+const Header: React.FC = () => {
   const [showDropDown, setShowDropDown] = useState(false);
   const dropDownVisibility = showDropDown ? '' : 'hidden';
 
@@ -60,4 +60,4 @@ const Header = () => {
   );
 };
 
-export default React.memo(Header);
+export default React.memo(Header) as typeof Header;

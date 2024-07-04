@@ -5,6 +5,7 @@ const SVGVerticalDots: React.FC<SVGProps> = (props) => {
   return (
     <SVGContainer {...props}>
       <svg
+        className={props.svgClassName}
         xmlns='http://www.w3.org/2000/svg'
         fill='currentColor'
         viewBox='0 0 29.96 122.88'
@@ -16,4 +17,4 @@ const SVGVerticalDots: React.FC<SVGProps> = (props) => {
   );
 };
 
-export default React.memo(SVGVerticalDots);
+export default React.memo(SVGVerticalDots) as typeof SVGVerticalDots;

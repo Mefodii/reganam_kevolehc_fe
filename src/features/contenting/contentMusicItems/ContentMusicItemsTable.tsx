@@ -13,7 +13,7 @@ type ContentMusicItemTableProps = {
   contentList: number;
   count: number;
   contentMusicItems: Model.ContentMusicItemDM[];
-  source: ContentWatcherSource;
+  source?: ContentWatcherSource;
   pageInfo: PageInfo<QParams.ContentMusicItem>;
 };
 
@@ -75,4 +75,6 @@ const ContentMusicItemTable: React.FC<ContentMusicItemTableProps> = ({
   );
 };
 
-export default React.memo(ContentMusicItemTable);
+export default React.memo(
+  ContentMusicItemTable
+) as typeof ContentMusicItemTable;

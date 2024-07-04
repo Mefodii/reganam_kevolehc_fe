@@ -17,7 +17,7 @@ import { useAppDispatch } from '../../../hooks';
 import { contentItem as model } from '../../../models';
 import { useForm } from '../../../hooks';
 import { DownloadStatus } from '../../../api/api-utils';
-import React from 'react';
+import React, { useCallback } from 'react';
 
 type ContentItemFormProps = {
   formProps: Model.ContentItemProps;
@@ -32,37 +32,30 @@ const ContentItemForm: React.FC<ContentItemFormProps> = ({
 
   const isUpdate = formProps.formMode === 'UPDATE';
 
-  const { modelState, onFieldChange, setFormErrors } = useForm(
-    model.buildState(formProps)
+  const handleCreate = useCallback(
+    (newContentItem: Model.ContentItemSM) => {
+      dispatch(createContentItem(newContentItem)).unwrap().then(onSuccess);
+    },
+    [dispatch, onSuccess]
   );
 
-  const handleCreate = () => {
-    const [newContentItem, isValid, error] = model.validateCreate(modelState);
-    if (!isValid) {
-      setFormErrors(error);
-      return;
-    }
-
-    dispatch(createContentItem(newContentItem)).unwrap().then(onSuccess);
-  };
-
-  const handleUpdate = () => {
-    const [updatedContentItem, equals, isValid, error] = model.validateUpdate(
-      modelState,
-      model.getDBState(formProps)
-    );
-    if (!isValid) {
-      setFormErrors(error);
-      return;
-    }
-    if (!isValid || equals) return;
-
-    dispatch(updateContentItem(updatedContentItem)).unwrap().then(onSuccess);
-  };
+  const handleUpdate = useCallback(
+    (updatedContentItem: Model.ContentItemDM) => {
+      dispatch(updateContentItem(updatedContentItem)).unwrap().then(onSuccess);
+    },
+    [dispatch, onSuccess]
+  );
 
   const handleDelete = (contentItem: Model.ContentItemDM) => {
     dispatch(deleteContentItem(contentItem)).unwrap().then(onSuccess);
   };
+
+  const { modelState, onFieldChange, onCreate, onUpdate } = useForm(
+    model,
+    formProps,
+    handleCreate,
+    handleUpdate
+  );
 
   const {
     item_id,
@@ -149,14 +142,14 @@ const ContentItemForm: React.FC<ContentItemFormProps> = ({
 
       <div className='flex'>
         {!isUpdate && (
-          <Button tooltip='Add Group' onClick={handleCreate}>
+          <Button tooltip='Add Group' onClick={onCreate}>
             <SVGCheck className='w-6 transition-all duration-300' />
           </Button>
         )}
 
         {isUpdate && (
           <>
-            <Button tooltip='Save Changes' onClick={handleUpdate}>
+            <Button tooltip='Save Changes' onClick={onUpdate}>
               <SVGCheck className='w-6 transition-all duration-300' />
             </Button>
             <Button
@@ -172,4 +165,4 @@ const ContentItemForm: React.FC<ContentItemFormProps> = ({
   );
 };
 
-export default React.memo(ContentItemForm);
+export default React.memo(ContentItemForm) as typeof ContentItemForm;

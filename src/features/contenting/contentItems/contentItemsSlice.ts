@@ -60,7 +60,7 @@ export const refetchContentItems = createAsyncThunk<
 
 export const createContentItem = createAsyncThunk<
   void,
-  Model.ContentItemAM,
+  Model.ContentItemSM,
   AppThunkApiConfig
 >(
   `${sliceName}/createContentItem`,

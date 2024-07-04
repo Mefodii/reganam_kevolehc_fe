@@ -255,11 +255,11 @@
 }
 
 .clickable-1 {
-  @apply hover:text-active-1 active:text-active-1/70;
+  @apply hover:text-active-1 hover:scale-110 active:text-active-1/70;
 }
 
 .clickable-2 {
-  @apply hover:text-active-2 active:text-active-2/70;
+  @apply hover:text-active-2 hover:scale-110 active:text-active-2/70;
 }
 
 .clickable-error {
@@ -282,11 +282,15 @@
 /* Tables Related */
 
 .row-icons-container {
-  @apply flex space-x-2 divide-x divide-active-1/20 justify-end mr-2;
+  @apply flex divide-x divide-active-1/20 justify-end mr-2;
 }
 
 .row-icon {
-  @apply w-4 ml-2 simple-clickable-1;
+  @apply px-2 simple-clickable-1;
+}
+
+.row-icon > svg {
+  @apply w-4;
 }
 
 /* ___________________________________________ */

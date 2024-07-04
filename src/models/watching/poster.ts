@@ -1,12 +1,12 @@
 declare global {
   namespace Model {
-    type PosterAM = {
+    type PosterSM = {
       id?: number;
       image: string;
       group: number;
     };
 
-    type PosterDM = PosterAM & {
+    type PosterDM = PosterSM & {
       id: number;
     };
   }

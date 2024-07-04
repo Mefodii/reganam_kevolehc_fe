@@ -22,9 +22,9 @@ declare global {
       check_date: string;
       file_extension: ContentWatcherExtension | '';
       content_list?: number;
+      // TODO: (M) - migration position should be part of state (Django will handle update in List object)
     };
-    type ContentWatcherAM = ContentWatcherSM;
-    type ContentWatcherDM = ContentWatcherAM & {
+    type ContentWatcherDM = ContentWatcherSM & {
       id: number;
       content_list: number;
       migration_position: number;
@@ -41,7 +41,6 @@ declare global {
 class ContentWatcherModel extends BaseModel<
   Model.ContentWatcherProps,
   Model.ContentWatcherSM,
-  Model.ContentWatcherAM,
   Model.ContentWatcherDM
 > {
   mandatoryFields: (keyof Model.ContentWatcherSM)[] = [
@@ -82,28 +81,12 @@ class ContentWatcherModel extends BaseModel<
     };
   }
 
-  toAPIState(state: Model.ContentWatcherSM): Model.ContentWatcherSM {
-    return {
-      id: state.id,
-      name: state.name,
-      category: state.category,
-      watcher_id: state.watcher_id,
-      source_type: state.source_type,
-      status: state.status,
-      download: state.download,
-      video_quality: state.video_quality,
-      check_date: state.check_date,
-      file_extension: state.file_extension,
-      content_list: state.content_list,
-    };
-  }
-
   toDBState(
     state: Model.ContentWatcherSM,
     dbState: Model.ContentWatcherDM
   ): Model.ContentWatcherDM {
     return {
-      ...this.toAPIState(state),
+      ...state,
       id: dbState.id,
       content_list: dbState.content_list,
       migration_position: dbState.migration_position,

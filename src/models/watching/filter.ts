@@ -1,4 +1,5 @@
 import { WatchingStatus } from '../../api/api-utils';
+import { SimpleModel } from '../generic/model';
 
 declare global {
   namespace Model {
@@ -9,38 +10,27 @@ declare global {
       fromDate: string;
       toDate: string;
     };
-    type WatchingFilterModel = SimpleWorker<WatchingFilter> & {
-      filterByTitle: (groups: GroupDM[], title: string) => GroupDM[];
-      filterByFromDate: (groups: GroupDM[], fromData: string) => GroupDM[];
-      filterByToDate: (groups: GroupDM[], toDate: string) => GroupDM[];
-      filterByStatuses: (groups: GroupDM[], statuses: string[]) => GroupDM[];
-      filterGroups: (groups: GroupDM[], filter: WatchingFilter) => GroupDM[];
-    };
   }
 }
 
-export const filter: Model.WatchingFilterModel = {
-  getInitialState: () => ({
-    title: '',
-    showPosters: true,
-    statuses: [],
-    fromDate: '',
-    toDate: '',
-  }),
-  toState: (watchingFilter) => ({
-    ...watchingFilter,
-  }),
-  buildState(watchingFilter) {
-    return this.toState(watchingFilter);
-  },
-  validate(watchingFilter) {
-    let isValid = true;
-    let error: Partial<Model.WatchingFilter> = {};
+class FilterModel extends SimpleModel<Model.WatchingFilter> {
+  mandatoryFields: (keyof Model.WatchingFilter)[] = [];
 
-    const newState = this.toState(watchingFilter);
-    return [newState, isValid, error];
-  },
-  equals(o1, o2) {
+  getInitialState(): Model.WatchingFilter {
+    return {
+      title: '',
+      showPosters: true,
+      statuses: [],
+      fromDate: '',
+      toDate: '',
+    };
+  }
+
+  toState(originalState: Model.WatchingFilter): Model.WatchingFilter {
+    return { ...originalState };
+  }
+
+  equals(o1: Model.WatchingFilter, o2: Model.WatchingFilter): boolean {
     if (o1?.title !== o2?.title) return false;
     if (o1?.showPosters !== o2?.showPosters) return false;
     if (o1?.statuses !== o2?.statuses) return false;
@@ -48,23 +38,34 @@ export const filter: Model.WatchingFilterModel = {
     if (o1?.toDate !== o2?.toDate) return false;
 
     return true;
-  },
-  filterByTitle(groups, title) {
-    if (title.length === 0) return groups;
+  }
 
-    return groups.filter((group) => {
-      const inName = group.name.toLowerCase().includes(title.toLowerCase());
-      const inAlias = group.aliases.find((alias) =>
+  filterByTitle(groups: Model.GroupDM[], title: string): Model.GroupDM[] {
+    if (!title) return groups;
+
+    return groups.filter((g) => {
+      const inName = g.name.toLowerCase().includes(title.toLowerCase());
+      const inAlias = g.aliases.find((alias) =>
         alias.toLowerCase().includes(title.toLowerCase())
       );
 
-      // TODO: (L) - check in videos as well
+      if (g.single) {
+        return inName || inAlias;
+      }
 
-      return inName || inAlias;
+      const inVideos = g.videos.find((v) => {
+        const inVName = v.name.toLowerCase().includes(title.toLowerCase());
+        const inVAlias = v.aliases.find((alias) =>
+          alias.toLowerCase().includes(title.toLowerCase())
+        );
+        return inVName || inVAlias;
+      });
+      return inName || inAlias || inVideos;
     });
-  },
-  filterByFromDate(groups, fromDate) {
-    if (!fromDate || fromDate.length === 0) return groups;
+  }
+
+  filterByFromDate(groups: Model.GroupDM[], fromDate: string): Model.GroupDM[] {
+    if (!fromDate) return groups;
 
     return groups.filter((g) => {
       if (g.single) {
@@ -76,9 +77,10 @@ export const filter: Model.WatchingFilterModel = {
       );
       return inVideos !== undefined;
     });
-  },
-  filterByToDate(groups, toDate) {
-    if (!toDate || toDate.length === 0) return groups;
+  }
+
+  filterByToDate(groups: Model.GroupDM[], toDate: string): Model.GroupDM[] {
+    if (!toDate) return groups;
 
     return groups.filter((g) => {
       if (g.single) {
@@ -90,8 +92,12 @@ export const filter: Model.WatchingFilterModel = {
       );
       return inVideos !== undefined;
     });
-  },
-  filterByStatuses(groups, statuses) {
+  }
+
+  filterByStatuses(
+    groups: Model.GroupDM[],
+    statuses: string[]
+  ): Model.GroupDM[] {
     if (statuses.length === 0) return groups;
 
     return groups.filter((g) => {
@@ -99,18 +105,24 @@ export const filter: Model.WatchingFilterModel = {
         return statuses.find((_) => _ === g.status) !== undefined;
       }
 
-      const inVideos = g.videos!.find((v) =>
+      const inVideos = g.videos.find((v) =>
         statuses.find((_) => _ === v.status)
       );
       return inVideos !== undefined;
     });
-  },
-  filterGroups(groups, filter) {
+  }
+
+  filterGroups(
+    groups: Model.GroupDM[],
+    filter: Model.WatchingFilter
+  ): Model.GroupDM[] {
     const { title, fromDate, toDate, statuses } = filter;
     let newGroups = this.filterByTitle(groups, title);
     newGroups = this.filterByFromDate(newGroups, fromDate);
     newGroups = this.filterByToDate(newGroups, toDate);
     newGroups = this.filterByStatuses(newGroups, statuses);
     return newGroups;
-  },
-};
+  }
+}
+
+export const filter = new FilterModel();

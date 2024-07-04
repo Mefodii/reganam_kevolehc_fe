@@ -28,7 +28,7 @@ const Checkbox = ({
   containerClassName,
   onChange,
 }: CheckboxProps) => {
-  const onClick: React.MouseEventHandler<HTMLDivElement> = (e) => {
+  const handleClick: React.MouseEventHandler<HTMLDivElement> = (e) => {
     onChange(e, { name, value: !checked });
   };
 
@@ -40,7 +40,7 @@ const Checkbox = ({
         } ${disabled && checked && 'option-selected-disabled'} 
           ${className}
           `}
-        onClick={onClick}
+        onClick={handleClick}
       >
         {!simple && (
           <div

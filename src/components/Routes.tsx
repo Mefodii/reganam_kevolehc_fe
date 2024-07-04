@@ -17,6 +17,9 @@ const ContentingDashboard = lazy(
 const ContentWatcherDashboard = lazy(
   () => import('../features/contenting/layout/ContentWatcherDashboard')
 );
+const ContentListDashboard = lazy(
+  () => import('../features/contenting/layout/ContentListDashboard')
+);
 const AudioDashboard = lazy(
   () => import('../features/listening/layout/Dashboard')
 );
@@ -52,6 +55,7 @@ const Routes = () => {
             path={`content_watcher/:id`}
             element={<ContentWatcherDashboard />}
           />
+          <Route path={`content_list/:id`} element={<ContentListDashboard />} />
         </Route>
         <Route path={FE_URL.AUDIO} element={<AudioDashboard />} />
         <Route path={FE_URL.HELPERS} element={<HelpersDashboard />} />

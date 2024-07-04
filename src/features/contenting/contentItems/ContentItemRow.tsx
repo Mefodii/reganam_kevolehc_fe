@@ -30,7 +30,7 @@ import YouTubePlayer from '../../../components/generic/YouTubePlayer';
 
 type ContentItemRowProps = {
   contentItem: Model.ContentItemDM;
-  source: ContentWatcherSource;
+  source?: ContentWatcherSource;
   selected?: boolean;
   onSelect?: (shiftKey: boolean) => void;
   showSelectBox?: boolean;
@@ -155,7 +155,6 @@ const ContentItemRow: React.FC<ContentItemRowProps> = ({
   const renderIcons = () => {
     if (showSelectBox) return;
 
-    // TODO: (L) - for SVGs add a prop "crossed" which will display a cross over it
     return (
       <div className='row-icons-container'>
         {source === ContentWatcherSource.YOUTUBE && (
@@ -283,4 +282,4 @@ const ContentItemRow: React.FC<ContentItemRowProps> = ({
   );
 };
 
-export default React.memo(ContentItemRow);
+export default React.memo(ContentItemRow) as typeof ContentItemRow;

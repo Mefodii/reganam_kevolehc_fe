@@ -6,7 +6,7 @@ import { getThemeForUrl } from '../../util/colors';
 import { themeUpdated } from '../../redux/pageSlice';
 import { usePrevious, useAppDispatch } from '../../hooks';
 
-const ThemeChanger = () => {
+const ThemeChanger: React.FC = () => {
   const location = useLocation();
   const prevLocation = usePrevious(location);
   const dispatch = useAppDispatch();
@@ -20,4 +20,4 @@ const ThemeChanger = () => {
   return <></>;
 };
 
-export default React.memo(ThemeChanger);
+export default React.memo(ThemeChanger) as typeof ThemeChanger;

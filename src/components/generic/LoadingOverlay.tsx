@@ -24,4 +24,4 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
   );
 };
 
-export default React.memo(LoadingOverlay);
+export default React.memo(LoadingOverlay) as typeof LoadingOverlay;

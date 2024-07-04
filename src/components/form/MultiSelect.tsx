@@ -33,27 +33,27 @@ const MultiSelect = <T,>({
   const select =
     (option: Form.Option<T>): React.MouseEventHandler<HTMLDivElement> =>
     (e) => {
-      onInputChange(e, [...value, option]);
+      handleChange(e, [...value, option]);
     };
 
   const deselect =
     (option: Form.Option<T>): React.MouseEventHandler<HTMLDivElement> =>
     (e) => {
-      onInputChange(
+      handleChange(
         e,
         value.filter((item) => item !== option)
       );
     };
 
   const selectAll: React.MouseEventHandler<HTMLDivElement> = (e) => {
-    onInputChange(e, options);
+    handleChange(e, options);
   };
 
   const deselectAll: React.MouseEventHandler<HTMLDivElement> = (e) => {
-    onInputChange(e, []);
+    handleChange(e, []);
   };
 
-  const onInputChange = (
+  const handleChange = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
     value: Form.Option<T>[]
   ) => {
@@ -84,7 +84,7 @@ const MultiSelect = <T,>({
   const renderOptions = () => {
     return options.map((option, i) => {
       const isSelected = isOptionSelected(option);
-      const onClick = isSelected ? deselect(option) : select(option);
+      const handleClick = isSelected ? deselect(option) : select(option);
 
       return (
         <div
@@ -93,7 +93,7 @@ const MultiSelect = <T,>({
             disabled && !isSelected && 'option-disabled'
           } ${disabled && isSelected && 'option-selected-disabled'}
             `}
-          onClick={disabled ? undefined : onClick}
+          onClick={disabled ? undefined : handleClick}
         >
           {optionDisplay(option)}
         </div>
@@ -119,4 +119,4 @@ const MultiSelect = <T,>({
   );
 };
 
-export default React.memo(MultiSelect);
+export default React.memo(MultiSelect) as typeof MultiSelect;

@@ -5,6 +5,7 @@ const SVGSave: React.FC<SVGProps> = (props) => {
   return (
     <SVGContainer {...props}>
       <svg
+        className={props.svgClassName}
         xmlns='http://www.w3.org/2000/svg'
         fill='none'
         viewBox='0 0 24 24'
@@ -21,4 +22,4 @@ const SVGSave: React.FC<SVGProps> = (props) => {
   );
 };
 
-export default React.memo(SVGSave);
+export default React.memo(SVGSave) as typeof SVGSave;

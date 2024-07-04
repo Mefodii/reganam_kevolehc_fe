@@ -12,8 +12,9 @@ import {
 } from '../contentLists/contentListsSlice';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import ContentWatcherList from '../contentWatchers/ContentWatcherList';
+import ContentListList from '../contentLists/ContentListList';
 
-const Dashboard = () => {
+const Dashboard: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const contentWatchers = useAppSelector(selectAllContentWatchers);
@@ -34,12 +35,10 @@ const Dashboard = () => {
       <Sidepanel />
       <div className='flex flex-col py-5 px-10 bg-theme-2 w-full overflow-auto'>
         <ContentWatcherList contentWatchers={contentWatchers} />
-        {contentLists.map((_, i) => (
-          <div key={i}>{JSON.stringify(_)}</div>
-        ))}
+        <ContentListList contentLists={contentLists} />
       </div>
     </div>
   );
 };
 
-export default React.memo(Dashboard);
+export default React.memo(Dashboard) as typeof Dashboard;

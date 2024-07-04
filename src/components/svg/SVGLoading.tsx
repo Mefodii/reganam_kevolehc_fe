@@ -5,6 +5,7 @@ const SVGLoading: React.FC<SVGProps> = (props) => {
   return (
     <SVGContainer {...props}>
       <svg
+        className={props.svgClassName}
         xmlns='http://www.w3.org/2000/svg'
         fill='currentColor'
         viewBox='0 0 100 100'
@@ -16,4 +17,4 @@ const SVGLoading: React.FC<SVGProps> = (props) => {
   );
 };
 
-export default React.memo(SVGLoading);
+export default React.memo(SVGLoading) as typeof SVGLoading;

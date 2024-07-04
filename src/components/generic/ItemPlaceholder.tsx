@@ -14,4 +14,4 @@ const ItemPlaceholder: React.FC<VideoItemPlaceholderProps> = ({
   return <div className={`${className}`}></div>;
 };
 
-export default React.memo(ItemPlaceholder);
+export default React.memo(ItemPlaceholder) as typeof ItemPlaceholder;

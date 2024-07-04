@@ -15,8 +15,7 @@ declare global {
       // TODO: (L) probably track will be received as full json not just number
       track: number | null;
     };
-    type ContentTrackAM = ContentTrackSM;
-    type ContentTrackDM = ContentTrackAM & {
+    type ContentTrackDM = ContentTrackSM & {
       id: number;
       content_item: number;
     };
@@ -27,7 +26,6 @@ declare global {
 class ContentTrackModel extends BaseModel<
   Model.ContentTrackProps,
   Model.ContentTrackSM,
-  Model.ContentTrackAM,
   Model.ContentTrackDM
 > {}
 

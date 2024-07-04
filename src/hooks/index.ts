@@ -9,6 +9,7 @@ import { useDrop } from './useDrop';
 import { useDnD } from './useDnD';
 import { useIsVisible } from './useIsVisible';
 import useContextMenu from './useContextMenu';
+import { useSimpleForm } from './useSimpleForm';
 
 export {
   usePrevious,
@@ -17,6 +18,7 @@ export {
   useAppSelector,
   useModal,
   useForm,
+  useSimpleForm,
   useListSelect,
   useDrag,
   useDrop,

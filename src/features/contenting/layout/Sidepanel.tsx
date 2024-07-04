@@ -3,22 +3,25 @@ import { SideButton } from '../../../components/buttons';
 import { SidepanelElement } from '../../../components/layout';
 
 import {
-  selectContentingFilters,
+  setSource,
   setCategory,
-  setLists,
-  setWatchers,
+  selectCategory,
+  selectSource,
 } from '../filters/filtersSlice';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { useModal } from '../../../hooks';
 import ContentWatcherForm from '../contentWatchers/ContentWatcherForm';
 import { ContentCategory, ContentWatcherSource } from '../../../api/api-utils';
 import React from 'react';
+import ContentListForm from '../contentLists/ContentListForm';
 
 type SidepanelProps = {};
 
 const Sidepanel: React.FC<SidepanelProps> = (props) => {
   const dispatch = useAppDispatch();
-  const filters = useAppSelector(selectContentingFilters);
+  const category = useAppSelector(selectCategory);
+  const source = useAppSelector(selectSource);
+
   const { openModal, closeModal } = useModal();
 
   const handleOpenContentWatcherModal = () => {
@@ -30,27 +33,28 @@ const Sidepanel: React.FC<SidepanelProps> = (props) => {
     );
   };
 
-  const hangleOpenContentListModal = () => {};
-
-  const handleShowWatchers = (watcherType?: ContentWatcherSource) => {
-    dispatch(setWatchers(watcherType));
+  const hangleOpenContentListModal = () => {
+    openModal(
+      <ContentListForm
+        formProps={{ formMode: 'CREATE' }}
+        onSuccess={closeModal}
+      />
+    );
   };
 
-  const handleShowLists = () => {
-    dispatch(setLists());
+  const handleShowWatchers = (source?: ContentWatcherSource) => {
+    dispatch(setSource(source));
   };
 
   const handleShowCategory = (showAll: boolean, category?: ContentCategory) => {
-    dispatch(setCategory({ showAll, category }));
+    dispatch(setCategory(category));
   };
-
-  const { showWatchers, showLists, watcherType, category } = filters;
 
   const renderCategories = () => {
     return (
       <>
         <SidepanelElement
-          isSelected={showLists && showWatchers && !category}
+          isSelected={!category}
           onClick={() => handleShowCategory(true)}
         >
           All Categories
@@ -59,7 +63,7 @@ const Sidepanel: React.FC<SidepanelProps> = (props) => {
         {Object.values(ContentCategory).map((cat, i) => (
           <SidepanelElement
             className={`pl-4`}
-            isSelected={showLists && showWatchers && cat === category}
+            isSelected={cat === category}
             onClick={() => handleShowCategory(true, cat)}
             key={i}
           >
@@ -81,7 +85,7 @@ const Sidepanel: React.FC<SidepanelProps> = (props) => {
         <div className='side-panel-sep'></div>
 
         <SidepanelElement
-          isSelected={showWatchers && !showLists && !watcherType}
+          isSelected={!source}
           onClick={() => handleShowWatchers()}
         >
           All Watchers
@@ -90,7 +94,7 @@ const Sidepanel: React.FC<SidepanelProps> = (props) => {
         {Object.values(ContentWatcherSource).map((type, i) => (
           <SidepanelElement
             className={`pl-4`}
-            isSelected={showWatchers && !showLists && watcherType === type}
+            isSelected={source === type}
             onClick={() => handleShowWatchers(type)}
             key={i}
           >
@@ -102,42 +106,16 @@ const Sidepanel: React.FC<SidepanelProps> = (props) => {
     );
   };
 
-  const renderLists = () => {
-    return (
-      <>
-        <SideButton onClick={() => hangleOpenContentListModal()}>
-          <SVGPlus className='w-5'></SVGPlus>
-          <div>Add List</div>
-        </SideButton>
-        <div className='side-panel-sep'></div>
-        <SidepanelElement
-          isSelected={showLists && !showWatchers && !category}
-          onClick={() => handleShowLists()}
-        >
-          Pure Lists
-        </SidepanelElement>
-
-        {Object.values(ContentCategory).map((cat, i) => (
-          <SidepanelElement
-            className={`pl-4`}
-            isSelected={showLists && !showWatchers && cat === category}
-            onClick={() => handleShowCategory(false, cat)}
-            key={i}
-          >
-            - {cat}
-          </SidepanelElement>
-        ))}
-      </>
-    );
-  };
-
   return (
     <div className='side-panel'>
       {renderCategories()}
       {renderWatchers()}
-      {renderLists()}
+      <SideButton onClick={() => hangleOpenContentListModal()}>
+        <SVGPlus className='w-5'></SVGPlus>
+        <div>Add List</div>
+      </SideButton>
     </div>
   );
 };
 
-export default React.memo(Sidepanel);
+export default React.memo(Sidepanel) as typeof Sidepanel;

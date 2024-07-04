@@ -17,7 +17,7 @@ import {
   ContentWatcherSource,
   ContentWatcherStatus,
 } from '../../../api/api-utils';
-import React from 'react';
+import React, { useCallback } from 'react';
 
 type ContentWatcherFormProps = {
   formProps: Model.ContentWatcherProps;
@@ -31,48 +31,47 @@ const ContentWatcherForm: React.FC<ContentWatcherFormProps> = ({
   onSuccess,
 }) => {
   const dispatch = useAppDispatch();
-
   const isUpdate = formProps.formMode === 'UPDATE';
 
-  const { modelState, onFieldChange, setFormErrors } = useForm(
-    model.buildState(formProps)
+  const handleCreate = useCallback(
+    (newContentWatcher: Model.ContentWatcherSM) => {
+      dispatch(createContentWatcher(newContentWatcher))
+        .unwrap()
+        .then(onSuccess);
+    },
+    [dispatch, onSuccess]
   );
 
-  const handleCreate = () => {
-    const [newContentWatcher, isValid, error] =
-      model.validateCreate(modelState);
-    if (!isValid) {
-      setFormErrors(error);
-      return;
-    }
+  const handleUpdate = useCallback(
+    (
+      updatedContentWatcher: Model.ContentWatcherDM,
+      _: any,
+      scope?: Redux.Scope
+    ) => {
+      if (!scope) throw new Error('Scope expected for handleUpdate');
 
-    dispatch(createContentWatcher(newContentWatcher)).unwrap().then(onSuccess);
-  };
-
-  const handleUpdate = () => {
-    if (!isUpdate) return;
-
-    const [updatedContentWatcher, equals, isValid, error] =
-      model.validateUpdate(modelState, model.getDBState(formProps));
-    if (!isValid) {
-      setFormErrors(error);
-      return;
-    }
-    if (!isValid || equals) return;
-
-    dispatch(
-      updateContentWatcher({
-        contentWatcher: updatedContentWatcher,
-        scope: formProps.scope,
-      })
-    )
-      .unwrap()
-      .then(onSuccess);
-  };
+      dispatch(
+        updateContentWatcher({
+          contentWatcher: updatedContentWatcher,
+          scope: scope,
+        })
+      )
+        .unwrap()
+        .then(onSuccess);
+    },
+    [dispatch, onSuccess]
+  );
 
   const handleDelete = (contentWatcher: Model.ContentWatcherDM) => {
     dispatch(deleteContentWatcher(contentWatcher)).unwrap().then(onSuccess);
   };
+
+  const { modelState, onFieldChange, onCreate, onUpdate } = useForm(
+    model,
+    formProps,
+    handleCreate,
+    handleUpdate
+  );
 
   const {
     name,
@@ -88,7 +87,6 @@ const ContentWatcherForm: React.FC<ContentWatcherFormProps> = ({
 
   const title = isUpdate ? `Edit Watcher` : `Add Watcher`;
   return (
-    // TODO -> to tailwind classname
     <div className='simple-font form-container'>
       <div className='title'>{title}</div>
 
@@ -167,14 +165,14 @@ const ContentWatcherForm: React.FC<ContentWatcherFormProps> = ({
 
       <div className='flex'>
         {!isUpdate && (
-          <Button tooltip='Add Group' onClick={handleCreate}>
+          <Button tooltip='Add Group' onClick={onCreate}>
             <SVGCheck className='w-6 transition-all duration-300' />
           </Button>
         )}
 
         {isUpdate && (
           <>
-            <Button tooltip='Save Changes' onClick={handleUpdate}>
+            <Button tooltip='Save Changes' onClick={onUpdate}>
               <SVGCheck className='w-6 transition-all duration-300' />
             </Button>
             <Button
@@ -190,4 +188,4 @@ const ContentWatcherForm: React.FC<ContentWatcherFormProps> = ({
   );
 };
 
-export default React.memo(ContentWatcherForm);
+export default React.memo(ContentWatcherForm) as typeof ContentWatcherForm;

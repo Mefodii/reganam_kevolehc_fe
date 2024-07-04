@@ -17,8 +17,7 @@ declare global {
     type ContentItemSM = ContentItemBase & {
       consumed: boolean;
     };
-    type ContentItemAM = ContentItemSM;
-    type ContentItemDM = ContentItemAM & {
+    type ContentItemDM = ContentItemSM & {
       id: number;
     };
     type ContentItemCreateProps = CreateProps & {
@@ -32,7 +31,6 @@ declare global {
 class ContentItemModel extends BaseModel<
   Model.ContentItemProps,
   Model.ContentItemSM,
-  Model.ContentItemAM,
   Model.ContentItemDM
 > {
   mandatoryFields: (keyof Model.ContentItemSM)[] = ['title'];
@@ -73,27 +71,12 @@ class ContentItemModel extends BaseModel<
     };
   }
 
-  toAPIState(state: Model.ContentItemSM): Model.ContentItemAM {
-    return {
-      id: state.id,
-      item_id: state.item_id,
-      url: state.url,
-      title: state.title,
-      file_name: state.file_name,
-      position: state.position,
-      download_status: state.download_status,
-      published_at: state.published_at,
-      consumed: state.consumed,
-      content_list: state.content_list,
-    };
-  }
-
   toDBState(
     state: Model.ContentItemSM,
     dbState: Model.ContentItemDM
   ): Model.ContentItemDM {
     return {
-      ...this.toAPIState(state),
+      ...state,
       id: dbState.id,
     };
   }

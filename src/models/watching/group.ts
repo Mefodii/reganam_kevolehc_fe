@@ -32,10 +32,6 @@ declare global {
     };
     type GroupSM = GroupSingleSM | GroupNotSingleSM;
 
-    type GroupSingleAM = GroupSingleSM;
-    type GroupNotSingleAM = GroupNotSingleSM;
-    type GroupAM = GroupSingleAM | GroupNotSingleAM;
-
     type GroupSingleDM = GroupSingleSM & {
       id: number;
       images: PosterDM[];
@@ -62,7 +58,6 @@ declare global {
 class GroupModel extends BaseModel<
   Model.GroupProps,
   Model.GroupSM,
-  Model.GroupAM,
   Model.GroupDM
 > {
   getInitialState(props?: Model.GroupProps): Model.GroupSM {
@@ -152,34 +147,6 @@ class GroupModel extends BaseModel<
         watched_date: getToday(),
         rating: null,
         year: 0,
-      };
-    }
-  }
-
-  toAPIState(state: Model.GroupSM): Model.GroupAM {
-    const baseProps = {
-      id: state.id,
-      type: state.type,
-      name: state.name,
-      aliases: alias.toState(state.aliases),
-      links: link.toState(state.links),
-    };
-
-    if (state.single) {
-      return {
-        ...baseProps,
-        single: true,
-        status: state.status,
-        watched_date: state.watched_date,
-        year: state.year,
-        rating: state.rating,
-      };
-    } else {
-      return {
-        ...baseProps,
-        single: false,
-        check_date: state.check_date,
-        airing_status: state.airing_status,
       };
     }
   }

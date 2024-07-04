@@ -21,4 +21,4 @@ const SVGContainer: React.FC<React.PropsWithChildren & SVGContainerProps> = ({
   );
 };
 
-export default React.memo(SVGContainer);
+export default React.memo(SVGContainer) as typeof SVGContainer;

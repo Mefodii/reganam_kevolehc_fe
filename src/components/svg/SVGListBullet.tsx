@@ -5,6 +5,7 @@ const SVGListBullet: React.FC<SVGProps> = (props) => {
   return (
     <SVGContainer {...props}>
       <svg
+        className={props.svgClassName}
         xmlns='http://www.w3.org/2000/svg'
         fill='none'
         viewBox='0 0 24 24'
@@ -21,4 +22,4 @@ const SVGListBullet: React.FC<SVGProps> = (props) => {
   );
 };
 
-export default React.memo(SVGListBullet);
+export default React.memo(SVGListBullet) as typeof SVGListBullet;

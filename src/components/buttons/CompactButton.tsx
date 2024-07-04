@@ -28,4 +28,4 @@ const CompactButton: React.FC<CompactButtonProps> = ({
   );
 };
 
-export default React.memo(CompactButton);
+export default React.memo(CompactButton) as typeof CompactButton;

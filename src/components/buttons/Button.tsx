@@ -24,4 +24,4 @@ const Button: React.FC<ButtonProps> = ({
   );
 };
 
-export default React.memo(Button);
+export default React.memo(Button) as typeof Button;

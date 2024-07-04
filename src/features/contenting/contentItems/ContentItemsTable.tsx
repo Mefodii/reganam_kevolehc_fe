@@ -37,7 +37,7 @@ type ContentItemsTableProps = {
   contentList: number;
   count: number;
   contentItems: Model.ContentItemDM[];
-  source: ContentWatcherSource;
+  source?: ContentWatcherSource;
   pageInfo: PageInfo<QParams.ContentItem>;
 };
 
@@ -219,4 +219,4 @@ const ContentItemsTable: React.FC<ContentItemsTableProps> = ({
   );
 };
 
-export default React.memo(ContentItemsTable);
+export default React.memo(ContentItemsTable) as typeof ContentItemsTable;

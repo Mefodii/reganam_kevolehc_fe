@@ -30,4 +30,4 @@ const InputContainer: React.FC<PropsWithChildren<InputContainerProps>> = ({
   );
 };
 
-export default React.memo(InputContainer);
+export default React.memo(InputContainer) as typeof InputContainer;

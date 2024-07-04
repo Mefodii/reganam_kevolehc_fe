@@ -46,7 +46,7 @@ export const fetchGroups = createAsyncThunk(
 
 export const createGroup = createAsyncThunk(
   `${sliceName}/createGroup`,
-  async (group: Model.GroupAM, { signal }) => {
+  async (group: Model.GroupSM, { signal }) => {
     const response = await apiAddGroup(group, signal);
     return response.data;
   }

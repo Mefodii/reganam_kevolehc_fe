@@ -54,9 +54,7 @@ const TextArea = React.forwardRef(
     const innerRef = useRef<HTMLTextAreaElement>(null);
     useImperativeHandle(ref, () => innerRef.current!, []);
 
-    const onInputChange: React.ChangeEventHandler<HTMLTextAreaElement> = (
-      e
-    ) => {
+    const handleChange: React.ChangeEventHandler<HTMLTextAreaElement> = (e) => {
       const { name, value } = e.target;
       onChange(e, { name, value: value || '' });
     };
@@ -84,7 +82,7 @@ const TextArea = React.forwardRef(
             value={value}
             rows={rows}
             maxLength={maxLength}
-            onChange={onInputChange}
+            onChange={handleChange}
             onKeyDown={onKeyDown}
             autoComplete={autoComplete}
             disabled={disabled}
@@ -126,4 +124,4 @@ const TextArea = React.forwardRef(
   }
 );
 
-export default React.memo(TextArea);
+export default React.memo(TextArea) as typeof TextArea;

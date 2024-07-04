@@ -47,7 +47,7 @@ const Date = React.forwardRef(
       onChange(e, { name, value: newValue });
     };
 
-    const onInputChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
       onChange(e, { name, value: e.target.value });
     };
 
@@ -61,7 +61,7 @@ const Date = React.forwardRef(
             name={name}
             value={value}
             maxLength={maxLength}
-            onChange={onInputChange}
+            onChange={handleChange}
             onKeyDown={onKeyDown}
             disabled={disabled}
             autoComplete={autoComplete}

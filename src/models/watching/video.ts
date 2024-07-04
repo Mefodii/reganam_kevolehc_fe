@@ -21,8 +21,7 @@ declare global {
       rating: number | null;
       watched_date: string;
     };
-    type VideoAM = VideoSM;
-    type VideoDM = VideoAM & {
+    type VideoDM = VideoSM & {
       id: number;
     };
     type VideoCreateProps = CreateProps & {
@@ -36,7 +35,6 @@ declare global {
 class VideoModel extends BaseModel<
   Model.VideoProps,
   Model.VideoSM,
-  Model.VideoAM,
   Model.VideoDM
 > {
   getInitialState(props: Model.VideoProps): Model.VideoSM {
@@ -81,27 +79,9 @@ class VideoModel extends BaseModel<
     };
   }
 
-  toAPIState(state: Model.VideoSM): Model.VideoSM {
-    return {
-      id: state.id,
-      group: state.group,
-      name: state.name,
-      comment: state.comment,
-      aliases: alias.toState(state.aliases),
-      links: link.toState(state.links),
-      year: state.year,
-      status: state.status,
-      watched_date: state.watched_date,
-      order: state.order,
-      current_episode: state.current_episode,
-      episodes: state.episodes,
-      rating: state.rating,
-    };
-  }
-
   toDBState(state: Model.VideoSM, dbState: Model.VideoDM): Model.VideoDM {
     return {
-      ...this.toAPIState(state),
+      ...state,
       id: dbState.id,
     };
   }

@@ -35,5 +35,3 @@ export const reducer = combineReducers({
   [contentMusicItemsName]: contentMusicItems,
   [contentTracksName]: contentTracks,
 });
-
-// TODO - check on google if feateures/slices has to be singular or plural

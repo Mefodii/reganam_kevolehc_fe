@@ -24,4 +24,4 @@ const SideButton: React.FC<SideButtonProps> = ({
   );
 };
 
-export default React.memo(SideButton);
+export default React.memo(SideButton) as typeof SideButton;

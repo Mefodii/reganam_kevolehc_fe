@@ -5,6 +5,7 @@ const SVGEyeClosed: React.FC<SVGProps> = (props) => {
   return (
     <SVGContainer {...props}>
       <svg
+        className={props.svgClassName}
         xmlns='http://www.w3.org/2000/svg'
         fill='currentColor'
         viewBox='0 0 15 15'
@@ -21,4 +22,4 @@ const SVGEyeClosed: React.FC<SVGProps> = (props) => {
   );
 };
 
-export default React.memo(SVGEyeClosed);
+export default React.memo(SVGEyeClosed) as typeof SVGEyeClosed;

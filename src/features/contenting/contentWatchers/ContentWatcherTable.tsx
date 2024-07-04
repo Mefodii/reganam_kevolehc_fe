@@ -23,7 +23,7 @@ const renderTableHeader = () => {
       <div className='flex-1'>Ext.</div>
       <div className='flex-2'>Status</div>
       <div className='flex-2'>Check Date</div>
-      <div className='flex-1'>Actions</div>
+      <div className='flex-1 text-center'>Actions</div>
     </Table.THead>
   );
 };
@@ -43,4 +43,4 @@ const ContentWatcherTable: React.FC<ContentWatcherTableProps> = ({
   );
 };
 
-export default React.memo(ContentWatcherTable);
+export default React.memo(ContentWatcherTable) as typeof ContentWatcherTable;

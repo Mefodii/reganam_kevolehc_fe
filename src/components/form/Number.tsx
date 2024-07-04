@@ -52,7 +52,7 @@ const Number = React.forwardRef(
       );
     };
 
-    const onArrowClick = (
+    const handleArrowClick = (
       e: React.MouseEvent<HTMLDivElement, MouseEvent>,
       mod: number
     ) => {
@@ -60,7 +60,7 @@ const Number = React.forwardRef(
       if (isInBounds(newValue)) onChange(e, { name, value: newValue });
     };
 
-    const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const { value, valueAsNumber } = e.target;
       if (
         value === '' ||
@@ -82,11 +82,11 @@ const Number = React.forwardRef(
         >
           <SVGArrow
             className='w-3 -rotate-90 simple-clickable-1'
-            onClick={(e) => onArrowClick(e, 1)}
+            onClick={(e) => handleArrowClick(e, 1)}
           ></SVGArrow>
           <SVGArrow
             className='w-3 rotate-90 simple-clickable-1'
-            onClick={(e) => onArrowClick(e, -1)}
+            onClick={(e) => handleArrowClick(e, -1)}
           ></SVGArrow>
         </div>
       );
@@ -104,7 +104,7 @@ const Number = React.forwardRef(
             className={`input-text text-center input-border-placeholder ${className}`}
             type='number'
             name={name}
-            onChange={onInputChange}
+            onChange={handleChange}
             onKeyDown={onKeyDown}
             value={value ?? ''}
             disabled={disabled}

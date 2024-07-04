@@ -6,6 +6,7 @@ import {
 } from '@reduxjs/toolkit';
 import {
   getContentListsPure as apiGetContentLists,
+  getContentList as apiGetContentList,
   addContentList as apiAddContentList,
   updateContentList as apiUpdateContentList,
   deleteContentList as apiDeleteContentList,
@@ -24,9 +25,11 @@ const contentListsAdapter = createEntityAdapter({
 const stateFragment: {
   status: APIStatus;
   error?: string;
+  details?: Model.ContentListPureDM;
 } = {
   status: APIStatus.NONE,
   error: '',
+  details: undefined,
 };
 
 const initialState = contentListsAdapter.getInitialState(stateFragment);
@@ -39,9 +42,17 @@ export const fetchContentLists = createAsyncThunk(
   }
 );
 
+export const fetchContentList = createAsyncThunk(
+  `${sliceName}/fetchContentList`,
+  async (id: number, { signal }) => {
+    const { data } = await apiGetContentList(id, signal);
+    return data;
+  }
+);
+
 export const createContentList = createAsyncThunk(
   `${sliceName}/createContentList`,
-  async (contentList: Model.ContentListAM, { signal }) => {
+  async (contentList: Model.ContentListSM, { signal }) => {
     const { data } = await apiAddContentList(contentList, signal);
     return data;
   }
@@ -49,9 +60,18 @@ export const createContentList = createAsyncThunk(
 
 export const updateContentList = createAsyncThunk(
   `${sliceName}/updateContentList`,
-  async (contentList: Model.ContentListPureDM, { signal }) => {
+  async (
+    {
+      contentList,
+      scope,
+    }: {
+      contentList: Model.ContentListPureDM;
+      scope: Redux.Scope;
+    },
+    { signal }
+  ) => {
     const { data } = await apiUpdateContentList(contentList, signal);
-    return data;
+    return { data, scope };
   }
 );
 
@@ -72,13 +92,23 @@ const slice = createSlice({
       state.status = APIStatus.OK;
       contentListsAdapter.upsertMany(state, action.payload);
     });
+    builder.addCase(fetchContentList.fulfilled, (state, action) => {
+      state.status = APIStatus.OK;
+      state.details = action.payload;
+    });
     builder.addCase(createContentList.fulfilled, (state, action) => {
       state.status = APIStatus.OK;
       contentListsAdapter.addOne(state, action.payload);
     });
     builder.addCase(updateContentList.fulfilled, (state, action) => {
       state.status = APIStatus.OK;
-      contentListsAdapter.setOne(state, action.payload);
+      const { data, scope } = action.payload;
+      if (scope === 'LIST') {
+        contentListsAdapter.setOne(state, data);
+      }
+      if (scope === 'DETAILS') {
+        state.details = data;
+      }
     });
     builder.addCase(deleteContentList.fulfilled, (state, action) => {
       state.status = APIStatus.OK;
@@ -87,6 +117,7 @@ const slice = createSlice({
     builder.addMatcher(
       isAnyOf(
         fetchContentLists.pending,
+        fetchContentList.pending,
         createContentList.pending,
         updateContentList.pending,
         deleteContentList.pending
@@ -98,6 +129,7 @@ const slice = createSlice({
     builder.addMatcher(
       isAnyOf(
         fetchContentLists.rejected,
+        fetchContentList.rejected,
         createContentList.rejected,
         updateContentList.rejected,
         deleteContentList.rejected
@@ -112,6 +144,10 @@ const slice = createSlice({
       }
     );
   },
+  selectors: {
+    selectDetails: (state) => state.details,
+    selectStatus: (state) => state.status,
+  },
 });
 
 export const selectSlice = (state: RootState) => state[parentName][name];
@@ -120,5 +156,6 @@ export const {
   selectById: selectContentListById,
   selectIds: selectContentListIds,
 } = contentListsAdapter.getSelectors(selectSlice);
+export const { selectDetails, selectStatus } = slice.getSelectors(selectSlice);
 export const reducer = slice.reducer;
 export default slice;

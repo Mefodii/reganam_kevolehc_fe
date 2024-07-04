@@ -31,4 +31,4 @@ const BaseButton: React.FC<BaseButtonProps> = ({
   );
 };
 
-export default React.memo(BaseButton);
+export default React.memo(BaseButton) as typeof BaseButton;

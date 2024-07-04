@@ -71,7 +71,6 @@ export type UseDropReturn<E extends HTMLElement> = DropState & {
   dropEvents: DropEvents<E>;
 };
 
-// TODO: (L) - check if it is reasonable to memoize received functions
 export const useDrop = <E extends HTMLElement, T = unknown>({
   accepted,
   dataTransfer = false,

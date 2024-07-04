@@ -20,6 +20,7 @@ import { group as model } from '../../../models';
 import { useAppDispatch } from '../../../hooks';
 import { useForm } from '../../../hooks';
 import { WatchingAirStatus, WatchingStatus } from '../../../api/api-utils';
+import { useCallback } from 'react';
 
 type GroupFormProps = {
   formProps: Model.GroupProps;
@@ -30,48 +31,37 @@ const GroupForm: React.FC<GroupFormProps> = ({ formProps, onSuccess }) => {
   const dispatch = useAppDispatch();
   const isUpdate = formProps.formMode === 'UPDATE';
 
-  const { modelState, onFieldChange, setFormErrors, setModelState } = useForm(
-    model.buildState(formProps)
+  const handleCreate = useCallback(
+    (newGroup: Model.GroupSM) => {
+      dispatch(createGroup(newGroup))
+        .unwrap()
+        .then((group) => {
+          onSuccess(group);
+        });
+    },
+    [dispatch, onSuccess]
   );
 
-  const handleToggleSingle = () => {
-    setModelState(model.toggleSingle(modelState));
-  };
-
-  const handleCreate = () => {
-    const [newGroup, isValid, error] = model.validateCreate(modelState);
-    if (!isValid) {
-      setFormErrors(error);
-      return;
-    }
-
-    dispatch(createGroup(newGroup))
-      .unwrap()
-      .then((group) => {
-        onSuccess(group);
-      });
-  };
-
-  const handleUpdate = () => {
-    const [updatedGroup, equals, isValid, error] = model.validateUpdate(
-      modelState,
-      model.getDBState(formProps)
-    );
-    if (!isValid) {
-      setFormErrors(error);
-      return;
-    }
-    if (!isValid || equals) return;
-
-    dispatch(updateGroup(updatedGroup))
-      .unwrap()
-      .then(() => onSuccess());
-  };
+  const handleUpdate = useCallback(
+    (updatedGroup: Model.GroupDM) => {
+      dispatch(updateGroup(updatedGroup))
+        .unwrap()
+        .then(() => onSuccess());
+    },
+    [dispatch, onSuccess]
+  );
 
   const handleDelete = (group: Model.GroupDM) => {
     dispatch(deleteGroup(group))
       .unwrap()
       .then(() => onSuccess());
+  };
+
+  const { modelState, setModelState, onFieldChange, onCreate, onUpdate } =
+    useForm(model, formProps, handleCreate, handleUpdate);
+
+  const handleToggleSingle = () => {
+    setModelState(model.toggleSingle(modelState));
   };
 
   const renderSingle = ({
@@ -184,14 +174,14 @@ const GroupForm: React.FC<GroupFormProps> = ({ formProps, onSuccess }) => {
       <div className='flex justify-between'>
         <div className='flex'>
           {!isUpdate && (
-            <Button tooltip='Add Group' onClick={handleCreate}>
+            <Button tooltip='Add Group' onClick={onCreate}>
               <SVGCheck className='w-6 transition-all duration-300' />
             </Button>
           )}
 
           {isUpdate && (
             <>
-              <Button tooltip='Save Changes' onClick={handleUpdate}>
+              <Button tooltip='Save Changes' onClick={onUpdate}>
                 <SVGCheck className='w-6 transition-all duration-300' />
               </Button>
               <Button

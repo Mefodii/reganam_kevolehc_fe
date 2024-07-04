@@ -3,9 +3,7 @@ import { ContentCategory, ContentWatcherSource } from '../../api/api-utils';
 declare global {
   namespace Model {
     type ContentingFilter = {
-      showWatchers: boolean;
-      showLists: boolean;
-      watcherType?: ContentWatcherSource;
+      source?: ContentWatcherSource;
       category?: ContentCategory;
     };
     type ContentingFilterModel = {
@@ -14,13 +12,13 @@ declare global {
         items: Model.ContentWatcherDM[],
         filter: ContentingFilter
       ) => Model.ContentWatcherDM[];
-      filterByCategory: <T extends { category: string }>(
+      filterByCategory: <T extends { category: ContentCategory }>(
         items: T[],
-        category?: string
+        category?: ContentCategory
       ) => T[];
-      filterBySourceType: (
+      filterBySource: (
         items: ContentWatcherDM[],
-        type?: string
+        source?: ContentWatcherSource
       ) => ContentWatcherDM[];
     };
   }
@@ -28,25 +26,23 @@ declare global {
 
 export const filter: Model.ContentingFilterModel = {
   getInitialState: (): Model.ContentingFilter => ({
-    showWatchers: true,
-    showLists: true,
-    watcherType: undefined,
+    source: undefined,
     category: undefined,
   }),
-  filterContentWatchers(items, { watcherType, category }) {
+  filterContentWatchers(items, { source, category }) {
     let filteredContentWatchers = this.filterByCategory(items, category);
-    filteredContentWatchers = this.filterBySourceType(
+    filteredContentWatchers = this.filterBySource(
       filteredContentWatchers,
-      watcherType
+      source
     );
     return filteredContentWatchers;
   },
   filterByCategory(items, category) {
-    if (!category || category.length === 0) return items;
+    if (!category) return items;
     return items.filter((item) => item.category === category);
   },
-  filterBySourceType(items, type) {
-    if (!type || type.length === 0) return items;
-    return items.filter((item) => item.source_type === type);
+  filterBySource(items, source) {
+    if (!source) return items;
+    return items.filter((item) => item.source_type === source);
   },
 };

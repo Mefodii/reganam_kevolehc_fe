@@ -44,14 +44,16 @@ const ContentWatcherDetails: React.FC<ContentWatcherDetailsProps> = ({
 
   const renderActions = () => {
     return (
-      <div className='flex space-x-2 divide-x divide-active-1/0 group-hover:divide-active-1/20'>
+      <div className='flex divide-x divide-active-1/0 group-hover:divide-active-1/20'>
         <SVGPencil
-          className='w-5 wiggling-clickable-group'
+          className='px-2 wiggling-clickable-group'
+          svgClassName='w-5'
           tooltip='Edit'
           onClick={handleOpenContentWatcherModal}
         />
         <SVGArrowPath
-          className='ml-2 w-5 wiggling-clickable-group'
+          className='px-2 wiggling-clickable-group'
+          svgClassName='w-5'
           tooltip='Check for Updates'
         />
       </div>
@@ -112,4 +114,6 @@ const ContentWatcherDetails: React.FC<ContentWatcherDetailsProps> = ({
   );
 };
 
-export default React.memo(ContentWatcherDetails);
+export default React.memo(
+  ContentWatcherDetails
+) as typeof ContentWatcherDetails;

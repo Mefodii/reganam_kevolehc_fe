@@ -10,4 +10,4 @@ const Loading: React.FC<LoadingProps> = ({ loading }) => {
   return <SVGLoading className='w-5 animate-spin'></SVGLoading>;
 };
 
-export default React.memo(Loading);
+export default React.memo(Loading) as typeof Loading;

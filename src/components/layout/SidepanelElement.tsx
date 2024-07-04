@@ -24,4 +24,4 @@ const SidepanelElement: React.FC<SidepanelElementProps> = ({
   );
 };
 
-export default React.memo(SidepanelElement);
+export default React.memo(SidepanelElement) as typeof SidepanelElement;
