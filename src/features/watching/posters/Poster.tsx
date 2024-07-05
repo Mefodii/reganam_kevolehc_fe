@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera, faTimes } from '@fortawesome/free-solid-svg-icons';
 
@@ -12,6 +12,7 @@ import {
   deletePoster,
 } from '../groups/groupsSlice';
 import { useAppDispatch, useDrop } from '../../../hooks';
+import { UseDropProps } from '../../../hooks/useDrop';
 
 type PosterProps = {
   disabled?: boolean;
@@ -28,47 +29,56 @@ const Poster: React.FC<PosterProps> = ({ disabled, groupId, images }) => {
 
   const poster = images[0];
 
-  const { isDragOver, dropEvents } = useDrop<HTMLDivElement, DataTransfer>({
-    dataTransfer: true,
-    onDrop: (e, dataTransfer) => changePoster(dataTransfer.files[0]),
-  });
+  const changePoster = useCallback(
+    (image: File) => {
+      if (!image) return;
+      setLoading(true);
+
+      if (!image.type.startsWith('image/')) {
+        alert(`Unacceptable file type: ${image.type}`);
+        return;
+      }
+
+      const poster = images[0];
+      // Update poster
+      if (poster) {
+        dispatch(updatePoster({ poster, image }))
+          .unwrap()
+          .then(() => {
+            setLoading(false);
+          });
+        return;
+      }
+
+      // Add poster
+      if (!poster) {
+        dispatch(createPoster({ image, group: groupId }))
+          .unwrap()
+          .then(() => {
+            setLoading(false);
+          });
+        return;
+      }
+    },
+    [dispatch, groupId, images]
+  );
+  const dropProps: UseDropProps<HTMLDivElement, DataTransfer> = useMemo(
+    () => ({
+      dataTransfer: true,
+      onDrop: (e, dataTransfer) => changePoster(dataTransfer.files[0]),
+    }),
+    [changePoster]
+  );
+
+  const { isDragOver, dropEvents } = useDrop<HTMLDivElement, DataTransfer>(
+    dropProps
+  );
 
   const handleFileSelect: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     if (!e.target.files) return;
 
     const image = e.target.files[0];
     changePoster(image);
-  };
-
-  const changePoster = (image: File) => {
-    if (!image) return;
-    setLoading(true);
-
-    if (!image.type.startsWith('image/')) {
-      alert(`Unacceptable file type: ${image.type}`);
-      return;
-    }
-
-    const poster = images[0];
-    // Update poster
-    if (poster) {
-      dispatch(updatePoster({ poster, image }))
-        .unwrap()
-        .then(() => {
-          setLoading(false);
-        });
-      return;
-    }
-
-    // Add poster
-    if (!poster) {
-      dispatch(createPoster({ image, group: groupId }))
-        .unwrap()
-        .then(() => {
-          setLoading(false);
-        });
-      return;
-    }
   };
 
   const handleDeletePoster = () => {

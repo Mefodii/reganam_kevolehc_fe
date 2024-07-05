@@ -27,6 +27,7 @@ import ContentItemForm from './ContentItemForm';
 import { DnDTypes } from '../../../util/constants';
 import { ContentWatcherSource } from '../../../api/api-utils';
 import YouTubePlayer from '../../../components/generic/YouTubePlayer';
+import { UseDropProps } from '../../../hooks/useDrop';
 
 type ContentItemRowProps = {
   contentItem: Model.ContentItemDM;
@@ -59,40 +60,36 @@ const ContentItemRow: React.FC<ContentItemRowProps> = ({
   const [insertBefore, setInsertBefore] = useState(false);
   const [draggable, setDraggable] = useState(false);
 
+  const dispatch = useAppDispatch();
+
+  const dropProps: UseDropProps<HTMLDivElement, Model.ContentItemDM> = useMemo(
+    () => ({
+      extraValidation: (e, item, copy) => {
+        if (item.content_list !== contentItem.content_list) return false;
+        if (item !== contentItem) return true;
+        return copy;
+      },
+      onDragEnter: (e, item) =>
+        setInsertBefore(item.position > contentItem.position),
+      onDrop: (e, item, copy) => {
+        const action = copy ? createContentItem : updateContentItem;
+        const position = contentItem.position + (copy && !insertBefore ? 1 : 0);
+        dispatch(
+          action({
+            ...item,
+            position,
+          })
+        );
+      },
+    }),
+    [dispatch, contentItem, insertBefore]
+  );
+
   const { isDragged, isCopying, isDragOver, dndEvents } = useDnD<
     HTMLDivElement,
     Model.ContentItemDM
-  >(DnDTypes.CONTENT_ITEM, contentItem, {
-    accepted: DnDTypes.CONTENT_ITEM,
-    extraValidation: (e, item, copy) => {
-      // Note: personal opinion, this way looks more readable
-      if (item.content_list !== contentItem.content_list) return false;
-      if (item !== contentItem) return true;
-      return copy;
-    },
-    onDragEnter: (e, item) =>
-      setInsertBefore(item.position > contentItem.position),
-    onDrop: handleDrop,
-  });
+  >(DnDTypes.CONTENT_ITEM, contentItem, dropProps);
 
-  function handleDrop(
-    e: React.DragEvent<HTMLDivElement>,
-    item: Model.ContentItemDM,
-    copy: boolean
-  ) {
-    const action = copy ? createContentItem : updateContentItem;
-    dispatch(
-      action({
-        ...item,
-        position:
-          copy && !insertBefore
-            ? contentItem.position + 1
-            : contentItem.position,
-      })
-    );
-  }
-
-  const dispatch = useAppDispatch();
   const { title, position, published_at, consumed, url, item_id } = contentItem;
 
   const handleToggleConsumed = () => {

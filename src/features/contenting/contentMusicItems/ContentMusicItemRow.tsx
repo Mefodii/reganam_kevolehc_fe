@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { toLocalDatetime } from '../../../util/datetime';
 import {
   SVGCalendar,
@@ -6,10 +6,16 @@ import {
   SVGLink,
   SVGListBullet,
   SVGMinus,
+  SVGPencil,
 } from '../../../components/svg';
 import { contentMusicItem as model } from '../../../models';
 import ContentTrackRow from '../contentTracks/ContentTrackRow';
-import { useAppDispatch, useContextMenu, useDnD } from '../../../hooks';
+import {
+  useAppDispatch,
+  useContextMenu,
+  useDnD,
+  useModal,
+} from '../../../hooks';
 import { ContentMusicContextMenu } from '../../../components/contextMenu';
 import {
   DragDots,
@@ -20,8 +26,11 @@ import {
 import { DnDTypes } from '../../../util/constants';
 import {
   createContentMusicItem,
+  deleteContentMusicItem,
   updateContentMusicItem,
 } from './contentMusicItemsSlice';
+import ContentMusicItemForm from './ContentMusicItemForm';
+import { UseDropProps } from '../../../hooks/useDrop';
 
 type ContentMusicItemRowProps = {
   contentMusicItem: Model.ContentMusicItemDM;
@@ -32,6 +41,8 @@ const ContentMusicItemRow: React.FC<ContentMusicItemRowProps> = ({
   const { title, position, published_at, type, tracks, url, parsed } =
     contentMusicItem;
 
+  const { openModal, openConfirmationModal, closeModal } = useModal();
+
   const dispatch = useAppDispatch();
   const { showContext, coords, onContextMenu } = useContextMenu();
   const [isMouseOver, setIsMouseOver] = useState(false);
@@ -39,41 +50,49 @@ const ContentMusicItemRow: React.FC<ContentMusicItemRowProps> = ({
   const [insertBefore, setInsertBefore] = useState(false);
   const [draggable, setDraggable] = useState(false);
 
+  const dropProps: UseDropProps<HTMLDivElement, Model.ContentMusicItemDM> =
+    useMemo(
+      () => ({
+        extraValidation: (e, item, copy) => {
+          if (item.content_list !== contentMusicItem.content_list) return false;
+          if (item !== contentMusicItem) return true;
+          return copy;
+        },
+        onDragEnter: (e, item) =>
+          setInsertBefore(item.position > contentMusicItem.position),
+        onDrop: (e, item, copy) => {
+          const action = copy ? createContentMusicItem : updateContentMusicItem;
+          const position =
+            contentMusicItem.position + (copy && !insertBefore ? 1 : 0);
+          dispatch(action({ ...item, position }));
+        },
+      }),
+      [dispatch, contentMusicItem, insertBefore]
+    );
+
   const { isDragged, isCopying, isDragOver, dndEvents } = useDnD<
     HTMLDivElement,
     Model.ContentMusicItemDM
-  >(DnDTypes.CONTENT_MUSIC_ITEM, contentMusicItem, {
-    accepted: DnDTypes.CONTENT_MUSIC_ITEM,
-    extraValidation: (e, item, copy) => {
-      // Note: personal opinion, this way looks more readable
-      if (item.content_list !== contentMusicItem.content_list) return false;
-      if (item !== contentMusicItem) return true;
-      return copy;
-    },
-    onDragEnter: (e, item) =>
-      setInsertBefore(item.position > contentMusicItem.position),
-    onDrop: handleDrop,
-  });
-
-  function handleDrop(
-    e: React.DragEvent<HTMLDivElement>,
-    item: Model.ContentMusicItemDM,
-    copy: boolean
-  ) {
-    const action = copy ? createContentMusicItem : updateContentMusicItem;
-    dispatch(
-      action({
-        ...item,
-        position:
-          copy && !insertBefore
-            ? contentMusicItem.position + 1
-            : contentMusicItem.position,
-      })
-    );
-  }
+  >(DnDTypes.CONTENT_MUSIC_ITEM, contentMusicItem, dropProps);
 
   const handleToggleParsed = () => {
     dispatch(updateContentMusicItem({ ...contentMusicItem, parsed: !parsed }));
+  };
+
+  const handleOpenContentItemModal = () => {
+    openModal(
+      <ContentMusicItemForm
+        formProps={{ formMode: 'UPDATE', item: contentMusicItem }}
+        onSuccess={closeModal}
+      />
+    );
+  };
+
+  const handleDeleteContentMusicItem = () => {
+    openConfirmationModal({
+      title: 'Delete Item?',
+      onConfirm: () => dispatch(deleteContentMusicItem(contentMusicItem)),
+    });
   };
 
   const renderTypeSVG = () => {
@@ -102,6 +121,16 @@ const ContentMusicItemRow: React.FC<ContentMusicItemRowProps> = ({
         <SVGCalendar
           className='w-4 ml-2 text-text-1/30 hover:text-text-1'
           tooltip={toLocalDatetime(published_at)}
+        />
+        <SVGPencil
+          className='row-icon'
+          tooltip='Edit'
+          onClick={handleOpenContentItemModal}
+        />
+        <SVGCross
+          className='row-icon hover:text-error-1'
+          tooltip='Delete'
+          onClick={handleDeleteContentMusicItem}
         />
       </div>
     );

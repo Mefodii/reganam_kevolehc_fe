@@ -89,7 +89,7 @@ const ContentItemsTable: React.FC<ContentItemsTableProps> = ({
     });
   };
 
-  const handleOpenVideoModal = useCallback(() => {
+  const handleOpenContentItemModal = useCallback(() => {
     const defaultPosition = contentItems.length > 0 ? count + 1 : 1;
 
     openModal(
@@ -172,7 +172,7 @@ const ContentItemsTable: React.FC<ContentItemsTableProps> = ({
           <SVGPlus
             className={`w-5 simple-clickable-1`}
             tooltip='Add Item'
-            onClick={handleOpenVideoModal}
+            onClick={handleOpenContentItemModal}
           />
           <div
             className={`cursor-pointer  ${

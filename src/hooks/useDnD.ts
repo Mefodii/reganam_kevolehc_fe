@@ -1,5 +1,6 @@
 import { DropEvents, DropState, UseDropProps, useDrop } from './useDrop';
 import { DragEvents, DragState, useDrag } from './useDrag';
+import { useMemo } from 'react';
 
 export type DnDEvents<E extends HTMLElement> = {
   onDragStart: React.DragEventHandler<E>;
@@ -16,17 +17,27 @@ export const useDnD = <E extends HTMLElement, T = unknown>(
   dropProps: UseDropProps<E, T>
 ): UseDnDReturn<E> => {
   const { dragEvents, ...dragState } = useDrag<E, T>(type, item);
-  const { dropEvents, ...dropState } = useDrop<E, T>({
-    ...dropProps,
-    accepted: dropProps.accepted ? dropProps.accepted : type,
-  });
+
+  const props = useMemo(
+    () => ({
+      ...dropProps,
+      accepted: dropProps.accepted ? dropProps.accepted : type,
+    }),
+    [dropProps, type]
+  );
+  const { dropEvents, ...dropState } = useDrop<E, T>(props);
+
+  const dndEvents = useMemo(
+    () => ({
+      ...dragEvents,
+      ...dropEvents,
+    }),
+    [dragEvents, dropEvents]
+  );
 
   return {
     ...dragState,
     ...dropState,
-    dndEvents: {
-      ...dragEvents,
-      ...dropEvents,
-    },
+    dndEvents,
   };
 };

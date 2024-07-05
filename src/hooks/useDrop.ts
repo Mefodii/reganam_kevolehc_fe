@@ -78,7 +78,8 @@ export const useDrop = <E extends HTMLElement, T = unknown>({
   onDragEnter,
   onDragLeave,
   onDrop,
-}: UseDropProps<E, T>): UseDropReturn<E> => {
+}: // eslint-disable-next-line react-hooks/exhaustive-deps
+UseDropProps<E, T>): UseDropReturn<E> => {
   const { data, getItem } = useContext<DnDProps<T, E>>(DnDContext);
   const [, setDragCounter] = useState(0);
   const [isDragOver, setIsDragOver] = useState(false);

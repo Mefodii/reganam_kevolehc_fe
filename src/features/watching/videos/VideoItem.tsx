@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import {
   BLANK_VALUE,
@@ -20,6 +20,7 @@ import { video as videoModel } from '../../../models';
 import VideoForm from './VideoForm';
 import { useModal } from '../../../hooks';
 import { DragDots, ItemPlaceholder, Table } from '../../../components/generic';
+import { UseDropProps } from '../../../hooks/useDrop';
 
 type VideoItemProps = {
   video: Model.VideoDM;
@@ -33,35 +34,34 @@ const VideoItem: React.FC<VideoItemProps> = ({ video }) => {
   const [insertBefore, setInsertBefore] = useState(false);
   const [draggable, setDraggable] = useState(false);
 
+  const dropProps: UseDropProps<HTMLDivElement, Model.VideoDM> = useMemo(
+    () => ({
+      extraValidation: (e, item, copy) => {
+        if (item.group !== video.group) return false;
+        if (item !== video) return true;
+        return copy;
+      },
+      onDragEnter: (e, item) => setInsertBefore(item.order > video.order),
+      onDrop: (e, item, copy) => {
+        const action = copy ? createVideo : updateVideo;
+        const order = video.order + (copy && !insertBefore ? 1 : 0);
+        dispatch(
+          action({
+            ...item,
+            order,
+          })
+        );
+      },
+    }),
+    [dispatch, video, insertBefore]
+  );
+
   const { isDragged, isCopying, isDragOver, dndEvents } = useDnD<
     HTMLDivElement,
     Model.VideoDM
-  >(DnDTypes.VIDEO, video, {
-    accepted: DnDTypes.VIDEO,
-    extraValidation: (e, item, copy) => {
-      if (item.group !== video.group) return false;
-      if (item !== video) return true;
-      return copy;
-    },
-    onDragEnter: (e, item) => setInsertBefore(item.order > video.order),
-    onDrop: handleDrop,
-  });
+  >(DnDTypes.VIDEO, video, dropProps);
 
   const { openModal, closeModal } = useModal();
-
-  function handleDrop(
-    e: React.DragEvent<HTMLDivElement>,
-    item: Model.VideoDM,
-    copy: boolean
-  ) {
-    const action = copy ? createVideo : updateVideo;
-    dispatch(
-      action({
-        ...item,
-        order: copy && !insertBefore ? video.order + 1 : video.order,
-      })
-    );
-  }
 
   const handleOpenEdit = () => {
     openModal(
