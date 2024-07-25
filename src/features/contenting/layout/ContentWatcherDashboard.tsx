@@ -64,7 +64,6 @@ const ContentWatcherDashboard: React.FC = () => {
     return (
       <ContentMusicItemTable
         contentList={contentWatcher.content_list}
-        count={contentWatcher.items_count}
         contentMusicItems={contentMusicItems}
         source={contentWatcher.source_type}
         pageInfo={contentMusicItemsPageInfo}
@@ -78,7 +77,6 @@ const ContentWatcherDashboard: React.FC = () => {
     return (
       <ContentItemsTable
         contentList={contentWatcher.content_list}
-        count={contentWatcher.items_count}
         contentItems={contentItems}
         source={contentWatcher.source_type}
         pageInfo={contentItemsPageInfo}

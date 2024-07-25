@@ -12,8 +12,10 @@ import SVGCog from './SVGCog';
 import SVGCollection from './SVGCollection';
 import SVGCross from './SVGCross';
 import SVGDocumentText from './SVGDocumentText';
+import SVGDoubleCheck from './SVGDoubleCheck';
 import SVGDownArrow from './SVGDownArrow';
 import SVGDownArrowTray from './SVGDownArrowTray';
+import SVGDroplet from './SVGDroplet';
 import SVGEye from './SVGEye';
 import SVGEyeClosed from './SVGEyeClosed';
 import SVGEyeSlash from './SVGEyeSlash';
@@ -26,6 +28,7 @@ import SVGLink from './SVGLink';
 import SVGListBullet from './SVGListBullet';
 import SVGLoading from './SVGLoading';
 import SVGLogout from './SVGLogout';
+import SVGMagnifyingGlass from './SVGMagnifyingGlass';
 import SVGMapPin from './SVGMapPin';
 import SVGMinus from './SVGMinus';
 import SVGPencil from './SVGPencil';
@@ -33,12 +36,13 @@ import SVGPlay from './SVGPlay';
 import SVGPlus from './SVGPlus';
 import SVGPlusCircle from './SVGPlusCircle';
 import SVGSave from './SVGSave';
+import SVGThumbDown from './SVGThumbDown';
+import SVGThumbUp from './SVGThumbUp';
 import SVGTrash from './SVGTrash';
 import SVGVerticalDots from './SVGVerticalDots';
 import SVGWarning from './SVGWarning';
 import SVGXCircle from './SVGXCircle';
 import SVGYoutube from './SVGYoutube';
-
 export {
   SVGArrow,
   SVGArrowPath,
@@ -54,8 +58,10 @@ export {
   SVGCollection,
   SVGCross,
   SVGDocumentText,
+  SVGDoubleCheck,
   SVGDownArrow,
   SVGDownArrowTray,
+  SVGDroplet,
   SVGEye,
   SVGEyeClosed,
   SVGEyeSlash,
@@ -68,6 +74,7 @@ export {
   SVGListBullet,
   SVGLoading,
   SVGLogout,
+  SVGMagnifyingGlass,
   SVGMapPin,
   SVGMinus,
   SVGPencil,
@@ -75,6 +82,8 @@ export {
   SVGPlus,
   SVGPlusCircle,
   SVGSave,
+  SVGThumbUp,
+  SVGThumbDown,
   SVGTrash,
   SVGVerticalDots,
   SVGWarning,

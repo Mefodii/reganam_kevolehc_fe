@@ -2,12 +2,12 @@
 @tailwind components;
 
 .default-theme {
-  --theme-1: #1f2937;
+  /* --theme-1: #1f2937;
   --theme-1RGB: 31, 41, 55;
   --theme-2: #1f2937;
   --theme-2RGB: 31, 41, 55;
   --theme-3: #374151;
-  --theme-3RGB: 55, 65, 81;
+  --theme-3RGB: 55, 65, 81; */
   --theme-1: #111827;
   --theme-1RGB: 17, 24, 39;
   --theme-2: #172035;
@@ -191,7 +191,7 @@
 
 .option-dropdown-container {
   @apply w-full absolute rounded-sm shadow-md border bg-theme-2 border-theme-3 origin-top
-  transform scale-0 duration-300 ease-in-out group-hover:scale-100 z-10 overflow-y-auto
+  transform scale-0 duration-300 ease-in-out group-hover:scale-100 z-50 overflow-y-auto
   max-h-52 divide-y-2 divide-theme-3;
 }
 

@@ -30,7 +30,8 @@ export enum FE_URL {
   READING = '/readio',
   CONTENTING = '/contentio',
   CONTENT_WATCHER = '/contentio/content_watcher',
-  AUDIO = '/audio',
+  AUDIO_TRACKS = '/audio/tracks',
+  AUDIO_ARTISTS = '/audio/artists',
   //
   WATCHING = '/watchio',
   MOVIES = '/watchio/movies',

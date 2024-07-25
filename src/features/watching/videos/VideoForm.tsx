@@ -39,7 +39,7 @@ const VideoForm: React.FC<VideoFormProps> = ({ formProps, onSuccess }) => {
 
   const handleUpdate = useCallback(
     (updatedVideo: Model.VideoDM, originalVideo: Model.VideoDM) => {
-      if (updatedVideo.order !== originalVideo.order) {
+      if (updatedVideo.position !== originalVideo.position) {
         dispatch(updateVideoSimple(updatedVideo)).unwrap().then(onSuccess);
       } else {
         dispatch(updateVideo(updatedVideo)).unwrap().then(onSuccess);
@@ -67,7 +67,7 @@ const VideoForm: React.FC<VideoFormProps> = ({ formProps, onSuccess }) => {
     year,
     status,
     watched_date,
-    order,
+    position,
     current_episode,
     episodes,
     rating,
@@ -98,9 +98,9 @@ const VideoForm: React.FC<VideoFormProps> = ({ formProps, onSuccess }) => {
           onChange={onFieldChange}
         />
         <Number
-          label='Order'
-          name='order'
-          value={order}
+          label='Position'
+          name='position'
+          value={position}
           onChange={onFieldChange}
           min={1}
         />

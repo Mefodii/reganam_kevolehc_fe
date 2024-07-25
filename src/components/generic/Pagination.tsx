@@ -35,6 +35,7 @@ type PaginationProps<T extends QParams.Page> = {
   action: (params: T) => AsyncThunkAction<any, T, AsyncThunkConfig>;
 };
 
+// TODO: (M) - a number field to specify manually the page
 const Pagination = <T extends QParams.Page>({
   pageInfo: { page, pages, nextParams, previousParams },
   action,

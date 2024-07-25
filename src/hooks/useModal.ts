@@ -3,7 +3,8 @@ import { ModalContext } from '../context';
 import { ConfirmationModalProps } from '../components/generic/ConfirmationModal';
 
 export const useModal = () => {
-  const { open, openConfirmation, close } = useContext(ModalContext);
+  const { open, openConfirmation, close, setClassName } =
+    useContext(ModalContext);
   const closeModal = close;
   const openModal = open;
   const openConfirmationModal = ({
@@ -23,5 +24,10 @@ export const useModal = () => {
     });
   };
 
-  return { closeModal, openModal, openConfirmationModal };
+  return {
+    closeModal,
+    openModal,
+    openConfirmationModal,
+    setModalClassName: setClassName,
+  };
 };

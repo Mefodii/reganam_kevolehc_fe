@@ -142,9 +142,12 @@ const slice = createSlice({
       contentMusicItemsAdapter.removeAll(state);
       contentMusicItemsAdapter.upsertMany(state, results);
     });
+    builder.addCase(fetchContentMusicItems.pending, (state, action) => {
+      state.status = APIStatus.PENDING;
+      contentMusicItemsAdapter.removeAll(state);
+    });
     builder.addMatcher(
       isAnyOf(
-        fetchContentMusicItems.pending,
         refetchContentMusicItems.pending,
         createContentMusicItem.pending,
         updateContentMusicItem.pending,

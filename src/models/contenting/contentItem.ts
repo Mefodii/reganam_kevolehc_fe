@@ -1,4 +1,5 @@
 import { DownloadStatus } from '../../api/api-utils';
+import { getNow } from '../../util/datetime';
 import { BaseModel } from '../generic/model';
 
 declare global {
@@ -50,7 +51,7 @@ class ContentItemModel extends BaseModel<
       file_name: '',
       position: props.defaultPosition,
       download_status: DownloadStatus.NONE,
-      published_at: '',
+      published_at: getNow(),
       consumed: false,
       content_list: props.content_list,
     };

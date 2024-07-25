@@ -20,8 +20,11 @@ const ContentWatcherDashboard = lazy(
 const ContentListDashboard = lazy(
   () => import('../features/contenting/layout/ContentListDashboard')
 );
-const AudioDashboard = lazy(
-  () => import('../features/listening/layout/Dashboard')
+const TracksDashboard = lazy(
+  () => import('../features/listening/layout/TracksDashboard')
+);
+const ArtistsDashboard = lazy(
+  () => import('../features/listening/layout/ArtistsDashboard')
 );
 const HelpersDashboard = lazy(() => import('../features/helpers/Dashboard'));
 const WatchingDashboard = lazy(
@@ -57,7 +60,8 @@ const Routes = () => {
           />
           <Route path={`content_list/:id`} element={<ContentListDashboard />} />
         </Route>
-        <Route path={FE_URL.AUDIO} element={<AudioDashboard />} />
+        <Route path={FE_URL.AUDIO_TRACKS} element={<TracksDashboard />} />
+        <Route path={FE_URL.AUDIO_ARTISTS} element={<ArtistsDashboard />} />
         <Route path={FE_URL.HELPERS} element={<HelpersDashboard />} />
       </ReactRoutes>
     </Suspense>

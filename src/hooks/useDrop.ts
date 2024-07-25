@@ -2,7 +2,7 @@ import { useCallback, useContext, useMemo, useState } from 'react';
 import { DnDContext } from '../context';
 import { DnDData, DnDProps } from '../context/DnD';
 
-type Accepted = string[] | string | undefined;
+export type Accepted = string[] | string | undefined;
 type ExtraValidation<E extends HTMLElement, T> = (
   e: React.DragEvent<E>,
   item: T,
@@ -81,7 +81,7 @@ export const useDrop = <E extends HTMLElement, T = unknown>({
 }: // eslint-disable-next-line react-hooks/exhaustive-deps
 UseDropProps<E, T>): UseDropReturn<E> => {
   const { data, getItem } = useContext<DnDProps<T, E>>(DnDContext);
-  const [, setDragCounter] = useState(0);
+  const [, setDragDepth] = useState(0);
   const [isDragOver, setIsDragOver] = useState(false);
 
   const handleDragEnter = useCallback(
@@ -113,7 +113,7 @@ UseDropProps<E, T>): UseDropReturn<E> => {
   const handleDrop = useCallback(
     (e: React.DragEvent<E>) => {
       e.preventDefault();
-      setDragCounter(0);
+      setDragDepth(0);
       setIsDragOver(false);
 
       if (!isValid({ e, data, accepted, extraValidation, dataTransfer }))
@@ -126,7 +126,7 @@ UseDropProps<E, T>): UseDropReturn<E> => {
 
   const handleDragPass = useCallback(
     (e: React.DragEvent<E>, mod: number) => {
-      setDragCounter((prevCounter) => {
+      setDragDepth((prevCounter) => {
         const newCounter = prevCounter + mod;
 
         if (prevCounter === 0 && newCounter === 1) {

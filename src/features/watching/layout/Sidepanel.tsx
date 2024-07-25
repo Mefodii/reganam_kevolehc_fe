@@ -45,7 +45,7 @@ const Sidepanel: React.FC<SidepanelProps> = ({ watchingType }) => {
         <VideoForm
           formProps={{
             groupId: group.id,
-            defaultOrder: 1,
+            defaultPosition: 1,
             formMode: 'CREATE',
           }}
           onSuccess={() => closeModal()}

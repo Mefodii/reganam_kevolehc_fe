@@ -75,7 +75,7 @@ const ContentWatcherRow: React.FC<ContentWatcherRowProps> = ({
       <div className='w-10 flex justify-center mr-2'>
         <LED on={true} color={consumed ? 'Green' : 'Red'} />
       </div>
-      <div className='flex-3'>{name}</div>
+      <div className='flex-3 text-ellipsis'>{name}</div>
       <div className='flex-1'>{category}</div>
       <div className='flex-1'>{source_type}</div>
       <div className='flex-1 text-center'>{items_count}</div>

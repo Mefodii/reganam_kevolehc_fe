@@ -31,6 +31,8 @@ import {
 } from './contentMusicItemsSlice';
 import ContentMusicItemForm from './ContentMusicItemForm';
 import { UseDropProps } from '../../../hooks/useDrop';
+import TrackStatusPanel from '../../listening/tracks/TrackStatusPanel';
+import { DownloadStatus } from '../../../api/api-utils';
 
 type ContentMusicItemRowProps = {
   contentMusicItem: Model.ContentMusicItemDM;
@@ -38,10 +40,28 @@ type ContentMusicItemRowProps = {
 const ContentMusicItemRow: React.FC<ContentMusicItemRowProps> = ({
   contentMusicItem,
 }) => {
-  const { title, position, published_at, type, tracks, url, parsed } =
-    contentMusicItem;
+  const {
+    id,
+    title,
+    position,
+    published_at,
+    type,
+    tracks,
+    url,
+    parsed,
+    download_status,
+  } = contentMusicItem;
 
   const { openModal, openConfirmationModal, closeModal } = useModal();
+  const [isSingle, isPlaylist, isNotMusic, isUnknown] = useMemo(
+    () => [
+      model.isSingle(contentMusicItem),
+      model.isPlaylist(contentMusicItem),
+      model.isNotMusic(contentMusicItem),
+      model.isUnknown(contentMusicItem),
+    ],
+    [contentMusicItem]
+  );
 
   const dispatch = useAppDispatch();
   const { showContext, coords, onContextMenu } = useContextMenu();
@@ -96,30 +116,30 @@ const ContentMusicItemRow: React.FC<ContentMusicItemRowProps> = ({
   };
 
   const renderTypeSVG = () => {
-    if (model.isPlaylist(contentMusicItem)) {
+    if (isPlaylist) {
       return <SVGListBullet className='w-5 text-active-2/80' tooltip={type} />;
     }
-    if (model.isSingle(contentMusicItem)) {
+    if (isSingle) {
       return <SVGMinus className='w-5 text-active-2/80' tooltip={type} />;
     }
-    if (model.isNotMusic(contentMusicItem)) {
+    if (isNotMusic) {
       return <SVGCross className='w-5 text-error-1/80' tooltip={type} />;
+    }
+    if (isUnknown) {
+      return <div className='w-5 text-warning-1/80 text-center'>{'?'}</div>;
     }
   };
 
   const renderIcons = () => {
     return (
-      <div className='flex space-x-2 divide-x divide-active-1/20 justify-end mr-4'>
+      <div className='flex justify-end'>
         {url && (
           <a href={url} target='_blank' rel='noreferrer'>
-            <SVGLink
-              className='w-4 ml-2 text-text-1/30 hover:text-text-1'
-              tooltip={url}
-            />
+            <SVGLink className='row-icon' tooltip={url} />
           </a>
         )}
         <SVGCalendar
-          className='w-4 ml-2 text-text-1/30 hover:text-text-1'
+          className='row-icon'
           tooltip={toLocalDatetime(published_at)}
         />
         <SVGPencil
@@ -135,6 +155,19 @@ const ContentMusicItemRow: React.FC<ContentMusicItemRowProps> = ({
       </div>
     );
   };
+
+  const renderTitle = useMemo(() => {
+    if (isSingle) {
+      if (!tracks || !tracks[0]?.track) {
+        throw new Error(
+          `Single items are expected to have one track. Item: ${id}/${title}`
+        );
+      }
+
+      return <div>{tracks[0].track.full_name}</div>;
+    }
+    return <div>{title}</div>;
+  }, [id, title, isSingle, tracks]);
 
   return (
     <div
@@ -168,21 +201,35 @@ const ContentMusicItemRow: React.FC<ContentMusicItemRowProps> = ({
               onClick={(type) => console.log(type)}
             />
           )}
-          <div className='flex-3'>{title}</div>
+          <div
+            className={`flex-3 ${
+              [DownloadStatus.MISSING, DownloadStatus.UNABLE].includes(
+                download_status
+              ) && 'text-warning-1'
+            }`}
+          >
+            {renderTitle}
+          </div>
           <div
             className={`flex-1 ${isMouseOver ? 'opacity-100' : 'opacity-0'}`}
           >
             {renderIcons()}
           </div>
+
+          <div className='w-36'>
+            {isSingle && <TrackStatusPanel track={tracks[0].track!} />}
+          </div>
           <div className='w-12 text-lg text-text-1/10 group-hover:text-text-1/70 text-right'>
             {position}
           </div>
         </Table.TRow>
-        <div className={`${tracks.length > 0 ? 'pb-3' : ''}`}>
-          {tracks.map((track, i) => (
-            <ContentTrackRow contentTrack={track} key={i} />
-          ))}
-        </div>
+        {isPlaylist && (
+          <div className={`${tracks.length > 0 ? 'pb-3' : ''}`}>
+            {tracks.map((track, i) => (
+              <ContentTrackRow contentTrack={track} key={i} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

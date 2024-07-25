@@ -13,3 +13,8 @@ export const API_CONTENT_ITEMS = API_CONTENTING + 'contentItems/';
 export const API_CONTENT_MUSIC_ITEMS = API_CONTENTING + 'contentMusicItems/';
 export const API_CONTENT_TRACKS = API_CONTENTING + 'contentTracks/';
 export const API_CONTENT_WATCHERS = API_CONTENTING + 'contentWatchers/';
+
+// LISTENING API
+export const API_LISTENING = DB_URL + 'listening/api/';
+export const API_TRACKS = API_LISTENING + 'tracks/';
+export const API_ARTISTS = API_LISTENING + 'artists/';

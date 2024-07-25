@@ -41,14 +41,14 @@ const VideoItem: React.FC<VideoItemProps> = ({ video }) => {
         if (item !== video) return true;
         return copy;
       },
-      onDragEnter: (e, item) => setInsertBefore(item.order > video.order),
+      onDragEnter: (e, item) => setInsertBefore(item.position > video.position),
       onDrop: (e, item, copy) => {
         const action = copy ? createVideo : updateVideo;
-        const order = video.order + (copy && !insertBefore ? 1 : 0);
+        const position = video.position + (copy && !insertBefore ? 1 : 0);
         dispatch(
           action({
             ...item,
-            order,
+            position,
           })
         );
       },

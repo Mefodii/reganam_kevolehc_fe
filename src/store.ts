@@ -5,6 +5,10 @@ import {
   reducer as contenting,
   name as contentingName,
 } from './features/contenting';
+import {
+  reducer as listening,
+  name as listeningName,
+} from './features/listening';
 import { reducer as page, name as pageName } from './redux/pageSlice';
 import {
   name as loadingsName,
@@ -16,6 +20,7 @@ const rootReducer = combineReducers({
   [pageName]: page,
   [watchingName]: watching,
   [contentingName]: contenting,
+  [listeningName]: listening,
 });
 
 const store = configureStore({

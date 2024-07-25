@@ -16,15 +16,15 @@ const Content = () => {
       <div
         className={`${theme} flex flex-col text-text-1 bg-gradient-to-t from-theme-2 to-theme-3 min-h-screen max-h-screen`}
       >
-        <ModalProvider>
-          <DnDProvider>
+        <DnDProvider>
+          <ModalProvider>
             <ThemeChanger />
             <Header />
             <div className='flex flex-1 overflow-hidden'>
               <Routes />
             </div>
-          </DnDProvider>
-        </ModalProvider>
+          </ModalProvider>
+        </DnDProvider>
         <div id='portal-root'></div>
       </div>
     </Router>

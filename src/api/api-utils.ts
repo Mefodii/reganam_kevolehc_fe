@@ -41,9 +41,10 @@ export enum DownloadStatus {
 }
 
 export enum ContentMusic {
+  UNKNOWN = 'Unknown',
+  NOT_MUSIC = 'NotMusic',
   SINGLE = 'Single',
   PLAYLIST = 'Playlist',
-  NOT_MUSIC = 'NotMusic',
 }
 
 export enum ContentWatcherSource {
@@ -59,6 +60,7 @@ export enum ContentWatcherStatus {
   WARNING = 'Warning',
   ERROR = 'Error',
   DEAD = 'Dead',
+  IGNORE = 'Ignore',
   NONE = 'None',
 }
 
@@ -72,4 +74,13 @@ export enum ContentWatcherQuality {
   DEFAULT = -1,
   Q720 = 720,
   Q1080 = 1080,
+}
+
+export enum TrackStatus {
+  NONE = 'None',
+  LIKE = 'Like',
+  DISLIKE = 'Dislike',
+  MISSING = 'Missing',
+  DOWNLOADED = 'Downloaded',
+  IN_LIBRARY = 'In Library',
 }

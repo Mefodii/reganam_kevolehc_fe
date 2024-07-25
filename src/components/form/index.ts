@@ -8,11 +8,13 @@ import Checkbox from './Checkbox';
 import Text from './Text';
 import TextArea from './TextArea';
 import TextAreaList from './TextAreaList';
+import List from './List';
 
 export {
   Date,
   DropdownSelect,
   InputContainer,
+  List,
   MultiSelect,
   Number,
   Radio,

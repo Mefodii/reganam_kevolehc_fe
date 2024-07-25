@@ -64,7 +64,6 @@ const ContentListDashboard: React.FC = () => {
     return (
       <ContentMusicItemTable
         contentList={contentList.id}
-        count={contentList.items_count}
         contentMusicItems={contentMusicItems}
         pageInfo={contentMusicItemsPageInfo}
       />
@@ -77,7 +76,6 @@ const ContentListDashboard: React.FC = () => {
     return (
       <ContentItemsTable
         contentList={contentList.id}
-        count={contentList.items_count}
         contentItems={contentItems}
         pageInfo={contentItemsPageInfo}
       />

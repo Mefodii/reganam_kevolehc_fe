@@ -15,7 +15,7 @@ declare global {
       links: Alias;
       year: number;
       status: WatchingStatus;
-      order: number;
+      position: number;
       current_episode: number;
       episodes: number;
       rating: number | null;
@@ -26,7 +26,7 @@ declare global {
     };
     type VideoCreateProps = CreateProps & {
       groupId: number;
-      defaultOrder: number;
+      defaultPosition: number;
     };
     type VideoProps = VideoCreateProps | UpdateProps<VideoDM>;
   }
@@ -54,7 +54,7 @@ class VideoModel extends BaseModel<
       status: WatchingStatus.PLANNED,
       watched_date: getToday(),
       year: 0,
-      order: props.defaultOrder ? props.defaultOrder : 1,
+      position: props.defaultPosition ? props.defaultPosition : 1,
       current_episode: 0,
       episodes: 1,
       rating: null,
@@ -71,7 +71,7 @@ class VideoModel extends BaseModel<
       links: link.toState(dbState.links),
       year: dbState.year,
       status: dbState.status,
-      order: dbState.order,
+      position: dbState.position,
       current_episode: dbState.current_episode,
       episodes: dbState.episodes,
       rating: dbState.rating,
@@ -92,7 +92,7 @@ class VideoModel extends BaseModel<
     if (o1?.year !== o2?.year) return false;
     if (o1?.status !== o2?.status) return false;
     if (o1?.watched_date !== o2?.watched_date) return false;
-    if (o1?.order !== o2?.order) return false;
+    if (o1?.position !== o2?.position) return false;
     if (o1?.current_episode !== o2?.current_episode) return false;
     if (o1?.episodes !== o2?.episodes) return false;
     if (o1?.rating !== o2?.rating) return false;

@@ -1,17 +1,17 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import ContentMusicItemRow from './ContentMusicItemRow';
 import { LoadingOverlay, Pagination, Table } from '../../../components/generic';
-import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { useAppDispatch, useAppSelector, useModal } from '../../../hooks';
 import {
   fetchContentMusicItems,
   selectIsAPIPending,
 } from './contentMusicItemsSlice';
 import { ContentWatcherSource } from '../../../api/api-utils';
-import { SVGEye, SVGEyeClosed } from '../../../components/svg';
+import { SVGEye, SVGEyeClosed, SVGPlus } from '../../../components/svg';
+import ContentMusicItemForm from './ContentMusicItemForm';
 
 type ContentMusicItemTableProps = {
   contentList: number;
-  count: number;
   contentMusicItems: Model.ContentMusicItemDM[];
   source?: ContentWatcherSource;
   pageInfo: PageInfo<QParams.ContentMusicItem>;
@@ -19,7 +19,6 @@ type ContentMusicItemTableProps = {
 
 const ContentMusicItemTable: React.FC<ContentMusicItemTableProps> = ({
   contentList,
-  count,
   contentMusicItems,
   source,
   pageInfo,
@@ -29,6 +28,24 @@ const ContentMusicItemTable: React.FC<ContentMusicItemTableProps> = ({
 
   const isLoading = useAppSelector(selectIsAPIPending);
 
+  const { openModal, closeModal } = useModal();
+
+  const handleOpenContentMusicItemModal = useCallback(() => {
+    const defaultPosition =
+      contentMusicItems.length > 0 ? contentMusicItems.length + 1 : 1;
+
+    openModal(
+      <ContentMusicItemForm
+        formProps={{
+          content_list: contentList,
+          defaultPosition,
+          formMode: 'CREATE',
+        }}
+        onSuccess={() => closeModal()}
+      />
+    );
+  }, [openModal, closeModal, contentMusicItems.length, contentList]);
+
   const renderUtilityPanel = () => {
     return (
       <Table.THead>
@@ -36,7 +53,12 @@ const ContentMusicItemTable: React.FC<ContentMusicItemTableProps> = ({
         <div className='flex w-1/3'>
           <Pagination pageInfo={pageInfo} action={fetchContentMusicItems} />
         </div>
-        <div className={`flex w-1/3 justify-end`}>
+        <div className={`flex w-1/3 justify-end space-x-3`}>
+          <SVGPlus
+            className={`w-5 simple-clickable-1`}
+            tooltip='Add Item'
+            onClick={handleOpenContentMusicItemModal}
+          />
           <div
             className={`cursor-pointer ${
               hideConsumed ? 'text-active-2' : 'text-text-1'

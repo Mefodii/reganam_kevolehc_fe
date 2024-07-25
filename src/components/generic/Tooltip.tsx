@@ -7,6 +7,7 @@ type TooltipProps = {
 };
 
 const Tooltip: React.FC<TooltipProps> = ({ tooltip, position }) => {
+  // TODO: (L) - when moving cursor fast on page, some tooltips persists, why??
   return ReactDOM.createPortal(
     <div
       className='tooltip'

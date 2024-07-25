@@ -10,7 +10,7 @@ const TContainer: React.FC<TProps> = ({
 }) => {
   return (
     <div
-      className={`bg-theme-1 border border-theme-3 rounded-lg shadow-2xl shadow-active-1/5 mono-font overflow-y-auto overflow-x-hidden ${className}`}
+      className={`w-full bg-theme-1 border border-theme-3 rounded-lg shadow-2xl shadow-active-1/5 mono-font overflow-y-auto overflow-x-hidden ${className}`}
       {...rest}
     >
       {children}

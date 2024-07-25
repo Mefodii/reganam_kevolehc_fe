@@ -9,6 +9,14 @@ declare global {
       hideConsumed?: boolean;
     };
     type ContentMusicItem = ContentItem;
+    type Track = Page & {
+      trackSearch?: string;
+      caseSensitive?: boolean;
+    };
+    type Artist = Page & {
+      artistSearch?: string;
+      caseSensitive?: boolean;
+    };
   }
 
   type PageInfo<T extends QParams.Page> = {

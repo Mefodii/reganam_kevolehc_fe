@@ -9,6 +9,8 @@ import {
   API_CONTENT_TRACKS,
   API_CONTENT_WATCHERS,
   API_CONTENT_MUSIC_ITEMS,
+  API_TRACKS,
+  API_ARTISTS,
 } from './backend-urls';
 
 import {
@@ -352,5 +354,100 @@ export async function updateContentWatcher(
 export async function deleteContentWatcher(id: number, signal: AbortSignal) {
   const conf = json(signal);
   return await axios.delete<void>(`${API_CONTENT_WATCHERS}${id}/`, conf);
+}
+// ----------------------------- //
+
+// TRACKS API
+export async function getTracks(params: QParams.Track, signal: AbortSignal) {
+  const conf = paramsConf(params, signal);
+  return await axios.get<Axios.PagedResult<Model.TrackDM, QParams.Track>>(
+    API_TRACKS,
+    conf
+  );
+}
+
+export async function addTrack(track: Model.TrackSM, signal: AbortSignal) {
+  const conf = json(signal);
+  return await axios.post<Model.TrackDM>(API_TRACKS, track, conf);
+}
+
+export async function updateTrack(track: Model.TrackDM, signal: AbortSignal) {
+  const conf = json(signal);
+  return await axios.put<Model.TrackDM>(
+    `${API_TRACKS}${track.id}/`,
+    track,
+    conf
+  );
+}
+
+export async function updateTracks(
+  tracks: Model.TrackDM[],
+  signal: AbortSignal
+) {
+  const conf = json(signal);
+  return await axios.put<Model.TrackDM[]>(API_TRACKS, tracks, conf);
+}
+
+export async function deleteTrack(id: number, signal: AbortSignal) {
+  const conf = json(signal);
+  return await axios.delete<void>(`${API_TRACKS}${id}/`, conf);
+}
+
+export async function deleteTracks(ids: number[], signal: AbortSignal) {
+  return await axios({
+    method: 'delete',
+    url: API_TRACKS,
+    data: ids,
+    signal,
+  });
+}
+// ----------------------------- //
+
+// ARTISTS API
+export async function getArtists(params: QParams.Artist, signal: AbortSignal) {
+  const conf = paramsConf(params, signal);
+  return await axios.get<Axios.PagedResult<Model.ArtistDM, QParams.Artist>>(
+    API_ARTISTS,
+    conf
+  );
+}
+
+export async function addArtist(artist: Model.ArtistSM, signal: AbortSignal) {
+  const conf = json(signal);
+  return await axios.post<Model.ArtistDM>(API_ARTISTS, artist, conf);
+}
+
+export async function updateArtist(
+  artist: Model.ArtistDM,
+  signal: AbortSignal
+) {
+  const conf = json(signal);
+  return await axios.put<Model.ArtistDM>(
+    `${API_ARTISTS}${artist.id}/`,
+    artist,
+    conf
+  );
+}
+
+export async function updateArtists(
+  artists: Model.ArtistDM[],
+  signal: AbortSignal
+) {
+  const conf = json(signal);
+  return await axios.put<Model.ArtistDM[]>(API_ARTISTS, artists, conf);
+}
+
+export async function deleteArtist(id: number, signal: AbortSignal) {
+  const conf = json(signal);
+  return await axios.delete<void>(`${API_ARTISTS}${id}/`, conf);
+}
+
+export async function deleteArtists(ids: number[], signal: AbortSignal) {
+  return await axios({
+    method: 'delete',
+    url: API_ARTISTS,
+    data: ids,
+    signal,
+  });
 }
 // ----------------------------- //

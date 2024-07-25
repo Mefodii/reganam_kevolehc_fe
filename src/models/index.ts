@@ -12,6 +12,9 @@ import { link } from './watching/link';
 import { poster } from './watching/poster';
 import { video } from './watching/video';
 
+import { track } from './listening/track';
+import { artist } from './listening/artist';
+
 export {
   alias,
   watchingFilter,
@@ -26,4 +29,7 @@ export {
   contentTrack,
   contentWatcher,
   contentFilter,
+  //
+  track,
+  artist,
 };

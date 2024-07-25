@@ -35,7 +35,6 @@ import ContentItemForm from './ContentItemForm';
 
 type ContentItemsTableProps = {
   contentList: number;
-  count: number;
   contentItems: Model.ContentItemDM[];
   source?: ContentWatcherSource;
   pageInfo: PageInfo<QParams.ContentItem>;
@@ -43,7 +42,6 @@ type ContentItemsTableProps = {
 
 const ContentItemsTable: React.FC<ContentItemsTableProps> = ({
   contentList,
-  count,
   contentItems,
   source,
   pageInfo,
@@ -90,7 +88,8 @@ const ContentItemsTable: React.FC<ContentItemsTableProps> = ({
   };
 
   const handleOpenContentItemModal = useCallback(() => {
-    const defaultPosition = contentItems.length > 0 ? count + 1 : 1;
+    const defaultPosition =
+      contentItems.length > 0 ? contentItems.length + 1 : 1;
 
     openModal(
       <ContentItemForm
@@ -102,7 +101,7 @@ const ContentItemsTable: React.FC<ContentItemsTableProps> = ({
         onSuccess={() => closeModal()}
       />
     );
-  }, [openModal, closeModal, contentItems.length, count, contentList]);
+  }, [openModal, closeModal, contentItems.length, contentList]);
 
   const handleCopyAsYTPlaylist = () => {
     const selectedItems = filterSelectedItems(contentItems, selectedIndexes);

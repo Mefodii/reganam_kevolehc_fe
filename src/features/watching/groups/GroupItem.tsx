@@ -73,14 +73,14 @@ const GroupItem: React.FC<GroupItemProps> = ({
     (group: Model.GroupNotSingleDM) => {
       const { id: groupId, videos } = group;
 
-      const defaultOrder =
-        videos.length > 0 ? videos[videos.length - 1].order + 1 : 1;
+      const defaultPosition =
+        videos.length > 0 ? videos[videos.length - 1].position + 1 : 1;
 
       openModal(
         <VideoForm
           formProps={{
             groupId,
-            defaultOrder,
+            defaultPosition,
             formMode: 'CREATE',
           }}
           onSuccess={() => closeModal()}

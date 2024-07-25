@@ -1,4 +1,5 @@
 import { ContentMusic, DownloadStatus } from '../../api/api-utils';
+import { getNow } from '../../util/datetime';
 import { BaseModel } from '../generic/model';
 
 declare global {
@@ -7,6 +8,7 @@ declare global {
       type: ContentMusic;
       comment: string;
       parsed: boolean;
+      single_track: number | null;
     };
     type ContentMusicItemDM = ContentMusicItemSM & {
       id: number;
@@ -43,11 +45,12 @@ class ContentMusicItemModel extends BaseModel<
       file_name: '',
       position: props.defaultPosition,
       download_status: DownloadStatus.NONE,
-      published_at: '',
-      type: ContentMusic.NOT_MUSIC,
+      published_at: getNow(),
+      type: ContentMusic.UNKNOWN,
       content_list: props.content_list,
       comment: '',
       parsed: false,
+      single_track: null,
     };
   }
 
@@ -65,6 +68,7 @@ class ContentMusicItemModel extends BaseModel<
       content_list: dbState.content_list,
       comment: dbState.comment,
       parsed: dbState.parsed,
+      single_track: this.isSingle(dbState) ? dbState.tracks[0].track!.id : null,
     };
   }
 
@@ -76,6 +80,7 @@ class ContentMusicItemModel extends BaseModel<
       ...state,
       id: dbState.id,
       tracks: dbState.tracks,
+      single_track: state.single_track,
     };
   }
 
@@ -105,6 +110,10 @@ class ContentMusicItemModel extends BaseModel<
 
   isNotMusic<T extends Model.ContentMusicItemSM>(item: T): boolean {
     return item.type === ContentMusic.NOT_MUSIC;
+  }
+
+  isUnknown<T extends Model.ContentMusicItemSM>(item: T): boolean {
+    return item.type === ContentMusic.UNKNOWN;
   }
 }
 
