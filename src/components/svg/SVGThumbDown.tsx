@@ -1,7 +1,7 @@
 import React from 'react';
-import SVGContainer from './SVGContainer';
+import { SVGContainer } from './SVGContainer';
 
-const SVGThumbDown: React.FC<SVGProps> = (props) => {
+export const SVGThumbDown = React.memo((props: SVGProps) => {
   return (
     <SVGContainer {...props}>
       <svg
@@ -18,6 +18,4 @@ const SVGThumbDown: React.FC<SVGProps> = (props) => {
       </svg>
     </SVGContainer>
   );
-};
-
-export default React.memo(SVGThumbDown) as typeof SVGThumbDown;
+});

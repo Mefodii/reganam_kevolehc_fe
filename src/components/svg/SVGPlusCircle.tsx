@@ -1,7 +1,7 @@
 import React from 'react';
-import SVGContainer from './SVGContainer';
+import { SVGContainer } from './SVGContainer';
 
-const SVGPlusCircle: React.FC<SVGProps> = (props) => {
+export const SVGPlusCircle = React.memo((props: SVGProps) => {
   return (
     <SVGContainer {...props}>
       <svg
@@ -20,6 +20,4 @@ const SVGPlusCircle: React.FC<SVGProps> = (props) => {
       </svg>
     </SVGContainer>
   );
-};
-
-export default React.memo(SVGPlusCircle) as typeof SVGPlusCircle;
+});

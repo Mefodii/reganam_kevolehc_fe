@@ -6,22 +6,22 @@ type SidepanelElementProps = React.PropsWithChildren & {
   onClick: () => void;
 };
 
-const SidepanelElement: React.FC<SidepanelElementProps> = ({
-  className = '',
-  isSelected = false,
-  onClick,
-  children,
-}) => {
-  return (
-    <div
-      className={`side-panel-el ${
-        isSelected && 'side-panel-el-active'
-      } ${className}`}
-      onClick={isSelected ? undefined : onClick}
-    >
-      {children}
-    </div>
-  );
-};
-
-export default React.memo(SidepanelElement) as typeof SidepanelElement;
+export const SidepanelElement = React.memo(
+  ({
+    className = '',
+    isSelected = false,
+    onClick,
+    children,
+  }: SidepanelElementProps) => {
+    return (
+      <div
+        className={`side-panel-el ${
+          isSelected && 'side-panel-el-active'
+        } ${className}`}
+        onClick={isSelected ? undefined : onClick}
+      >
+        {children}
+      </div>
+    );
+  }
+);

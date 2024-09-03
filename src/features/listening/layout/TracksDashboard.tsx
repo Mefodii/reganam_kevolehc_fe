@@ -1,15 +1,15 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { LoadingOverlay } from '../../../components/generic';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { TrackSearch } from '../tracks/TrackSearch';
 import {
   fetchTracks,
   selectAllTracks,
   selectPageInfo,
 } from '../tracks/tracksSlice';
-import TracksTable from '../tracks/TracksTable';
-import TrackSearch from '../tracks/TrackSearch';
+import { TracksTable } from '../tracks/TracksTable';
 
-export const TracksDashboard = () => {
+export const TracksDashboard = React.memo(() => {
   const dispatch = useAppDispatch();
 
   const tracks = useAppSelector(selectAllTracks);
@@ -32,6 +32,4 @@ export const TracksDashboard = () => {
       </div>
     </div>
   );
-};
-
-export default TracksDashboard;
+});

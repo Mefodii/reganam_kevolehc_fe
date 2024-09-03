@@ -1,20 +1,18 @@
 import React, { useEffect } from 'react';
-
-import Sidepanel from './Sidepanel';
-
-import {
-  fetchContentWatchers,
-  selectAllContentWatchers,
-} from '../contentWatchers/contentWatchersSlice';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { ContentListList } from '../contentLists/ContentListList';
 import {
   fetchContentLists,
   selectAllContentLists,
 } from '../contentLists/contentListsSlice';
-import { useAppDispatch, useAppSelector } from '../../../hooks';
-import ContentWatcherList from '../contentWatchers/ContentWatcherList';
-import ContentListList from '../contentLists/ContentListList';
+import { ContentWatcherList } from '../contentWatchers/ContentWatcherList';
+import {
+  fetchContentWatchers,
+  selectAllContentWatchers,
+} from '../contentWatchers/contentWatchersSlice';
+import { Sidepanel } from './Sidepanel';
 
-const Dashboard: React.FC = () => {
+export const ContentingDashboard = React.memo(() => {
   const dispatch = useAppDispatch();
 
   const contentWatchers = useAppSelector(selectAllContentWatchers);
@@ -39,6 +37,4 @@ const Dashboard: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default React.memo(Dashboard) as typeof Dashboard;
+});

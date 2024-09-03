@@ -1,28 +1,27 @@
 import React, { useEffect, useMemo } from 'react';
-
-import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { useParams } from 'react-router-dom';
 import { LoadingOverlay } from '../../../components/generic';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { contentList as model } from '../../../models';
 import {
   fetchContentItems,
   selectAllContentItems,
   selectPageInfo,
 } from '../contentItems/contentItemsSlice';
+import { ContentItemsTable } from '../contentItems/ContentItemsTable';
+import { ContentListDetails } from '../contentLists/ContentListDetails';
+import {
+  fetchContentList,
+  selectDetails,
+} from '../contentLists/contentListsSlice';
 import {
   fetchContentMusicItems,
   selectAllContentMusicItems,
   selectPageInfo as selectMusicPageInfo,
 } from '../contentMusicItems/contentMusicItemsSlice';
-import { contentList as model } from '../../../models';
-import ContentMusicItemTable from '../contentMusicItems/ContentMusicItemsTable';
-import ContentItemsTable from '../contentItems/ContentItemsTable';
-import {
-  fetchContentList,
-  selectDetails,
-} from '../contentLists/contentListsSlice';
-import ContentListDetails from '../contentLists/ContentListDetails';
+import { ContentMusicItemTable } from '../contentMusicItems/ContentMusicItemsTable';
 
-const ContentListDashboard: React.FC = () => {
+export const ContentListDashboard = React.memo(() => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
 
@@ -94,6 +93,4 @@ const ContentListDashboard: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default React.memo(ContentListDashboard) as typeof ContentListDashboard;
+});

@@ -1,23 +1,21 @@
-import { SVGPlus } from '../../../components/svg';
+import React from 'react';
+import { ContentCategory, ContentWatcherSource } from '../../../api/api-utils';
 import { SideButton } from '../../../components/buttons';
 import { SidepanelElement } from '../../../components/layout';
-
+import { SVGPlus } from '../../../components/svg';
+import { useAppDispatch, useAppSelector, useModal } from '../../../hooks';
+import { ContentListForm } from '../contentLists/ContentListForm';
+import { ContentWatcherForm } from '../contentWatchers/ContentWatcherForm';
 import {
-  setSource,
-  setCategory,
   selectCategory,
   selectSource,
+  setCategory,
+  setSource,
 } from '../filters/filtersSlice';
-import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { useModal } from '../../../hooks';
-import ContentWatcherForm from '../contentWatchers/ContentWatcherForm';
-import { ContentCategory, ContentWatcherSource } from '../../../api/api-utils';
-import React from 'react';
-import ContentListForm from '../contentLists/ContentListForm';
 
 type SidepanelProps = {};
 
-const Sidepanel: React.FC<SidepanelProps> = (props) => {
+export const Sidepanel = React.memo((props: SidepanelProps) => {
   const dispatch = useAppDispatch();
   const category = useAppSelector(selectCategory);
   const source = useAppSelector(selectSource);
@@ -116,6 +114,4 @@ const Sidepanel: React.FC<SidepanelProps> = (props) => {
       </SideButton>
     </div>
   );
-};
-
-export default React.memo(Sidepanel) as typeof Sidepanel;
+});

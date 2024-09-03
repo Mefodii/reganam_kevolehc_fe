@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
-  getGroup as apiGetGroup,
   addVideo as apiAddVideo,
-  updateVideo as apiUpdateVideo,
   deleteVideo as apiDeleteVideo,
+  getGroup as apiGetGroup,
+  updateVideo as apiUpdateVideo,
 } from '../../../api/api';
 
 export const name = 'videos';

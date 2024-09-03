@@ -3,11 +3,7 @@ import React from 'react';
 type TProps = React.PropsWithChildren &
   React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 
-const TContainer: React.FC<TProps> = ({
-  children,
-  className = '',
-  ...rest
-}) => {
+const TContainer = ({ children, className = '', ...rest }: TProps) => {
   return (
     <div
       className={`w-full bg-theme-1 border border-theme-3 rounded-lg shadow-2xl shadow-active-1/5 mono-font overflow-y-auto overflow-x-hidden ${className}`}
@@ -18,7 +14,7 @@ const TContainer: React.FC<TProps> = ({
   );
 };
 
-const THead: React.FC<TProps> = ({ children, className = '', ...rest }) => {
+const THead = ({ children, className = '', ...rest }: TProps) => {
   return (
     <div className='sticky top-0 bg-inherit z-10'>
       <div
@@ -31,7 +27,7 @@ const THead: React.FC<TProps> = ({ children, className = '', ...rest }) => {
   );
 };
 
-const TBody: React.FC<TProps> = ({ children, className = '', ...rest }) => {
+const TBody = ({ children, className = '', ...rest }: TProps) => {
   return (
     <div className={`divide-y divide-active-1/10 ${className}`} {...rest}>
       {children}
@@ -39,7 +35,7 @@ const TBody: React.FC<TProps> = ({ children, className = '', ...rest }) => {
   );
 };
 
-const TRow: React.FC<TProps> = ({ children, className, ...rest }) => {
+const TRow = ({ children, className, ...rest }: TProps) => {
   return (
     <div
       className={`flex justify-between items-center px-5 py-3 hover:bg-theme-3/50 ${className}`}
@@ -50,11 +46,9 @@ const TRow: React.FC<TProps> = ({ children, className, ...rest }) => {
   );
 };
 
-const Table = {
+export const Table = {
   TContainer: React.memo(TContainer) as typeof TContainer,
   THead: React.memo(THead) as typeof THead,
   TBody: React.memo(TBody) as typeof TBody,
   TRow: React.memo(TRow) as typeof TRow,
 };
-
-export default Table;

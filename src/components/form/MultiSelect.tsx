@@ -1,6 +1,6 @@
 import React from 'react';
-import InputContainer, { InputContainerProps } from './InputContainer';
 import { SVGCheckCircle, SVGXCircle } from '../svg';
+import { InputContainer, InputContainerProps } from './InputContainer';
 
 export type MultiSelectProps<T> = InputContainerProps & {
   name: string;
@@ -16,7 +16,7 @@ export type MultiSelectProps<T> = InputContainerProps & {
   ) => void;
 };
 
-const MultiSelect = <T,>({
+const MultiSelectBase = <T,>({
   label,
   error,
   className = '',
@@ -119,4 +119,6 @@ const MultiSelect = <T,>({
   );
 };
 
-export default React.memo(MultiSelect) as typeof MultiSelect;
+export const MultiSelect = React.memo(
+  MultiSelectBase
+) as typeof MultiSelectBase;

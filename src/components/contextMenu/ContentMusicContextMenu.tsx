@@ -10,25 +10,20 @@ type ContentMusicContextMenuProps = {
   onClick: (type: ContentMusic) => void;
 };
 
-const ContentMusicContextMenu: React.FC<ContentMusicContextMenuProps> = ({
-  coords,
-  onClick,
-}) => {
-  return (
-    <ContextMenu coords={coords}>
-      {Object.values(ContentMusic).map((type) => (
-        <div
-          className='px-3 py-2 hover:bg-theme-3/50'
-          key={type}
-          onClick={() => onClick(type)}
-        >
-          {type}
-        </div>
-      ))}
-    </ContextMenu>
-  );
-};
-
-export default React.memo(
-  ContentMusicContextMenu
-) as typeof ContentMusicContextMenu;
+export const ContentMusicContextMenu = React.memo(
+  ({ coords, onClick }: ContentMusicContextMenuProps) => {
+    return (
+      <ContextMenu coords={coords}>
+        {Object.values(ContentMusic).map((type) => (
+          <div
+            className='px-3 py-2 hover:bg-theme-3/50'
+            key={type}
+            onClick={() => onClick(type)}
+          >
+            {type}
+          </div>
+        ))}
+      </ContextMenu>
+    );
+  }
+);

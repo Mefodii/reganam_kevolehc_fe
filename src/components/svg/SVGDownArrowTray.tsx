@@ -1,7 +1,7 @@
 import React from 'react';
-import SVGContainer from './SVGContainer';
+import { SVGContainer } from './SVGContainer';
 
-const SVGDownArrowTray: React.FC<SVGProps> = (props) => {
+export const SVGDownArrowTray = React.memo((props: SVGProps) => {
   return (
     <SVGContainer {...props}>
       <svg
@@ -20,6 +20,4 @@ const SVGDownArrowTray: React.FC<SVGProps> = (props) => {
       </svg>
     </SVGContainer>
   );
-};
-
-export default React.memo(SVGDownArrowTray) as typeof SVGDownArrowTray;
+});

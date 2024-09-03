@@ -56,6 +56,7 @@ module.exports = {
         200: '50rem',
         220: '55rem',
         240: '60rem',
+        'screen-90': '90vh',
       },
       transitionProperty: {
         height: 'height',

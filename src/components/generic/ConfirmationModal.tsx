@@ -9,29 +9,24 @@ export type ConfirmationModalProps = {
   onDecline?: () => void;
 };
 
-const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
-  title,
-  description,
-  onConfirm,
-  onDecline,
-}) => {
-  return (
-    <div className='simple-font form-container'>
-      <div className='title'>{title}</div>
-      <div className='text-xl'>{description}</div>
+export const ConfirmationModal = React.memo(
+  ({ title, description, onConfirm, onDecline }: ConfirmationModalProps) => {
+    return (
+      <div className='simple-font form-container'>
+        <div className='title'>{title}</div>
+        <div className='text-xl'>{description}</div>
 
-      <div className='form-row'>
-        <Button className='w-full' onClick={onConfirm}>
-          <SVGCheck className='w-6' />
-          <div>Confirm</div>
-        </Button>
-        <Button className='w-full' onClick={onDecline}>
-          <SVGCross className='w-6' />
-          <div>Cancel</div>
-        </Button>
+        <div className='form-row'>
+          <Button className='w-full' onClick={onConfirm}>
+            <SVGCheck className='w-6' />
+            <div>Confirm</div>
+          </Button>
+          <Button className='w-full' onClick={onDecline}>
+            <SVGCross className='w-6' />
+            <div>Cancel</div>
+          </Button>
+        </div>
       </div>
-    </div>
-  );
-};
-
-export default React.memo(ConfirmationModal) as typeof ConfirmationModal;
+    );
+  }
+);

@@ -1,24 +1,22 @@
-import { useCallback } from 'react';
-
+import React, { useCallback } from 'react';
+import { WatchingStatus } from '../../../api/api-utils';
+import { Button } from '../../../components/buttons';
 import {
+  Checkbox,
   Date,
   MultiSelect,
-  Checkbox,
   TextArea,
 } from '../../../components/form';
-import { Button } from '../../../components/buttons';
 import { SVGCheck, SVGTrash } from '../../../components/svg';
-
+import { useAppDispatch, useAppSelector, useSimpleForm } from '../../../hooks';
 import { watchingFilter as model } from '../../../models';
 import { selectWatchingFilter, updateWatchingFilter } from './filtersSlice';
-import { useAppDispatch, useAppSelector, useSimpleForm } from '../../../hooks';
-import { WatchingStatus } from '../../../api/api-utils';
 
 type FilterFormProps = {
   onSuccess: () => void;
 };
 
-const FilterForm: React.FC<FilterFormProps> = ({ onSuccess }) => {
+export const FilterForm = React.memo(({ onSuccess }: FilterFormProps) => {
   const dispatch = useAppDispatch();
   const watchingFilter = useAppSelector(selectWatchingFilter);
 
@@ -99,6 +97,4 @@ const FilterForm: React.FC<FilterFormProps> = ({ onSuccess }) => {
       </div>
     </div>
   );
-};
-
-export default FilterForm;
+});

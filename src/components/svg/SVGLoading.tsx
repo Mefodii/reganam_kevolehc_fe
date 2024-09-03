@@ -1,7 +1,7 @@
 import React from 'react';
-import SVGContainer from './SVGContainer';
+import { SVGContainer } from './SVGContainer';
 
-const SVGLoading: React.FC<SVGProps> = (props) => {
+export const SVGLoading = React.memo((props: SVGProps) => {
   return (
     <SVGContainer {...props}>
       <svg
@@ -15,6 +15,4 @@ const SVGLoading: React.FC<SVGProps> = (props) => {
       </svg>
     </SVGContainer>
   );
-};
-
-export default React.memo(SVGLoading) as typeof SVGLoading;
+});

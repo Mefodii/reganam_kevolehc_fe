@@ -33,5 +33,4 @@ export const toYTPlaylist = (ytIds: string[]): string[] => {
 
 const extractIdFromUrl = (url: string) => url.replace(YOUTUBE_WATCH_STUB, '');
 
-const transformer: Helper.Transformer = { name, run };
-export default transformer;
+export const playlistToYoutubePlaylist: Helper.Transformer = { name, run };

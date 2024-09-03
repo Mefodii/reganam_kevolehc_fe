@@ -1,21 +1,22 @@
 import {
-  createSlice,
   createAsyncThunk,
   createEntityAdapter,
+  createSlice,
   isAnyOf,
 } from '@reduxjs/toolkit';
 import {
-  getTracks as apiGetTracks,
   addTrack as apiAddTrack,
-  updateTrack as apiUpdateTrack,
-  updateTracks as apiUpdateTracks,
   deleteTrack as apiDeleteTrack,
   deleteTracks as apiDeleteTracks,
+  getTracks as apiGetTracks,
+  updateTrack as apiUpdateTrack,
+  updateTracks as apiUpdateTracks,
 } from '../../../api/api';
-import { APIStatus } from '../../../util/constants';
-import { name as parentName } from '../constants';
 import { AppThunkApiConfig, RootState } from '../../../store';
+import { APIStatus, ReduxRootName } from '../../../util/constants';
 import { isAbortError } from '../../../util/functions';
+
+const parentName = ReduxRootName.LISTENING;
 
 export const name = 'tracks';
 const sliceName = `${parentName}/${name}`;
@@ -105,7 +106,7 @@ export const deleteTracks = createAsyncThunk<
   dispatch(refetchTracks());
 });
 
-const slice = createSlice({
+export const slice = createSlice({
   name: sliceName,
   initialState,
   reducers: {},
@@ -178,4 +179,3 @@ export const { selectStatus, selectPageInfo, selectPage, selectCurrentParams } =
 export const selectIsAPIPending = (state: RootState) =>
   selectStatus(state) === APIStatus.PENDING;
 export const reducer = slice.reducer;
-export default slice;

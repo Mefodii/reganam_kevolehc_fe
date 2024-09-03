@@ -1,22 +1,20 @@
 import axios from 'axios';
-
 import {
-  API_GROUPS,
-  API_VIDEOS,
-  API_POSTERS,
-  API_CONTENT_LISTS,
+  API_ARTISTS,
   API_CONTENT_ITEMS,
+  API_CONTENT_LISTS,
+  API_CONTENT_MUSIC_ITEMS,
   API_CONTENT_TRACKS,
   API_CONTENT_WATCHERS,
-  API_CONTENT_MUSIC_ITEMS,
+  API_GROUPS,
+  API_POSTERS,
   API_TRACKS,
-  API_ARTISTS,
+  API_VIDEOS,
 } from './backend-urls';
-
 import {
+  formDataConfig as formConf,
   jsonConfig as json,
   jsonWithParamsConfig as paramsConf,
-  formDataConfig as formConf,
 } from './config';
 
 // GROUPS API

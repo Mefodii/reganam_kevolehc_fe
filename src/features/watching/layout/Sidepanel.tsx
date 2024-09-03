@@ -1,19 +1,17 @@
 import React, { useState } from 'react';
-
+import { WatchingType } from '../../../api/api-utils';
 import { CompactButton } from '../../../components/buttons';
 import { SVGFilter, SVGPlusCircle } from '../../../components/svg';
-
 import { useModal } from '../../../hooks';
-import FilterForm from '../filters/FilterForm';
-import GroupForm from '../groups/GroupForm';
-import VideoForm from '../videos/VideoForm';
-import { WatchingType } from '../../../api/api-utils';
+import { FilterForm } from '../filters/FilterForm';
+import { GroupForm } from '../groups/GroupForm';
+import { VideoForm } from '../videos/VideoForm';
 
 type SidepanelProps = {
   watchingType: WatchingType;
 };
 
-const Sidepanel: React.FC<SidepanelProps> = ({ watchingType }) => {
+export const Sidepanel = React.memo(({ watchingType }: SidepanelProps) => {
   const [mouseIn, setMouseIn] = useState(false);
 
   const { openModal, closeModal } = useModal();
@@ -78,6 +76,4 @@ const Sidepanel: React.FC<SidepanelProps> = ({ watchingType }) => {
       </div>
     </div>
   );
-};
-
-export default Sidepanel;
+});

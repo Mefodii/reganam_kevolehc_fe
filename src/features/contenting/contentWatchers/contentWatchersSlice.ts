@@ -1,20 +1,21 @@
 import {
-  createSlice,
   createAsyncThunk,
   createEntityAdapter,
+  createSlice,
   isAnyOf,
 } from '@reduxjs/toolkit';
 import {
-  getContentWatchers as apiGetContentWatchers,
-  getContentWatcher as apiGetContentWatcher,
   addContentWatcher as apiAddContentWatcher,
-  updateContentWatcher as apiUpdateContentWatcher,
   deleteContentWatcher as apiDeleteContentWatcher,
+  getContentWatcher as apiGetContentWatcher,
+  getContentWatchers as apiGetContentWatchers,
+  updateContentWatcher as apiUpdateContentWatcher,
 } from '../../../api/api';
-import { APIStatus } from '../../../util/constants';
-import { name as parentName } from '../constants';
 import { RootState } from '../../../store';
+import { APIStatus, ReduxRootName } from '../../../util/constants';
 import { isAbortError } from '../../../util/functions';
+
+const parentName = ReduxRootName.CONTENTING;
 
 export const name = 'contentWatchers';
 const sliceName = `${parentName}/${name}`;
@@ -84,7 +85,7 @@ export const deleteContentWatcher = createAsyncThunk(
   }
 );
 
-const slice = createSlice({
+export const slice = createSlice({
   name: sliceName,
   initialState,
   reducers: {},
@@ -159,4 +160,3 @@ export const {
 } = contentWatchersAdapter.getSelectors(selectSlice);
 export const { selectDetails, selectStatus } = slice.getSelectors(selectSlice);
 export const reducer = slice.reducer;
-export default slice;

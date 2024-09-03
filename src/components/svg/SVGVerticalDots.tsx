@@ -1,7 +1,7 @@
 import React from 'react';
-import SVGContainer from './SVGContainer';
+import { SVGContainer } from './SVGContainer';
 
-const SVGVerticalDots: React.FC<SVGProps> = (props) => {
+export const SVGVerticalDots = React.memo((props: SVGProps) => {
   return (
     <SVGContainer {...props}>
       <svg
@@ -15,6 +15,4 @@ const SVGVerticalDots: React.FC<SVGProps> = (props) => {
       </svg>
     </SVGContainer>
   );
-};
-
-export default React.memo(SVGVerticalDots) as typeof SVGVerticalDots;
+});

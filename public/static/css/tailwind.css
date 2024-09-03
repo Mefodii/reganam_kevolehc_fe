@@ -671,6 +671,7 @@ video {
   z-index: 30;
   display: flex;
   height: 100%;
+  max-height: 100vh;
   width: 100%;
   align-items: center;
   justify-content: center;
@@ -1875,6 +1876,10 @@ video {
 
 .max-h-screen {
   max-height: 100vh;
+}
+
+.max-h-screen-90 {
+  max-height: 90vh;
 }
 
 .min-h-screen {

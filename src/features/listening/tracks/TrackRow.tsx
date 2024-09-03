@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
+import { DragDots, Table } from '../../../components/generic';
 import { SVGCross, SVGPencil } from '../../../components/svg';
 import { useAppDispatch, useDrag, useModal } from '../../../hooks';
-import { deleteTrack } from './tracksSlice';
-import { DragDots, Table } from '../../../components/generic';
-import TrackStatusPanel from './TrackStatusPanel';
 import { DnDTypes } from '../../../util/constants';
-import TrackForm from './TrackForm';
+import { TrackForm } from './TrackForm';
+import { deleteTrack } from './tracksSlice';
+import { TrackStatusPanel } from './TrackStatusPanel';
+
 type TrackRowProps = {
   track: Model.TrackDM;
 };
-const TrackRow: React.FC<TrackRowProps> = ({ track }) => {
+
+export const TrackRow = React.memo(({ track }: TrackRowProps) => {
   const { full_name } = track;
 
   const [isMouseOver, setIsMouseOver] = useState(false);
@@ -76,6 +78,4 @@ const TrackRow: React.FC<TrackRowProps> = ({ track }) => {
       <TrackStatusPanel track={track} />
     </Table.TRow>
   );
-};
-
-export default React.memo(TrackRow) as typeof TrackRow;
+});

@@ -1,8 +1,7 @@
 import React from 'react';
 import { getTextFromClipboard, saveToClipboard } from '../../util/functions';
-
-import InputContainer, { InputContainerProps } from './InputContainer';
-import { SVGClipboardDocEmpty, SVGClipboardDoc } from '../svg';
+import { SVGClipboardDoc, SVGClipboardDocEmpty } from '../svg';
+import { InputContainer, InputContainerProps } from './InputContainer';
 
 export enum TEXT_INPUT_TYPE {
   TEXT = 'text',
@@ -31,94 +30,96 @@ export type TextProps = InputContainerProps & {
   onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
 };
 
-const Text = React.forwardRef(
-  (
-    {
-      label,
-      error,
-      className,
-      // ^ InputContainerProps
-      name,
-      value,
-      type = TEXT_INPUT_TYPE.TEXT,
-      maxLength,
-      disabled,
-      autoComplete = 'off',
-      copy = false,
-      paste = false,
-      simple,
-      containerClassName,
-      onChange,
-      onKeyDown,
-      onBlur,
-    }: TextProps,
-    ref: React.ForwardedRef<HTMLInputElement>
-  ) => {
-    const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-      const { name, value } = e.target;
-      onChange(e, { name, value });
-    };
-
-    const copyToClipboard = () => {
-      value && saveToClipboard(value);
-    };
-
-    const pasteFromClipboard: React.MouseEventHandler<HTMLDivElement> = (e) => {
-      getTextFromClipboard().then((value) => {
+export const Text = React.memo(
+  React.forwardRef(
+    (
+      {
+        label,
+        error,
+        className,
+        // ^ InputContainerProps
+        name,
+        value,
+        type = TEXT_INPUT_TYPE.TEXT,
+        maxLength,
+        disabled,
+        autoComplete = 'off',
+        copy = false,
+        paste = false,
+        simple,
+        containerClassName,
+        onChange,
+        onKeyDown,
+        onBlur,
+      }: TextProps,
+      ref: React.ForwardedRef<HTMLInputElement>
+    ) => {
+      const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+        const { name, value } = e.target;
         onChange(e, { name, value });
-      });
-    };
+      };
 
-    const renderInput = () => {
+      const copyToClipboard = () => {
+        value && saveToClipboard(value);
+      };
+
+      const pasteFromClipboard: React.MouseEventHandler<HTMLDivElement> = (
+        e
+      ) => {
+        getTextFromClipboard().then((value) => {
+          onChange(e, { name, value });
+        });
+      };
+
+      const renderInput = () => {
+        return (
+          <>
+            <input
+              ref={ref}
+              className={`input-text input-border-placeholder ${className}`}
+              type={type}
+              name={name}
+              value={value}
+              maxLength={maxLength}
+              onChange={handleChange}
+              onKeyDown={onKeyDown}
+              onBlur={onBlur}
+              disabled={disabled}
+              autoComplete={autoComplete}
+            />
+            <div
+              className={`absolute right-2 top-2 flex space-x-1 ${
+                copy || paste ? '' : 'hidden'
+              }`}
+            >
+              {copy && (
+                <SVGClipboardDocEmpty
+                  className='w-4 simple-clickable-1'
+                  onClick={copyToClipboard}
+                />
+              )}
+              {paste && (
+                <SVGClipboardDoc
+                  className='w-4 simple-clickable-1'
+                  onClick={pasteFromClipboard}
+                />
+              )}
+            </div>
+          </>
+        );
+      };
+
+      if (simple) return renderInput();
+
       return (
-        <>
-          <input
-            ref={ref}
-            className={`input-text input-border-placeholder ${className}`}
-            type={type}
-            name={name}
-            value={value}
-            maxLength={maxLength}
-            onChange={handleChange}
-            onKeyDown={onKeyDown}
-            onBlur={onBlur}
-            disabled={disabled}
-            autoComplete={autoComplete}
-          />
-          <div
-            className={`absolute right-2 top-2 flex space-x-1 ${
-              copy || paste ? '' : 'hidden'
-            }`}
-          >
-            {copy && (
-              <SVGClipboardDocEmpty
-                className='w-4 simple-clickable-1'
-                onClick={copyToClipboard}
-              />
-            )}
-            {paste && (
-              <SVGClipboardDoc
-                className='w-4 simple-clickable-1'
-                onClick={pasteFromClipboard}
-              />
-            )}
-          </div>
-        </>
+        <InputContainer
+          label={label}
+          error={error}
+          className={containerClassName}
+        >
+          {renderInput()}
+        </InputContainer>
       );
-    };
-
-    if (simple) return renderInput();
-
-    return (
-      <InputContainer
-        label={label}
-        error={error}
-        className={containerClassName}
-      >
-        {renderInput()}
-      </InputContainer>
-    );
-  }
+    }
+  )
 );
-
-export default React.memo(Text) as typeof Text;

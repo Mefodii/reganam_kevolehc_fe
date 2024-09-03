@@ -1,7 +1,7 @@
 import React from 'react';
-import SVGContainer from './SVGContainer';
+import { SVGContainer } from './SVGContainer';
 
-const SVGBoxChecked: React.FC<SVGProps> = (props) => {
+export const SVGBoxChecked = React.memo((props: SVGProps) => {
   return (
     <SVGContainer {...props}>
       <svg
@@ -26,6 +26,4 @@ const SVGBoxChecked: React.FC<SVGProps> = (props) => {
       </svg>
     </SVGContainer>
   );
-};
-
-export default React.memo(SVGBoxChecked) as typeof SVGBoxChecked;
+});

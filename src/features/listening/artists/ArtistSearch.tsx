@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { Text } from '../../../components/form';
 import { Button } from '../../../components/buttons';
+import { Text } from '../../../components/form';
 import { SVGMagnifyingGlass } from '../../../components/svg';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { fetchArtists, selectPageInfo } from './artistsSlice';
 
 type ArtistSearchProps = {};
 
-const ArtistSearch: React.FC<ArtistSearchProps> = (props) => {
+export const ArtistSearch = React.memo((props: ArtistSearchProps) => {
   const pageInfo = useAppSelector(selectPageInfo);
 
   const [artistSearch, setArtistSearch] = useState(
@@ -52,6 +52,4 @@ const ArtistSearch: React.FC<ArtistSearchProps> = (props) => {
       </Button>
     </div>
   );
-};
-
-export default React.memo(ArtistSearch) as typeof ArtistSearch;
+});

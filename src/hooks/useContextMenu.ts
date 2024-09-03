@@ -1,5 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
-const useContextMenu = () => {
+import { useCallback, useEffect, useState } from 'react';
+
+export const useContextMenu = () => {
   const [showContext, setShowContext] = useState(false);
   const [coords, setCoords] = useState({
     x: 0,
@@ -35,4 +36,3 @@ const useContextMenu = () => {
     onContextMenu: handleContextMenu,
   };
 };
-export default useContextMenu;

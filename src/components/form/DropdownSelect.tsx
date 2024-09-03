@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-
-import InputContainer, { InputContainerProps } from './InputContainer';
 import { BLANK_VALUE } from '../../util/constants';
+import { InputContainer, InputContainerProps } from './InputContainer';
 
 export type DropdownSelectProps<T> = InputContainerProps & {
   name: string;
@@ -23,7 +22,7 @@ export type DropdownSelectProps<T> = InputContainerProps & {
 };
 
 // Note: In case ref will be required: https://fettblog.eu/typescript-react-generic-forward-refs/
-const DropdownSelect = <T,>({
+const DropdownSelectBase = <T,>({
   label,
   error,
   className = '',
@@ -126,4 +125,6 @@ const DropdownSelect = <T,>({
 
 // NOTE: Component with generic & React.memo
 // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/37087
-export default React.memo(DropdownSelect) as typeof DropdownSelect;
+export const DropdownSelect = React.memo(
+  DropdownSelectBase
+) as typeof DropdownSelectBase;

@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import InputContainer, { InputContainerProps } from './InputContainer';
-import { SVGCross } from '../svg';
-import { useDrop, UseDropProps } from '../../hooks/useDrop';
 import { useDnD } from '../../hooks';
+import { useDrop, UseDropProps } from '../../hooks/useDrop';
 import { DragDots } from '../generic';
+import { SVGCross } from '../svg';
+import { InputContainer, InputContainerProps } from './InputContainer';
 
 export type ListItemProps<T> = InputContainerProps & {
   listItem: T;
@@ -79,7 +79,7 @@ export type ListProps<T> = InputContainerProps & {
   onChange: (e: Form.ChangeEvent, payload: Form.Payload<T[]>) => void;
 };
 
-const List = <T,>({
+const ListBase = <T,>({
   label,
   error,
   name,
@@ -175,4 +175,4 @@ const List = <T,>({
   );
 };
 
-export default React.memo(List) as typeof List;
+export const List = React.memo(ListBase) as typeof ListBase;

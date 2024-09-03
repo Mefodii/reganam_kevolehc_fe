@@ -1,6 +1,5 @@
 import { getToday } from '../../util/datetime';
 import { BaseModel } from '../generic/model';
-
 import { alias } from '../watching/alias';
 
 declare global {

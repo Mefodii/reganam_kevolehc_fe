@@ -1,20 +1,21 @@
 import {
-  createSlice,
   createAsyncThunk,
   createEntityAdapter,
+  createSlice,
   isAnyOf,
 } from '@reduxjs/toolkit';
 import {
-  getContentListsPure as apiGetContentLists,
-  getContentList as apiGetContentList,
   addContentList as apiAddContentList,
-  updateContentList as apiUpdateContentList,
   deleteContentList as apiDeleteContentList,
+  getContentList as apiGetContentList,
+  getContentListsPure as apiGetContentLists,
+  updateContentList as apiUpdateContentList,
 } from '../../../api/api';
-import { APIStatus } from '../../../util/constants';
-import { name as parentName } from '../constants';
 import { RootState } from '../../../store';
+import { APIStatus, ReduxRootName } from '../../../util/constants';
 import { isAbortError } from '../../../util/functions';
+
+const parentName = ReduxRootName.CONTENTING;
 
 export const name = 'contentLists';
 const sliceName = `${parentName}/${name}`;
@@ -83,7 +84,7 @@ export const deleteContentList = createAsyncThunk(
   }
 );
 
-const slice = createSlice({
+export const slice = createSlice({
   name: sliceName,
   initialState,
   reducers: {},
@@ -158,4 +159,3 @@ export const {
 } = contentListsAdapter.getSelectors(selectSlice);
 export const { selectDetails, selectStatus } = slice.getSelectors(selectSlice);
 export const reducer = slice.reducer;
-export default slice;

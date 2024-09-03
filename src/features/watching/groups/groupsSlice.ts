@@ -1,22 +1,23 @@
 import {
-  createSlice,
   createAsyncThunk,
   createEntityAdapter,
-  isAnyOf,
   createSelector,
+  createSlice,
+  isAnyOf,
 } from '@reduxjs/toolkit';
 import {
-  getGroups as apiGetGroups,
   addGroup as apiAddGroup,
-  updateGroup as apiUpdateGroup,
   deleteGroup as apiDeleteGroup,
+  getGroups as apiGetGroups,
+  updateGroup as apiUpdateGroup,
 } from '../../../api/api';
-import { APIStatus } from '../../../util/constants';
-import { name as parentName } from '../constants';
+import { RootState } from '../../../store';
+import { APIStatus, ReduxRootName } from '../../../util/constants';
 import { compareByKey, isAbortError } from '../../../util/functions';
 import { createPostersSlice } from '../posters/postersSlice';
 import { createVideosActions } from '../videos/videosSlice';
-import { RootState } from '../../../store';
+
+const parentName = ReduxRootName.WATCHING;
 
 export const name = 'groups';
 const sliceName = `${parentName}/${name}`;
@@ -76,7 +77,7 @@ const { extraActions: postersExtraActions, reducer: postersReducer } =
 
 export const { createPoster, updatePoster, deletePoster } = postersExtraActions;
 
-const slice = createSlice({
+export const slice = createSlice({
   name: sliceName,
   initialState,
   reducers: {},
@@ -196,4 +197,3 @@ export const selectGroupsIdByWatchingType = createSelector(
 );
 
 export const reducer = slice.reducer;
-export default slice;

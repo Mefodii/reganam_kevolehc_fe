@@ -1,6 +1,5 @@
 import { TrackStatus } from '../../api/api-utils';
 import { BaseModel } from '../generic/model';
-
 import { alias } from '../watching/alias';
 
 declare global {

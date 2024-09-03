@@ -1,18 +1,15 @@
-import { useState } from 'react';
-
-import { joinByNewline, splitByNewline } from '../../util/functions';
-
+import React, { useState } from 'react';
 import { Button } from '../../components/buttons';
 import { TextArea } from '../../components/form';
-
+import { joinByNewline, splitByNewline } from '../../util/functions';
 import {
-  playlistSquareToCurly,
-  playlistItemNumbering,
   playlistAddCarret,
+  playlistItemNumbering,
+  playlistSquareToCurly,
   playlistToYoutubePlaylist,
 } from './transformers';
 
-const TextTransformers = () => {
+export const TextTransformers = React.memo(() => {
   const [transformer, setTransformer] = useState(playlistSquareToCurly);
   const [inputValue, setInputValue] = useState('');
   const [outputValue, setOutputValue] = useState('');
@@ -122,6 +119,4 @@ const TextTransformers = () => {
       </div>
     </div>
   );
-};
-
-export default TextTransformers;
+});

@@ -6,7 +6,7 @@ type TooltipProps = {
   position: DOMRect;
 };
 
-const Tooltip: React.FC<TooltipProps> = ({ tooltip, position }) => {
+export const Tooltip = React.memo(({ tooltip, position }: TooltipProps) => {
   // TODO: (L) - when moving cursor fast on page, some tooltips persists, why??
   return ReactDOM.createPortal(
     <div
@@ -20,6 +20,4 @@ const Tooltip: React.FC<TooltipProps> = ({ tooltip, position }) => {
     </div>,
     document.getElementById('portal-root')!
   );
-};
-
-export default Tooltip;
+});

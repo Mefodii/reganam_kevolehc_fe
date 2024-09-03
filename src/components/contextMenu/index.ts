@@ -1,3 +1,1 @@
-import ContentMusicContextMenu from './ContentMusicContextMenu';
-
-export { ContentMusicContextMenu };
+export { ContentMusicContextMenu } from './ContentMusicContextMenu';

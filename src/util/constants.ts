@@ -15,3 +15,9 @@ export enum DnDTypes {
   TRACK = 'TRACK',
   ARTIST = 'ARTIST',
 }
+
+export enum ReduxRootName {
+  CONTENTING = 'contenting',
+  WATCHING = 'watching',
+  LISTENING = 'listening',
+}

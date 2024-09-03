@@ -1,37 +1,62 @@
 import { Suspense, lazy } from 'react';
-import { Route, Routes as ReactRoutes } from 'react-router-dom';
-
-import { FE_URL } from '../util/frontend-urls';
+import { Routes as ReactRoutes, Route } from 'react-router-dom';
 import { WatchingType } from '../api/api-utils';
+import { FE_URL } from '../util/frontend-urls';
 
-const Home = lazy(() => import('../features/home/Home'));
-const GamingDashboard = lazy(
-  () => import('../features/gaming/layout/Dashboard')
+const Home = lazy(() =>
+  import('../features/home/Home').then((module) => ({ default: module.Home }))
 );
-const ReadingDashboard = lazy(
-  () => import('../features/reading/layout/Dashboard')
+const GamingDashboard = lazy(() =>
+  import('../features/gaming/layout/GamingDashboard').then((module) => ({
+    default: module.GamingDashboard,
+  }))
 );
-const ContentingDashboard = lazy(
-  () => import('../features/contenting/layout/Dashboard')
+const ReadingDashboard = lazy(() =>
+  import('../features/reading/layout/ReadingDashboard').then((module) => ({
+    default: module.ReadingDashboard,
+  }))
 );
-const ContentWatcherDashboard = lazy(
-  () => import('../features/contenting/layout/ContentWatcherDashboard')
+const ContentingDashboard = lazy(() =>
+  import('../features/contenting/layout/ContentingDashboard').then(
+    (module) => ({
+      default: module.ContentingDashboard,
+    })
+  )
 );
-const ContentListDashboard = lazy(
-  () => import('../features/contenting/layout/ContentListDashboard')
+const ContentWatcherDashboard = lazy(() =>
+  import('../features/contenting/layout/ContentWatcherDashboard').then(
+    (module) => ({
+      default: module.ContentWatcherDashboard,
+    })
+  )
 );
-const TracksDashboard = lazy(
-  () => import('../features/listening/layout/TracksDashboard')
+const ContentListDashboard = lazy(() =>
+  import('../features/contenting/layout/ContentListDashboard').then(
+    (module) => ({ default: module.ContentListDashboard })
+  )
 );
-const ArtistsDashboard = lazy(
-  () => import('../features/listening/layout/ArtistsDashboard')
+const TracksDashboard = lazy(() =>
+  import('../features/listening/layout/TracksDashboard').then((module) => ({
+    default: module.TracksDashboard,
+  }))
 );
-const HelpersDashboard = lazy(() => import('../features/helpers/Dashboard'));
-const WatchingDashboard = lazy(
-  () => import('../features/watching/layout/Dashboard')
+const ArtistsDashboard = lazy(() =>
+  import('../features/listening/layout/ArtistsDashboard').then((module) => ({
+    default: module.ArtistsDashboard,
+  }))
+);
+const HelpersDashboard = lazy(() =>
+  import('../features/helpers/HelpersDashboard').then((module) => ({
+    default: module.HelpersDashboard,
+  }))
+);
+const WatchingDashboard = lazy(() =>
+  import('../features/watching/layout/Dashboard').then((module) => ({
+    default: module.WatchingDashboard,
+  }))
 );
 
-const Routes = () => {
+export const Routes = () => {
   const renderLoading = () => <div>Loading ... </div>;
 
   return (
@@ -67,5 +92,3 @@ const Routes = () => {
     </Suspense>
   );
 };
-
-export default Routes;

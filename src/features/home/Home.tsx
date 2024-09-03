@@ -1,4 +1,6 @@
-export const Home = () => {
+import React from 'react';
+
+export const Home = React.memo(() => {
   return (
     <div className='flex-1'>
       <div className='p-5 text-2xl font-semibold text-center'>
@@ -7,6 +9,4 @@ export const Home = () => {
       </div>
     </div>
   );
-};
-
-export default Home;
+});

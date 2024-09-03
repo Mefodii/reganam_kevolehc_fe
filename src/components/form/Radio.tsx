@@ -1,5 +1,5 @@
 import React from 'react';
-import InputContainer, { InputContainerProps } from './InputContainer';
+import { InputContainer, InputContainerProps } from './InputContainer';
 
 export type RadioProps<T> = InputContainerProps & {
   name: string;
@@ -17,7 +17,7 @@ export type RadioProps<T> = InputContainerProps & {
   ) => void;
 };
 
-const Radio = <T,>({
+const RadioBase = <T,>({
   label,
   error,
   className = '',
@@ -93,4 +93,4 @@ const Radio = <T,>({
   );
 };
 
-export default React.memo(Radio) as typeof Radio;
+export const Radio = React.memo(RadioBase) as typeof RadioBase;

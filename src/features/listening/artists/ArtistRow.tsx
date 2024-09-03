@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
+import { DragDots, Table } from '../../../components/generic';
 import { SVGCross, SVGPencil } from '../../../components/svg';
 import { useAppDispatch, useDrag, useModal } from '../../../hooks';
-import { deleteArtist } from './artistsSlice';
-import { DragDots, Table } from '../../../components/generic';
 import { DnDTypes } from '../../../util/constants';
-import ArtistForm from './ArtistForm';
-import ArtistStatusPanel from './ArtistStatusPanel';
+import { ArtistForm } from './ArtistForm';
+import { deleteArtist } from './artistsSlice';
+import { ArtistStatusPanel } from './ArtistStatusPanel';
+
 type ArtistRowProps = {
   artist: Model.ArtistDM;
 };
-const ArtistRow: React.FC<ArtistRowProps> = ({ artist }) => {
+
+export const ArtistRow = React.memo(({ artist }: ArtistRowProps) => {
   const { name } = artist;
   const [isMouseOver, setIsMouseOver] = useState(false);
 
@@ -75,6 +77,4 @@ const ArtistRow: React.FC<ArtistRowProps> = ({ artist }) => {
       <ArtistStatusPanel artist={artist} />
     </Table.TRow>
   );
-};
-
-export default React.memo(ArtistRow) as typeof ArtistRow;
+});

@@ -1,11 +1,9 @@
 import { StrictMode } from 'react';
 import { Provider } from 'react-redux';
+import { store } from '../store';
+import { Content } from './Content';
 
-import Content from './Content';
-
-import store from '../store';
-
-const App = () => {
+export const App = () => {
   return (
     <StrictMode>
       <Provider store={store}>
@@ -14,5 +12,3 @@ const App = () => {
     </StrictMode>
   );
 };
-
-export default App;

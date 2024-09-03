@@ -1,21 +1,22 @@
 import {
-  createSlice,
   createAsyncThunk,
   createEntityAdapter,
+  createSlice,
   isAnyOf,
 } from '@reduxjs/toolkit';
 import {
-  getContentMusicItems as apiGetContentMusicItems,
   addContentMusicItem as apiAddContentMusicItem,
-  updateContentMusicItem as apiUpdateContentMusicItem,
-  updateContentMusicItems as apiUpdateContentMusicItems,
   deleteContentMusicItem as apiDeleteContentMusicItem,
   deleteContentMusicItems as apiDeleteContentMusicItems,
+  getContentMusicItems as apiGetContentMusicItems,
+  updateContentMusicItem as apiUpdateContentMusicItem,
+  updateContentMusicItems as apiUpdateContentMusicItems,
 } from '../../../api/api';
-import { APIStatus } from '../../../util/constants';
-import { name as parentName } from '../constants';
 import { AppThunkApiConfig, RootState } from '../../../store';
+import { APIStatus, ReduxRootName } from '../../../util/constants';
 import { compareByKey, isAbortError } from '../../../util/functions';
+
+const parentName = ReduxRootName.CONTENTING;
 
 export const name = 'contentMusicItems';
 const sliceName = `${parentName}/${name}`;
@@ -122,7 +123,7 @@ export const deleteContentMusicItems = createAsyncThunk<
   }
 );
 
-const slice = createSlice({
+export const slice = createSlice({
   name: sliceName,
   initialState,
   reducers: {},
@@ -198,4 +199,3 @@ export const { selectStatus, selectPageInfo, selectPage, selectCurrentParams } =
 export const selectIsAPIPending = (state: RootState) =>
   selectStatus(state) === APIStatus.PENDING;
 export const reducer = slice.reducer;
-export default slice;

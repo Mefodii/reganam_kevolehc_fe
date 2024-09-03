@@ -5,13 +5,10 @@ type VideoItemPlaceholderProps = React.PropsWithChildren & {
   className?: string;
 };
 
-const ItemPlaceholder: React.FC<VideoItemPlaceholderProps> = ({
-  show,
-  className,
-}) => {
-  if (!show) return <></>;
+export const ItemPlaceholder = React.memo(
+  ({ show, className }: VideoItemPlaceholderProps) => {
+    if (!show) return <></>;
 
-  return <div className={`${className}`}></div>;
-};
-
-export default React.memo(ItemPlaceholder) as typeof ItemPlaceholder;
+    return <div className={`${className}`}></div>;
+  }
+);

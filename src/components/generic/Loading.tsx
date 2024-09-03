@@ -5,9 +5,7 @@ type LoadingProps = {
   loading: boolean;
 };
 
-const Loading: React.FC<LoadingProps> = ({ loading }) => {
+export const Loading = React.memo(({ loading }: LoadingProps) => {
   if (!loading) return <></>;
-  return <SVGLoading className='w-5 animate-spin'></SVGLoading>;
-};
-
-export default React.memo(Loading) as typeof Loading;
+  return <SVGLoading className='w-5 animate-spin' />;
+});

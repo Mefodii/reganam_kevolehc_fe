@@ -17,7 +17,7 @@ const initialState: LoadingStateProps = {
   groupIds: [],
 };
 
-const slice = createSlice({
+export const slice = createSlice({
   name,
   initialState,
   reducers: {},
@@ -60,4 +60,3 @@ export const isGroupLoading = (state: RootState, groupId: number) =>
   selectGroupId(state, groupId) !== undefined;
 
 export const reducer = slice.reducer;
-export default slice;

@@ -1,27 +1,27 @@
 import React from 'react';
-import BaseButton, { BaseButtonProps } from './BaseButton';
+import { BaseButton, BaseButtonProps } from './BaseButton';
 
 type ButtonProps = BaseButtonProps;
 
-const Button: React.FC<ButtonProps> = ({
-  className,
-  onClick,
-  tooltip,
-  showTooltipDelay,
-  loading,
-  children,
-}) => {
-  return (
-    <BaseButton
-      className={`btn ${className}`}
-      onClick={onClick}
-      tooltip={tooltip}
-      showTooltipDelay={showTooltipDelay}
-      loading={loading}
-    >
-      {children}
-    </BaseButton>
-  );
-};
-
-export default React.memo(Button) as typeof Button;
+export const Button = React.memo(
+  ({
+    className,
+    onClick,
+    tooltip,
+    showTooltipDelay,
+    loading,
+    children,
+  }: ButtonProps) => {
+    return (
+      <BaseButton
+        className={`btn ${className}`}
+        onClick={onClick}
+        tooltip={tooltip}
+        showTooltipDelay={showTooltipDelay}
+        loading={loading}
+      >
+        {children}
+      </BaseButton>
+    );
+  }
+);

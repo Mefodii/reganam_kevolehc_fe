@@ -1,54 +1,52 @@
 import React from 'react';
-import { selectCategory, selectSource } from '../filters/filtersSlice';
 import { useAppSelector } from '../../../hooks';
 import { contentFilter as filterModel } from '../../../models';
-import ContentWatcherTable from './ContentWatcherTable';
+import { selectCategory, selectSource } from '../filters/filtersSlice';
+import { ContentWatcherTable } from './ContentWatcherTable';
 
 type ContentWatcherListProps = {
   contentWatchers: Model.ContentWatcherDM[];
 };
 
-const ContentWatcherList: React.FC<ContentWatcherListProps> = ({
-  contentWatchers,
-}) => {
-  const category = useAppSelector(selectCategory);
-  const source = useAppSelector(selectSource);
+export const ContentWatcherList = React.memo(
+  ({ contentWatchers }: ContentWatcherListProps) => {
+    const category = useAppSelector(selectCategory);
+    const source = useAppSelector(selectSource);
 
-  const filteredContentWatchers = filterModel.filterContentWatchers(
-    contentWatchers,
-    { category, source }
-  );
-
-  if (filteredContentWatchers.length === 0)
-    return (
-      <h2 className='w-full text-center text-xl uppercase font-bold m-4'>
-        No Watchers for current filter
-      </h2>
+    const filteredContentWatchers = filterModel.filterContentWatchers(
+      contentWatchers,
+      { category, source }
     );
 
-  const renderH3 = (text: string, value?: string) => {
-    if (!value) return;
+    if (filteredContentWatchers.length === 0)
+      return (
+        <h2 className='w-full text-center text-xl uppercase font-bold m-4'>
+          No Watchers for current filter
+        </h2>
+      );
+
+    const renderH3 = (text: string, value?: string) => {
+      if (!value) return;
+
+      return (
+        <h3 className='uppercase font-bold mb-4'>
+          {text}: <span className='text-active-1 ml-2 text-sm'>{value}</span>
+        </h3>
+      );
+    };
 
     return (
-      <h3 className='uppercase font-bold mb-4'>
-        {text}: <span className='text-active-1 ml-2 text-sm'>{value}</span>
-      </h3>
-    );
-  };
+      <div className='flex w-full'>
+        <div className='w-full flex flex-col items-center'>
+          <h2 className='text-xl uppercase font-bold m-4'>Content Watchers</h2>
+          {renderH3('Category', category)}
+          {renderH3('Source', source)}
 
-  return (
-    <div className='flex w-full'>
-      <div className='w-full flex flex-col items-center'>
-        <h2 className='text-xl uppercase font-bold m-4'>Content Watchers</h2>
-        {renderH3('Category', category)}
-        {renderH3('Source', source)}
-
-        <div className='flex flex-col rounded-xl shadow-md w-10/12 space-y-10 mb-28'>
-          <ContentWatcherTable contentWatchers={filteredContentWatchers} />
+          <div className='flex flex-col rounded-xl shadow-md w-10/12 space-y-10 mb-28'>
+            <ContentWatcherTable contentWatchers={filteredContentWatchers} />
+          </div>
         </div>
       </div>
-    </div>
-  );
-};
-
-export default React.memo(ContentWatcherList) as typeof ContentWatcherList;
+    );
+  }
+);

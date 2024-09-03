@@ -1,7 +1,7 @@
 import React from 'react';
-import SVGContainer from './SVGContainer';
+import { SVGContainer } from './SVGContainer';
 
-const SVGMapPin: React.FC<SVGProps> = (props) => {
+export const SVGMapPin = React.memo((props: SVGProps) => {
   return (
     <SVGContainer {...props}>
       <svg
@@ -25,6 +25,4 @@ const SVGMapPin: React.FC<SVGProps> = (props) => {
       </svg>
     </SVGContainer>
   );
-};
-
-export default React.memo(SVGMapPin) as typeof SVGMapPin;
+});

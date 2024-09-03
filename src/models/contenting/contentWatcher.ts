@@ -1,4 +1,3 @@
-import { getToday } from '../../util/datetime';
 import {
   ContentCategory,
   ContentWatcherExtension,
@@ -6,6 +5,7 @@ import {
   ContentWatcherSource,
   ContentWatcherStatus,
 } from '../../api/api-utils';
+import { getToday } from '../../util/datetime';
 import { BaseModel } from '../generic/model';
 
 declare global {

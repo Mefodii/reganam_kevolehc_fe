@@ -1,7 +1,7 @@
 import React from 'react';
-import ContentWatcherRow from './ContentWatcherRow';
-import { SVGInfoCircle } from '../../../components/svg';
 import { Table } from '../../../components/generic';
+import { SVGInfoCircle } from '../../../components/svg';
+import { ContentWatcherRow } from './ContentWatcherRow';
 
 type ContentWatcherTableProps = {
   contentWatchers: Model.ContentWatcherDM[];
@@ -28,19 +28,17 @@ const renderTableHeader = () => {
   );
 };
 
-const ContentWatcherTable: React.FC<ContentWatcherTableProps> = ({
-  contentWatchers,
-}) => {
-  return (
-    <Table.TContainer className='max-h-220'>
-      {renderTableHeader()}
-      <Table.TBody>
-        {contentWatchers.map((contentWatcher, i) => (
-          <ContentWatcherRow key={i} contentWatcher={contentWatcher} />
-        ))}
-      </Table.TBody>
-    </Table.TContainer>
-  );
-};
-
-export default React.memo(ContentWatcherTable) as typeof ContentWatcherTable;
+export const ContentWatcherTable = React.memo(
+  ({ contentWatchers }: ContentWatcherTableProps) => {
+    return (
+      <Table.TContainer className='max-h-220'>
+        {renderTableHeader()}
+        <Table.TBody>
+          {contentWatchers.map((contentWatcher, i) => (
+            <ContentWatcherRow key={i} contentWatcher={contentWatcher} />
+          ))}
+        </Table.TBody>
+      </Table.TContainer>
+    );
+  }
+);

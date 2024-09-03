@@ -1,5 +1,4 @@
-import { useState } from 'react';
-
+import React, { useState } from 'react';
 import { Button } from '../../components/buttons';
 import { TextArea } from '../../components/form';
 
@@ -8,7 +7,7 @@ const UNDERLINE =
   '________________________________________________________________________________________________________________________________________________________________';
 const WITH_COMMENT = false;
 
-const TransExcelToTxt = () => {
+export const TransExcelToTxt = React.memo(() => {
   const [excelValue, setExcelValue] = useState('');
   const [txtValue, setTxtValue] = useState('');
 
@@ -106,6 +105,4 @@ const TransExcelToTxt = () => {
       </div>
     </div>
   );
-};
-
-export default TransExcelToTxt;
+});

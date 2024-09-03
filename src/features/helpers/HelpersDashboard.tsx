@@ -1,10 +1,11 @@
-import TransExcelToTxt from './TransExcelToTxt';
-import TextTransformers from './TextTransformers';
+import React, { useState } from 'react';
 import { SidepanelElement } from '../../components/layout';
-import { useState } from 'react';
+import { TextTransformers } from './TextTransformers';
+import { TransExcelToTxt } from './TransExcelToTxt';
 
-const Dashboard = () => {
+export const HelpersDashboard = React.memo(() => {
   const [helper, setHelper] = useState(<TextTransformers />);
+  // TODO: (L) - helper does not have type.name anymore
   return (
     <div className='flex grow'>
       <div className='side-panel'>
@@ -25,6 +26,4 @@ const Dashboard = () => {
       <div className='py-5 px-10 bg-theme-2 w-full'>{helper}</div>
     </div>
   );
-};
-
-export default Dashboard;
+});

@@ -12,5 +12,4 @@ const run = (lines: string[]) =>
     return line;
   });
 
-const transformer: Helper.Transformer = { name, run };
-export default transformer;
+export const playlistSquareToCurly: Helper.Transformer = { name, run };

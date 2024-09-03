@@ -1,8 +1,8 @@
 import {
+  getPlaylistItemCounter,
   isItem,
   isPlaylistItem,
   isPlaylistItemWithCounter,
-  getPlaylistItemCounter,
 } from '../playlistUtils';
 
 const name = 'PlaylistItemNumbering';
@@ -43,5 +43,4 @@ const insertCounter = (line: string, counter: number) =>
 const replaceCounter = (line: string, counter: number) =>
   insertCounter(line.slice(0, 18) + line.slice(25), counter);
 
-const transformer: Helper.Transformer = { name, run };
-export default transformer;
+export const playlistItemNumbering: Helper.Transformer = { name, run };

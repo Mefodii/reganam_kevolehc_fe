@@ -1,32 +1,28 @@
 import React, { useMemo, useState } from 'react';
-
+import { DragDots, ItemPlaceholder, Table } from '../../../components/generic';
+import { SVGCheck, SVGPencil } from '../../../components/svg';
+import { useAppDispatch, useDnD, useModal } from '../../../hooks';
+import { UseDropProps } from '../../../hooks/useDrop';
+import { video as videoModel } from '../../../models';
 import {
   BLANK_VALUE,
   DnDTypes,
   SHORT_BLANK_VALUE,
 } from '../../../util/constants';
 import { promptNumber } from '../../../util/functions';
-
-import { SVGPencil, SVGCheck } from '../../../components/svg';
-import LinkList from '../links/LinkList';
-
 import {
   createVideo,
   updateVideo,
   updateVideoSimple,
 } from '../groups/groupsSlice';
-import { useAppDispatch, useDnD } from '../../../hooks';
-import { video as videoModel } from '../../../models';
-import VideoForm from './VideoForm';
-import { useModal } from '../../../hooks';
-import { DragDots, ItemPlaceholder, Table } from '../../../components/generic';
-import { UseDropProps } from '../../../hooks/useDrop';
+import { LinkList } from '../links/LinkList';
+import { VideoForm } from './VideoForm';
 
 type VideoItemProps = {
   video: Model.VideoDM;
 };
 
-const VideoItem: React.FC<VideoItemProps> = ({ video }) => {
+export const VideoItem = React.memo(({ video }: VideoItemProps) => {
   const [showDots, setShowDots] = useState(false);
 
   const dispatch = useAppDispatch();
@@ -188,6 +184,4 @@ const VideoItem: React.FC<VideoItemProps> = ({ video }) => {
       </Table.TRow>
     </div>
   );
-};
-
-export default React.memo(VideoItem) as typeof VideoItem;
+});

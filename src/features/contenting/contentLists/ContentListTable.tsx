@@ -1,7 +1,7 @@
 import React from 'react';
-import { SVGInfoCircle } from '../../../components/svg';
 import { Table } from '../../../components/generic';
-import ContentListRow from './ContentListRow';
+import { SVGInfoCircle } from '../../../components/svg';
+import { ContentListRow } from './ContentListRow';
 
 type ContentListTableProps = {
   contentLists: Model.ContentListPureDM[];
@@ -21,19 +21,17 @@ const renderTableHeader = () => {
   );
 };
 
-const ContentListTable: React.FC<ContentListTableProps> = ({
-  contentLists,
-}) => {
-  return (
-    <Table.TContainer className='max-h-220'>
-      {renderTableHeader()}
-      <Table.TBody>
-        {contentLists.map((contentList, i) => (
-          <ContentListRow key={i} contentList={contentList} />
-        ))}
-      </Table.TBody>
-    </Table.TContainer>
-  );
-};
-
-export default React.memo(ContentListTable) as typeof ContentListTable;
+export const ContentListTable = React.memo(
+  ({ contentLists }: ContentListTableProps) => {
+    return (
+      <Table.TContainer className='max-h-220'>
+        {renderTableHeader()}
+        <Table.TBody>
+          {contentLists.map((contentList, i) => (
+            <ContentListRow key={i} contentList={contentList} />
+          ))}
+        </Table.TBody>
+      </Table.TContainer>
+    );
+  }
+);

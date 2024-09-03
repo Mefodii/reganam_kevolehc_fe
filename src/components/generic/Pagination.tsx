@@ -1,8 +1,8 @@
-import React, { useCallback, useMemo } from 'react';
-import { SVGArrow } from '../svg';
-import { useAppDispatch } from '../../hooks';
 import { AsyncThunkAction } from '@reduxjs/toolkit';
 import { AsyncThunkConfig } from '@reduxjs/toolkit/dist/createAsyncThunk';
+import React, { useCallback, useMemo } from 'react';
+import { useAppDispatch } from '../../hooks';
+import { SVGArrow } from '../svg';
 
 const PAGES_RANGE = 1;
 
@@ -36,7 +36,7 @@ type PaginationProps<T extends QParams.Page> = {
 };
 
 // TODO: (M) - a number field to specify manually the page
-const Pagination = <T extends QParams.Page>({
+const PaginationBase = <T extends QParams.Page>({
   pageInfo: { page, pages, nextParams, previousParams },
   action,
 }: PaginationProps<T>) => {
@@ -125,4 +125,4 @@ const Pagination = <T extends QParams.Page>({
   );
 };
 
-export default React.memo(Pagination) as typeof Pagination;
+export const Pagination = React.memo(PaginationBase) as typeof PaginationBase;

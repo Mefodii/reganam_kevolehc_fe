@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { Text } from '../../../components/form';
 import { Button } from '../../../components/buttons';
+import { Text } from '../../../components/form';
 import { SVGMagnifyingGlass } from '../../../components/svg';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { fetchTracks, selectPageInfo } from './tracksSlice';
 
 type TrackSearchProps = {};
 
-const TrackSearch: React.FC<TrackSearchProps> = (props) => {
+export const TrackSearch = React.memo((props: TrackSearchProps) => {
   const pageInfo = useAppSelector(selectPageInfo);
 
   const [trackSearch, setTrackSearch] = useState(
@@ -52,6 +52,4 @@ const TrackSearch: React.FC<TrackSearchProps> = (props) => {
       </Button>
     </div>
   );
-};
-
-export default React.memo(TrackSearch) as typeof TrackSearch;
+});

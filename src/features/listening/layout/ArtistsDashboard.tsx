@@ -1,15 +1,15 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { LoadingOverlay } from '../../../components/generic';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { ArtistSearch } from '../artists/ArtistSearch';
 import {
   fetchArtists,
   selectAllArtists,
   selectPageInfo,
 } from '../artists/artistsSlice';
-import ArtistsTable from '../artists/ArtistsTable';
-import ArtistSearch from '../artists/ArtistSearch';
+import { ArtistsTable } from '../artists/ArtistsTable';
 
-export const ArtistsDashboard = () => {
+export const ArtistsDashboard = React.memo(() => {
   const dispatch = useAppDispatch();
 
   const artists = useAppSelector(selectAllArtists);
@@ -32,6 +32,4 @@ export const ArtistsDashboard = () => {
       </div>
     </div>
   );
-};
-
-export default ArtistsDashboard;
+});

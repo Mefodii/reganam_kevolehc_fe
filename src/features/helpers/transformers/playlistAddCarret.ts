@@ -16,5 +16,4 @@ const run = (lines: string[]) =>
 
 const isApprovedToAdd = (line: string) => line[5] === 'x' || line[2] === 'X';
 
-const transformer: Helper.Transformer = { name, run };
-export default transformer;
+export const playlistAddCarret: Helper.Transformer = { name, run };

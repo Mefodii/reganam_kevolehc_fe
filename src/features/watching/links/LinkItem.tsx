@@ -1,10 +1,11 @@
+import React from 'react';
 import { getLogoFromLink } from '../../../util/frontend-urls';
 
 type LinkItemProps = {
   link: string;
 };
 
-const LinkItem: React.FC<LinkItemProps> = ({ link }) => {
+export const LinkItem = React.memo(({ link }: LinkItemProps) => {
   return (
     <a href={link}>
       <img
@@ -15,6 +16,4 @@ const LinkItem: React.FC<LinkItemProps> = ({ link }) => {
       />
     </a>
   );
-};
-
-export default LinkItem;
+});

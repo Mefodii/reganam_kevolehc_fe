@@ -1,28 +1,27 @@
 import React, { useEffect, useMemo } from 'react';
-
-import {
-  fetchContentWatcher,
-  selectDetails,
-} from '../contentWatchers/contentWatchersSlice';
-import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { useParams } from 'react-router-dom';
-import ContentWatcherDetails from '../contentWatchers/ContentWatcherDetails';
 import { LoadingOverlay } from '../../../components/generic';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { contentWatcher as model } from '../../../models';
 import {
   fetchContentItems,
   selectAllContentItems,
   selectPageInfo,
 } from '../contentItems/contentItemsSlice';
+import { ContentItemsTable } from '../contentItems/ContentItemsTable';
 import {
   fetchContentMusicItems,
   selectAllContentMusicItems,
   selectPageInfo as selectMusicPageInfo,
 } from '../contentMusicItems/contentMusicItemsSlice';
-import { contentWatcher as model } from '../../../models';
-import ContentMusicItemTable from '../contentMusicItems/ContentMusicItemsTable';
-import ContentItemsTable from '../contentItems/ContentItemsTable';
+import { ContentMusicItemTable } from '../contentMusicItems/ContentMusicItemsTable';
+import { ContentWatcherDetails } from '../contentWatchers/ContentWatcherDetails';
+import {
+  fetchContentWatcher,
+  selectDetails,
+} from '../contentWatchers/contentWatchersSlice';
 
-const ContentWatcherDashboard: React.FC = () => {
+export const ContentWatcherDashboard = React.memo(() => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
 
@@ -97,8 +96,4 @@ const ContentWatcherDashboard: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default React.memo(
-  ContentWatcherDashboard
-) as typeof ContentWatcherDashboard;
+});

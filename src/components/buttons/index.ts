@@ -1,7 +1,5 @@
-import BaseButton from './BaseButton';
-import Button from './Button';
-import CompactButton from './CompactButton';
-import SideButton from './SideButton';
-import { UtilityPanelSVG } from './InteractableSVG';
-
-export { BaseButton, Button, CompactButton, SideButton, UtilityPanelSVG };
+export { BaseButton } from './BaseButton';
+export { Button } from './Button';
+export { CompactButton } from './CompactButton';
+export { UtilityPanelSVG } from './InteractableSVG';
+export { SideButton } from './SideButton';

@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-
 import { FE_URL } from '../../util/frontend-urls';
-
 import { SVGDownArrow } from '../svg';
 
-const Header: React.FC = () => {
+export const Header = React.memo(() => {
   const [showWatchioDropDown, setWatchioShowDropDown] = useState(false);
   const [showAudioDropDown, setAudioShowDropDown] = useState(false);
 
@@ -77,6 +75,4 @@ const Header: React.FC = () => {
       </div>
     </nav>
   );
-};
-
-export default React.memo(Header) as typeof Header;
+});

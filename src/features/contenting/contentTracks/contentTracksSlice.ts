@@ -1,19 +1,20 @@
 import {
-  createSlice,
   createAsyncThunk,
   createEntityAdapter,
+  createSlice,
   isAnyOf,
 } from '@reduxjs/toolkit';
 import {
-  getContentTracks as apiGetContentTracks,
   addContentTrack as apiAddContentTrack,
-  updateContentTrack as apiUpdateContentTrack,
   deleteContentTrack as apiDeleteContentTrack,
+  getContentTracks as apiGetContentTracks,
+  updateContentTrack as apiUpdateContentTrack,
 } from '../../../api/api';
-import { APIStatus } from '../../../util/constants';
-import { name as parentName } from '../constants';
 import { RootState } from '../../../store';
+import { APIStatus, ReduxRootName } from '../../../util/constants';
 import { isAbortError } from '../../../util/functions';
+
+const parentName = ReduxRootName.CONTENTING;
 
 export const name = 'contentTracks';
 const sliceName = `${parentName}/${name}`;
@@ -64,7 +65,7 @@ export const deleteContentTrack = createAsyncThunk(
   }
 );
 
-const slice = createSlice({
+export const slice = createSlice({
   name: sliceName,
   initialState,
   reducers: {},
@@ -122,4 +123,3 @@ export const {
   selectIds: selectContentTrackIds,
 } = contentTracksAdapter.getSelectors(selectSlice);
 export const reducer = slice.reducer;
-export default slice;

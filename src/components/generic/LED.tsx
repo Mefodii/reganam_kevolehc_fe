@@ -5,7 +5,7 @@ type LEDProps = React.PropsWithChildren & {
   color: 'Green' | 'Red' | 'Yellow';
 };
 
-const LED: React.FC<LEDProps> = ({ on, color }) => {
+export const LED = React.memo(({ on, color }: LEDProps) => {
   return (
     <div
       className={`led ${
@@ -17,6 +17,4 @@ const LED: React.FC<LEDProps> = ({ on, color }) => {
       }`}
     ></div>
   );
-};
-
-export default React.memo(LED) as typeof LED;
+});

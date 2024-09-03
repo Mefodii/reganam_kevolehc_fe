@@ -1,8 +1,8 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
   addPoster as apiAddPoster,
-  updatePoster as apiUpdatePoster,
   deletePoster as apiDeletePoster,
+  updatePoster as apiUpdatePoster,
 } from '../../../api/api';
 
 type PosterSliceProps = Model.PosterDM[];

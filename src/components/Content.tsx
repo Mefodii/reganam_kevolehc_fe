@@ -1,14 +1,12 @@
+import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { DnDProvider, ModalProvider } from '../context';
 import { useAppSelector } from '../hooks';
-
-import Header from './layout/Header';
-import ThemeChanger from './layout/ThemeChanger';
-import Routes from './Routes';
-
 import { selectTheme } from '../redux/pageSlice';
-import { ModalProvider, DnDProvider } from '../context';
+import { Header, ThemeChanger } from './layout';
+import { Routes } from './Routes';
 
-const Content = () => {
+export const Content = React.memo(() => {
   const theme = useAppSelector(selectTheme);
 
   return (
@@ -29,6 +27,4 @@ const Content = () => {
       </div>
     </Router>
   );
-};
-
-export default Content;
+});

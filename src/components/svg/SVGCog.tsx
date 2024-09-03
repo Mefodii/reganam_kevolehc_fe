@@ -1,7 +1,7 @@
 import React from 'react';
-import SVGContainer from './SVGContainer';
+import { SVGContainer } from './SVGContainer';
 
-const SVGCog: React.FC<SVGProps> = (props) => {
+export const SVGCog = React.memo((props: SVGProps) => {
   return (
     <SVGContainer {...props}>
       <svg
@@ -26,6 +26,4 @@ const SVGCog: React.FC<SVGProps> = (props) => {
       </svg>
     </SVGContainer>
   );
-};
-
-export default React.memo(SVGCog) as typeof SVGCog;
+});

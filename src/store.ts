@@ -1,35 +1,79 @@
-import { ThunkAction, configureStore, Action } from '@reduxjs/toolkit';
+import { Action, ThunkAction, configureStore } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
-import { reducer as watching, name as watchingName } from './features/watching';
 import {
-  reducer as contenting,
-  name as contentingName,
-} from './features/contenting';
+  reducer as contentItems,
+  name as contentItemsName,
+} from './features/contenting/contentItems/contentItemsSlice';
 import {
-  reducer as listening,
-  name as listeningName,
-} from './features/listening';
-import { reducer as page, name as pageName } from './redux/pageSlice';
+  reducer as contentLists,
+  name as contentListsName,
+} from './features/contenting/contentLists/contentListsSlice';
 import {
-  name as loadingsName,
+  reducer as contentMusicItems,
+  name as contentMusicItemsName,
+} from './features/contenting/contentMusicItems/contentMusicItemsSlice';
+import {
+  reducer as contentTracks,
+  name as contentTracksName,
+} from './features/contenting/contentTracks/contentTracksSlice';
+import {
+  reducer as contentWatchers,
+  name as contentWatchersName,
+} from './features/contenting/contentWatchers/contentWatchersSlice';
+import {
+  reducer as contentingFilters,
+  name as contentingFiltersName,
+} from './features/contenting/filters/filtersSlice';
+import {
+  reducer as artists,
+  name as artistsName,
+} from './features/listening/artists/artistsSlice';
+import {
+  reducer as tracks,
+  name as tracksName,
+} from './features/listening/tracks/tracksSlice';
+import {
+  reducer as filters,
+  name as filtersName,
+} from './features/watching/filters/filtersSlice';
+import {
+  reducer as groups,
+  name as groupsName,
+} from './features/watching/groups/groupsSlice';
+import {
   reducer as loadings,
+  name as loadingsName,
 } from './redux/loadingsSlice';
+import { reducer as page, name as pageName } from './redux/pageSlice';
+import { ReduxRootName } from './util/constants';
 
 const rootReducer = combineReducers({
   [loadingsName]: loadings,
   [pageName]: page,
-  [watchingName]: watching,
-  [contentingName]: contenting,
-  [listeningName]: listening,
+  [ReduxRootName.WATCHING]: combineReducers({
+    [groupsName]: groups,
+    [filtersName]: filters,
+  }),
+  [ReduxRootName.CONTENTING]: combineReducers({
+    [contentingFiltersName]: contentingFilters,
+    [contentWatchersName]: contentWatchers,
+    [contentListsName]: contentLists,
+    [contentItemsName]: contentItems,
+    [contentMusicItemsName]: contentMusicItems,
+    [contentTracksName]: contentTracks,
+  }),
+  [ReduxRootName.LISTENING]: combineReducers({
+    [tracksName]: tracks,
+    [artistsName]: artists,
+  }),
 });
 
-const store = configureStore({
+export const store = configureStore({
   reducer: rootReducer,
 });
 
 // Actions on the page load
-
-export default store;
+//
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;

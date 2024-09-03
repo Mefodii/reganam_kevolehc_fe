@@ -1,10 +1,11 @@
-import LinkItem from './LinkItem';
+import React from 'react';
+import { LinkItem } from './LinkItem';
 
 type LinkListProps = {
   links: string[];
 };
 
-const LinkList: React.FC<LinkListProps> = ({ links }) => {
+export const LinkList = React.memo(({ links }: LinkListProps) => {
   if (links.length === 0) return <></>;
 
   return (
@@ -14,6 +15,4 @@ const LinkList: React.FC<LinkListProps> = ({ links }) => {
       ))}
     </div>
   );
-};
-
-export default LinkList;
+});

@@ -1,5 +1,4 @@
 import React, { PropsWithChildren } from 'react';
-
 import { Loading, TooltipContainer } from '../generic';
 
 export type BaseButtonProps = PropsWithChildren<{
@@ -10,25 +9,25 @@ export type BaseButtonProps = PropsWithChildren<{
   onClick?: React.MouseEventHandler<HTMLDivElement>;
 }>;
 
-const BaseButton: React.FC<BaseButtonProps> = ({
-  tooltip,
-  className = '',
-  loading = false,
-  showTooltipDelay,
-  onClick,
-  children,
-}) => {
-  return (
-    <TooltipContainer
-      tooltip={tooltip}
-      className={`btn-base ${className}`}
-      onClick={onClick}
-    >
-      {children}
-      <Loading loading={loading} />
-      {/* {tooltip && <Tooltip text={tooltip} hidden={!showTooltip} />} */}
-    </TooltipContainer>
-  );
-};
-
-export default React.memo(BaseButton) as typeof BaseButton;
+export const BaseButton = React.memo(
+  ({
+    tooltip,
+    className = '',
+    loading = false,
+    showTooltipDelay,
+    onClick,
+    children,
+  }: BaseButtonProps) => {
+    return (
+      <TooltipContainer
+        tooltip={tooltip}
+        className={`btn-base ${className}`}
+        onClick={onClick}
+        delay={showTooltipDelay}
+      >
+        {children}
+        <Loading loading={loading} />
+      </TooltipContainer>
+    );
+  }
+);
