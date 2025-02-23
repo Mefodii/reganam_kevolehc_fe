@@ -28,7 +28,6 @@ export const TooltipContainer = React.memo(
       if (showTooltip) return;
 
       const id = setTimeout(() => {
-        setShowTooltip(true);
         setTimeoutId(null);
 
         if (ref.current) {
@@ -42,10 +41,11 @@ export const TooltipContainer = React.memo(
 
     const handleHideTooltip = useCallback(() => {
       if (!tooltip) return;
-      if (timeoutId) clearTimeout(timeoutId);
-
-      setShowTooltip(false);
-    }, [tooltip, timeoutId]);
+      setTimeout(() => {
+        if (timeoutId) clearTimeout(timeoutId);
+        setShowTooltip(false);
+      }, delay);
+    }, [tooltip, timeoutId, delay]);
 
     if (!tooltip) return <div {...rest}>{children}</div>;
 
