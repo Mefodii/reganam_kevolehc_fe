@@ -26,6 +26,7 @@ import {
 import { toYTPlaylist } from '../../helpers/transformers/playlistToYoutubePlaylist';
 import { ContentItemForm } from './ContentItemForm';
 import { ContentItemRow } from './ContentItemRow';
+import { ContentItemSearch } from './ContentItemSearch';
 import {
   deleteContentItems,
   fetchContentItems,
@@ -116,79 +117,84 @@ export const ContentItemsTable = React.memo(
     const renderUtilityPanel = () => {
       return (
         <Table.THead>
-          <div className='flex w-1/3 items-center'>
-            <Checkbox
-              className='rounded-none px-2 border-opacity-70'
-              name='showPosters'
-              text='Select Mode'
-              checked={isSelectMode}
-              onChange={() => setIsSelectMode(!isSelectMode)}
-              simple
-            />
-            <div className={`pl-5 ${isSelectMode ? '' : 'opacity-10'}`}>
-              <div className={`flex space-x-3`}>
-                <UtilityPanelSVG
-                  SVG={SVGEye}
-                  disabled={!isSelectMode}
-                  tooltip='Set Consumed'
-                  onClick={() => handleSetConsumed(true)}
+          <div className='w-full'>
+            <div className='flex'>
+              <div className='flex w-1/3 items-center'>
+                <Checkbox
+                  className='rounded-none px-2 border-opacity-70'
+                  name='showPosters'
+                  text='Select Mode'
+                  checked={isSelectMode}
+                  onChange={() => setIsSelectMode(!isSelectMode)}
+                  simple
                 />
-                <UtilityPanelSVG
-                  SVG={SVGEyeSlash}
-                  disabled={!isSelectMode}
-                  tooltip='Set Not Consumed'
-                  onClick={() => handleSetConsumed(false)}
-                />
-                <UtilityPanelSVG
-                  SVG={SVGClipboardDocEmpty}
-                  disabled={!isSelectMode}
-                  tooltip='Copy items as text'
-                />
-                <UtilityPanelSVG
-                  SVG={SVGYoutube}
-                  disabled={!isSelectMode}
-                  tooltip='Copy as YT Playlist'
-                  onClick={handleCopyAsYTPlaylist}
-                />
-                <UtilityPanelSVG
-                  SVG={SVGCross}
-                  disabled={!isSelectMode}
-                  tooltip='Delete'
-                  onClick={handleDelete}
-                />
+                <div className={`pl-5 ${isSelectMode ? '' : 'opacity-10'}`}>
+                  <div className={`flex space-x-3`}>
+                    <UtilityPanelSVG
+                      SVG={SVGEye}
+                      disabled={!isSelectMode}
+                      tooltip='Set Consumed'
+                      onClick={() => handleSetConsumed(true)}
+                    />
+                    <UtilityPanelSVG
+                      SVG={SVGEyeSlash}
+                      disabled={!isSelectMode}
+                      tooltip='Set Not Consumed'
+                      onClick={() => handleSetConsumed(false)}
+                    />
+                    <UtilityPanelSVG
+                      SVG={SVGClipboardDocEmpty}
+                      disabled={!isSelectMode}
+                      tooltip='Copy items as text'
+                    />
+                    <UtilityPanelSVG
+                      SVG={SVGYoutube}
+                      disabled={!isSelectMode}
+                      tooltip='Copy as YT Playlist'
+                      onClick={handleCopyAsYTPlaylist}
+                    />
+                    <UtilityPanelSVG
+                      SVG={SVGCross}
+                      disabled={!isSelectMode}
+                      tooltip='Delete'
+                      onClick={handleDelete}
+                    />
+                  </div>
+                  <div className='pt-2 text-sm text-active-1/70'>{`${selectedIndexes.length}: Selected`}</div>
+                </div>
               </div>
-              <div className='pt-2 text-sm text-active-1/70'>{`${selectedIndexes.length}: Selected`}</div>
+              <div className='flex w-1/3'>
+                <Pagination pageInfo={pageInfo} action={fetchContentItems} />
+              </div>
+              <div className={`flex w-1/3 justify-end space-x-3`}>
+                <SVGPlus
+                  className={`w-5 simple-clickable-1`}
+                  tooltip='Add Item'
+                  onClick={handleOpenContentItemModal}
+                />
+                <div
+                  className={`cursor-pointer  ${
+                    hideConsumed ? 'simple-clickable-2' : 'simple-clickable-1'
+                  }`}
+                  onClick={() =>
+                    dispatch(
+                      fetchContentItems({
+                        ...pageInfo.currentParams,
+                        page: 1,
+                        hideConsumed: !hideConsumed,
+                      })
+                    )
+                  }
+                >
+                  {hideConsumed ? (
+                    <SVGEyeClosed className={`w-5`} tooltip='Show Consumed' />
+                  ) : (
+                    <SVGEye className={`w-5`} tooltip='Hide Consumed' />
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-          <div className='flex w-1/3'>
-            <Pagination pageInfo={pageInfo} action={fetchContentItems} />
-          </div>
-          <div className={`flex w-1/3 justify-end space-x-3`}>
-            <SVGPlus
-              className={`w-5 simple-clickable-1`}
-              tooltip='Add Item'
-              onClick={handleOpenContentItemModal}
-            />
-            <div
-              className={`cursor-pointer  ${
-                hideConsumed ? 'simple-clickable-2' : 'simple-clickable-1'
-              }`}
-              onClick={() =>
-                dispatch(
-                  fetchContentItems({
-                    ...pageInfo.currentParams,
-                    page: 1,
-                    hideConsumed: !hideConsumed,
-                  })
-                )
-              }
-            >
-              {hideConsumed ? (
-                <SVGEyeClosed className={`w-5`} tooltip='Show Consumed' />
-              ) : (
-                <SVGEye className={`w-5`} tooltip='Hide Consumed' />
-              )}
-            </div>
+            <ContentItemSearch />
           </div>
         </Table.THead>
       );

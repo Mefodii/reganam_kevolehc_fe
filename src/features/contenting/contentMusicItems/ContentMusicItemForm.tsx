@@ -247,7 +247,7 @@ export const ContentMusicItemForm = React.memo(
               <TrackSearch />
             </div>
 
-            <div className='flex w-full overflow-hidden max-h-120 my-2'>
+            <div className='flex w-full overflow-hidden max-h-100 my-2'>
               <TracksTable tracks={tracks} pageInfo={tracksPageInfo} />
             </div>
           </div>
